@@ -1,19 +1,27 @@
 //
-//  MobileEngage.h
-//  MobileEngage
-//
-//  Created by Laszlo Ori on 2017. 03. 02..
-//  Copyright (c) 2017 Emarsys. All rights reserved.
+// Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
+@class MEConfig;
+@protocol MobileEngageStatusDelegate;
 
-//! Project version number for MobileEngage.
-FOUNDATION_EXPORT double MobileEngageVersionNumber;
+@interface MobileEngage : NSObject
 
-//! Project version string for MobileEngage.
-FOUNDATION_EXPORT const unsigned char MobileEngageVersionString[];
+@property(class, nonatomic, weak) id <MobileEngageStatusDelegate> statusDelegate;
 
-// In this header, you should import all the public headers of your framework using statements like #import <MobileEngage/PublicHeader.h>
++ (void)setupWithConfig:(nonnull MEConfig *)config
+          launchOptions:(NSDictionary *)launchOptions;
 
++ (void)appLogin;
+
++ (void)appLoginWithContactFieldId:(NSNumber *)contactFieldId
+                 contactFieldValue:(NSString *)contactFieldValue;
+
++ (void)appLogout;
+
++ (void)trackCustomEvent:(nonnull NSString *)eventName
+         eventAttributes:(NSDictionary<NSString *, id> *)eventAttributes;
+
+@end
