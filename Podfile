@@ -1,7 +1,7 @@
 platform :ios, '9.0'
 
 target "MobileEngage" do
-  pod 'CoreSDK', :path => '../Core'
+  pod 'CoreSDK', :path => '../ios-core-sdk'
 end
 
 target "MobileEngageTests" do

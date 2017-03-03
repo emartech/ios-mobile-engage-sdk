@@ -8,6 +8,8 @@
 #import "MobileEngageStatusDelegate.h"
 #import "EMSRequestManager.h"
 #import "NSString+EMSCore.h"
+#import "EMSRequestModel.h"
+#import "EMSRequestModelBuilder.h"
 
 @implementation MobileEngage
 
@@ -23,6 +25,8 @@ static EMSRequestManager *_requestManager;
             @"Authorization": [NSString createBasicAuthWith:config.applicationId
                                                    password:config.applicationSecret]
     };
+
+    [requestManager setAdditionalHeaders:additionalHeaders];
 }
 
 + (void)setupWithConfig:(nonnull MEConfig *)config
@@ -33,6 +37,16 @@ static EMSRequestManager *_requestManager;
 }
 
 + (void)appLogin {
+    EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+        [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login"];
+        [builder setMethod:HTTPMethodPOST];
+
+        NSDictionary *jsonObject = @{};
+        NSData *postBody = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:nil];
+        [builder setBody:postBody];
+    }];
+
+    [_requestManager submit:requestModel successBlock:nil errorBlock:nil];
 }
 
 + (void)appLoginWithContactFieldId:(NSNumber *)contactFieldId

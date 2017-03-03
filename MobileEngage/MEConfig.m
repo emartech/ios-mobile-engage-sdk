@@ -8,7 +8,7 @@
 
 @implementation MEConfig
 
-+ (nonnull MEConfig *)makeWithBuilder:(BuilderBlock)builderBlock {
++ (nonnull MEConfig *)makeWithBuilder:(MEConfigBuilderBlock)builderBlock {
     NSParameterAssert(builderBlock);
     MEConfigBuilder *builder = [MEConfigBuilder new];
     builderBlock(builder);

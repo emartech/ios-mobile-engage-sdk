@@ -11,10 +11,9 @@
 @property(nonatomic, readonly) NSString *applicationId;
 @property(nonatomic, readonly) NSString *applicationSecret;
 
+typedef void(^MEConfigBuilderBlock)(MEConfigBuilder * _Nonnull builder);
 
-typedef void(^BuilderBlock)(MEConfigBuilder * _Nonnull builder);
-
-+ (nonnull MEConfig *)makeWithBuilder:(BuilderBlock)builderBlock;
++ (nonnull MEConfig *)makeWithBuilder:(MEConfigBuilderBlock)builderBlock;
 
 
 @end

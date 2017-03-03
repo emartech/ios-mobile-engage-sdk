@@ -6,7 +6,7 @@ SPEC_BEGIN(BuilderTest)
 
     describe(@"Builder", ^{
 
-        it(@"should create a config with username", ^{
+        it(@"should create a config with applicationId", ^{
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationId:@"test1" applicationSecret:@"pwd"];
             }];
@@ -22,12 +22,23 @@ SPEC_BEGIN(BuilderTest)
             [[theValue(@"pwd") should] equal:theValue(config.applicationSecret)];
         });
 
-        it(@"should throw exception when applicationId or secret is nil", ^{
+        it(@"should throw exception when applicationId is nil", ^{
             @try {
                 [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                    [builder setCredentialsWithApplicationId:nil applicationSecret:nil];
+                    [builder setCredentialsWithApplicationId:nil applicationSecret:@"pwd"];
                 }];
-                fail(@"Assertation doesn't called!");
+                fail(@"Expected Exception when applicationId is nil!");
+            } @catch(NSException *exception) {
+                [[theValue(exception) shouldNot] beNil];
+            }
+        });
+
+        it(@"should throw exception when secret is nil", ^{
+            @try {
+                [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                    [builder setCredentialsWithApplicationId:@"test1" applicationSecret:nil];
+                }];
+                fail(@"Expected Exception when applicationSecret is nil!");
             } @catch(NSException *exception) {
                 [[theValue(exception) shouldNot] beNil];
             }
