@@ -14,48 +14,53 @@ SPEC_BEGIN(PublicInterfaceTest)
 
     registerMatchers(@"EMS");
 
+    id (^requestManagerMock)() = ^id() {
+        NSString *applicationId = @"appId";
+        NSString *applicationSecret = @"appSecret";
+        NSDictionary *additionalHeaders = @{@"Authorization" : [NSString createBasicAuthWith:applicationId
+                                                                                    password:applicationSecret]};
+
+        id requestManager = [EMSRequestManager mock];
+        [[requestManager should] receive:@selector(setAdditionalHeaders:)
+                           withArguments:additionalHeaders];
+
+        MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder){
+            [builder setCredentialsWithApplicationId:applicationId
+                                   applicationSecret:applicationSecret];
+        }];
+
+        [MobileEngage setupWithRequestManager:requestManager
+                                       config:config
+                                launchOptions:nil];
+        return requestManager;
+    };
+
+    id (^requestModel)(NSString *url, NSDictionary *body) = ^id(NSString *url, NSDictionary *body) {
+        return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+            [builder setUrl:url];
+            [builder setMethod:HTTPMethodPOST];
+            NSData *postBody = [NSJSONSerialization dataWithJSONObject:body
+                                                               options:0
+                                                                 error:nil];
+            [builder setBody:postBody];
+        }];
+    };
+
     describe(@"setupWithConfig:launchOptions:", ^{
         it(@"should setup the RequestManager with base64 auth header", ^{
-            NSString *applicationId = @"appId";
-            NSString *applicationSecret = @"appSecret";
-            NSDictionary *additionalHeaders = @{@"Authorization" : [NSString createBasicAuthWith:applicationId password:applicationSecret]};
-
-            id requestManagerMock = [EMSRequestManager mock];
-            [[requestManagerMock should] receive:@selector(setAdditionalHeaders:) withArguments:additionalHeaders];
-
-            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder){
-                [builder setCredentialsWithApplicationId:applicationId applicationSecret:applicationSecret];
-            }];
-
-            [MobileEngage setupWithRequestManager:requestManagerMock config:config launchOptions:nil];
+            requestManagerMock();
         });
     });
 
     describe(@"anonymous appLogin", ^{
         it(@"should submit a corresponding RequestModel", ^{
+            id requestManager = requestManagerMock();
+            EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{});
 
-            id requestManagerMock = [EMSRequestManager mock];
-            
-            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder){
-                [builder setCredentialsWithApplicationId:@"applicationId" applicationSecret:@"applicationSecret"];
-            }];
-
-            [[requestManagerMock should] receive:@selector(setAdditionalHeaders:) withArguments:@{ @"Authorization" : @"Basic YXBwbGljYXRpb25JZDphcHBsaWNhdGlvblNlY3JldA=="}];
-
-            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login"];
-                [builder setMethod:HTTPMethodPOST];
-
-                NSDictionary *jsonObject = @{};
-                NSData *postBody = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:nil];
-                [builder setBody:postBody];
-            }];
-
-
-            [[requestManagerMock should] receive:@selector(submit:successBlock:errorBlock:) withArguments:model, nil, nil];
-            KWCaptureSpy *spy = [requestManagerMock captureArgument:@selector(submit:successBlock:errorBlock:) atIndex:0];
-
-            [MobileEngage setupWithRequestManager:requestManagerMock config:config launchOptions:nil];
+            [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
+                               withArguments:any(), nil, nil];
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
+                                                        atIndex:0];
             [MobileEngage appLogin];
 
             EMSRequestModel *actualModel = spy.argument;

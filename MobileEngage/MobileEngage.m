@@ -42,11 +42,14 @@ static EMSRequestManager *_requestManager;
         [builder setMethod:HTTPMethodPOST];
 
         NSDictionary *jsonObject = @{};
-        NSData *postBody = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:nil];
+        NSData *postBody = [NSJSONSerialization dataWithJSONObject:jsonObject
+                                                           options:0
+                                                             error:nil];
         [builder setBody:postBody];
     }];
-
-    [_requestManager submit:requestModel successBlock:nil errorBlock:nil];
+    [_requestManager submit:requestModel
+               successBlock:nil
+                 errorBlock:nil];
 }
 
 + (void)appLoginWithContactFieldId:(NSNumber *)contactFieldId
