@@ -14,14 +14,16 @@
 + (void)setupWithConfig:(nonnull MEConfig *)config
           launchOptions:(NSDictionary *)launchOptions;
 
-+ (void)appLogin;
++ (NSString *)appLogin;
 
-+ (void)appLoginWithContactFieldId:(NSNumber *)contactFieldId
-                 contactFieldValue:(NSString *)contactFieldValue;
++ (NSString *)appLoginWithContactFieldId:(NSNumber *)contactFieldId
+                       contactFieldValue:(NSString *)contactFieldValue;
 
-+ (void)appLogout;
++ (NSString *)trackMessageOpenWithUserInfo:(NSDictionary *)userInfo;
 
-+ (void)trackCustomEvent:(nonnull NSString *)eventName
-         eventAttributes:(NSDictionary<NSString *, id> *)eventAttributes;
++ (NSString *)trackCustomEvent:(nonnull NSString *)eventName
+               eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes;
+
++ (NSString *)appLogout;
 
 @end

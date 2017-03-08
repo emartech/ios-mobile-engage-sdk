@@ -2,11 +2,13 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
+#import <CoreSDK/EMSRequestModelBuilder.h>
 #import "EMSRequestModelMatcher.h"
 
 
 @implementation EMSRequestModelMatcher {
     id _otherSubject;
+    NSString *_differance;
 }
 
 #pragma mark - Getting Matcher Strings
@@ -18,11 +20,11 @@
 #pragma mark - Getting Failure Messages
 
 - (NSString *)failureMessageForShould {
-    return @"expected subject to be similar";
+    return [NSString stringWithFormat:@"\nexpected subject to be similar: %@", _differance];
 }
 
 - (NSString *)failureMessageForShouldNot {
-    return @"expected subject to be NOT similar";
+    return [NSString stringWithFormat:@"\nexpected subject to be NOT similar: %@", _differance];
 }
 
 #pragma mark - Matching
@@ -30,16 +32,29 @@
 - (BOOL)evaluate {
     if (self.subject == _otherSubject)
         return YES;
-    if (_otherSubject == nil)
+    if (_otherSubject == nil) {
+        _differance = @"subject is nil";
         return NO;
-    if ([self.subject url] != [_otherSubject url] && ![[self.subject url] isEqual:[_otherSubject url]])
+    }
+    if ([self.subject url] != [_otherSubject url] && ![[self.subject url] isEqual:[_otherSubject url]]) {
+        _differance = [NSString stringWithFormat:@"URL %@ != %@", [self.subject url], [_otherSubject url]];
         return NO;
-    if ([self.subject method] != [_otherSubject method] && ![[self.subject method] isEqualToString:[_otherSubject method]])
+    }
+    if ([self.subject method] != [_otherSubject method]
+            && ![[self.subject method] isEqualToString:[_otherSubject method]]) {
+        _differance = [NSString stringWithFormat:@"method %@ != %@", [self.subject method], [_otherSubject method]];
         return NO;
-    if ([self.subject body] != [_otherSubject body] && ![[self.subject body] isEqualToData:[_otherSubject body]])
+    }
+    if ([self.subject payload] != [_otherSubject payload]
+            && ![[self.subject payload] isEqualToDictionary:[_otherSubject payload]]) {
+        _differance = [NSString stringWithFormat:@"payload %@ != %@", [self.subject payload], [_otherSubject payload]];
         return NO;
-    if ([self.subject headers] != [_otherSubject headers] && ![[self.subject headers] isEqualToDictionary:[_otherSubject headers]])
+    }
+    if ([self.subject headers] != [_otherSubject headers]
+            && ![[self.subject headers] isEqualToDictionary:[_otherSubject headers]]) {
+        _differance = [NSString stringWithFormat:@"headers %@ != %@", [self.subject headers], [_otherSubject headers]];
         return NO;
+    }
     return YES;
 }
 
