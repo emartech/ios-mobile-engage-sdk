@@ -9,19 +9,15 @@
 
 @implementation NSDictionary (MobileEngage)
 
-+ (NSString *)messageIdFromUserInfo:(NSDictionary *)userInfo {
-    NSString *customData = userInfo[PushwooshMessageCustomDataKey];
+- (NSString *)messageId {
     NSString *sid;
-    if (customData) {
-        NSData *data = [customData dataUsingEncoding:NSUTF8StringEncoding];
-        if (data != nil) {
-            NSDictionary<NSString *, id> *customDataDict = [NSJSONSerialization JSONObjectWithData:data
-                                                                                           options:NSJSONReadingAllowFragments
-                                                                                             error:nil];
-            if (customDataDict) {
-                sid = customDataDict[MobileEngageSIDKey];
-            }
-        }
+    NSString *customData = self[PushwooshMessageCustomDataKey];
+    NSData *data = [customData dataUsingEncoding:NSUTF8StringEncoding];
+    if (data) {
+        NSDictionary<NSString *, id> *customDataDict = [NSJSONSerialization JSONObjectWithData:data
+                                                                                       options:NSJSONReadingAllowFragments
+                                                                                         error:nil];
+        sid = customDataDict[MobileEngageSIDKey];
     }
     return sid;
 }

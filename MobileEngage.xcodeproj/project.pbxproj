@@ -14,6 +14,7 @@
 		32C6F55A9979DC26FD526D89 /* MEConfigBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F0CED986657DA32E7525 /* MEConfigBuilder.m */; };
 		32C6F791C414CB1E195DF7BF /* MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F0F5EAFCCF8DD8BEDE99 /* MobileEngage.m */; };
 		32C6F81E4196B011AFB51586 /* MEConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F22AD8B05632EFE8F29D /* MEConfig.h */; };
+		32C6F841AFC3F9D8BFD08191 /* NSDictionary+MobileEngageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */; };
 		32C6F906E9F3410E5BF08A2D /* BuilderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F8941CDF4E63DBD3D286 /* BuilderTests.m */; };
 		32C6F9742BC7CC58427DA191 /* MobileEngageStatusDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */; };
 		32C6FC9F53ECB121BF53EA03 /* NSDictionary+MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */; };
@@ -42,6 +43,7 @@
 		32C6F0F5EAFCCF8DD8BEDE99 /* MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngage.m; sourceTree = "<group>"; };
 		32C6F1CFFCD7F0A4AB4BD0BA /* MobileEngage+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MobileEngage+Private.h"; sourceTree = "<group>"; };
 		32C6F22AD8B05632EFE8F29D /* MEConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEConfig.h; sourceTree = "<group>"; };
+		32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngageTests.m"; sourceTree = "<group>"; };
 		32C6F2F7B517867CF069B590 /* InterfaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceTests.m; sourceTree = "<group>"; };
 		32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngageStatusDelegate.h; sourceTree = "<group>"; };
 		32C6F68C59D362926D33BB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				32C6F1CFFCD7F0A4AB4BD0BA /* MobileEngage+Private.h */,
 				374600D2C87F4E59AE3EB5C1 /* EMSRequestModelMatcher.m */,
 				37460A62CFE918ED5D3EE52F /* EMSRequestModelMatcher.h */,
+				32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */,
 			);
 			path = MobileEngageTests;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				32C6F906E9F3410E5BF08A2D /* BuilderTests.m in Sources */,
 				32C6F443B74763D4785022F9 /* InterfaceTests.m in Sources */,
 				37460906FC12301114D82BAF /* EMSRequestModelMatcher.m in Sources */,
+				32C6F841AFC3F9D8BFD08191 /* NSDictionary+MobileEngageTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
