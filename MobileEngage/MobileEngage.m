@@ -94,34 +94,41 @@ static NSData *_pushToken;
 }
 
 + (NSString *)trackMessageOpenWithUserInfo:(NSDictionary *)userInfo {
-    EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-        [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
-        [builder setMethod:HTTPMethodPOST];
-        [builder setPayload:@{
-                @"application_id": _config.applicationId,
-                @"hardware_id": [EMSDeviceInfo hardwareId],
-                @"sid": [NSDictionary messageIdFromUserInfo:userInfo]
+    NSString *requestId;
+    NSString *messageId = [userInfo messageId];
+    if (messageId) {
+        EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+            [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
+            [builder setMethod:HTTPMethodPOST];
+            [builder setPayload:@{
+                    @"application_id": _config.applicationId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"sid": messageId
+            }];
         }];
-    }];
-    [_requestManager submit:requestModel
-               successBlock:nil
-                 errorBlock:nil];
-    return requestModel.requestId;
+        [_requestManager submit:requestModel
+                   successBlock:nil
+                     errorBlock:nil];
+        requestId = [requestModel requestId];
+    }
+    return requestId;
 }
 
 + (NSString *)trackCustomEvent:(nonnull NSString *)eventName
                eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes {
     NSParameterAssert(eventName);
-    NSParameterAssert(eventAttributes);
 
     EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setUrl:[NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName]];
         [builder setMethod:HTTPMethodPOST];
-        [builder setPayload:@{
+        NSMutableDictionary *payload = [@{
                 @"application_id": _config.applicationId,
-                @"hardware_id": [EMSDeviceInfo hardwareId],
-                @"attributes": eventAttributes
-        }];
+                @"hardware_id": [EMSDeviceInfo hardwareId]
+        } mutableCopy];
+        if (eventAttributes) {
+            payload[@"attributes"] = eventAttributes;
+        }
+        [builder setPayload:payload];
     }];
     [_requestManager submit:requestModel
                successBlock:nil

@@ -203,15 +203,6 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[uuid should] equal:actualModel.requestId];
         });
 
-        it(@"should throw exception when userInfo is nil", ^{
-            @try {
-                [MobileEngage trackMessageOpenWithUserInfo:nil];
-                fail(@"Expected Exception when userInfo is nil!");
-            } @catch (NSException *exception) {
-                [[theValue(exception) shouldNot] beNil];
-            }
-        });
-
         it(@"should submit a corresponding RequestModel", ^{
             id requestManager = requestManagerMock();
 
@@ -230,6 +221,11 @@ SPEC_BEGIN(PublicInterfaceTest)
 
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
+        });
+
+        it(@"should return nil when there is no messageId", ^{
+            NSString *result = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"no-sid\":\"123456789\"}"}];
+            [[result should] beNil];
         });
     });
 
@@ -266,17 +262,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             }
         });
 
-        it(@"should throw exception when eventAttributes is nil", ^{
-            @try {
-                [MobileEngage trackCustomEvent:@""
-                               eventAttributes:nil];
-                fail(@"Expected Exception when eventAttributes is nil!");
-            } @catch (NSException *exception) {
-                [[theValue(exception) shouldNot] beNil];
-            }
-        });
-
-        it(@"should submit a corresponding RequestModel", ^{
+        it(@"should submit a corresponding RequestModel, when eventAttributes are set", ^{
             id requestManager = requestManagerMock();
 
             NSString *eventName = @"testEventName";
@@ -297,6 +283,30 @@ SPEC_BEGIN(PublicInterfaceTest)
                                                         atIndex:0];
             [MobileEngage trackCustomEvent:eventName
                            eventAttributes:eventAttributes];
+            EMSRequestModel *actualModel = spy.argument;
+            [[model should] beSimilarWithRequest:actualModel];
+        });
+
+
+        it(@"should submit a corresponding RequestModel, when eventAttributes are missing", ^{
+            id requestManager = requestManagerMock();
+
+            NSString *eventName = @"testEventName";
+
+            NSDictionary *payload = @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+            };
+
+            EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName], payload);
+
+            [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
+                               withArguments:any(), nil, nil];
+
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
+                                                        atIndex:0];
+            [MobileEngage trackCustomEvent:eventName
+                           eventAttributes:nil];
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
         });
