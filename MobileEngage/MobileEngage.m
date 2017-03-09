@@ -11,6 +11,7 @@
 #import <CoreSDK/EMSDeviceInfo.h>
 #import <CoreSDK/EMSRequestModel.h>
 #import <CoreSDK/EMSRequestModelBuilder.h>
+#import <CoreSDK/NSError+EMSCore.h>
 
 @implementation MobileEngage
 
@@ -18,6 +19,20 @@ static id <MobileEngageStatusDelegate> _statusDelegate;
 static EMSRequestManager *_requestManager;
 static MEConfig *_config;
 static NSData *_pushToken;
+
+void (^ const successBlock)(NSString *)=^(NSString *requestId) {
+    if ([_statusDelegate respondsToSelector:@selector(mobileEngageLogReceivedWithEventId:log:)]) {
+        [_statusDelegate mobileEngageLogReceivedWithEventId:requestId
+                                                        log:@"Success"];
+    }
+};
+
+void (^ const errorBlock)(NSString *, NSError *)=^(NSString *requestId, NSError *error) {
+    if ([_statusDelegate respondsToSelector:@selector(mobileEngageErrorHappenedWithEventId:error:)]) {
+        [_statusDelegate mobileEngageErrorHappenedWithEventId:requestId
+                                                        error:error];
+    }
+};
 
 + (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
                          config:(nonnull MEConfig *)config
@@ -72,9 +87,10 @@ static NSData *_pushToken;
         }
         [builder setPayload:payload];
     }];
+
     [_requestManager submit:requestModel
-               successBlock:nil
-                 errorBlock:nil];
+               successBlock:successBlock
+                 errorBlock:errorBlock];
     return requestModel.requestId;
 }
 
@@ -88,8 +104,8 @@ static NSData *_pushToken;
         }];
     }];
     [_requestManager submit:requestModel
-               successBlock:nil
-                 errorBlock:nil];
+               successBlock:successBlock
+                 errorBlock:errorBlock];
     return requestModel.requestId;
 }
 
@@ -107,11 +123,15 @@ static NSData *_pushToken;
             }];
         }];
         [_requestManager submit:requestModel
-                   successBlock:nil
-                     errorBlock:nil];
+                   successBlock:successBlock
+                     errorBlock:errorBlock];
         requestId = [requestModel requestId];
+    } else {
+        errorBlock(nil, [NSError errorWithCode:1
+                          localizedDescription:@"Missing messageId"]);
     }
     return requestId;
+
 }
 
 + (NSString *)trackCustomEvent:(nonnull NSString *)eventName
@@ -131,8 +151,8 @@ static NSData *_pushToken;
         [builder setPayload:payload];
     }];
     [_requestManager submit:requestModel
-               successBlock:nil
-                 errorBlock:nil];
+               successBlock:successBlock
+                 errorBlock:errorBlock];
     return requestModel.requestId;
 }
 

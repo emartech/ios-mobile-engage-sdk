@@ -2,3 +2,7 @@
 .idea/
 MobileEngage.xcodeproj/xcuserdata/
 /Pods
+/Podfile.lock
+/MobileEngage.xcworkspace/
+/MobileEngage.xcodeproj/project.xcworkspace/
+/test_output/

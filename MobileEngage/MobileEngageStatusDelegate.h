@@ -7,8 +7,10 @@
 @protocol MobileEngageStatusDelegate <NSObject>
 
 @optional
-- (void)mobileEngageErrorHappened:(NSError *)error;
 
-- (void)mobileEngageLogReceived:(NSString *)log;
+- (void)mobileEngageErrorHappenedWithEventId:(NSString *)eventId
+                                       error:(NSError *)error;
 
+- (void)mobileEngageLogReceivedWithEventId:(NSString *)eventId
+                                       log:(NSString *)log;
 @end
