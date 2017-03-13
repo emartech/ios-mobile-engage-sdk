@@ -11,6 +11,7 @@
 #import "EMSAuthentication.h"
 #import "EMSDeviceInfo.h"
 #import "FakeRequestManager.h"
+#import "FakeStatusDelegate.h"
 
 static NSString *const kAppId = @"kAppId";
 
@@ -223,11 +224,6 @@ SPEC_BEGIN(PublicInterfaceTest)
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
         });
-
-        it(@"should return nil when there is no messageId", ^{
-            NSString *result = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"no-sid\":\"123456789\"}"}];
-            [[result should] beNil];
-        });
     });
 
     describe(@"trackCustomEvent:eventAttributes:", ^{
@@ -425,10 +421,11 @@ SPEC_BEGIN(PublicInterfaceTest)
             id statusDelegate = statusDelegateMock(ResponseTypeFailure);
 
             [MobileEngage setStatusDelegate:statusDelegate];
-            [[statusDelegate should] receive:@selector(mobileEngageErrorHappenedWithEventId:error:)
-                                   withCount:1
-                                   arguments:nil, any()];
-            [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"no-sid\":\"123456789\"}"}];
+            NSString *messageId = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"no-sid\":\"123456789\"}"}];
+
+            [[statusDelegate shouldEventually] receive:@selector(mobileEngageErrorHappenedWithEventId:error:)
+                                             withCount:1
+                                             arguments:messageId, any()];
         });
 
         it(@"should be called with logReceived when trackCustomEvent is successful", ^{
@@ -454,6 +451,139 @@ SPEC_BEGIN(PublicInterfaceTest)
                                              withCount:1
                                              arguments:eventId, any()];
         });
+    });
+
+    describe(@"Main thread", ^{
+
+        void (^setupWithResponseType)(ResponseType responseType) = ^void(ResponseType responseType) {
+            FakeRequestManager *requestManager = [FakeRequestManager new];
+            [requestManager setResponseType:responseType];
+
+            NSString *applicationId = kAppId;
+            NSString *applicationSecret = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationId:applicationId
+                                       applicationSecret:applicationSecret];
+            }];
+            [MobileEngage setupWithRequestManager:requestManager
+                                           config:config
+                                    launchOptions:nil];
+        };
+
+        it(@"should be used for statusDelegate, when anonymous appLogin success happens", ^{
+            setupWithResponseType(ResponseTypeSuccess);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage appLogin];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
+        });
+
+        it(@"should be used for statusDelegate, when anonymous appLogin failure happens", ^{
+            setupWithResponseType(ResponseTypeFailure);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage appLogin];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];
+        });
+
+        it(@"should be used for statusDelegate, when appLogin success happens", ^{
+            setupWithResponseType(ResponseTypeSuccess);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage appLoginWithContactFieldId:@0
+                                   contactFieldValue:@"contactFieldValue"];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
+        });
+
+        it(@"should be used for statusDelegate, when appLogin failure happens", ^{
+            setupWithResponseType(ResponseTypeFailure);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage appLoginWithContactFieldId:@0
+                                   contactFieldValue:@"contactFieldValue"];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];
+        });
+
+        it(@"should be used for statusDelegate, when appLogout success happens", ^{
+            setupWithResponseType(ResponseTypeSuccess);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage appLogout];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
+        });
+
+        it(@"should be used for statusDelegate, when appLogout failure happens", ^{
+            setupWithResponseType(ResponseTypeFailure);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage appLogout];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];
+        });
+
+        it(@"should be used for statusDelegate, when messageOpen success happens", ^{
+            setupWithResponseType(ResponseTypeSuccess);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
+        });
+
+        it(@"should be used for statusDelegate, when messageOpen failure happens", ^{
+            setupWithResponseType(ResponseTypeFailure);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];
+        });
+
+        it(@"should be used for statusDelegate, when messageOpen success happens", ^{
+            setupWithResponseType(ResponseTypeSuccess);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage trackCustomEvent:@"eventName"
+                           eventAttributes:nil];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
+        });
+
+        it(@"should be used for statusDelegate, when messageOpen failure happens", ^{
+            setupWithResponseType(ResponseTypeFailure);
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+
+            [MobileEngage setStatusDelegate:statusDelegate];
+            [MobileEngage trackCustomEvent:@"eventName"
+                           eventAttributes:nil];
+
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];
+        });
+
     });
 
 SPEC_END

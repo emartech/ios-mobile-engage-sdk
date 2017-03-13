@@ -17,6 +17,7 @@
 		32C6F841AFC3F9D8BFD08191 /* NSDictionary+MobileEngageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */; };
 		32C6F906E9F3410E5BF08A2D /* BuilderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F8941CDF4E63DBD3D286 /* BuilderTests.m */; };
 		32C6F9742BC7CC58427DA191 /* MobileEngageStatusDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */; };
+		32C6F9BEF9759A037BD8C3D9 /* FakeStatusDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F9EBE29BADE147154DC7 /* FakeStatusDelegate.m */; };
 		32C6FC9F53ECB121BF53EA03 /* NSDictionary+MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */; };
 		32C6FCF5DE2B130DCD04794A /* MEConfigBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FB15634CAA89F68990D1 /* MEConfigBuilder.h */; };
 		32C6FD0B7F3B7647DA9C43EC /* NSDictionary+MobileEngage.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F901EAA453C0FE99E056 /* NSDictionary+MobileEngage.h */; };
@@ -42,6 +43,7 @@
 		0BB822EAFA034034244E9B64 /* Pods-MobileEngage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.release.xcconfig"; sourceTree = "<group>"; };
 		32C6F0CED986657DA32E7525 /* MEConfigBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEConfigBuilder.m; sourceTree = "<group>"; };
 		32C6F0F5EAFCCF8DD8BEDE99 /* MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngage.m; sourceTree = "<group>"; };
+		32C6F123C6A32D948E91FC84 /* FakeStatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeStatusDelegate.h; sourceTree = "<group>"; };
 		32C6F1CFFCD7F0A4AB4BD0BA /* MobileEngage+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MobileEngage+Private.h"; sourceTree = "<group>"; };
 		32C6F22AD8B05632EFE8F29D /* MEConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEConfig.h; sourceTree = "<group>"; };
 		32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngageTests.m"; sourceTree = "<group>"; };
@@ -52,6 +54,7 @@
 		32C6F8941CDF4E63DBD3D286 /* BuilderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuilderTests.m; sourceTree = "<group>"; };
 		32C6F901EAA453C0FE99E056 /* NSDictionary+MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MobileEngage.h"; sourceTree = "<group>"; };
 		32C6F979B34ACD8FE94CBAD3 /* MobileEngageSDK.podspec */ = {isa = PBXFileReference; lastKnownFileType = file.podspec; path = MobileEngageSDK.podspec; sourceTree = "<group>"; };
+		32C6F9EBE29BADE147154DC7 /* FakeStatusDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeStatusDelegate.m; sourceTree = "<group>"; };
 		32C6F9F7C741052373E946A2 /* MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngage.h; sourceTree = "<group>"; };
 		32C6FA4B877CF01DBE87E712 /* FakeRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeRequestManager.h; sourceTree = "<group>"; };
 		32C6FA5C92065D2BBF21E07A /* MobileEngageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MobileEngageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +152,8 @@
 				32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */,
 				32C6FE3759BB0C1FD42A418E /* FakeRequestManager.m */,
 				32C6FA4B877CF01DBE87E712 /* FakeRequestManager.h */,
+				32C6F9EBE29BADE147154DC7 /* FakeStatusDelegate.m */,
+				32C6F123C6A32D948E91FC84 /* FakeStatusDelegate.h */,
 			);
 			path = MobileEngageTests;
 			sourceTree = "<group>";
@@ -367,6 +372,7 @@
 				37460906FC12301114D82BAF /* EMSRequestModelMatcher.m in Sources */,
 				32C6F841AFC3F9D8BFD08191 /* NSDictionary+MobileEngageTests.m in Sources */,
 				32C6FDFEA2A652D115B32D50 /* FakeRequestManager.m in Sources */,
+				32C6F9BEF9759A037BD8C3D9 /* FakeStatusDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

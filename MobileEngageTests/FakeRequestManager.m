@@ -11,11 +11,11 @@
   successBlock:(CoreSuccessBlock)successBlock
     errorBlock:(CoreErrorBlock)errorBlock {
     if (self.responseType == ResponseTypeSuccess) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (0.2 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             successBlock(model.requestId);
         });
     } else {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (0.2 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             NSError *error = [NSError errorWithDomain:@"com.emarsys.mobileengage"
                                                  code:1
                                              userInfo:@{NSLocalizedDescriptionKey: @"Errorka"}];

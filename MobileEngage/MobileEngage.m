@@ -21,17 +21,21 @@ static MEConfig *_config;
 static NSData *_pushToken;
 
 void (^ const successBlock)(NSString *)=^(NSString *requestId) {
-    if ([_statusDelegate respondsToSelector:@selector(mobileEngageLogReceivedWithEventId:log:)]) {
-        [_statusDelegate mobileEngageLogReceivedWithEventId:requestId
-                                                        log:@"Success"];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_statusDelegate respondsToSelector:@selector(mobileEngageLogReceivedWithEventId:log:)]) {
+            [_statusDelegate mobileEngageLogReceivedWithEventId:requestId
+                                                            log:@"Success"];
+        }
+    });
 };
 
 void (^ const errorBlock)(NSString *, NSError *)=^(NSString *requestId, NSError *error) {
-    if ([_statusDelegate respondsToSelector:@selector(mobileEngageErrorHappenedWithEventId:error:)]) {
-        [_statusDelegate mobileEngageErrorHappenedWithEventId:requestId
-                                                        error:error];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_statusDelegate respondsToSelector:@selector(mobileEngageErrorHappenedWithEventId:error:)]) {
+            [_statusDelegate mobileEngageErrorHappenedWithEventId:requestId
+                                                            error:error];
+        }
+    });
 };
 
 + (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
@@ -127,11 +131,13 @@ void (^ const errorBlock)(NSString *, NSError *)=^(NSString *requestId, NSError 
                      errorBlock:errorBlock];
         requestId = [requestModel requestId];
     } else {
-        errorBlock(nil, [NSError errorWithCode:1
-                          localizedDescription:@"Missing messageId"]);
+        requestId = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+            [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
+        }].requestId;
+        errorBlock(requestId, [NSError errorWithCode:1
+                                localizedDescription:@"Missing messageId"]);
     }
     return requestId;
-
 }
 
 + (NSString *)trackCustomEvent:(nonnull NSString *)eventName
