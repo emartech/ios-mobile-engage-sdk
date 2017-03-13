@@ -1,7 +1,7 @@
 #import "Kiwi.h"
 #import "EMSRequestManager.h"
-#import "MobileEngage.h"
-#import "MobileEngage+Private.h"
+#import "MobileEngageInternal.h"
+#import "MobileEngageInternal+Private.h"
 #import "MobileEngageStatusDelegate.h"
 #import "MEConfigBuilder.h"
 #import "MEConfig.h"
@@ -15,9 +15,15 @@
 
 static NSString *const kAppId = @"kAppId";
 
+MobileEngageInternal *_mobileEngage;
+
 SPEC_BEGIN(PublicInterfaceTest)
 
     registerMatchers(@"EMS");
+
+    beforeAll(^{
+        _mobileEngage = [MobileEngageInternal new];
+    });
 
     id (^requestManagerMock)() = ^id() {
         NSString *applicationId = kAppId;
@@ -33,9 +39,9 @@ SPEC_BEGIN(PublicInterfaceTest)
                                    applicationSecret:applicationSecret];
         }];
 
-        [MobileEngage setupWithRequestManager:requestManager
-                                       config:config
-                                launchOptions:nil];
+        [_mobileEngage setupWithRequestManager:requestManager
+                                        config:config
+                                 launchOptions:nil];
         return requestManager;
     };
 
@@ -59,7 +65,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
                                withArguments:any(), any(), any()];
 
-            NSString *uuid = [MobileEngage appLogin];
+            NSString *uuid = [_mobileEngage appLogin];
             [[uuid shouldNot] beNil];
         });
 
@@ -69,7 +75,7 @@ SPEC_BEGIN(PublicInterfaceTest)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            NSString *uuid = [MobileEngage appLogin];
+            NSString *uuid = [_mobileEngage appLogin];
             EMSRequestModel *actualModel = spy.argument;
             [[uuid should] equal:actualModel.requestId];
         });
@@ -90,7 +96,7 @@ SPEC_BEGIN(PublicInterfaceTest)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            [MobileEngage appLogin];
+            [_mobileEngage appLogin];
 
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
@@ -103,8 +109,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
                                withArguments:any(), any(), any()];
 
-            NSString *uuid = [MobileEngage appLoginWithContactFieldId:@0
-                                                    contactFieldValue:@"contactFieldValue"];
+            NSString *uuid = [_mobileEngage appLoginWithContactFieldId:@0
+                                                     contactFieldValue:@"contactFieldValue"];
             [[uuid shouldNot] beNil];
         });
 
@@ -114,8 +120,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            NSString *uuid = [MobileEngage appLoginWithContactFieldId:@0
-                                                    contactFieldValue:@"contactFieldValue"];
+            NSString *uuid = [_mobileEngage appLoginWithContactFieldId:@0
+                                                     contactFieldValue:@"contactFieldValue"];
             EMSRequestModel *actualModel = spy.argument;
             [[uuid should] equal:actualModel.requestId];
         });
@@ -138,8 +144,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            [MobileEngage appLoginWithContactFieldId:@0
-                                   contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
         });
@@ -150,7 +156,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             id requestManager = requestManagerMock();
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
                                withArguments:any(), any(), any()];
-            NSString *uuid = [MobileEngage appLogout];
+            NSString *uuid = [_mobileEngage appLogout];
             [[uuid shouldNot] beNil];
         });
 
@@ -160,7 +166,7 @@ SPEC_BEGIN(PublicInterfaceTest)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            NSString *uuid = [MobileEngage appLogout];
+            NSString *uuid = [_mobileEngage appLogout];
 
             EMSRequestModel *actualModel = spy.argument;
             [[uuid should] equal:actualModel.requestId];
@@ -177,7 +183,7 @@ SPEC_BEGIN(PublicInterfaceTest)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            [MobileEngage appLogout];
+            [_mobileEngage appLogout];
 
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
@@ -189,7 +195,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             id requestManager = requestManagerMock();
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
                                withArguments:any(), any(), any()];
-            NSString *uuid = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+            NSString *uuid = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
             [[uuid shouldNot] beNil];
         });
 
@@ -199,7 +205,7 @@ SPEC_BEGIN(PublicInterfaceTest)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            NSString *uuid = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+            NSString *uuid = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
 
             EMSRequestModel *actualModel = spy.argument;
             [[uuid should] equal:actualModel.requestId];
@@ -219,7 +225,7 @@ SPEC_BEGIN(PublicInterfaceTest)
 
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+            [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
 
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
@@ -231,8 +237,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             id requestManager = requestManagerMock();
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
                                withArguments:any(), any(), any()];
-            NSString *uuid = [MobileEngage trackCustomEvent:@""
-                                            eventAttributes:@{}];
+            NSString *uuid = [_mobileEngage trackCustomEvent:@""
+                                             eventAttributes:@{}];
             [[uuid shouldNot] beNil];
         });
 
@@ -242,8 +248,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            NSString *uuid = [MobileEngage trackCustomEvent:@""
-                                            eventAttributes:@{}];
+            NSString *uuid = [_mobileEngage trackCustomEvent:@""
+                                             eventAttributes:@{}];
 
             EMSRequestModel *actualModel = spy.argument;
             [[uuid should] equal:actualModel.requestId];
@@ -251,8 +257,8 @@ SPEC_BEGIN(PublicInterfaceTest)
 
         it(@"should throw exception when eventName is nil", ^{
             @try {
-                [MobileEngage trackCustomEvent:nil
-                               eventAttributes:@{}];
+                [_mobileEngage trackCustomEvent:nil
+                                eventAttributes:@{}];
                 fail(@"Expected Exception when eventName is nil!");
             } @catch (NSException *exception) {
                 [[theValue(exception) shouldNot] beNil];
@@ -278,8 +284,8 @@ SPEC_BEGIN(PublicInterfaceTest)
 
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            [MobileEngage trackCustomEvent:eventName
-                           eventAttributes:eventAttributes];
+            [_mobileEngage trackCustomEvent:eventName
+                            eventAttributes:eventAttributes];
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
         });
@@ -302,8 +308,8 @@ SPEC_BEGIN(PublicInterfaceTest)
 
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:successBlock:errorBlock:)
                                                         atIndex:0];
-            [MobileEngage trackCustomEvent:eventName
-                           eventAttributes:nil];
+            [_mobileEngage trackCustomEvent:eventName
+                            eventAttributes:nil];
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
         });
@@ -321,28 +327,28 @@ SPEC_BEGIN(PublicInterfaceTest)
                 [builder setCredentialsWithApplicationId:applicationId
                                        applicationSecret:applicationSecret];
             }];
-            [MobileEngage setupWithRequestManager:requestManager
-                                           config:config
-                                    launchOptions:nil];
+            [_mobileEngage setupWithRequestManager:requestManager
+                                            config:config
+                                     launchOptions:nil];
             return [KWMock mockForProtocol:@protocol(MobileEngageStatusDelegate)];
         };
 
-        it(@"should be called with logReceived when anonymusAppLogin is successful", ^{
+        it(@"should be called with logReceived when anonymousAppLogin is successful", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeSuccess);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage appLogin];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage appLogin];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageLogReceivedWithEventId:log:)
                                              withCount:1
                                              arguments:eventId, any()];
         });
 
-        it(@"should be called with errorHappened when anonymusAppLogin is failure", ^{
+        it(@"should be called with errorHappened when anonymousAppLogin is failure", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeFailure);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage appLogin];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage appLogin];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageErrorHappenedWithEventId:error:)
                                              withCount:1
@@ -352,9 +358,9 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"should be called with logReceived when appLoginWithContact is successful", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeSuccess);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage appLoginWithContactFieldId:@123
-                                                       contactFieldValue:@"contactValue"];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage appLoginWithContactFieldId:@123
+                                                        contactFieldValue:@"contactValue"];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageLogReceivedWithEventId:log:)
                                              withCount:1
@@ -364,9 +370,9 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"should be called with errorHappened when appLoginWithContact is failure", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeFailure);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage appLoginWithContactFieldId:@123
-                                                       contactFieldValue:@"contactValue"];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage appLoginWithContactFieldId:@123
+                                                        contactFieldValue:@"contactValue"];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageErrorHappenedWithEventId:error:)
                                              withCount:1
@@ -376,8 +382,8 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"should be called with logReceived when appLogout is successful", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeSuccess);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage appLogout];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage appLogout];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageLogReceivedWithEventId:log:)
                                              withCount:1
@@ -387,8 +393,8 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"should be called with errorHappened when appLogout is failure", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeFailure);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage appLogout];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage appLogout];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageErrorHappenedWithEventId:error:)
                                              withCount:1
@@ -398,8 +404,8 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"should be called with logReceived when trackMessageOpenWithUserInfo is successful", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeSuccess);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageLogReceivedWithEventId:log:)
                                              withCount:1
@@ -409,8 +415,8 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"should be called with errorHappened when trackMessageOpenWithUserInfo is failure", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeFailure);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageErrorHappenedWithEventId:error:)
                                              withCount:1
@@ -420,8 +426,8 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"should be called with errorHappened when trackMessageOpenWithUserInfo is called with missing messageId", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeFailure);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *messageId = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"no-sid\":\"123456789\"}"}];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *messageId = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"no-sid\":\"123456789\"}"}];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageErrorHappenedWithEventId:error:)
                                              withCount:1
@@ -431,9 +437,9 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"should be called with logReceived when trackCustomEvent is successful", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeSuccess);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage trackCustomEvent:@"event-name"
-                                               eventAttributes:nil];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage trackCustomEvent:@"event-name"
+                                                eventAttributes:nil];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageLogReceivedWithEventId:log:)
                                              withCount:1
@@ -443,9 +449,9 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"should be called with errorHappened when trackCustomEvent is failure", ^{
             id statusDelegate = statusDelegateMock(ResponseTypeFailure);
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            NSString *eventId = [MobileEngage trackCustomEvent:@"event-name"
-                                               eventAttributes:nil];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            NSString *eventId = [_mobileEngage trackCustomEvent:@"event-name"
+                                                eventAttributes:nil];
 
             [[statusDelegate shouldEventually] receive:@selector(mobileEngageErrorHappenedWithEventId:error:)
                                              withCount:1
@@ -465,17 +471,17 @@ SPEC_BEGIN(PublicInterfaceTest)
                 [builder setCredentialsWithApplicationId:applicationId
                                        applicationSecret:applicationSecret];
             }];
-            [MobileEngage setupWithRequestManager:requestManager
-                                           config:config
-                                    launchOptions:nil];
+            [_mobileEngage setupWithRequestManager:requestManager
+                                            config:config
+                                     launchOptions:nil];
         };
 
         it(@"should be used for statusDelegate, when anonymous appLogin success happens", ^{
             setupWithResponseType(ResponseTypeSuccess);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage appLogin];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage appLogin];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
@@ -485,8 +491,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             setupWithResponseType(ResponseTypeFailure);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage appLogin];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage appLogin];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];
@@ -496,9 +502,9 @@ SPEC_BEGIN(PublicInterfaceTest)
             setupWithResponseType(ResponseTypeSuccess);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage appLoginWithContactFieldId:@0
-                                   contactFieldValue:@"contactFieldValue"];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"contactFieldValue"];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
@@ -508,9 +514,9 @@ SPEC_BEGIN(PublicInterfaceTest)
             setupWithResponseType(ResponseTypeFailure);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage appLoginWithContactFieldId:@0
-                                   contactFieldValue:@"contactFieldValue"];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"contactFieldValue"];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];
@@ -520,8 +526,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             setupWithResponseType(ResponseTypeSuccess);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage appLogout];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage appLogout];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
@@ -531,8 +537,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             setupWithResponseType(ResponseTypeFailure);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage appLogout];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage appLogout];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];
@@ -542,8 +548,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             setupWithResponseType(ResponseTypeSuccess);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
@@ -553,8 +559,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             setupWithResponseType(ResponseTypeFailure);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];
@@ -564,9 +570,9 @@ SPEC_BEGIN(PublicInterfaceTest)
             setupWithResponseType(ResponseTypeSuccess);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage trackCustomEvent:@"eventName"
-                           eventAttributes:nil];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage trackCustomEvent:@"eventName"
+                            eventAttributes:nil];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
@@ -576,9 +582,9 @@ SPEC_BEGIN(PublicInterfaceTest)
             setupWithResponseType(ResponseTypeFailure);
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
 
-            [MobileEngage setStatusDelegate:statusDelegate];
-            [MobileEngage trackCustomEvent:@"eventName"
-                           eventAttributes:nil];
+            [_mobileEngage setStatusDelegate:statusDelegate];
+            [_mobileEngage trackCustomEvent:@"eventName"
+                            eventAttributes:nil];
 
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@0];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@1];

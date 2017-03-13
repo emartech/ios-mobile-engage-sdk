@@ -4,170 +4,58 @@
 
 #import "MobileEngage.h"
 #import "MEConfig.h"
-#import "MobileEngageStatusDelegate.h"
-#import "NSDictionary+MobileEngage.h"
-#import <CoreSDK/EMSRequestManager.h>
-#import <CoreSDK/EMSAuthentication.h>
-#import <CoreSDK/EMSDeviceInfo.h>
-#import <CoreSDK/EMSRequestModel.h>
-#import <CoreSDK/EMSRequestModelBuilder.h>
-#import <CoreSDK/NSError+EMSCore.h>
+#import "MobileEngageInternal.h"
 
 @implementation MobileEngage
 
-static id <MobileEngageStatusDelegate> _statusDelegate;
-static EMSRequestManager *_requestManager;
-static MEConfig *_config;
-static NSData *_pushToken;
+static MobileEngageInternal *_mobileEngageInternal;
 
-void (^ const successBlock)(NSString *)=^(NSString *requestId) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_statusDelegate respondsToSelector:@selector(mobileEngageLogReceivedWithEventId:log:)]) {
-            [_statusDelegate mobileEngageLogReceivedWithEventId:requestId
-                                                            log:@"Success"];
-        }
-    });
-};
-
-void (^ const errorBlock)(NSString *, NSError *)=^(NSString *requestId, NSError *error) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_statusDelegate respondsToSelector:@selector(mobileEngageErrorHappenedWithEventId:error:)]) {
-            [_statusDelegate mobileEngageErrorHappenedWithEventId:requestId
-                                                            error:error];
-        }
-    });
-};
-
-+ (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
-                         config:(nonnull MEConfig *)config
-                  launchOptions:(NSDictionary *)launchOptions {
-    _requestManager = requestManager;
-    _config = config;
-
-    NSDictionary<NSString *, NSString *> *additionalHeaders = @{
-            @"Authorization": [EMSAuthentication createBasicAuthWithUsername:config.applicationId
-                                                                    password:config.applicationSecret]
-    };
-
-    [requestManager setAdditionalHeaders:additionalHeaders];
++ (void)setupWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal
+                               config:(MEConfig *)config
+                        launchOptions:(NSDictionary *)launchOptions {
+    _mobileEngageInternal = mobileEngageInternal;
+    [_mobileEngageInternal setupWithConfig:config
+                             launchOptions:launchOptions];
 }
 
-+ (void)setupWithConfig:(nonnull MEConfig *)config
++ (void)setupWithConfig:(MEConfig *)config
           launchOptions:(NSDictionary *)launchOptions {
-    [self setupWithRequestManager:[EMSRequestManager new]
-                           config:config
-                    launchOptions:launchOptions];
+    [MobileEngage setupWithMobileEngageInternal:[MobileEngageInternal new]
+                                         config:config
+                                  launchOptions:launchOptions];
 }
 
 + (NSString *)appLogin {
-    return [MobileEngage appLoginWithContactFieldId:nil
-                                  contactFieldValue:nil];
+    return [_mobileEngageInternal appLogin];
 }
 
 + (NSString *)appLoginWithContactFieldId:(NSNumber *)contactFieldId
                        contactFieldValue:(NSString *)contactFieldValue {
-    EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-        [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login"];
-        [builder setMethod:HTTPMethodPOST];
-        NSMutableDictionary *payload = [@{
-                @"application_id": _config.applicationId,
-                @"hardware_id": [EMSDeviceInfo hardwareId],
-                @"platform": @"ios",
-                @"language": [EMSDeviceInfo languageCode],
-                @"timezone": [EMSDeviceInfo timeZone],
-                @"device_model": [EMSDeviceInfo deviceModel],
-                @"os_version": [EMSDeviceInfo osVersion]
-        } mutableCopy];
-        NSString *appVersion = [EMSDeviceInfo applicationVersion];
-        if (appVersion) {
-            payload[@"application_version"] = appVersion;
-        }
-        if (_pushToken) {
-            payload[@"push_token"] = _pushToken;
-        }
-        if (contactFieldId && contactFieldValue) {
-            payload[@"contact_field_id"] = contactFieldId;
-            payload[@"contact_field_value"] = contactFieldValue;
-        }
-        [builder setPayload:payload];
-    }];
-
-    [_requestManager submit:requestModel
-               successBlock:successBlock
-                 errorBlock:errorBlock];
-    return requestModel.requestId;
+    return [_mobileEngageInternal appLoginWithContactFieldId:contactFieldId
+                                           contactFieldValue:contactFieldValue];
 }
 
 + (NSString *)appLogout {
-    EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-        [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/logout"];
-        [builder setMethod:HTTPMethodPOST];
-        [builder setPayload:@{
-                @"application_id": _config.applicationId,
-                @"hardware_id": [EMSDeviceInfo hardwareId],
-        }];
-    }];
-    [_requestManager submit:requestModel
-               successBlock:successBlock
-                 errorBlock:errorBlock];
-    return requestModel.requestId;
+    return [_mobileEngageInternal appLogout];
 }
 
 + (NSString *)trackMessageOpenWithUserInfo:(NSDictionary *)userInfo {
-    NSString *requestId;
-    NSString *messageId = [userInfo messageId];
-    if (messageId) {
-        EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
-            [builder setMethod:HTTPMethodPOST];
-            [builder setPayload:@{
-                    @"application_id": _config.applicationId,
-                    @"hardware_id": [EMSDeviceInfo hardwareId],
-                    @"sid": messageId
-            }];
-        }];
-        [_requestManager submit:requestModel
-                   successBlock:successBlock
-                     errorBlock:errorBlock];
-        requestId = [requestModel requestId];
-    } else {
-        requestId = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
-        }].requestId;
-        errorBlock(requestId, [NSError errorWithCode:1
-                                localizedDescription:@"Missing messageId"]);
-    }
-    return requestId;
+    return [_mobileEngageInternal trackMessageOpenWithUserInfo:userInfo];
 }
 
-+ (NSString *)trackCustomEvent:(nonnull NSString *)eventName
-               eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes {
-    NSParameterAssert(eventName);
 
-    EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-        [builder setUrl:[NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName]];
-        [builder setMethod:HTTPMethodPOST];
-        NSMutableDictionary *payload = [@{
-                @"application_id": _config.applicationId,
-                @"hardware_id": [EMSDeviceInfo hardwareId]
-        } mutableCopy];
-        if (eventAttributes) {
-            payload[@"attributes"] = eventAttributes;
-        }
-        [builder setPayload:payload];
-    }];
-    [_requestManager submit:requestModel
-               successBlock:successBlock
-                 errorBlock:errorBlock];
-    return requestModel.requestId;
++ (NSString *)trackCustomEvent:(NSString *)eventName
+               eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes {
+    return [_mobileEngageInternal trackCustomEvent:eventName
+                                   eventAttributes:eventAttributes];
 }
 
 + (void)setStatusDelegate:(id <MobileEngageStatusDelegate>)statusDelegate {
-    _statusDelegate = statusDelegate;
+    [_mobileEngageInternal setStatusDelegate:statusDelegate];
 }
 
 + (id <MobileEngageStatusDelegate>)statusDelegate {
-    return _statusDelegate;
+    return [_mobileEngageInternal statusDelegate];
 }
 
 @end

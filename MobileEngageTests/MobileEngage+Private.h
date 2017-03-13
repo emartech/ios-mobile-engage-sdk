@@ -1,15 +1,15 @@
 //
-//  Copyright (c) 2017 Emarsys. All rights reserved.
+// Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
 #import "MobileEngage.h"
 
-@class EMSRequestManager;
+@class MobileEngageInternal;
 
-@interface MobileEngage(Private)
+@interface MobileEngage (Private)
 
-+ (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
-                         config:(nonnull MEConfig *)config
-                  launchOptions:(NSDictionary *)launchOptions;
++ (void)setupWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal
+                               config:(MEConfig *)config
+                        launchOptions:(NSDictionary *)launchOptions;
 
 @end
