@@ -6,10 +6,13 @@
 
 @class MobileEngageInternal;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface MobileEngage (Private)
 
 + (void)setupWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal
                                config:(MEConfig *)config
-                        launchOptions:(NSDictionary *)launchOptions;
+                        launchOptions:(nullable NSDictionary *)launchOptions;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -6,6 +6,7 @@
 
 @class MEConfig;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface MEConfigBuilder : NSObject
 
 @property(nonatomic, readonly) NSString *applicationId;
@@ -15,3 +16,5 @@
                                     applicationSecret:(NSString *)applicationSecret;
 
 @end
+
+NS_ASSUME_NONNULL_END

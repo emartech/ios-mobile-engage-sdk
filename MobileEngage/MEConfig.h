@@ -6,14 +6,16 @@
 
 @class MEConfigBuilder;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface MEConfig : NSObject
 
 @property(nonatomic, readonly) NSString *applicationId;
 @property(nonatomic, readonly) NSString *applicationSecret;
 
-typedef void(^MEConfigBuilderBlock)(MEConfigBuilder * _Nonnull builder);
+typedef void(^MEConfigBuilderBlock)(MEConfigBuilder *builder);
 
-+ (nonnull MEConfig *)makeWithBuilder:(MEConfigBuilderBlock)builderBlock;
-
++ (MEConfig *)makeWithBuilder:(MEConfigBuilderBlock)builderBlock;
 
 @end
+
+NS_ASSUME_NONNULL_END

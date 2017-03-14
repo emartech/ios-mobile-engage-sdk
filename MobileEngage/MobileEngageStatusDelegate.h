@@ -4,6 +4,7 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 @protocol MobileEngageStatusDelegate <NSObject>
 
 @optional
@@ -14,3 +15,5 @@
 - (void)mobileEngageLogReceivedWithEventId:(NSString *)eventId
                                        log:(NSString *)log;
 @end
+
+NS_ASSUME_NONNULL_END

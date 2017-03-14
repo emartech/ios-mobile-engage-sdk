@@ -3,7 +3,6 @@
 //
 
 #import "MobileEngageInternal.h"
-#import "MobileEngageInternal+Private.h"
 #import <CoreSDK/EMSRequestManager.h>
 #import <CoreSDK/EMSAuthentication.h>
 #import <CoreSDK/EMSRequestModelBuilder.h>

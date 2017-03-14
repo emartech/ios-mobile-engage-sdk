@@ -7,23 +7,26 @@
 @class MEConfig;
 @protocol MobileEngageStatusDelegate;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface MobileEngage : NSObject
 
-@property(class, nonatomic, weak) id <MobileEngageStatusDelegate> statusDelegate;
+@property(class, nonatomic, weak, nullable) id <MobileEngageStatusDelegate> statusDelegate;
 
-+ (void)setupWithConfig:(nonnull MEConfig *)config
-          launchOptions:(NSDictionary *)launchOptions;
++ (void)setupWithConfig:(MEConfig *)config
+          launchOptions:(nullable NSDictionary *)launchOptions;
 
 + (NSString *)appLogin;
 
-+ (NSString *)appLoginWithContactFieldId:(NSNumber *)contactFieldId
-                       contactFieldValue:(NSString *)contactFieldValue;
++ (NSString *)appLoginWithContactFieldId:(nullable NSNumber *)contactFieldId
+                       contactFieldValue:(nullable NSString *)contactFieldValue;
 
 + (NSString *)trackMessageOpenWithUserInfo:(NSDictionary *)userInfo;
 
-+ (NSString *)trackCustomEvent:(nonnull NSString *)eventName
-               eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes;
++ (NSString *)trackCustomEvent:(NSString *)eventName
+               eventAttributes:(nullable NSDictionary<NSString *, NSString *> *)eventAttributes;
 
 + (NSString *)appLogout;
 
 @end
+
+NS_ASSUME_NONNULL_END
