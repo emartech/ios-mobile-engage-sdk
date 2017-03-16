@@ -55,7 +55,8 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
 
     NSDictionary<NSString *, NSString *> *additionalHeaders = @{
             @"Authorization": [EMSAuthentication createBasicAuthWithUsername:config.applicationId
-                                                                    password:config.applicationSecret]
+                                                                    password:config.applicationSecret],
+            @"Content-Type": @"application/json"
     };
     [requestManager setAdditionalHeaders:additionalHeaders];
 }
@@ -92,6 +93,8 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
         }
         if (self.pushToken) {
             payload[@"push_token"] = self.pushToken;
+        } else {
+            payload[@"push_token"] = @NO;
         }
         if (contactFieldId && contactFieldValue) {
             payload[@"contact_field_id"] = contactFieldId;

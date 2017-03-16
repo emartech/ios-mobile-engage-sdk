@@ -28,8 +28,11 @@ SPEC_BEGIN(PublicInterfaceTest)
     id (^requestManagerMock)() = ^id() {
         NSString *applicationId = kAppId;
         NSString *applicationSecret = @"appSecret";
-        NSDictionary *additionalHeaders = @{@"Authorization": [EMSAuthentication createBasicAuthWithUsername:applicationId
-                                                                                                    password:applicationSecret]};
+        NSDictionary *additionalHeaders = @{
+                @"Authorization": [EMSAuthentication createBasicAuthWithUsername:applicationId
+                                                                        password:applicationSecret],
+                @"Content-Type": @"application/json"
+        };
         id requestManager = [EMSRequestManager mock];
         [[requestManager should] receive:@selector(setAdditionalHeaders:)
                            withArguments:additionalHeaders];
@@ -89,7 +92,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                     @"language": [EMSDeviceInfo languageCode],
                     @"timezone": [EMSDeviceInfo timeZone],
                     @"device_model": [EMSDeviceInfo deviceModel],
-                    @"os_version": [EMSDeviceInfo osVersion]
+                    @"os_version": [EMSDeviceInfo osVersion],
+                    @"push_token": @NO
             });
 
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
@@ -101,6 +105,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
         });
+
+
     });
 
     describe(@"appLoginWithContactFieldId:contactFieldValue:", ^{
@@ -137,7 +143,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                     @"device_model": [EMSDeviceInfo deviceModel],
                     @"os_version": [EMSDeviceInfo osVersion],
                     @"contact_field_id": @0,
-                    @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"
+                    @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
+                    @"push_token": @NO
             });
 
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
