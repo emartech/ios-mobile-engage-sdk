@@ -247,6 +247,11 @@
 			isa = PBXProject;
 			attributes = {
 				ORGANIZATIONNAME = Emarsys;
+				TargetAttributes = {
+					32C6F59736632C8B5808DD7B = {
+						DevelopmentTeam = 8LAPGQR7L8;
+					};
+				};
 			};
 			buildConfigurationList = 32C6FD3AA9EA1AC27FAA2651 /* Build configuration list for PBXProject "MobileEngage" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -539,6 +544,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F1CF1B5F24046DBCF30ACF75 /* Pods-MobileEngageTests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 8LAPGQR7L8;
 				INFOPLIST_FILE = MobileEngageTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.MobileEngageTests;
@@ -550,6 +556,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9780057C0A3C341B76020F59 /* Pods-MobileEngageTests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 8LAPGQR7L8;
 				INFOPLIST_FILE = MobileEngageTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.MobileEngageTests;
