@@ -93,7 +93,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                     @"timezone": [EMSDeviceInfo timeZone],
                     @"device_model": [EMSDeviceInfo deviceModel],
                     @"os_version": [EMSDeviceInfo osVersion],
-                    @"push_token": @NO
+                    @"push_token": @NO,
+                    @"application_version" : @"1.0"
             });
 
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
@@ -144,7 +145,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                     @"os_version": [EMSDeviceInfo osVersion],
                     @"contact_field_id": @0,
                     @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
-                    @"push_token": @NO
+                    @"push_token": @NO,
+                    @"application_version" : @"1.0"
             });
 
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
