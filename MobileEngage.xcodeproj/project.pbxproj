@@ -559,6 +559,7 @@
 				INFOPLIST_FILE = "MobileEngage Host/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "emarsys.MobileEngage-Host";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -687,6 +688,7 @@
 				INFOPLIST_FILE = MobileEngage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.MobileEngage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -707,6 +709,7 @@
 				INFOPLIST_FILE = MobileEngage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.MobileEngage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -721,6 +724,7 @@
 				DEVELOPMENT_TEAM = 8LAPGQR7L8;
 				INFOPLIST_FILE = MobileEngageTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.MobileEngageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MobileEngage Host.app/MobileEngage Host";
@@ -734,6 +738,7 @@
 				DEVELOPMENT_TEAM = 8LAPGQR7L8;
 				INFOPLIST_FILE = MobileEngageTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.MobileEngageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MobileEngage Host.app/MobileEngage Host";
@@ -750,6 +755,7 @@
 				16ED6B341E7FE12600BB9C63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		32C6F1102A8A4F8E0A6DFCDC /* Build configuration list for PBXNativeTarget "MobileEngageTests" */ = {
 			isa = XCConfigurationList;
