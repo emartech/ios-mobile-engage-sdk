@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		16ED6B221E7FE12600BB9C63 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ED6B211E7FE12600BB9C63 /* main.m */; };
+		16ED6B251E7FE12600BB9C63 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ED6B241E7FE12600BB9C63 /* AppDelegate.m */; };
+		16ED6B281E7FE12600BB9C63 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ED6B271E7FE12600BB9C63 /* ViewController.m */; };
+		16ED6B2B1E7FE12600BB9C63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16ED6B291E7FE12600BB9C63 /* Main.storyboard */; };
+		16ED6B2D1E7FE12600BB9C63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16ED6B2C1E7FE12600BB9C63 /* Assets.xcassets */; };
+		16ED6B301E7FE12600BB9C63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16ED6B2E1E7FE12600BB9C63 /* LaunchScreen.storyboard */; };
+		16ED6B3A1E7FE2E600BB9C63 /* MobileEngage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32C6FFD88E2892F183B9C41C /* MobileEngage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		32C6F2B18FBC539E961EF069 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 32C6F75C6B275FB5F0669AF0 /* Info.plist */; };
 		32C6F32039F275C4AD6C9FFC /* MobileEngageInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F8DAD8E109756D0A6B68 /* MobileEngageInternal.h */; };
 		32C6F443B74763D4785022F9 /* InterfaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2F7B517867CF069B590 /* InterfaceTests.m */; };
@@ -33,6 +40,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		16ED6B351E7FE12B00BB9C63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 32C6FB81753C1A302A110975 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16ED6B1D1E7FE12600BB9C63;
+			remoteInfo = "MobileEngage Host";
+		};
 		32C6F78DBBA38E3DA5AAB9EA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 32C6FB81753C1A302A110975 /* Project object */;
@@ -42,8 +56,31 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		16ED6B381E7FE29F00BB9C63 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				16ED6B3A1E7FE2E600BB9C63 /* MobileEngage.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0BB822EAFA034034244E9B64 /* Pods-MobileEngage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.release.xcconfig"; sourceTree = "<group>"; };
+		16ED6B1E1E7FE12600BB9C63 /* MobileEngage Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MobileEngage Host.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		16ED6B211E7FE12600BB9C63 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		16ED6B231E7FE12600BB9C63 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		16ED6B241E7FE12600BB9C63 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		16ED6B261E7FE12600BB9C63 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		16ED6B271E7FE12600BB9C63 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		16ED6B2A1E7FE12600BB9C63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		16ED6B2C1E7FE12600BB9C63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		16ED6B2F1E7FE12600BB9C63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		16ED6B311E7FE12600BB9C63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		32C6F0CED986657DA32E7525 /* MEConfigBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEConfigBuilder.m; sourceTree = "<group>"; };
 		32C6F0F5EAFCCF8DD8BEDE99 /* MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngage.m; sourceTree = "<group>"; };
 		32C6F123C6A32D948E91FC84 /* FakeStatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeStatusDelegate.h; sourceTree = "<group>"; };
@@ -80,6 +117,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		16ED6B1B1E7FE12600BB9C63 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32C6F32B68AAAF0659C14E37 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -100,6 +144,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		16ED6B1F1E7FE12600BB9C63 /* MobileEngage Host */ = {
+			isa = PBXGroup;
+			children = (
+				16ED6B231E7FE12600BB9C63 /* AppDelegate.h */,
+				16ED6B241E7FE12600BB9C63 /* AppDelegate.m */,
+				16ED6B261E7FE12600BB9C63 /* ViewController.h */,
+				16ED6B271E7FE12600BB9C63 /* ViewController.m */,
+				16ED6B291E7FE12600BB9C63 /* Main.storyboard */,
+				16ED6B2C1E7FE12600BB9C63 /* Assets.xcassets */,
+				16ED6B2E1E7FE12600BB9C63 /* LaunchScreen.storyboard */,
+				16ED6B311E7FE12600BB9C63 /* Info.plist */,
+				16ED6B201E7FE12600BB9C63 /* Supporting Files */,
+			);
+			path = "MobileEngage Host";
+			sourceTree = "<group>";
+		};
+		16ED6B201E7FE12600BB9C63 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				16ED6B211E7FE12600BB9C63 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		1751A715D0CE68D830F78796 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +182,7 @@
 			children = (
 				32C6FFD88E2892F183B9C41C /* MobileEngage.framework */,
 				32C6FA5C92065D2BBF21E07A /* MobileEngageTests.xctest */,
+				16ED6B1E1E7FE12600BB9C63 /* MobileEngage Host.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,6 +209,7 @@
 		32C6F81B7E30889957A4E0A2 = {
 			isa = PBXGroup;
 			children = (
+				16ED6B1F1E7FE12600BB9C63 /* MobileEngage Host */,
 				32C6F2E927A07E7D8C6B5DFD /* Products */,
 				32C6F7A21B68BA819BB6EDCD /* MobileEngage */,
 				32C6FB088790CDEAD5811809 /* MobileEngageTests */,
@@ -199,6 +269,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		16ED6B1D1E7FE12600BB9C63 /* MobileEngage Host */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16ED6B321E7FE12600BB9C63 /* Build configuration list for PBXNativeTarget "MobileEngage Host" */;
+			buildPhases = (
+				16ED6B1A1E7FE12600BB9C63 /* Sources */,
+				16ED6B1B1E7FE12600BB9C63 /* Frameworks */,
+				16ED6B1C1E7FE12600BB9C63 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MobileEngage Host";
+			productName = "MobileEngage Host";
+			productReference = 16ED6B1E1E7FE12600BB9C63 /* MobileEngage Host.app */;
+			productType = "com.apple.product-type.application";
+		};
 		32C6F20E7A6F515CE383A966 /* MobileEngage */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 32C6F9D7A7E9B0205DB5522F /* Build configuration list for PBXNativeTarget "MobileEngage" */;
@@ -229,11 +316,13 @@
 				32C6FB56092210A8184BD7F6 /* Resources */,
 				555312E4D793A2098CD2F704 /* [CP] Embed Pods Frameworks */,
 				78CF99FB91F5A23DA8ACEB44 /* [CP] Copy Pods Resources */,
+				16ED6B381E7FE29F00BB9C63 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				32C6F8EB8EF02E210EF457D6 /* PBXTargetDependency */,
+				16ED6B361E7FE12B00BB9C63 /* PBXTargetDependency */,
 			);
 			name = MobileEngageTests;
 			productName = MobileEngageTests;
@@ -248,8 +337,18 @@
 			attributes = {
 				ORGANIZATIONNAME = Emarsys;
 				TargetAttributes = {
+					16ED6B1D1E7FE12600BB9C63 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 8LAPGQR7L8;
+						ProvisioningStyle = Automatic;
+					};
+					32C6F20E7A6F515CE383A966 = {
+						DevelopmentTeam = 8LAPGQR7L8;
+						ProvisioningStyle = Automatic;
+					};
 					32C6F59736632C8B5808DD7B = {
 						DevelopmentTeam = 8LAPGQR7L8;
+						TestTargetID = 16ED6B1D1E7FE12600BB9C63;
 					};
 				};
 			};
@@ -259,6 +358,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 32C6F81B7E30889957A4E0A2;
 			productRefGroup = 32C6F2E927A07E7D8C6B5DFD /* Products */;
@@ -267,11 +367,22 @@
 			targets = (
 				32C6F20E7A6F515CE383A966 /* MobileEngage */,
 				32C6F59736632C8B5808DD7B /* MobileEngageTests */,
+				16ED6B1D1E7FE12600BB9C63 /* MobileEngage Host */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		16ED6B1C1E7FE12600BB9C63 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16ED6B301E7FE12600BB9C63 /* LaunchScreen.storyboard in Resources */,
+				16ED6B2D1E7FE12600BB9C63 /* Assets.xcassets in Resources */,
+				16ED6B2B1E7FE12600BB9C63 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32C6FB56092210A8184BD7F6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -369,6 +480,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		16ED6B1A1E7FE12600BB9C63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16ED6B281E7FE12600BB9C63 /* ViewController.m in Sources */,
+				16ED6B251E7FE12600BB9C63 /* AppDelegate.m in Sources */,
+				16ED6B221E7FE12600BB9C63 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32C6F9DFBC3FBB7D13386EEB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -398,6 +519,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		16ED6B361E7FE12B00BB9C63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16ED6B1D1E7FE12600BB9C63 /* MobileEngage Host */;
+			targetProxy = 16ED6B351E7FE12B00BB9C63 /* PBXContainerItemProxy */;
+		};
 		32C6F8EB8EF02E210EF457D6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 32C6F20E7A6F515CE383A966 /* MobileEngage */;
@@ -405,7 +531,52 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		16ED6B291E7FE12600BB9C63 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16ED6B2A1E7FE12600BB9C63 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		16ED6B2E1E7FE12600BB9C63 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16ED6B2F1E7FE12600BB9C63 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		16ED6B331E7FE12600BB9C63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8LAPGQR7L8;
+				INFOPLIST_FILE = "MobileEngage Host/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "emarsys.MobileEngage-Host";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		16ED6B341E7FE12600BB9C63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8LAPGQR7L8;
+				INFOPLIST_FILE = "MobileEngage Host/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "emarsys.MobileEngage-Host";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		32C6F1B420F1CB08C9867F54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -507,7 +678,9 @@
 			baseConfigurationReference = DD30B2F719C16E63FB8E4734 /* Pods-MobileEngage.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8LAPGQR7L8;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -526,6 +699,7 @@
 			baseConfigurationReference = 0BB822EAFA034034244E9B64 /* Pods-MobileEngage.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -549,6 +723,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.MobileEngageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MobileEngage Host.app/MobileEngage Host";
 			};
 			name = Debug;
 		};
@@ -561,12 +736,21 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.MobileEngageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MobileEngage Host.app/MobileEngage Host";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		16ED6B321E7FE12600BB9C63 /* Build configuration list for PBXNativeTarget "MobileEngage Host" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16ED6B331E7FE12600BB9C63 /* Debug */,
+				16ED6B341E7FE12600BB9C63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		32C6F1102A8A4F8E0A6DFCDC /* Build configuration list for PBXNativeTarget "MobileEngageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
