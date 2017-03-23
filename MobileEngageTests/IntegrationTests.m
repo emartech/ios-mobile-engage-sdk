@@ -57,7 +57,7 @@ SPEC_BEGIN(IntegrationTests)
             FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
             [MobileEngage setStatusDelegate:statusDelegate];
 
-            NSString *eventId = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+            NSString *eventId = [MobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"dd8_zXfDdndBNEQi\"}"}];
 
             [[eventId shouldNot] beNil];
             [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
