@@ -12,6 +12,7 @@
 #import "MEConfig.h"
 #import "NSDictionary+MobileEngage.h"
 #import "NSError+EMSCore.h"
+#import "MobileEngageVersion.h"
 
 @interface MobileEngageInternal ()
 
@@ -56,7 +57,8 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
     NSDictionary<NSString *, NSString *> *additionalHeaders = @{
             @"Authorization": [EMSAuthentication createBasicAuthWithUsername:config.applicationId
                                                                     password:config.applicationSecret],
-            @"Content-Type": @"application/json"
+            @"Content-Type": @"application/json",
+            @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION
     };
     [requestManager setAdditionalHeaders:additionalHeaders];
 }

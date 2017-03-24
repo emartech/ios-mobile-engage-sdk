@@ -12,6 +12,7 @@
 #import "EMSDeviceInfo.h"
 #import "FakeRequestManager.h"
 #import "FakeStatusDelegate.h"
+#import "MobileEngageVersion.h"
 
 static NSString *const kAppId = @"kAppId";
 
@@ -31,7 +32,8 @@ SPEC_BEGIN(PublicInterfaceTest)
         NSDictionary *additionalHeaders = @{
                 @"Authorization": [EMSAuthentication createBasicAuthWithUsername:applicationId
                                                                         password:applicationSecret],
-                @"Content-Type": @"application/json"
+                @"Content-Type": @"application/json",
+                @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION
         };
         id requestManager = [EMSRequestManager mock];
         [[requestManager should] receive:@selector(setAdditionalHeaders:)
