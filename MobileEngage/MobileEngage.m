@@ -25,6 +25,10 @@ static MobileEngageInternal *_mobileEngageInternal;
                                   launchOptions:launchOptions];
 }
 
++ (void)setPushToken:(NSData *)deviceToken {
+    [_mobileEngageInternal setPushToken:deviceToken];
+}
+
 + (NSString *)appLogin {
     return [_mobileEngageInternal appLogin];
 }

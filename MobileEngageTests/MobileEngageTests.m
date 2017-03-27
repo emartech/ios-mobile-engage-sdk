@@ -35,6 +35,13 @@ SPEC_BEGIN(MobileEngageTests)
             mobileEngageInternal();
         });
 
+        it(@"should call internal implementation's method for setPushToken:", ^{
+            NSData *deviceToken = [NSData new];
+            [[mobileEngageInternal() should] receive:@selector(setPushToken:) withArguments:deviceToken];
+
+            [MobileEngage setPushToken:deviceToken];
+        });
+
         it(@"should call internal implementation's method for anonymous appLogin", ^{
             [[mobileEngageInternal() should] receive:@selector(appLogin)];
 

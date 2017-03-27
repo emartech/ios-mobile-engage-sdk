@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MobileEngageInternal : NSObject
 
 @property(nonatomic, weak, nullable) id <MobileEngageStatusDelegate> statusDelegate;
+@property(nonatomic, strong) NSData *pushToken;
 
 - (void)setupWithConfig:(MEConfig *)config
           launchOptions:(nullable NSDictionary *)launchOptions;

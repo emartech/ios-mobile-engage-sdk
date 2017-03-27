@@ -22,7 +22,6 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
 
 @property(nonatomic, strong) EMSRequestManager *requestManager;
 @property(nonatomic, strong) MEConfig *config;
-@property(nonatomic, strong) NSData *pushToken;
 @property(nonatomic, strong) MESuccessBlock successBlock;
 @property(nonatomic, strong) MEErrorBlock errorBlock;
 

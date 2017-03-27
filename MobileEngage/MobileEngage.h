@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)setupWithConfig:(MEConfig *)config
           launchOptions:(nullable NSDictionary *)launchOptions;
 
++ (void)setPushToken:(NSData *)deviceToken;
+
 + (NSString *)appLogin;
 
 + (NSString *)appLoginWithContactFieldId:(nullable NSNumber *)contactFieldId
