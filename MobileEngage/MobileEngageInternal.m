@@ -69,9 +69,16 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
                     launchOptions:launchOptions];
 }
 
+- (void)setPushToken:(NSData *)pushToken {
+    _pushToken = pushToken;
+
+    if (self.lastAppLoginParameters != nil) {
+        [self appLoginWithContactFieldId:self.lastAppLoginParameters.contactFieldId contactFieldValue:self.lastAppLoginParameters.contactFieldValue];
+    }
+}
+
 - (NSString *)appLogin {
-    return [self appLoginWithContactFieldId:nil
-                          contactFieldValue:nil];
+    return [self appLoginWithContactFieldId:nil contactFieldValue:nil];
 }
 
 - (NSString *)appLoginWithContactFieldId:(NSNumber *)contactFieldId
@@ -107,6 +114,8 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
     [self.requestManager submit:requestModel
                    successBlock:self.successBlock
                      errorBlock:self.errorBlock];
+
+    self.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
     return requestModel.requestId;
 }
 

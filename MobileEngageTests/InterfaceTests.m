@@ -22,7 +22,7 @@ SPEC_BEGIN(PublicInterfaceTest)
 
     registerMatchers(@"EMS");
 
-    beforeAll(^{
+    beforeEach(^{
         _mobileEngage = [MobileEngageInternal new];
     });
 
@@ -64,6 +64,51 @@ SPEC_BEGIN(PublicInterfaceTest)
         });
     });
 
+    describe(@"setPushToken:", ^{
+        it(@"should call appLogin with lastAppLogin parameters", ^{
+            NSData *deviceToken = [NSData new];
+            [[_mobileEngage should] receive:@selector(appLoginWithContactFieldId:contactFieldValue:)
+                                  withCount:1
+                                  arguments:nil, nil, nil];
+
+            _mobileEngage.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:nil contactFieldValue:nil];
+            [_mobileEngage setPushToken:deviceToken];
+        });
+
+        it(@"should call appLogin with lastAppLogin parameters when there are previous values", ^{
+            NSData *deviceToken = [NSData new];
+            [[_mobileEngage should] receive:@selector(appLoginWithContactFieldId:contactFieldValue:)
+                                  withCount:1
+                                  arguments:@12, @"23", nil];
+
+            _mobileEngage.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@12 contactFieldValue:@"23"];
+            [_mobileEngage setPushToken:deviceToken];
+        });
+
+        it(@"appLogin should save last anonymous AppLogin parameters", ^{
+            [[requestManagerMock() should] receive:@selector(submit:successBlock:errorBlock:)];
+            [_mobileEngage appLogin];
+            [[_mobileEngage.lastAppLoginParameters shouldNot] beNil];
+            [[_mobileEngage.lastAppLoginParameters.contactFieldId should] beNil];
+            [[_mobileEngage.lastAppLoginParameters.contactFieldValue should] beNil];
+        });
+
+        it(@"appLogin should save last AppLogin parameters", ^{
+            [[requestManagerMock() should] receive:@selector(submit:successBlock:errorBlock:)];
+            [_mobileEngage appLoginWithContactFieldId:@42 contactFieldValue:@"99"];
+            [[_mobileEngage.lastAppLoginParameters shouldNot] beNil];
+            [[_mobileEngage.lastAppLoginParameters.contactFieldId should] equal:@42];
+            [[_mobileEngage.lastAppLoginParameters.contactFieldValue should] equal:@"99"];
+        });
+
+        it(@"should not call appLogin with setPushToken when there was no previous appLogin call", ^{
+            NSData *deviceToken = [NSData new];
+            [[_mobileEngage shouldNot] receive:@selector(appLoginWithContactFieldId:contactFieldValue:)];
+            [_mobileEngage setPushToken:deviceToken];
+        });
+    });
+
+
     describe(@"anonymous appLogin", ^{
         it(@"must not return with nil", ^{
             id requestManager = requestManagerMock();
@@ -96,7 +141,7 @@ SPEC_BEGIN(PublicInterfaceTest)
                     @"device_model": [EMSDeviceInfo deviceModel],
                     @"os_version": [EMSDeviceInfo osVersion],
                     @"push_token": @NO,
-                    @"application_version" : @"1.0"
+                    @"application_version": @"1.0"
             });
 
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
@@ -148,7 +193,7 @@ SPEC_BEGIN(PublicInterfaceTest)
                     @"contact_field_id": @0,
                     @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
                     @"push_token": @NO,
-                    @"application_version" : @"1.0"
+                    @"application_version": @"1.0"
             });
 
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)

@@ -36,7 +36,9 @@
 		32C6FE55F469AAF41FE77725 /* MobileEngage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFD88E2892F183B9C41C /* MobileEngage.framework */; };
 		32C6FF342FC2C54422C8657C /* MobileEngage.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F9F7C741052373E946A2 /* MobileEngage.h */; };
 		32C6FF6CA695A73EA009E40A /* MobileEngageVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FA6991F882C8197DE493 /* MobileEngageVersion.h */; };
+		374602FFDFB3E8B95C8CA424 /* MEAppLoginParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460064180D9AE6386F4D91 /* MEAppLoginParameters.m */; };
 		37460906FC12301114D82BAF /* EMSRequestModelMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 374600D2C87F4E59AE3EB5C1 /* EMSRequestModelMatcher.m */; };
+		37460D8A9337F9B6ABBA014F /* MEAppLoginParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 3746074B9FA6B1E3D03E0F05 /* MEAppLoginParameters.h */; };
 		3D2E4B52761B24CDC2658F5F /* libPods-MobileEngageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6262C89B7603BAEEEC82477 /* libPods-MobileEngageTests.a */; };
 		69AF135B0B285E983E9BEF76 /* libPods-MobileEngage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBEE9AE6141869888698713 /* libPods-MobileEngage.a */; };
 /* End PBXBuildFile section */
@@ -111,7 +113,9 @@
 		32C6FE99B9488237B00942D3 /* IntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegrationTests.m; sourceTree = "<group>"; };
 		32C6FF185EC94949DE34FF16 /* MobileEngageInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngageInternal.m; sourceTree = "<group>"; };
 		32C6FFD88E2892F183B9C41C /* MobileEngage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MobileEngage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		37460064180D9AE6386F4D91 /* MEAppLoginParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEAppLoginParameters.m; sourceTree = "<group>"; };
 		374600D2C87F4E59AE3EB5C1 /* EMSRequestModelMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSRequestModelMatcher.m; sourceTree = "<group>"; };
+		3746074B9FA6B1E3D03E0F05 /* MEAppLoginParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEAppLoginParameters.h; sourceTree = "<group>"; };
 		37460A62CFE918ED5D3EE52F /* EMSRequestModelMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestModelMatcher.h; sourceTree = "<group>"; };
 		4FBEE9AE6141869888698713 /* libPods-MobileEngage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9780057C0A3C341B76020F59 /* Pods-MobileEngageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -207,6 +211,8 @@
 				32C6FF185EC94949DE34FF16 /* MobileEngageInternal.m */,
 				32C6F8DAD8E109756D0A6B68 /* MobileEngageInternal.h */,
 				32C6FA6991F882C8197DE493 /* MobileEngageVersion.h */,
+				37460064180D9AE6386F4D91 /* MEAppLoginParameters.m */,
+				3746074B9FA6B1E3D03E0F05 /* MEAppLoginParameters.h */,
 			);
 			path = MobileEngage;
 			sourceTree = "<group>";
@@ -270,6 +276,7 @@
 				32C6FD0B7F3B7647DA9C43EC /* NSDictionary+MobileEngage.h in Headers */,
 				32C6F32039F275C4AD6C9FFC /* MobileEngageInternal.h in Headers */,
 				32C6FF6CA695A73EA009E40A /* MobileEngageVersion.h in Headers */,
+				37460D8A9337F9B6ABBA014F /* MEAppLoginParameters.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +513,7 @@
 				32C6F791C414CB1E195DF7BF /* MobileEngage.m in Sources */,
 				32C6FC9F53ECB121BF53EA03 /* NSDictionary+MobileEngage.m in Sources */,
 				32C6F9AA36B2BC1AAA2EFDD5 /* MobileEngageInternal.m in Sources */,
+				374602FFDFB3E8B95C8CA424 /* MEAppLoginParameters.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
