@@ -11,6 +11,10 @@
     if ([NSThread isMainThread]) {
         self.errorCount++;
     }
+
+    if (self.printErrors) {
+        NSLog(@"%@", error);
+    }
 }
 
 - (void)mobileEngageLogReceivedWithEventId:(NSString *)eventId

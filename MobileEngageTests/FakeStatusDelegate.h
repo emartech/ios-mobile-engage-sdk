@@ -9,5 +9,6 @@
 
 @property(nonatomic, assign) int successCount;
 @property(nonatomic, assign) int errorCount;
+@property(nonatomic, assign) BOOL printErrors;
 
 @end
