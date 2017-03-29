@@ -4,15 +4,12 @@
 
 #import "MobileEngageInternal.h"
 #import <CoreSDK/EMSRequestManager.h>
-#import <CoreSDK/EMSAuthentication.h>
 #import <CoreSDK/EMSRequestModelBuilder.h>
 #import <CoreSDK/EMSDeviceInfo.h>
 #import <CoreSDK/EMSRequestModel.h>
-#import "MobileEngageStatusDelegate.h"
 #import "MEConfig.h"
-#import "NSDictionary+MobileEngage.h"
+#import "NSData+MobileEngine.h"
 #import "NSError+EMSCore.h"
-#import "MobileEngageVersion.h"
 
 @interface MobileEngageInternal ()
 
@@ -100,7 +97,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
             payload[@"application_version"] = appVersion;
         }
         if (self.pushToken) {
-            payload[@"push_token"] = self.pushToken;
+            payload[@"push_token"] = [self.pushToken deviceTokenString];
         } else {
             payload[@"push_token"] = @NO;
         }
