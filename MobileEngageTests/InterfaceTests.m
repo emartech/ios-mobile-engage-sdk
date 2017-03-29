@@ -244,6 +244,17 @@ SPEC_BEGIN(PublicInterfaceTest)
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
         });
+
+        it(@"should clear lastAppLoginParameters", ^{
+            id requestManager = requestManagerMock();
+            [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)];
+
+            [_mobileEngage setLastAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
+                                                                                      contactFieldValue:@"contactFieldValue"]];
+            [_mobileEngage appLogout];
+            [[_mobileEngage.lastAppLoginParameters should] beNil];
+        });
+
     });
 
     describe(@"trackMessageOpenWithUserInfo:", ^{

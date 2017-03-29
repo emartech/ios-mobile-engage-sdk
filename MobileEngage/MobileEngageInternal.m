@@ -121,6 +121,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
 }
 
 - (NSString *)appLogout {
+    self.lastAppLoginParameters = nil;
     EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/logout"];
         [builder setMethod:HTTPMethodPOST];
