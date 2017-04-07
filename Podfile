@@ -1,7 +1,10 @@
 platform :ios, '9.0'
 
+source 'https://github.com/emartech/pod-private.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
 target "MobileEngage" do
-  pod 'CoreSDK', :path => '../ios-core-sdk'
+  pod 'CoreSDK'
 end
 
 target "MobileEngageTests" do
