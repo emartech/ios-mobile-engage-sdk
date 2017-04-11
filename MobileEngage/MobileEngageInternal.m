@@ -55,8 +55,8 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
     };
 
     NSDictionary<NSString *, NSString *> *additionalHeaders = @{
-            @"Authorization": [EMSAuthentication createBasicAuthWithUsername:config.applicationId
-                                                                    password:config.applicationSecret],
+            @"Authorization": [EMSAuthentication createBasicAuthWithUsername:config.applicationCode
+                                                                    password:config.applicationPassword],
             @"Content-Type": @"application/json",
             @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION
     };
@@ -88,7 +88,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
         [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login"];
         [builder setMethod:HTTPMethodPOST];
         NSMutableDictionary *payload = [@{
-                @"application_id": self.config.applicationId,
+                @"application_id": self.config.applicationCode,
                 @"hardware_id": [EMSDeviceInfo hardwareId],
                 @"platform": @"ios",
                 @"language": [EMSDeviceInfo languageCode],
@@ -126,7 +126,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
         [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/logout"];
         [builder setMethod:HTTPMethodPOST];
         [builder setPayload:@{
-                @"application_id": self.config.applicationId,
+                @"application_id": self.config.applicationCode,
                 @"hardware_id": [EMSDeviceInfo hardwareId],
         }];
     }];
@@ -144,7 +144,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
             [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
             [builder setMethod:HTTPMethodPOST];
             [builder setPayload:@{
-                    @"application_id": self.config.applicationId,
+                    @"application_id": self.config.applicationCode,
                     @"hardware_id": [EMSDeviceInfo hardwareId],
                     @"sid": messageId
             }];
@@ -171,7 +171,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
         [builder setUrl:[NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName]];
         [builder setMethod:HTTPMethodPOST];
         NSMutableDictionary *payload = [@{
-                @"application_id": self.config.applicationId,
+                @"application_id": self.config.applicationCode,
                 @"hardware_id": [EMSDeviceInfo hardwareId]
         } mutableCopy];
         if (eventAttributes) {

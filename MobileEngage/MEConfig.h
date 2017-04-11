@@ -9,8 +9,8 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface MEConfig : NSObject
 
-@property(nonatomic, readonly) NSString *applicationId;
-@property(nonatomic, readonly) NSString *applicationSecret;
+@property(nonatomic, readonly) NSString *applicationCode;
+@property(nonatomic, readonly) NSString *applicationPassword;
 
 typedef void(^MEConfigBuilderBlock)(MEConfigBuilder *builder);
 

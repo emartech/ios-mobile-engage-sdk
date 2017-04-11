@@ -3,14 +3,13 @@
 //
 
 #import "MEConfigBuilder.h"
-#import "MEConfig.h"
 
 @implementation MEConfigBuilder
 
-- (MEConfigBuilder *)setCredentialsWithApplicationId:(NSString *)applicationId
-                                    applicationSecret:(NSString *)applicationSecret {
-    _applicationId = applicationId;
-    _applicationSecret = applicationSecret;
+- (MEConfigBuilder *)setCredentialsWithApplicationCode:(NSString *)applicationCode
+                                   applicationPassword:(NSString *)applicationPassword {
+    _applicationCode = applicationCode;
+    _applicationPassword = applicationPassword;
     return self;
 }
 

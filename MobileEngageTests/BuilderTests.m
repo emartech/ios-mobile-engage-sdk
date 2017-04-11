@@ -6,28 +6,28 @@ SPEC_BEGIN(BuilderTest)
 
     describe(@"Builder", ^{
 
-        it(@"should create a config with applicationId", ^{
+        it(@"should create a config with applicationCode", ^{
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                [builder setCredentialsWithApplicationId:@"test1" applicationSecret:@"pwd"];
+                [builder setCredentialsWithApplicationCode:@"test1" applicationPassword:@"pwd"];
             }];
 
-            [[theValue(@"test1") should] equal:theValue(config.applicationId)];
+            [[theValue(@"test1") should] equal:theValue(config.applicationCode)];
         });
 
-        it(@"should create a config with applicationSecret", ^{
+        it(@"should create a config with applicationPassword", ^{
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                [builder setCredentialsWithApplicationId:@"test1" applicationSecret:@"pwd"];
+                [builder setCredentialsWithApplicationCode:@"test1" applicationPassword:@"pwd"];
             }];
 
-            [[theValue(@"pwd") should] equal:theValue(config.applicationSecret)];
+            [[theValue(@"pwd") should] equal:theValue(config.applicationPassword)];
         });
 
-        it(@"should throw exception when applicationId is nil", ^{
+        it(@"should throw exception when applicationCode is nil", ^{
             @try {
                 [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                    [builder setCredentialsWithApplicationId:nil applicationSecret:@"pwd"];
+                    [builder setCredentialsWithApplicationCode:nil applicationPassword:@"pwd"];
                 }];
-                fail(@"Expected Exception when applicationId is nil!");
+                fail(@"Expected Exception when applicationCode is nil!");
             } @catch(NSException *exception) {
                 [[theValue(exception) shouldNot] beNil];
             }
@@ -36,9 +36,9 @@ SPEC_BEGIN(BuilderTest)
         it(@"should throw exception when secret is nil", ^{
             @try {
                 [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                    [builder setCredentialsWithApplicationId:@"test1" applicationSecret:nil];
+                    [builder setCredentialsWithApplicationCode:@"test1" applicationPassword:nil];
                 }];
-                fail(@"Expected Exception when applicationSecret is nil!");
+                fail(@"Expected Exception when applicationPassword is nil!");
             } @catch(NSException *exception) {
                 [[theValue(exception) shouldNot] beNil];
             }

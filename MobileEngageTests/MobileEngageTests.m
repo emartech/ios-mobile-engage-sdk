@@ -14,12 +14,12 @@ SPEC_BEGIN(MobileEngageTests)
 
         [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:)];
 
-        NSString *applicationId = kAppId;
-        NSString *applicationSecret = @"appSecret";
+        NSString *applicationCode = kAppId;
+        NSString *applicationPassword = @"appSecret";
 
         MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-            [builder setCredentialsWithApplicationId:applicationId
-                                   applicationSecret:applicationSecret];
+            [builder setCredentialsWithApplicationCode:applicationCode
+                                   applicationPassword:applicationPassword];
         }];
 
         [MobileEngage setupWithMobileEngageInternal:mobileEngageInternalMock

@@ -9,11 +9,11 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface MEConfigBuilder : NSObject
 
-@property(nonatomic, readonly) NSString *applicationId;
-@property(nonatomic, readonly) NSString *applicationSecret;
+@property(nonatomic, readonly) NSString *applicationCode;
+@property(nonatomic, readonly) NSString *applicationPassword;
 
-- (MEConfigBuilder *)setCredentialsWithApplicationId:(NSString *)applicationId
-                                    applicationSecret:(NSString *)applicationSecret;
+- (MEConfigBuilder *)setCredentialsWithApplicationCode:(NSString *)applicationCode
+                                   applicationPassword:(NSString *)applicationPassword;
 
 @end
 

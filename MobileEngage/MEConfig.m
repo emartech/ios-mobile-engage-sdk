@@ -13,16 +13,16 @@
     MEConfigBuilder *builder = [MEConfigBuilder new];
     builderBlock(builder);
 
-    NSParameterAssert(builder.applicationId);
-    NSParameterAssert(builder.applicationSecret);
+    NSParameterAssert(builder.applicationCode);
+    NSParameterAssert(builder.applicationPassword);
 
     return [[MEConfig alloc] initWithBuilder:builder];
 }
 
 - (id)initWithBuilder:(MEConfigBuilder *)builder {
     if (self = [super init]) {
-        _applicationId = builder.applicationId;
-        _applicationSecret = builder.applicationSecret;
+        _applicationCode = builder.applicationCode;
+        _applicationPassword = builder.applicationPassword;
     }
 
     return self;

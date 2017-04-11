@@ -27,11 +27,11 @@ SPEC_BEGIN(PublicInterfaceTest)
     });
 
     id (^requestManagerMock)() = ^id() {
-        NSString *applicationId = kAppId;
-        NSString *applicationSecret = @"appSecret";
+        NSString *applicationCode = kAppId;
+        NSString *applicationPassword = @"appSecret";
         NSDictionary *additionalHeaders = @{
-                @"Authorization": [EMSAuthentication createBasicAuthWithUsername:applicationId
-                                                                        password:applicationSecret],
+                @"Authorization": [EMSAuthentication createBasicAuthWithUsername:applicationCode
+                                                                        password:applicationPassword],
                 @"Content-Type": @"application/json",
                 @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION
         };
@@ -40,8 +40,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                            withArguments:additionalHeaders];
 
         MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-            [builder setCredentialsWithApplicationId:applicationId
-                                   applicationSecret:applicationSecret];
+            [builder setCredentialsWithApplicationCode:applicationCode
+                                   applicationPassword:applicationPassword];
         }];
 
         [_mobileEngage setupWithRequestManager:requestManager
@@ -388,11 +388,11 @@ SPEC_BEGIN(PublicInterfaceTest)
             FakeRequestManager *requestManager = [FakeRequestManager new];
             [requestManager setResponseType:responseType];
 
-            NSString *applicationId = kAppId;
-            NSString *applicationSecret = @"appSecret";
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                [builder setCredentialsWithApplicationId:applicationId
-                                       applicationSecret:applicationSecret];
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
             }];
             [_mobileEngage setupWithRequestManager:requestManager
                                             config:config
@@ -532,11 +532,11 @@ SPEC_BEGIN(PublicInterfaceTest)
             FakeRequestManager *requestManager = [FakeRequestManager new];
             [requestManager setResponseType:responseType];
 
-            NSString *applicationId = kAppId;
-            NSString *applicationSecret = @"appSecret";
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                [builder setCredentialsWithApplicationId:applicationId
-                                       applicationSecret:applicationSecret];
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
             }];
             [_mobileEngage setupWithRequestManager:requestManager
                                             config:config
