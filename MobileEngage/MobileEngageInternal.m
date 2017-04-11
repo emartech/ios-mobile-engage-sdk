@@ -17,7 +17,7 @@
 
 @interface MobileEngageInternal ()
 
-typedef void (^MESuccessBlock)(NSString *requestId);
+typedef void (^MESuccessBlock)(NSString *requestId, EMSResponseModel *);
 
 typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
 
@@ -37,7 +37,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
     _config = config;
 
     __weak typeof(self) weakSelf = self;
-    _successBlock = ^(NSString *requestId) {
+    _successBlock = ^(NSString *requestId, EMSResponseModel *responseModel) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([weakSelf.statusDelegate respondsToSelector:@selector(mobileEngageLogReceivedWithEventId:log:)]) {
                 [weakSelf.statusDelegate mobileEngageLogReceivedWithEventId:requestId

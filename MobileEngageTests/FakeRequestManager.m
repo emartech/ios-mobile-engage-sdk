@@ -4,6 +4,7 @@
 
 #import "FakeRequestManager.h"
 #import "EMSRequestModel.h"
+#import "EMSResponseModel.h"
 
 @implementation FakeRequestManager
 
@@ -12,7 +13,7 @@
     errorBlock:(CoreErrorBlock)errorBlock {
     if (self.responseType == ResponseTypeSuccess) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (0.2 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            successBlock(model.requestId);
+            successBlock(model.requestId, [EMSResponseModel new]);
         });
     } else {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (0.2 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
