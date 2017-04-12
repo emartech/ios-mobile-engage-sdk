@@ -4,5 +4,7 @@ Mobile Engage SDK is a tool that enables you to use Emarsys' Mobile Engage featu
 
 The Mobile Engage SDK is open sourced to enhance transparency and to do away with privacy concerns. You can always be up-to-date on what we are working on.
 
-The preferred way of integrating the SDK is through Cocoapods, please check out our integration guide at:
-[https://link.to.documentation](https://link.to.documentation)
+The preferred way of integrating the SDK is through Cocoapods, please check out our [Integration guide](https://link.to.documentation).
+
+We also have a [Sample Application](https://github.com/emartech/ios-mobile-engage-sample-app) which perfectly demonstrates how an integration should like.
+
