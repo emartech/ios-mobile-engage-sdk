@@ -141,7 +141,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                     @"device_model": [EMSDeviceInfo deviceModel],
                     @"os_version": [EMSDeviceInfo osVersion],
                     @"push_token": @NO,
-                    @"application_version": @"1.0"
+                    @"application_version": @"1.0",
+                    @"ems_sdk": MOBILEENGAGE_SDK_VERSION
             });
 
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)
@@ -193,7 +194,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                     @"contact_field_id": @0,
                     @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
                     @"push_token": @NO,
-                    @"application_version": @"1.0"
+                    @"application_version": @"1.0",
+                    @"ems_sdk": MOBILEENGAGE_SDK_VERSION
             });
 
             [[requestManager should] receive:@selector(submit:successBlock:errorBlock:)

@@ -94,7 +94,8 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
                 @"language": [EMSDeviceInfo languageCode],
                 @"timezone": [EMSDeviceInfo timeZone],
                 @"device_model": [EMSDeviceInfo deviceModel],
-                @"os_version": [EMSDeviceInfo osVersion]
+                @"os_version": [EMSDeviceInfo osVersion],
+                @"ems_sdk": MOBILEENGAGE_SDK_VERSION
         } mutableCopy];
         NSString *appVersion = [EMSDeviceInfo applicationVersion];
         if (appVersion) {
