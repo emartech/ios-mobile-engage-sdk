@@ -7,7 +7,7 @@ The Mobile Engage SDK is open sourced to enhance transparency and to do away wit
 The preferred way of integrating the SDK can be found in the links below.
 
 ## Documentation and integration guide:
-* [Android integration guide](https://link.to.documentation) 
-* [Android sample application](https://link.to.documentation) 
-* [iOS integration guide](https://link.to.documentation) 
-* [iOS sample application](https://link.to.documentation) 
+* [Android integration guide](https://help.emarsys.com/hc/en-us/articles/115002410625)
+* [Android sample application](https://github.com/emartech/android-mobile-engage-sample-app)
+* [iOS integration guide](https://help.emarsys.com/hc/en-us/articles/115002410625)
+* [iOS sample application](https://github.com/emartech/ios-mobile-engage-sample-app)
