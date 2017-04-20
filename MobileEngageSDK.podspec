@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'MobileEngageSDK'
-	spec.version              = '0.5.0'
-	spec.homepage             = 'http://documentation.emarsys.com/'
+	spec.version              = '0.5.1'
+	spec.homepage             = 'https://help.emarsys.com/hc/en-us/articles/115002410625'
 	spec.license              = 'Mozilla Public License 2.0'
     spec.author               = { 'Emarsys Technologies' => 'mobile-team@emarsys.com' }
 	spec.summary              = 'Mobile Engage iOS SDK'
