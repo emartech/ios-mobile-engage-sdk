@@ -8,6 +8,7 @@
 @protocol MobileEngageStatusDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface MobileEngage : NSObject
 
 @property(class, nonatomic, weak, nullable) id <MobileEngageStatusDelegate> statusDelegate;
