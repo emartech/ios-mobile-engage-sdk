@@ -31,6 +31,13 @@ SPEC_BEGIN(NSDictionaryMobileEngageTests)
             };
             [[[dict messageId] should] equal:@"123456789"];
         });
+
+        it(@"should be able to parse whats actually returned", ^{
+            NSDictionary *dict = @{
+                                   @"u": @{@"sid": @"123456789"}
+                                   };
+            [[[dict messageId] should] equal:@"123456789"];
+        });
     });
 
 SPEC_END
