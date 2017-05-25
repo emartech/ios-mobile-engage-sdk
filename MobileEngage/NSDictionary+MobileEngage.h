@@ -6,6 +6,6 @@
 
 @interface NSDictionary (MobileEngage)
 
-- (NSString *)messageId;
+- (nullable NSString*)messageId;
 
 @end
