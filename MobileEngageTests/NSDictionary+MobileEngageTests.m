@@ -25,9 +25,18 @@ SPEC_BEGIN(NSDictionaryMobileEngageTests)
             [[[dict messageId] should] beNil];
         });
 
-        it(@"should return messageId, when it is present", ^{
+        it(@"should return messageId, when it is present in json format", ^{
             NSDictionary *dict = @{
                     @"u": @"{\"sid\": \"123456789\"}"
+            };
+            [[[dict messageId] should] equal:@"123456789"];
+        });
+
+        it(@"should return messageId, when it is present in structured format", ^{
+            NSDictionary *dict = @{
+                    @"u": @{
+                            @"sid": @"123456789"
+                    }
             };
             [[[dict messageId] should] equal:@"123456789"];
         });

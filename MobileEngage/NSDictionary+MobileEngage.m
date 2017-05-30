@@ -11,15 +11,21 @@
 
 - (NSString *)messageId {
     NSString *sid;
-    NSString *customData = self[PushwooshMessageCustomDataKey];
-    NSData *data = [customData dataUsingEncoding:NSUTF8StringEncoding];
-    if (data) {
-        NSDictionary<NSString *, id> *customDataDict = [NSJSONSerialization JSONObjectWithData:data
-                                                                                       options:NSJSONReadingAllowFragments
-                                                                                         error:nil];
-        sid = customDataDict[MobileEngageSIDKey];
+    id customData = self[PushwooshMessageCustomDataKey];
+    NSDictionary<NSString *, id> *customDataDict;
+
+    if ([customData isKindOfClass:[NSString class]]) {
+        NSData *data = [customData dataUsingEncoding:NSUTF8StringEncoding];
+        if (data) {
+            customDataDict = [NSJSONSerialization JSONObjectWithData:data
+                                                             options:NSJSONReadingAllowFragments
+                                                               error:nil];
+        }
+    } else if ([customData isKindOfClass:[NSDictionary class]]) {
+        customDataDict = customData;
     }
-    return sid;
+
+    return customDataDict[MobileEngageSIDKey];
 }
 
 @end
