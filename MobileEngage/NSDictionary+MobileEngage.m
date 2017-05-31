@@ -10,7 +10,6 @@
 @implementation NSDictionary (MobileEngage)
 
 - (NSString *)messageId {
-    NSString *sid;
     id customData = self[PushwooshMessageCustomDataKey];
     NSDictionary<NSString *, id> *customDataDict;
 
