@@ -9,6 +9,8 @@
 #import "MEConfigBuilder.h"
 #import "MEConfig.h"
 
+#define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
+
 SPEC_BEGIN(IntegrationTests)
 
     FakeStatusDelegate *(^createStatusDelegate)() = ^FakeStatusDelegate *() {
@@ -16,6 +18,11 @@ SPEC_BEGIN(IntegrationTests)
         statusDelegate.printErrors = YES;
         return statusDelegate;
     };
+
+    beforeEach(^{
+        [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
+                                                   error:nil];
+    });
 
     describe(@"Public interface methods", ^{
         it(@"should return with eventId, and finish with success for anonymousAppLogin", ^{

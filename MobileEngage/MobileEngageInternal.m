@@ -35,7 +35,17 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
                   launchOptions:(NSDictionary *)launchOptions {
     _requestManager = requestManager;
     _config = config;
+    NSDictionary<NSString *, NSString *> *additionalHeaders = @{
+            @"Authorization": [EMSAuthentication createBasicAuthWithUsername:config.applicationCode
+                                                                    password:config.applicationPassword],
+            @"Content-Type": @"application/json",
+            @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION
+    };
+    [requestManager setAdditionalHeaders:additionalHeaders];
+}
 
+- (void)setupWithConfig:(nonnull MEConfig *)config
+          launchOptions:(NSDictionary *)launchOptions {
     __weak typeof(self) weakSelf = self;
     _successBlock = ^(NSString *requestId, EMSResponseModel *responseModel) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -53,19 +63,8 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
             }
         });
     };
-
-    NSDictionary<NSString *, NSString *> *additionalHeaders = @{
-            @"Authorization": [EMSAuthentication createBasicAuthWithUsername:config.applicationCode
-                                                                    password:config.applicationPassword],
-            @"Content-Type": @"application/json",
-            @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION
-    };
-    [requestManager setAdditionalHeaders:additionalHeaders];
-}
-
-- (void)setupWithConfig:(nonnull MEConfig *)config
-          launchOptions:(NSDictionary *)launchOptions {
-    [self setupWithRequestManager:[EMSRequestManager new]
+    [self setupWithRequestManager:[EMSRequestManager managerWithSuccessBlock:self.successBlock
+                                                                  errorBlock:self.errorBlock]
                            config:config
                     launchOptions:launchOptions];
 }
@@ -113,9 +112,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
         [builder setPayload:payload];
     }];
 
-    [self.requestManager submit:requestModel
-                   successBlock:self.successBlock
-                     errorBlock:self.errorBlock];
+    [self.requestManager submit:requestModel];
 
     self.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
     return requestModel.requestId;
@@ -131,9 +128,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
                 @"hardware_id": [EMSDeviceInfo hardwareId],
         }];
     }];
-    [self.requestManager submit:requestModel
-                   successBlock:self.successBlock
-                     errorBlock:self.errorBlock];
+    [self.requestManager submit:requestModel];
     return requestModel.requestId;
 }
 
@@ -150,9 +145,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
                     @"sid": messageId
             }];
         }];
-        [self.requestManager submit:requestModel
-                       successBlock:self.successBlock
-                         errorBlock:self.errorBlock];
+        [self.requestManager submit:requestModel];
         requestId = [requestModel requestId];
     } else {
         requestId = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
@@ -180,9 +173,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
         }
         [builder setPayload:payload];
     }];
-    [self.requestManager submit:requestModel
-                   successBlock:self.successBlock
-                     errorBlock:self.errorBlock];
+    [self.requestManager submit:requestModel];
     return requestModel.requestId;
 }
 
