@@ -10,3 +10,4 @@ The preferred way of integrating the SDK can be found in the links below.
 * [Integration guide](https://help.emarsys.com/hc/en-us/articles/115002410625)
 * [Android sample application](https://github.com/emartech/android-mobile-engage-sample-app)
 * [iOS sample application](https://github.com/emartech/ios-mobile-engage-sample-app)
+
