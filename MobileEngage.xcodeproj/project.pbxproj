@@ -14,12 +14,14 @@
 		16ED6B2D1E7FE12600BB9C63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16ED6B2C1E7FE12600BB9C63 /* Assets.xcassets */; };
 		16ED6B301E7FE12600BB9C63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16ED6B2E1E7FE12600BB9C63 /* LaunchScreen.storyboard */; };
 		16ED6B3A1E7FE2E600BB9C63 /* MobileEngage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32C6FFD88E2892F183B9C41C /* MobileEngage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		32C6F1622149E6D693644399 /* InboxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F48B471B160D168FF06E /* InboxTests.m */; };
 		32C6F2B18FBC539E961EF069 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 32C6F75C6B275FB5F0669AF0 /* Info.plist */; };
 		32C6F32039F275C4AD6C9FFC /* MobileEngageInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F8DAD8E109756D0A6B68 /* MobileEngageInternal.h */; };
 		32C6F443B74763D4785022F9 /* InterfaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2F7B517867CF069B590 /* InterfaceTests.m */; };
 		32C6F4BFDB188B474E9CFF03 /* MEConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FE11C048D1D103C6B120 /* MEConfig.m */; };
 		32C6F550B3CD5637A841BB0B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 32C6F68C59D362926D33BB45 /* Info.plist */; };
 		32C6F55A9979DC26FD526D89 /* MEConfigBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F0CED986657DA32E7525 /* MEConfigBuilder.m */; };
+		32C6F6BB6ABB424822AF34B0 /* MENotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F1045F8F067FAC344C7F /* MENotification.h */; };
 		32C6F791C414CB1E195DF7BF /* MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F0F5EAFCCF8DD8BEDE99 /* MobileEngage.m */; };
 		32C6F7999214937B7CFA2169 /* MobileEngageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F873043EA1EC7E0E057C /* MobileEngageTests.m */; };
 		32C6F81E4196B011AFB51586 /* MEConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F22AD8B05632EFE8F29D /* MEConfig.h */; };
@@ -28,10 +30,13 @@
 		32C6F9742BC7CC58427DA191 /* MobileEngageStatusDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */; };
 		32C6F9AA36B2BC1AAA2EFDD5 /* MobileEngageInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FF185EC94949DE34FF16 /* MobileEngageInternal.m */; };
 		32C6F9BEF9759A037BD8C3D9 /* FakeStatusDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F9EBE29BADE147154DC7 /* FakeStatusDelegate.m */; };
+		32C6FC6A5D81C0FBEFAB203E /* MEInbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F093C7EB892F8593D2D3 /* MEInbox.m */; };
 		32C6FC9F53ECB121BF53EA03 /* NSDictionary+MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */; };
 		32C6FCF5DE2B130DCD04794A /* MEConfigBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FB15634CAA89F68990D1 /* MEConfigBuilder.h */; };
 		32C6FD0B7F3B7647DA9C43EC /* NSDictionary+MobileEngage.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F901EAA453C0FE99E056 /* NSDictionary+MobileEngage.h */; };
+		32C6FD7EEB7E3941D941080F /* MEInbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FA2A7418AC9AED782AEC /* MEInbox.h */; };
 		32C6FDBD2FC3DD9E7B80C096 /* IntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FE99B9488237B00942D3 /* IntegrationTests.m */; };
+		32C6FE399116DE5778DA0E0D /* MENotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F647028661A86258F4C7 /* MENotification.m */; };
 		32C6FE55F469AAF41FE77725 /* MobileEngage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFD88E2892F183B9C41C /* MobileEngage.framework */; };
 		32C6FF342FC2C54422C8657C /* MobileEngage.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F9F7C741052373E946A2 /* MobileEngage.h */; };
 		32C6FF6CA695A73EA009E40A /* MobileEngageVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FA6991F882C8197DE493 /* MobileEngageVersion.h */; };
@@ -89,14 +94,18 @@
 		16ED6B2C1E7FE12600BB9C63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		16ED6B2F1E7FE12600BB9C63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		16ED6B311E7FE12600BB9C63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		32C6F093C7EB892F8593D2D3 /* MEInbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInbox.m; sourceTree = "<group>"; };
 		32C6F0CED986657DA32E7525 /* MEConfigBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEConfigBuilder.m; sourceTree = "<group>"; };
 		32C6F0F5EAFCCF8DD8BEDE99 /* MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngage.m; sourceTree = "<group>"; };
+		32C6F1045F8F067FAC344C7F /* MENotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MENotification.h; sourceTree = "<group>"; };
 		32C6F123C6A32D948E91FC84 /* FakeStatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeStatusDelegate.h; sourceTree = "<group>"; };
 		32C6F1CFFCD7F0A4AB4BD0BA /* MobileEngageInternal+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MobileEngageInternal+Private.h"; sourceTree = "<group>"; };
 		32C6F22AD8B05632EFE8F29D /* MEConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEConfig.h; sourceTree = "<group>"; };
 		32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngageTests.m"; sourceTree = "<group>"; };
 		32C6F2F7B517867CF069B590 /* InterfaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceTests.m; sourceTree = "<group>"; };
 		32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngageStatusDelegate.h; sourceTree = "<group>"; };
+		32C6F48B471B160D168FF06E /* InboxTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxTests.m; sourceTree = "<group>"; };
+		32C6F647028661A86258F4C7 /* MENotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MENotification.m; sourceTree = "<group>"; };
 		32C6F68C59D362926D33BB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32C6F75C6B275FB5F0669AF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32C6F873043EA1EC7E0E057C /* MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngageTests.m; sourceTree = "<group>"; };
@@ -106,6 +115,7 @@
 		32C6F979B34ACD8FE94CBAD3 /* MobileEngageSDK.podspec */ = {isa = PBXFileReference; lastKnownFileType = file.podspec; path = MobileEngageSDK.podspec; sourceTree = "<group>"; };
 		32C6F9EBE29BADE147154DC7 /* FakeStatusDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeStatusDelegate.m; sourceTree = "<group>"; };
 		32C6F9F7C741052373E946A2 /* MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngage.h; sourceTree = "<group>"; };
+		32C6FA2A7418AC9AED782AEC /* MEInbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInbox.h; sourceTree = "<group>"; };
 		32C6FA5C92065D2BBF21E07A /* MobileEngageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MobileEngageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32C6FA6991F882C8197DE493 /* MobileEngageVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngageVersion.h; sourceTree = "<group>"; };
 		32C6FB15634CAA89F68990D1 /* MEConfigBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEConfigBuilder.h; sourceTree = "<group>"; };
@@ -224,6 +234,7 @@
 				3746074B9FA6B1E3D03E0F05 /* MEAppLoginParameters.h */,
 				37460A987A7E73365F25A559 /* NSData+MobileEngine.m */,
 				374606C19F7396FF90BF0546 /* NSData+MobileEngine.h */,
+				32C6FD79AB75711E8A5390BC /* Inbox */,
 			);
 			path = MobileEngage;
 			sourceTree = "<group>";
@@ -257,8 +268,20 @@
 				32C6FBCD7BBB80E3DCEDE7B3 /* MobileEngage+Private.h */,
 				32C6FE99B9488237B00942D3 /* IntegrationTests.m */,
 				3746082B41F26ED2E4C30FE6 /* NSData+MobileEngageTest.m */,
+				32C6F48B471B160D168FF06E /* InboxTests.m */,
 			);
 			path = MobileEngageTests;
+			sourceTree = "<group>";
+		};
+		32C6FD79AB75711E8A5390BC /* Inbox */ = {
+			isa = PBXGroup;
+			children = (
+				32C6F093C7EB892F8593D2D3 /* MEInbox.m */,
+				32C6FA2A7418AC9AED782AEC /* MEInbox.h */,
+				32C6F647028661A86258F4C7 /* MENotification.m */,
+				32C6F1045F8F067FAC344C7F /* MENotification.h */,
+			);
+			path = Inbox;
 			sourceTree = "<group>";
 		};
 		C5F2067B715382BAF7819E4F /* Pods */ = {
@@ -288,6 +311,8 @@
 				32C6FF6CA695A73EA009E40A /* MobileEngageVersion.h in Headers */,
 				37460D8A9337F9B6ABBA014F /* MEAppLoginParameters.h in Headers */,
 				37460EC794D9BE7A0577B4BB /* NSData+MobileEngine.h in Headers */,
+				32C6FD7EEB7E3941D941080F /* MEInbox.h in Headers */,
+				32C6F6BB6ABB424822AF34B0 /* MENotification.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,6 +551,8 @@
 				32C6F9AA36B2BC1AAA2EFDD5 /* MobileEngageInternal.m in Sources */,
 				374602FFDFB3E8B95C8CA424 /* MEAppLoginParameters.m in Sources */,
 				37460F8AB7A75315B302E899 /* NSData+MobileEngine.m in Sources */,
+				32C6FC6A5D81C0FBEFAB203E /* MEInbox.m in Sources */,
+				32C6FE399116DE5778DA0E0D /* MENotification.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -541,6 +568,7 @@
 				32C6F7999214937B7CFA2169 /* MobileEngageTests.m in Sources */,
 				32C6FDBD2FC3DD9E7B80C096 /* IntegrationTests.m in Sources */,
 				3746080B1ECACAB2F5BC7935 /* NSData+MobileEngageTest.m in Sources */,
+				32C6F1622149E6D693644399 /* InboxTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

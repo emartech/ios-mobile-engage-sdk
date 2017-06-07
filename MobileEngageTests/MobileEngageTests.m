@@ -28,46 +28,69 @@ SPEC_BEGIN(MobileEngageTests)
         return mobileEngageInternalMock;
     };
 
-
-    describe(@"Static public interface method", ^{
-
-        it(@"should call internal implementation's method for setupWithConfig:launchOptions:", ^{
+    describe(@"setupWithConfig:launchOptions:", ^{
+        it(@"should call internal implementation's method", ^{
             mobileEngageInternal();
         });
 
-        it(@"should call internal implementation's method for setPushToken:", ^{
+        it(@"should create inbox instance", ^{
+            mobileEngageInternal();
+            [[theValue(MobileEngage.inbox) shouldNot] beNil];
+        });
+
+        it(@"should create one inbox instance", ^{
+            mobileEngageInternal();
+            MEInbox *inbox1 = MobileEngage.inbox;
+            MEInbox *inbox2 = MobileEngage.inbox;
+
+            [[inbox1 should] equal:inbox2];
+        });
+    });
+
+    describe(@"setPushToken:", ^{
+        it(@"should call internal implementation's method", ^{
             NSData *deviceToken = [NSData new];
             [[mobileEngageInternal() should] receive:@selector(setPushToken:) withArguments:deviceToken];
 
             [MobileEngage setPushToken:deviceToken];
         });
+    });
 
-        it(@"should call internal implementation's method for anonymous appLogin", ^{
+    describe(@"anonymous appLogin", ^{
+        it(@"should call internal implementation's method", ^{
             [[mobileEngageInternal() should] receive:@selector(appLogin)];
 
             [MobileEngage appLogin];
         });
+    });
 
-        it(@"should call internal implementation's method for appLogin", ^{
+    describe(@"appLoginWithContactFieldId:contactFieldValue:", ^{
+        it(@"should call internal implementation's method", ^{
             [[mobileEngageInternal() should] receive:@selector(appLoginWithContactFieldId:contactFieldValue:)];
 
             [MobileEngage appLoginWithContactFieldId:@0
                                    contactFieldValue:@"contactFieldValue"];
         });
+    });
 
-        it(@"should call internal implementation's method for appLogout", ^{
+    describe(@"appLogout", ^{
+        it(@"should call internal implementation's method", ^{
             [[mobileEngageInternal() should] receive:@selector(appLogout)];
 
             [MobileEngage appLogout];
         });
+    });
 
-        it(@"should call internal implementation's method for trackMessageOpenWithUserInfo", ^{
+    describe(@"trackMessageOpenWithUserInfo:", ^{
+        it(@"should call internal implementation's method", ^{
             [[mobileEngageInternal() should] receive:@selector(trackMessageOpenWithUserInfo:)];
 
             [MobileEngage trackMessageOpenWithUserInfo:@{}];
         });
+    });
 
-        it(@"should call internal implementation's method for trackCustomEvent:eventAttributes:", ^{
+    describe(@"trackCustomEvent:eventAttributes:", ^{
+        it(@"should call internal implementation's method", ^{
             [[mobileEngageInternal() should] receive:@selector(trackCustomEvent:eventAttributes:)];
 
             [MobileEngage trackCustomEvent:@"eventName"

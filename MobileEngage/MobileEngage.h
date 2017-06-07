@@ -3,6 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MEInbox.h"
 
 @class MEConfig;
 @protocol MobileEngageStatusDelegate;
@@ -12,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MobileEngage : NSObject
 
 @property(class, nonatomic, weak, nullable) id <MobileEngageStatusDelegate> statusDelegate;
+@property(class, nonatomic, readonly) MEInbox *inbox;
 
 + (void)setupWithConfig:(MEConfig *)config
           launchOptions:(nullable NSDictionary *)launchOptions;

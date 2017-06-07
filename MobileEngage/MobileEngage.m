@@ -9,6 +9,7 @@
 @implementation MobileEngage
 
 static MobileEngageInternal *_mobileEngageInternal;
+static MEInbox *_inbox;
 
 + (void)setupWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal
                                config:(MEConfig *)config
@@ -60,6 +61,13 @@ static MobileEngageInternal *_mobileEngageInternal;
 
 + (id <MobileEngageStatusDelegate>)statusDelegate {
     return [_mobileEngageInternal statusDelegate];
+}
+
++ (MEInbox *)inbox {
+    if (_inbox == nil) {
+        _inbox = [MEInbox new];
+    }
+    return _inbox;
 }
 
 @end
