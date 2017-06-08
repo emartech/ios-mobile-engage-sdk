@@ -13,6 +13,7 @@ Pod::Spec.new do |spec|
 		'MobileEngage/MobileEngageStatusDelegate.h',
 		'MobileEngage/MEConfigBuilder.h',
 		'MobileEngage/MEConfig.h',
+		'MobileEngage/MEInbox.h'
 	]
 	spec.libraries = 'z', 'c++'
 end
