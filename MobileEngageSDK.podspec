@@ -14,6 +14,6 @@ Pod::Spec.new do |spec|
 		'MobileEngage/MEConfigBuilder.h',
 		'MobileEngage/MEConfig.h',
 	]
-	spec.dependency 'CoreSDK'
+	spec.dependency = 'CoreSDK', :git => 'https://github.com/redconnect-io/ios-core-sdk'
 	spec.libraries = 'z', 'c++'
 end
