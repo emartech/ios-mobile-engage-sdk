@@ -24,4 +24,6 @@ typedef void (^MEInboxResultErrorBlock)(NSError *error);
 - (void)resetBadgeCountWithSuccessBlock:(MEInboxSuccessBlock)successBlock
                              errorBlock:(MEInboxResultErrorBlock)errorBlock;
 
+- (void)resetBadgeCount;
+
 @end

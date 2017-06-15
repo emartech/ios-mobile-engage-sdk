@@ -76,6 +76,10 @@
     }
 }
 
+- (void)resetBadgeCount {
+    [self resetBadgeCountWithSuccessBlock:nil errorBlock:nil];
+}
+
 - (void)resetBadgeCountWithSuccessBlock:(MEInboxSuccessBlock)successBlock
                              errorBlock:(MEInboxResultErrorBlock)errorBlock {
     if (self.appLoginParameters && self.appLoginParameters.contactFieldId && self.appLoginParameters.contactFieldValue) {

@@ -184,7 +184,7 @@ SPEC_BEGIN(InboxTests)
         });
     });
 
-    describe(@"inbox.resetBadgeCount", ^{
+    describe(@"inbox.resetBadgeCountWithSuccessBlock:errorBlock:", ^{
 
         it(@"should invoke restClient when applLginParameters are set", ^{
             EMSRESTClient *restClientMock = [EMSRESTClient mock];
@@ -327,7 +327,22 @@ SPEC_BEGIN(InboxTests)
                                         }];
             [[expectFutureValue(theValue(onMainThread)) shouldEventually] beYes];
         });
-
     });
+
+    describe(@"inbox.resetBadgeCount", ^{
+        it(@"should call resetBadgeCountWithSuccessBlock:errorBlock:", ^{
+            MEInbox *inbox = [MEInbox new];
+            __block NSNumber *resetCalled;
+            [inbox stub:@selector(resetBadgeCountWithSuccessBlock:errorBlock:) withBlock:^id(NSArray *params) {
+                resetCalled = @YES;
+                return nil;
+            }];
+
+            [inbox resetBadgeCount];
+
+            [[expectFutureValue(resetCalled) shouldNotEventually] beNil];
+        });
+    });
+
 
 SPEC_END
