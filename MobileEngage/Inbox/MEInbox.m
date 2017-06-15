@@ -18,9 +18,13 @@
 @property(nonatomic, strong) EMSRESTClient *restClient;
 @property(nonatomic, strong) MEConfig *config;
 
+- (NSDictionary<NSString *, NSString *> *)createNotificationsFetchingHeaders;
+
 @end
 
 @implementation MEInbox
+
+#pragma mark - Init
 
 - (instancetype)initWithConfig:(MEConfig *)config {
     EMSRESTClient *restClient = [EMSRESTClient clientWithSession:[NSURLSession sharedSession]];
@@ -37,6 +41,8 @@
     }
     return self;
 }
+
+#pragma mark - Public methods
 
 - (void)fetchNotificationsWithResultBlock:(MEInboxResultBlock)resultBlock
                                errorBlock:(MEInboxResultErrorBlock)errorBlock {
@@ -69,6 +75,41 @@
         });
     }
 }
+
+- (void)resetBadgeCountWithSuccessBlock:(MEInboxSuccessBlock)successBlock
+                             errorBlock:(MEInboxResultErrorBlock)errorBlock {
+    if (self.appLoginParameters && self.appLoginParameters.contactFieldId && self.appLoginParameters.contactFieldValue) {
+        EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+            [builder setUrl:@"https://me-inbox.eservice.emarsys.net/api/reset-badge-count"];
+            [builder setMethod:HTTPMethodPOST];
+            [builder setHeaders:[self createNotificationsFetchingHeaders]];
+        }];
+        [_restClient executeTaskWithRequestModel:model
+                                    successBlock:^(NSString *requestId, EMSResponseModel *response) {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            if (successBlock) {
+                                                successBlock();
+                                            }
+                                        });
+                                    }
+                                      errorBlock:^(NSString *requestId, NSError *error) {
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                              if (errorBlock) {
+                                                  errorBlock(error);
+                                              }
+                                          });
+                                      }];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (errorBlock) {
+                errorBlock([NSError errorWithCode:42
+                             localizedDescription:@"Login parameters are not available."]);
+            }
+        });
+    }
+}
+
+#pragma mark - Private methods
 
 - (NSDictionary<NSString *, NSString *> *)createNotificationsFetchingHeaders {
     NSDictionary *defaultHeaders = [MEDefaultHeaders additionalHeadersWithConfig:self.config];

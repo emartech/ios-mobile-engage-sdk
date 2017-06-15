@@ -10,8 +10,8 @@
 @class MEConfig;
 @class MEAppLoginParameters;
 
+typedef void (^MEInboxSuccessBlock)();
 typedef void (^MEInboxResultBlock)(MENotificationInboxStatus *inboxStatus);
-
 typedef void (^MEInboxResultErrorBlock)(NSError *error);
 
 @interface MEInbox : NSObject
@@ -20,4 +20,8 @@ typedef void (^MEInboxResultErrorBlock)(NSError *error);
 
 - (void)fetchNotificationsWithResultBlock:(MEInboxResultBlock)resultBlock
                                errorBlock:(MEInboxResultErrorBlock)errorBlock;
+
+- (void)resetBadgeCountWithSuccessBlock:(MEInboxSuccessBlock)successBlock
+                             errorBlock:(MEInboxResultErrorBlock)errorBlock;
+
 @end

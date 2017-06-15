@@ -7,10 +7,14 @@
 #import "MEAppLoginParameters.h"
 #import "FakeRestClient.h"
 #import "MEInbox+Private.h"
+#import "EMSRequestModelBuilder.h"
+#import "EMSRequestModelMatcher.h"
 
 static NSString *const kAppId = @"kAppId";
 
 SPEC_BEGIN(InboxTests)
+
+    registerMatchers(@"EMS");
 
     NSString *applicationCode = kAppId;
     NSString *applicationPassword = @"appSecret";
@@ -30,6 +34,16 @@ SPEC_BEGIN(InboxTests)
                                                                           contactFieldValue:contactFieldValue]];
         }
         return inbox;
+    };
+
+    id (^expectedHeaders)() = ^id() {
+        NSDictionary *defaultHeaders = [MEDefaultHeaders additionalHeadersWithConfig:config];
+        NSMutableDictionary *mutableFetchingHeaders = [NSMutableDictionary dictionaryWithDictionary:defaultHeaders];
+        mutableFetchingHeaders[@"x-ems-me-hardware-id"] = [EMSDeviceInfo hardwareId];
+        mutableFetchingHeaders[@"x-ems-me-application-code"] = config.applicationCode;
+        mutableFetchingHeaders[@"x-ems-me-contact-field-id"] = [NSString stringWithFormat:@"%@", contactFieldId];
+        mutableFetchingHeaders[@"x-ems-me-contact-field-value"] = contactFieldValue;
+        return [NSDictionary dictionaryWithDictionary:mutableFetchingHeaders];
     };
 
     describe(@"inbox.fetchNotificationsWithResultBlock", ^{
@@ -90,16 +104,8 @@ SPEC_BEGIN(InboxTests)
             EMSRESTClient *client = [EMSRESTClient mock];
             MEInbox *inbox = inboxWithParameters(client, YES);
 
-            NSDictionary *defaultHeaders = [MEDefaultHeaders additionalHeadersWithConfig:config];
-            NSMutableDictionary *mutableFetchingHeaders = [NSMutableDictionary dictionaryWithDictionary:defaultHeaders];
-            mutableFetchingHeaders[@"x-ems-me-hardware-id"] = [EMSDeviceInfo hardwareId];
-            mutableFetchingHeaders[@"x-ems-me-application-code"] = config.applicationCode;
-            mutableFetchingHeaders[@"x-ems-me-contact-field-id"] = [NSString stringWithFormat:@"%@", contactFieldId];
-            mutableFetchingHeaders[@"x-ems-me-contact-field-value"] = contactFieldValue;
-            NSDictionary *expectedHeaders = [NSDictionary dictionaryWithDictionary:mutableFetchingHeaders];
-
             KWCaptureSpy *requestModelSpy = [client captureArgument:@selector(executeTaskWithRequestModel:successBlock:errorBlock:)
-                                                            atIndex:0];
+                    atIndex:0];
             [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
                     }
                                           errorBlock:nil];
@@ -108,7 +114,7 @@ SPEC_BEGIN(InboxTests)
 
             [[capturedRequestModel.url should] equal:[NSURL URLWithString:@"https://me-inbox.eservice.emarsys.net/api/notifications"]];
             [[capturedRequestModel.method should] equal:@"GET"];
-            [[capturedRequestModel.headers should] equal:expectedHeaders];
+            [[capturedRequestModel.headers should] equal:expectedHeaders()];
         });
 
         it(@"should throw an exception, when resultBlock is nil", ^{
@@ -155,9 +161,9 @@ SPEC_BEGIN(InboxTests)
             [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
                         fail(@"resultblock invoked");
                     }
-                                          errorBlock:^(NSError *error) {
-                                              receivedError = error;
-                                          }];
+                    errorBlock:^(NSError *error) {
+                        receivedError = error;
+                    }];
             [[expectFutureValue(receivedError) shouldNotEventually] beNil];
         });
 
@@ -166,7 +172,7 @@ SPEC_BEGIN(InboxTests)
             [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
                         fail(@"resultblock invoked");
                     }
-                                          errorBlock:nil];
+                    errorBlock:nil];
         });
 
         it(@"should not invoke errorBlock when there is no errorBlock without appLoginParameters", ^{
@@ -176,6 +182,152 @@ SPEC_BEGIN(InboxTests)
                     }
                                           errorBlock:nil];
         });
+    });
+
+    describe(@"inbox.resetBadgeCount", ^{
+
+        it(@"should invoke restClient when applLginParameters are set", ^{
+            EMSRESTClient *restClientMock = [EMSRESTClient mock];
+            [[restClientMock should] receive:@selector(executeTaskWithRequestModel:successBlock:errorBlock:)];
+
+            MEInbox *inbox = inboxWithParameters(restClientMock, YES);
+
+            [inbox resetBadgeCountWithSuccessBlock:nil
+                                        errorBlock:nil];
+        });
+
+        it(@"should not invoke restClient when appLoginParameters are not available", ^{
+            EMSRESTClient *restClientMock = [EMSRESTClient mock];
+            [[restClientMock shouldNot] receive:@selector(executeTaskWithRequestModel:successBlock:errorBlock:)];
+
+            MEInbox *inbox = inboxWithParameters(restClientMock, NO);
+
+            [inbox resetBadgeCountWithSuccessBlock:nil
+                                        errorBlock:nil];
+        });
+
+        it(@"should invoke restClient with the correct requestModel", ^{
+            EMSRequestModel *expectedRequestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setMethod:HTTPMethodPOST];
+                [builder setUrl:@"https://me-inbox.eservice.emarsys.net/api/reset-badge-count"];
+                [builder setHeaders:expectedHeaders()];
+            }];
+
+            EMSRESTClient *restClientMock = [EMSRESTClient mock];
+            [[restClientMock should] receive:@selector(executeTaskWithRequestModel:successBlock:errorBlock:)];
+            KWCaptureSpy *requestModelSpy = [restClientMock captureArgument:@selector(executeTaskWithRequestModel:successBlock:errorBlock:)
+                                                                    atIndex:0];
+            MEInbox *inbox = inboxWithParameters(restClientMock, YES);
+
+            [inbox resetBadgeCountWithSuccessBlock:nil
+                                        errorBlock:nil];
+
+            EMSRequestModel *capturedModel = requestModelSpy.argument;
+            [[capturedModel should] beSimilarWithRequest:expectedRequestModel];
+        });
+
+        it(@"should invoke successBlock when success", ^{
+            __block BOOL successBlockInvoked = NO;
+
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+            [inbox resetBadgeCountWithSuccessBlock:^{
+                        successBlockInvoked = YES;
+                    }
+                                        errorBlock:^(NSError *error) {
+                                            fail(@"errorblock invoked");
+                                        }];
+            [[expectFutureValue(theValue(successBlockInvoked)) shouldEventually] beYes];
+        });
+
+        it(@"should invoke errorBlock when failure with apploginParameters", ^{
+            __block NSError *_error;
+
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], YES);
+            [inbox resetBadgeCountWithSuccessBlock:^{
+                        fail(@"successblock invoked");
+                    }
+                                        errorBlock:^(NSError *error) {
+                                            _error = error;
+                                        }];
+            [[_error shouldNotEventually] beNil];
+        });
+
+        it(@"should invoke errorBlock when failure without apploginParameters", ^{
+            __block NSError *_error;
+
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], NO);
+            [inbox resetBadgeCountWithSuccessBlock:^{
+                        fail(@"successblock invoked");
+                    }
+                                        errorBlock:^(NSError *error) {
+                                            _error = error;
+                                        }];
+            [[_error shouldNotEventually] beNil];
+        });
+
+        it(@"should not invoke successBlock when there is no successBlock", ^{
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+            [inbox resetBadgeCountWithSuccessBlock:nil
+                                        errorBlock:nil];
+        });
+
+        it(@"should not invoke errorBlock when there is no errorBlock with apploginParameters", ^{
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], YES);
+            [inbox resetBadgeCountWithSuccessBlock:nil
+                                        errorBlock:nil];
+        });
+
+        it(@"should not invoke errorBlock when there is no errorBlock without apploginParameters", ^{
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], NO);
+            [inbox resetBadgeCountWithSuccessBlock:nil
+                                        errorBlock:nil];
+        });
+
+        it(@"should invoke successBlock on main thread", ^{
+            __block BOOL onMainThread = NO;
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+
+            [inbox resetBadgeCountWithSuccessBlock:^{
+                        if ([NSThread isMainThread]) {
+                            onMainThread = YES;
+                        }
+                    }
+                                        errorBlock:^(NSError *error) {
+                                            fail(@"errorblock invoked");
+                                        }];
+            [[expectFutureValue(theValue(onMainThread)) shouldEventually] beYes];
+        });
+
+        it(@"should invoke errorBlock on main thread", ^{
+            __block BOOL onMainThread = NO;
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], YES);
+
+            [inbox resetBadgeCountWithSuccessBlock:^{
+                        fail(@"successblock invoked");
+                    }
+                                        errorBlock:^(NSError *error) {
+                                            if ([NSThread isMainThread]) {
+                                                onMainThread = YES;
+                                            }
+                                        }];
+            [[expectFutureValue(theValue(onMainThread)) shouldEventually] beYes];
+        });
+
+        it(@"should invoke errorBlock on main thread when apploginParameters are not set", ^{
+            __block BOOL onMainThread = NO;
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], NO);
+
+            [inbox resetBadgeCountWithSuccessBlock:^{
+                        fail(@"successblock invoked");
+                    }
+                                        errorBlock:^(NSError *error) {
+                                            if ([NSThread isMainThread]) {
+                                                onMainThread = YES;
+                                            }
+                                        }];
+            [[expectFutureValue(theValue(onMainThread)) shouldEventually] beYes];
+        });
+
     });
 
 SPEC_END
