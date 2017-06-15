@@ -54,6 +54,9 @@ static MEInbox *_inbox;
     return [_mobileEngageInternal trackMessageOpenWithUserInfo:userInfo];
 }
 
++ (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage {
+    return [_mobileEngageInternal trackMessageOpenWithInboxMessage:inboxMessage];
+}
 
 + (NSString *)trackCustomEvent:(NSString *)eventName
                eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes {

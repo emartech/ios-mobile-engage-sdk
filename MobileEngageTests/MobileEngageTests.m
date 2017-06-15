@@ -98,6 +98,15 @@ SPEC_BEGIN(MobileEngageTests)
         });
     });
 
+    describe(@"trackMessageOpenWithInboxMessage:", ^{
+        it(@"should call internal implementation's method", ^{
+            [[mobileEngageInternal() should] receive:@selector(trackMessageOpenWithInboxMessage:)];
+            MENotification *message = [MENotification new];
+            message.id = @"testID";
+            [MobileEngage trackMessageOpenWithInboxMessage:message];
+        });
+    });
+
     describe(@"trackCustomEvent:eventAttributes:", ^{
         it(@"should call internal implementation's method", ^{
             [[mobileEngageInternal() should] receive:@selector(trackCustomEvent:eventAttributes:)];

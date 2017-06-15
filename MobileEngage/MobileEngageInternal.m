@@ -14,6 +14,7 @@
 #import "NSData+MobileEngine.h"
 #import "MEDefaultHeaders.h"
 #import "MobileEngageVersion.h"
+#import "MENotification.h"
 
 @interface MobileEngageInternal ()
 
@@ -150,6 +151,23 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
     }
     return requestId;
 }
+
+- (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage {
+    NSParameterAssert(inboxMessage);
+    EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+        [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
+        [builder setMethod:HTTPMethodPOST];
+        [builder setPayload:@{
+                @"application_id": self.config.applicationCode,
+                @"hardware_id": [EMSDeviceInfo hardwareId],
+                @"sid": inboxMessage.id,
+                @"source": @"inbox"
+        }];
+    }];
+    [self.requestManager submit:requestModel];
+    return [requestModel requestId];
+}
+
 
 - (NSString *)trackCustomEvent:(nonnull NSString *)eventName
                eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes {

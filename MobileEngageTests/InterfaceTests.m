@@ -303,6 +303,91 @@ SPEC_BEGIN(PublicInterfaceTest)
         });
     });
 
+    describe(@"trackMessageOpenWithInboxMessage:", ^{
+        it(@"should throw exception when parameter is nil", ^{
+            @try {
+                [_mobileEngage trackMessageOpenWithInboxMessage:nil];
+                fail(@"Expected Exception when inboxMessage is nil!");
+            } @catch (NSException *exception) {
+                [[theValue(exception) shouldNot] beNil];
+            }
+        });
+
+        it(@"should submit a corresponding RequestModel", ^{
+            id requestManager = requestManagerMock();
+
+            EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"sid": @"testID",
+                    @"source": @"inbox"
+            });
+
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                        atIndex:0];
+            MENotification *message = [MENotification new];
+            message.id = @"testID";
+            [_mobileEngage trackMessageOpenWithInboxMessage:message];
+
+            EMSRequestModel *actualModel = spy.argument;
+            [[model should] beSimilarWithRequest:actualModel];
+        });
+
+        it(@"should submit a corresponding RequestModel", ^{
+            id requestManager = requestManagerMock();
+
+            EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"sid": @"valueOfSid",
+                    @"source": @"inbox"
+            });
+
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                        atIndex:0];
+            MENotification *message = [MENotification new];
+            message.id = @"valueOfSid";
+            [_mobileEngage trackMessageOpenWithInboxMessage:message];
+
+            EMSRequestModel *actualModel = spy.argument;
+            [[model should] beSimilarWithRequest:actualModel];
+        });
+
+        it(@"should return with the requestModel's requestID", ^{
+            id requestManager = requestManagerMock();
+
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                        atIndex:0];
+            MENotification *message = [MENotification new];
+            message.id = @"valueOfSid";
+            NSString *requestID = [_mobileEngage trackMessageOpenWithInboxMessage:message];
+
+            EMSRequestModel *actualModel = spy.argument;
+            [[requestID should] equal:actualModel.requestId];
+        });
+
+        it(@"must not return with nil", ^{
+            id requestManager = requestManagerMock();
+            MENotification *message = [MENotification new];
+            message.id = @"testID";
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+
+            NSString *uuid = [_mobileEngage trackMessageOpenWithInboxMessage:message];
+
+            [[uuid shouldNot] beNil];
+        });
+    });
+
     describe(@"trackCustomEvent:eventAttributes:", ^{
         it(@"must not return with nil", ^{
             id requestManager = requestManagerMock();
