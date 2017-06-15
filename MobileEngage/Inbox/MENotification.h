@@ -10,7 +10,7 @@
 @property(nonatomic, strong) NSString *id;
 @property(nonatomic, strong) NSString *title;
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *customData;
-@property(nonatomic, strong) NSDictionary<NSString *, NSString *> *rootParams;
+@property(nonatomic, strong) NSDictionary<NSString *, id> *rootParams;
 @property(nonatomic, strong) NSNumber *expirationTime;
 @property(nonatomic, strong) NSDate *receivedAt;
 
