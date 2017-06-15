@@ -14,4 +14,11 @@
 @property(nonatomic, strong) NSNumber *expirationTime;
 @property(nonatomic, strong) NSDate *receivedAt;
 
+- (instancetype)initWithNotificationDictionary:(NSDictionary *)dictionary;
+
+- (BOOL)isEqual:(id)other;
+
+- (BOOL)isEqualToNotification:(MENotification *)notification;
+
+- (NSUInteger)hash;
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		167609D01EEAD8480029B2E6 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
 		16ED6B221E7FE12600BB9C63 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ED6B211E7FE12600BB9C63 /* main.m */; };
 		16ED6B251E7FE12600BB9C63 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ED6B241E7FE12600BB9C63 /* AppDelegate.m */; };
 		16ED6B281E7FE12600BB9C63 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ED6B271E7FE12600BB9C63 /* ViewController.m */; };
@@ -24,12 +25,15 @@
 		32C6F6BB6ABB424822AF34B0 /* MENotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F1045F8F067FAC344C7F /* MENotification.h */; };
 		32C6F791C414CB1E195DF7BF /* MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F0F5EAFCCF8DD8BEDE99 /* MobileEngage.m */; };
 		32C6F7999214937B7CFA2169 /* MobileEngageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F873043EA1EC7E0E057C /* MobileEngageTests.m */; };
+		32C6F81B504C3170FFA20580 /* InboxIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FDB26B21FB77D0C22429 /* InboxIntegrationTests.m */; };
 		32C6F81E4196B011AFB51586 /* MEConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F22AD8B05632EFE8F29D /* MEConfig.h */; };
 		32C6F841AFC3F9D8BFD08191 /* NSDictionary+MobileEngageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */; };
 		32C6F906E9F3410E5BF08A2D /* BuilderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F8941CDF4E63DBD3D286 /* BuilderTests.m */; };
 		32C6F9742BC7CC58427DA191 /* MobileEngageStatusDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */; };
 		32C6F9AA36B2BC1AAA2EFDD5 /* MobileEngageInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FF185EC94949DE34FF16 /* MobileEngageInternal.m */; };
 		32C6F9BEF9759A037BD8C3D9 /* FakeStatusDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F9EBE29BADE147154DC7 /* FakeStatusDelegate.m */; };
+		32C6FAB3E109A9AA23618DEC /* MEInbox+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FC9030200EE26F10E902 /* MEInbox+Private.h */; };
+		32C6FB16C938582D71B70BC3 /* FakeRestClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F93DFEA64AB17BBADDAE /* FakeRestClient.m */; };
 		32C6FC6A5D81C0FBEFAB203E /* MEInbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F093C7EB892F8593D2D3 /* MEInbox.m */; };
 		32C6FC9F53ECB121BF53EA03 /* NSDictionary+MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */; };
 		32C6FCF5DE2B130DCD04794A /* MEConfigBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FB15634CAA89F68990D1 /* MEConfigBuilder.h */; };
@@ -40,15 +44,22 @@
 		32C6FE55F469AAF41FE77725 /* MobileEngage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFD88E2892F183B9C41C /* MobileEngage.framework */; };
 		32C6FF342FC2C54422C8657C /* MobileEngage.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F9F7C741052373E946A2 /* MobileEngage.h */; };
 		32C6FF6CA695A73EA009E40A /* MobileEngageVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FA6991F882C8197DE493 /* MobileEngageVersion.h */; };
+		374600E1F7E23A2E0B9D9F45 /* MEInboxParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3746044F59EDC9970D9A6D24 /* MEInboxParser.h */; };
+		374601D32A5F62AFF997EA8F /* MENotificationInboxStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 37460E12B3DD884B04FE9218 /* MENotificationInboxStatus.h */; };
 		374602FFDFB3E8B95C8CA424 /* MEAppLoginParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460064180D9AE6386F4D91 /* MEAppLoginParameters.m */; };
+		374606F978D96F3B46B92709 /* MEDefaultHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 37460A6C6D11B17EADC95F08 /* MEDefaultHeaders.h */; };
+		374608097EC048F89D113A3C /* MENotificationInboxStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 374606DCC16B33077DAC2715 /* MENotificationInboxStatus.m */; };
 		3746080B1ECACAB2F5BC7935 /* NSData+MobileEngageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746082B41F26ED2E4C30FE6 /* NSData+MobileEngageTest.m */; };
 		37460906FC12301114D82BAF /* EMSRequestModelMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 374600D2C87F4E59AE3EB5C1 /* EMSRequestModelMatcher.m */; };
+		3746094CE3B78154A87522E2 /* MEDefaultHeaders.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460D3696B359FBDF2A2A85 /* MEDefaultHeaders.m */; };
+		37460A79B9C8DBBFFBF4E29E /* MEInboxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460DB8C2DE5DC85E245CAF /* MEInboxParser.m */; };
 		37460D8A9337F9B6ABBA014F /* MEAppLoginParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 3746074B9FA6B1E3D03E0F05 /* MEAppLoginParameters.h */; };
 		37460EC794D9BE7A0577B4BB /* NSData+MobileEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 374606C19F7396FF90BF0546 /* NSData+MobileEngine.h */; };
 		37460F8AB7A75315B302E899 /* NSData+MobileEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460A987A7E73365F25A559 /* NSData+MobileEngine.m */; };
 		3D2E4B52761B24CDC2658F5F /* libPods-MobileEngageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6262C89B7603BAEEEC82477 /* libPods-MobileEngageTests.a */; };
 		69AF135B0B285E983E9BEF76 /* libPods-MobileEngage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBEE9AE6141869888698713 /* libPods-MobileEngage.a */; };
 		8A4BD7A01EE192FF0056486D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
+		8A9E703C1EEFE134002F2331 /* InboxParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460D9203AFE27B53C80335 /* InboxParserTests.m */; };
 		8AAFD65E1EE196C700ACEB52 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +111,7 @@
 		32C6F1045F8F067FAC344C7F /* MENotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MENotification.h; sourceTree = "<group>"; };
 		32C6F123C6A32D948E91FC84 /* FakeStatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeStatusDelegate.h; sourceTree = "<group>"; };
 		32C6F1CFFCD7F0A4AB4BD0BA /* MobileEngageInternal+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MobileEngageInternal+Private.h"; sourceTree = "<group>"; };
+		32C6F1FE55A5070D9906A0F1 /* FakeRestClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeRestClient.h; sourceTree = "<group>"; };
 		32C6F22AD8B05632EFE8F29D /* MEConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEConfig.h; sourceTree = "<group>"; };
 		32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngageTests.m"; sourceTree = "<group>"; };
 		32C6F2F7B517867CF069B590 /* InterfaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceTests.m; sourceTree = "<group>"; };
@@ -112,6 +124,7 @@
 		32C6F8941CDF4E63DBD3D286 /* BuilderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuilderTests.m; sourceTree = "<group>"; };
 		32C6F8DAD8E109756D0A6B68 /* MobileEngageInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngageInternal.h; sourceTree = "<group>"; };
 		32C6F901EAA453C0FE99E056 /* NSDictionary+MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MobileEngage.h"; sourceTree = "<group>"; };
+		32C6F93DFEA64AB17BBADDAE /* FakeRestClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeRestClient.m; sourceTree = "<group>"; };
 		32C6F979B34ACD8FE94CBAD3 /* MobileEngageSDK.podspec */ = {isa = PBXFileReference; lastKnownFileType = file.podspec; path = MobileEngageSDK.podspec; sourceTree = "<group>"; };
 		32C6F9EBE29BADE147154DC7 /* FakeStatusDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeStatusDelegate.m; sourceTree = "<group>"; };
 		32C6F9F7C741052373E946A2 /* MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngage.h; sourceTree = "<group>"; };
@@ -121,17 +134,26 @@
 		32C6FB15634CAA89F68990D1 /* MEConfigBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEConfigBuilder.h; sourceTree = "<group>"; };
 		32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngage.m"; sourceTree = "<group>"; };
 		32C6FBCD7BBB80E3DCEDE7B3 /* MobileEngage+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MobileEngage+Private.h"; sourceTree = "<group>"; };
+		32C6FC9030200EE26F10E902 /* MEInbox+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEInbox+Private.h"; sourceTree = "<group>"; };
+		32C6FDB26B21FB77D0C22429 /* InboxIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxIntegrationTests.m; sourceTree = "<group>"; };
 		32C6FE11C048D1D103C6B120 /* MEConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEConfig.m; sourceTree = "<group>"; };
 		32C6FE99B9488237B00942D3 /* IntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegrationTests.m; sourceTree = "<group>"; };
 		32C6FF185EC94949DE34FF16 /* MobileEngageInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngageInternal.m; sourceTree = "<group>"; };
 		32C6FFD88E2892F183B9C41C /* MobileEngage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MobileEngage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37460064180D9AE6386F4D91 /* MEAppLoginParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEAppLoginParameters.m; sourceTree = "<group>"; };
 		374600D2C87F4E59AE3EB5C1 /* EMSRequestModelMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSRequestModelMatcher.m; sourceTree = "<group>"; };
+		3746044F59EDC9970D9A6D24 /* MEInboxParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxParser.h; sourceTree = "<group>"; };
 		374606C19F7396FF90BF0546 /* NSData+MobileEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MobileEngine.h"; sourceTree = "<group>"; };
+		374606DCC16B33077DAC2715 /* MENotificationInboxStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MENotificationInboxStatus.m; sourceTree = "<group>"; };
 		3746074B9FA6B1E3D03E0F05 /* MEAppLoginParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEAppLoginParameters.h; sourceTree = "<group>"; };
 		3746082B41F26ED2E4C30FE6 /* NSData+MobileEngageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MobileEngageTest.m"; sourceTree = "<group>"; };
 		37460A62CFE918ED5D3EE52F /* EMSRequestModelMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestModelMatcher.h; sourceTree = "<group>"; };
+		37460A6C6D11B17EADC95F08 /* MEDefaultHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEDefaultHeaders.h; sourceTree = "<group>"; };
 		37460A987A7E73365F25A559 /* NSData+MobileEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MobileEngine.m"; sourceTree = "<group>"; };
+		37460D3696B359FBDF2A2A85 /* MEDefaultHeaders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEDefaultHeaders.m; sourceTree = "<group>"; };
+		37460D9203AFE27B53C80335 /* InboxParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxParserTests.m; sourceTree = "<group>"; };
+		37460DB8C2DE5DC85E245CAF /* MEInboxParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxParser.m; sourceTree = "<group>"; };
+		37460E12B3DD884B04FE9218 /* MENotificationInboxStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MENotificationInboxStatus.h; sourceTree = "<group>"; };
 		4FBEE9AE6141869888698713 /* libPods-MobileEngage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		9780057C0A3C341B76020F59 /* Pods-MobileEngageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -162,6 +184,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				167609D01EEAD8480029B2E6 /* libsqlite3.tbd in Frameworks */,
 				32C6FE55F469AAF41FE77725 /* MobileEngage.framework in Frameworks */,
 				3D2E4B52761B24CDC2658F5F /* libPods-MobileEngageTests.a in Frameworks */,
 			);
@@ -235,6 +258,8 @@
 				37460A987A7E73365F25A559 /* NSData+MobileEngine.m */,
 				374606C19F7396FF90BF0546 /* NSData+MobileEngine.h */,
 				32C6FD79AB75711E8A5390BC /* Inbox */,
+				37460D3696B359FBDF2A2A85 /* MEDefaultHeaders.m */,
+				37460A6C6D11B17EADC95F08 /* MEDefaultHeaders.h */,
 			);
 			path = MobileEngage;
 			sourceTree = "<group>";
@@ -269,6 +294,10 @@
 				32C6FE99B9488237B00942D3 /* IntegrationTests.m */,
 				3746082B41F26ED2E4C30FE6 /* NSData+MobileEngageTest.m */,
 				32C6F48B471B160D168FF06E /* InboxTests.m */,
+				37460D9203AFE27B53C80335 /* InboxParserTests.m */,
+				32C6F93DFEA64AB17BBADDAE /* FakeRestClient.m */,
+				32C6F1FE55A5070D9906A0F1 /* FakeRestClient.h */,
+				32C6FDB26B21FB77D0C22429 /* InboxIntegrationTests.m */,
 			);
 			path = MobileEngageTests;
 			sourceTree = "<group>";
@@ -280,6 +309,11 @@
 				32C6FA2A7418AC9AED782AEC /* MEInbox.h */,
 				32C6F647028661A86258F4C7 /* MENotification.m */,
 				32C6F1045F8F067FAC344C7F /* MENotification.h */,
+				37460DB8C2DE5DC85E245CAF /* MEInboxParser.m */,
+				3746044F59EDC9970D9A6D24 /* MEInboxParser.h */,
+				374606DCC16B33077DAC2715 /* MENotificationInboxStatus.m */,
+				37460E12B3DD884B04FE9218 /* MENotificationInboxStatus.h */,
+				32C6FC9030200EE26F10E902 /* MEInbox+Private.h */,
 			);
 			path = Inbox;
 			sourceTree = "<group>";
@@ -313,6 +347,10 @@
 				37460EC794D9BE7A0577B4BB /* NSData+MobileEngine.h in Headers */,
 				32C6FD7EEB7E3941D941080F /* MEInbox.h in Headers */,
 				32C6F6BB6ABB424822AF34B0 /* MENotification.h in Headers */,
+				374606F978D96F3B46B92709 /* MEDefaultHeaders.h in Headers */,
+				374600E1F7E23A2E0B9D9F45 /* MEInboxParser.h in Headers */,
+				374601D32A5F62AFF997EA8F /* MENotificationInboxStatus.h in Headers */,
+				32C6FAB3E109A9AA23618DEC /* MEInbox+Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,6 +591,9 @@
 				37460F8AB7A75315B302E899 /* NSData+MobileEngine.m in Sources */,
 				32C6FC6A5D81C0FBEFAB203E /* MEInbox.m in Sources */,
 				32C6FE399116DE5778DA0E0D /* MENotification.m in Sources */,
+				3746094CE3B78154A87522E2 /* MEDefaultHeaders.m in Sources */,
+				37460A79B9C8DBBFFBF4E29E /* MEInboxParser.m in Sources */,
+				374608097EC048F89D113A3C /* MENotificationInboxStatus.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +610,9 @@
 				32C6FDBD2FC3DD9E7B80C096 /* IntegrationTests.m in Sources */,
 				3746080B1ECACAB2F5BC7935 /* NSData+MobileEngageTest.m in Sources */,
 				32C6F1622149E6D693644399 /* InboxTests.m in Sources */,
+				8A9E703C1EEFE134002F2331 /* InboxParserTests.m in Sources */,
+				32C6FB16C938582D71B70BC3 /* FakeRestClient.m in Sources */,
+				32C6F81B504C3170FFA20580 /* InboxIntegrationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

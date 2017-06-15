@@ -71,6 +71,15 @@ SPEC_BEGIN(MobileEngageTests)
             [MobileEngage appLoginWithContactFieldId:@0
                                    contactFieldValue:@"contactFieldValue"];
         });
+
+        it(@"should set the contactFieldId and contactFieldValue in inbox", ^{
+            [MobileEngage setupWithMobileEngageInternal:[MobileEngageInternal nullMock] config:[MEConfig nullMock] launchOptions:nil];
+            [MobileEngage appLoginWithContactFieldId:@5
+                                   contactFieldValue:@"three"];
+
+            [[MobileEngage.inbox.appLoginParameters.contactFieldId should] equal:@5];
+            [[MobileEngage.inbox.appLoginParameters.contactFieldValue should] equal:@"three"];
+        });
     });
 
     describe(@"appLogout", ^{

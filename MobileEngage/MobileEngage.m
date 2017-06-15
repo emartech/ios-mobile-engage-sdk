@@ -5,6 +5,7 @@
 #import "MobileEngage.h"
 #import "MEConfig.h"
 #import "MobileEngageInternal.h"
+#import "MEInbox+Private.h"
 
 @implementation MobileEngage
 
@@ -15,6 +16,7 @@ static MEInbox *_inbox;
                                config:(MEConfig *)config
                         launchOptions:(NSDictionary *)launchOptions {
     _mobileEngageInternal = mobileEngageInternal;
+    _inbox = [[MEInbox alloc] initWithConfig:config];
     [_mobileEngageInternal setupWithConfig:config
                              launchOptions:launchOptions];
 }
@@ -31,16 +33,20 @@ static MEInbox *_inbox;
 }
 
 + (NSString *)appLogin {
+    [_inbox setAppLoginParameters:[MEAppLoginParameters new]];
     return [_mobileEngageInternal appLogin];
 }
 
 + (NSString *)appLoginWithContactFieldId:(NSNumber *)contactFieldId
                        contactFieldValue:(NSString *)contactFieldValue {
+    [_inbox setAppLoginParameters:[[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId
+                                                                     contactFieldValue:contactFieldValue]];
     return [_mobileEngageInternal appLoginWithContactFieldId:contactFieldId
                                            contactFieldValue:contactFieldValue];
 }
 
 + (NSString *)appLogout {
+    [_inbox setAppLoginParameters:nil];
     return [_mobileEngageInternal appLogout];
 }
 
@@ -64,9 +70,6 @@ static MEInbox *_inbox;
 }
 
 + (MEInbox *)inbox {
-    if (_inbox == nil) {
-        _inbox = [MEInbox new];
-    }
     return _inbox;
 }
 

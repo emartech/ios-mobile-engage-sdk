@@ -1,8 +1,3 @@
-//
-//  Created by Laszlo Ori on 2017. 03. 22..
-//  Copyright (c) 2017 Emarsys. All rights reserved.
-//
-
 #import "Kiwi.h"
 #import "FakeStatusDelegate.h"
 #import "MobileEngage.h"

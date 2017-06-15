@@ -4,11 +4,20 @@
 
 #import <Foundation/Foundation.h>
 #import "MENotification.h"
+#import "EMSRESTClient.h"
+#import "MENotificationInboxStatus.h"
 
-typedef void (^MEInboxResultBlock)(NSArray<MENotification *> *notifications);
+@class MEConfig;
+@class MEAppLoginParameters;
+
+typedef void (^MEInboxResultBlock)(MENotificationInboxStatus *inboxStatus);
+
+typedef void (^MEInboxResultErrorBlock)(NSError *error);
 
 @interface MEInbox : NSObject
 
-- (void)fetchNotificationsWithResultBlock:(MEInboxResultBlock)resultBlock;
+@property(nonatomic, strong) MEAppLoginParameters *appLoginParameters;
 
+- (void)fetchNotificationsWithResultBlock:(MEInboxResultBlock)resultBlock
+                               errorBlock:(MEInboxResultErrorBlock)errorBlock;
 @end

@@ -4,7 +4,6 @@
 
 #import "MobileEngageInternal.h"
 #import <CoreSDK/EMSRequestManager.h>
-#import <CoreSDK/EMSAuthentication.h>
 #import <CoreSDK/EMSRequestModelBuilder.h>
 #import <CoreSDK/EMSDeviceInfo.h>
 #import <CoreSDK/EMSRequestModel.h>
@@ -12,8 +11,9 @@
 #import "MEConfig.h"
 #import "NSDictionary+MobileEngage.h"
 #import "NSError+EMSCore.h"
-#import "MobileEngageVersion.h"
 #import "NSData+MobileEngine.h"
+#import "MEDefaultHeaders.h"
+#import "MobileEngageVersion.h"
 
 @interface MobileEngageInternal ()
 
@@ -35,13 +35,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
                   launchOptions:(NSDictionary *)launchOptions {
     _requestManager = requestManager;
     _config = config;
-    NSDictionary<NSString *, NSString *> *additionalHeaders = @{
-            @"Authorization": [EMSAuthentication createBasicAuthWithUsername:config.applicationCode
-                                                                    password:config.applicationPassword],
-            @"Content-Type": @"application/json",
-            @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION
-    };
-    [requestManager setAdditionalHeaders:additionalHeaders];
+    [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
 }
 
 - (void)setupWithConfig:(nonnull MEConfig *)config
