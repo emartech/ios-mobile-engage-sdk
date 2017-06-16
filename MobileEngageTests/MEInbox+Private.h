@@ -7,8 +7,6 @@
 
 @interface MEInbox (Private)
 
-- (instancetype)initWithConfig:(MEConfig *)config;
-
 - (instancetype)initWithRestClient:(EMSRESTClient *)restClient
                             config:(MEConfig *)config;
 

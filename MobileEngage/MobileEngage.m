@@ -5,7 +5,6 @@
 #import "MobileEngage.h"
 #import "MEConfig.h"
 #import "MobileEngageInternal.h"
-#import "MEInbox+Private.h"
 
 @implementation MobileEngage
 
