@@ -4,7 +4,6 @@
 
 #import <Foundation/Foundation.h>
 #import "MENotification.h"
-#import "EMSRESTClient.h"
 #import "MENotificationInboxStatus.h"
 
 @class MEConfig;

@@ -17,6 +17,6 @@ Pod::Spec.new do |spec|
         'MobileEngage/Inbox/MENotification.h',
         'MobileEngage/Inbox/MENotificationInboxStatus.h'
 	]
-	spec.dependency 'CoreSDK'
+	spec.dependency 'CoreSDK', '>= 0.7.0'
 	spec.libraries = 'z', 'c++'
 end

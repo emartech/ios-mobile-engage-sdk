@@ -11,6 +11,7 @@
 #import "EMSDeviceInfo.h"
 #import "MEAppLoginParameters.h"
 #import "MEInboxParser.h"
+#import "EMSRESTClient.h"
 
 @interface MEInbox ()
 
