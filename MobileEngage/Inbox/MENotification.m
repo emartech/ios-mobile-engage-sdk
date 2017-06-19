@@ -10,11 +10,12 @@
 - (instancetype)initWithNotificationDictionary:(NSDictionary *)dictionary {
     if (self = [super init]) {
         _id = dictionary[@"id"];
+        _sid = dictionary[@"sid"];
         _title = dictionary[@"title"];
         _customData = dictionary[@"custom_data"];
         _rootParams = dictionary[@"root_params"];
         _expirationTime = dictionary[@"expiration_time"];
-        _receivedAt = [NSDate dateWithTimeIntervalSince1970:[((NSNumber *) dictionary[@"received_at"]) doubleValue] / 1000];
+        _receivedAt = [NSDate dateWithTimeIntervalSince1970:[(dictionary[@"received_at"]) doubleValue] / 1000];
     }
     return self;
 }
@@ -35,6 +36,8 @@
         return NO;
     if (self.id != notification.id && ![self.id isEqualToString:notification.id])
         return NO;
+    if (self.sid != notification.sid && ![self.sid isEqualToString:notification.sid])
+        return NO;
     if (self.title != notification.title && ![self.title isEqualToString:notification.title])
         return NO;
     if (self.customData != notification.customData && ![self.customData isEqualToDictionary:notification.customData])
@@ -50,6 +53,7 @@
 
 - (NSUInteger)hash {
     NSUInteger hash = [self.id hash];
+    hash = hash * 31u + [self.sid hash];
     hash = hash * 31u + [self.title hash];
     hash = hash * 31u + [self.customData hash];
     hash = hash * 31u + [self.rootParams hash];

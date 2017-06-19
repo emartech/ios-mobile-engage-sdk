@@ -123,7 +123,7 @@ SPEC_BEGIN(InboxTests)
                 [inbox fetchNotificationsWithResultBlock:nil
                                               errorBlock:^(NSError *error) {
                                               }];
-                fail(@"Assertation doesn't called!");
+                fail(@"Assertion doesn't called!");
             } @catch (NSException *exception) {
                 [[theValue(exception) shouldNot] beNil];
             }
@@ -186,7 +186,7 @@ SPEC_BEGIN(InboxTests)
 
     describe(@"inbox.resetBadgeCountWithSuccessBlock:errorBlock:", ^{
 
-        it(@"should invoke restClient when applLginParameters are set", ^{
+        it(@"should invoke restClient when appLoginParameters are set", ^{
             EMSRESTClient *restClientMock = [EMSRESTClient mock];
             [[restClientMock should] receive:@selector(executeTaskWithRequestModel:successBlock:errorBlock:)];
 

@@ -8,6 +8,7 @@
 @interface MENotification : NSObject
 
 @property(nonatomic, strong) NSString *id;
+@property(nonatomic, strong) NSString *sid;
 @property(nonatomic, strong) NSString *title;
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *customData;
 @property(nonatomic, strong) NSDictionary<NSString *, id> *rootParams;

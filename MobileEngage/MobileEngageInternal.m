@@ -160,7 +160,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
         [builder setPayload:@{
                 @"application_id": self.config.applicationCode,
                 @"hardware_id": [EMSDeviceInfo hardwareId],
-                @"sid": inboxMessage.id,
+                @"sid": inboxMessage.sid,
                 @"source": @"inbox"
         }];
     }];

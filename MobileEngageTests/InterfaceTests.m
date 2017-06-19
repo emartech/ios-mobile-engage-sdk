@@ -329,7 +329,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
                                                         atIndex:0];
             MENotification *message = [MENotification new];
-            message.id = @"testID";
+            message.sid = @"testID";
             [_mobileEngage trackMessageOpenWithInboxMessage:message];
 
             EMSRequestModel *actualModel = spy.argument;
@@ -352,7 +352,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
                                                         atIndex:0];
             MENotification *message = [MENotification new];
-            message.id = @"valueOfSid";
+            message.sid = @"valueOfSid";
             [_mobileEngage trackMessageOpenWithInboxMessage:message];
 
             EMSRequestModel *actualModel = spy.argument;
@@ -368,7 +368,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
                                                         atIndex:0];
             MENotification *message = [MENotification new];
-            message.id = @"valueOfSid";
+            message.sid = @"valueOfSid";
             NSString *requestID = [_mobileEngage trackMessageOpenWithInboxMessage:message];
 
             EMSRequestModel *actualModel = spy.argument;
@@ -378,7 +378,7 @@ SPEC_BEGIN(PublicInterfaceTest)
         it(@"must not return with nil", ^{
             id requestManager = requestManagerMock();
             MENotification *message = [MENotification new];
-            message.id = @"testID";
+            message.sid = @"testID";
             [[requestManager should] receive:@selector(submit:)
                                withArguments:any(), any(), any()];
 
