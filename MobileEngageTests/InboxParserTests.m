@@ -75,7 +75,7 @@ SPEC_BEGIN(InboxParserTests)
             [[notification.customData should] equal:@{}];
             [[notification.rootParams should] equal:@{}];
             [[notification.expirationTime should] equal:@7200];
-            [[notification.receivedAt should] equal:[NSDate dateWithTimeIntervalSince1970:12345678.123]];
+            [[notification.receivedAtTimestamp should] equal:@12345678123];
         });
     });
 

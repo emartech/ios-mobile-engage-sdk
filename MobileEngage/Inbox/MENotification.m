@@ -15,7 +15,7 @@
         _customData = dictionary[@"custom_data"];
         _rootParams = dictionary[@"root_params"];
         _expirationTime = dictionary[@"expiration_time"];
-        _receivedAt = [NSDate dateWithTimeIntervalSince1970:[(dictionary[@"received_at"]) doubleValue] / 1000];
+        _receivedAtTimestamp = dictionary[@"received_at"];
     }
     return self;
 }
@@ -46,9 +46,7 @@
         return NO;
     if (self.expirationTime != notification.expirationTime && ![self.expirationTime isEqualToNumber:notification.expirationTime])
         return NO;
-    if (self.receivedAt != notification.receivedAt && [self.receivedAt timeIntervalSince1970] != [notification.receivedAt timeIntervalSince1970])
-        return NO;
-    return YES;
+    return [self.receivedAtTimestamp isEqualToNumber: notification.receivedAtTimestamp];
 }
 
 - (NSUInteger)hash {
@@ -58,7 +56,7 @@
     hash = hash * 31u + [self.customData hash];
     hash = hash * 31u + [self.rootParams hash];
     hash = hash * 31u + [self.expirationTime hash];
-    hash = hash * 31u + [self.receivedAt hash];
+    hash = hash * 31u + [self.receivedAtTimestamp hash];
     return hash;
 }
 

@@ -13,7 +13,7 @@
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *customData;
 @property(nonatomic, strong) NSDictionary<NSString *, id> *rootParams;
 @property(nonatomic, strong) NSNumber *expirationTime;
-@property(nonatomic, strong) NSDate *receivedAt;
+@property(nonatomic, strong) NSNumber *receivedAtTimestamp;
 
 - (instancetype)initWithNotificationDictionary:(NSDictionary *)dictionary;
 
