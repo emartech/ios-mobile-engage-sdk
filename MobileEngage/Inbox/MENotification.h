@@ -15,6 +15,7 @@
 @property(nonatomic, strong) NSNumber *expirationTime;
 @property(nonatomic, strong) NSNumber *receivedAtTimestamp;
 
+- (instancetype)initWithUserinfo:(NSDictionary *)dictionary;
 - (instancetype)initWithNotificationDictionary:(NSDictionary *)dictionary;
 
 - (BOOL)isEqual:(id)other;

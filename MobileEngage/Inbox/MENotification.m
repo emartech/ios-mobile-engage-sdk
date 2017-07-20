@@ -4,9 +4,18 @@
 
 #import "MENotification.h"
 
-@implementation MENotification {
+@implementation MENotification
 
+- (instancetype)initWithUserinfo:(NSDictionary *)dictionary {
+    if (self = [super init]) {
+        _id = dictionary[@"id"];
+        _title = dictionary[@"aps"][@"alert"];
+        _receivedAtTimestamp = @([[NSDate date] timeIntervalSince1970]);
+        //TODO: fill in the rest of the fields
+    }
+    return self;
 }
+
 - (instancetype)initWithNotificationDictionary:(NSDictionary *)dictionary {
     if (self = [super init]) {
         _id = dictionary[@"id"];

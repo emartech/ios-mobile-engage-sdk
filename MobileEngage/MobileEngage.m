@@ -5,6 +5,7 @@
 #import "MobileEngage.h"
 #import "MEConfig.h"
 #import "MobileEngageInternal.h"
+#import "MEInbox+Notification.h"
 
 @implementation MobileEngage
 
@@ -50,6 +51,8 @@ static MEInbox *_inbox;
 }
 
 + (NSString *)trackMessageOpenWithUserInfo:(NSDictionary *)userInfo {
+    MENotification *notification = [[MENotification alloc] initWithUserinfo:userInfo];
+    [_inbox addNotification:notification];
     return [_mobileEngageInternal trackMessageOpenWithUserInfo:userInfo];
 }
 

@@ -18,6 +18,8 @@
 @property(nonatomic, strong) EMSRESTClient *restClient;
 @property(nonatomic, strong) MEConfig *config;
 
+@property(nonatomic, strong) NSMutableSet *notifications;
+
 - (NSDictionary<NSString *, NSString *> *)createNotificationsFetchingHeaders;
 
 @end
@@ -38,6 +40,7 @@
     if (self) {
         _restClient = restClient;
         _config = config;
+        _notifications = [NSMutableSet new];
     }
     return self;
 }
@@ -56,7 +59,14 @@
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            resultBlock([[MEInboxParser new] parseNotificationInboxStatus:payload]);
+                                            MENotificationInboxStatus *status = [[MEInboxParser new] parseNotificationInboxStatus:payload];
+
+                                            NSMutableArray *notifications = [NSMutableArray new];
+                                            [notifications addObjectsFromArray:[self.notifications allObjects]];
+                                            [notifications addObjectsFromArray:status.notifications];
+                                            status.notifications = notifications;
+
+                                            resultBlock(status);
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
@@ -111,6 +121,11 @@
             }
         });
     }
+}
+
+
+- (void)addNotification:(MENotification *)notification {
+    [self.notifications addObject:notification];
 }
 
 #pragma mark - Private methods
