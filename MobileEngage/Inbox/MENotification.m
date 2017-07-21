@@ -3,15 +3,18 @@
 //
 
 #import "MENotification.h"
+#import "NSDictionary+MobileEngage.h"
 
 @implementation MENotification
 
 - (instancetype)initWithUserinfo:(NSDictionary *)dictionary {
     if (self = [super init]) {
         _id = dictionary[@"id"];
+        _sid = [dictionary messageId];
         _title = dictionary[@"aps"][@"alert"];
+        _customData = [self customDataWithoutSid:dictionary];
+        _expirationTime = @7200;
         _receivedAtTimestamp = @([[NSDate date] timeIntervalSince1970]);
-        //TODO: fill in the rest of the fields
     }
     return self;
 }
@@ -27,6 +30,13 @@
         _receivedAtTimestamp = dictionary[@"received_at"];
     }
     return self;
+}
+
+- (NSDictionary *)customDataWithoutSid:(NSDictionary *)dictionary {
+    NSDictionary *u = [dictionary customData];
+    NSMutableDictionary *customData = [u mutableCopy];
+    [customData removeObjectForKey:@"sid"];
+    return [NSDictionary dictionaryWithDictionary:customData];;
 }
 
 - (BOOL)isEqual:(id)other {

@@ -416,6 +416,30 @@ SPEC_BEGIN(InboxTests)
             [[expectFutureValue([status.notifications firstObject]) shouldEventually] equal:notification];
         });
 
+        it(@"should not add the notification if there is a notification already in with the same ID", ^{
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+            MENotification *notification = [MENotification new];
+            notification.title = @"asdfghjk";
+            notification.id = @"id1";
+            [inbox addNotification:notification];
+
+            __block MENotification *returnedNotification;
+            [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                for (MENotification *noti in inboxStatus.notifications) {
+                    if ([noti.id isEqualToString:notification.id]) {
+                        returnedNotification = noti;
+                        break;
+                    }
+                }
+            }                             errorBlock:^(NSError *error) {
+                fail(@"error block invoked");
+            }];
+
+            [[expectFutureValue(returnedNotification.id) shouldEventually] equal:@"id1"];
+            [[expectFutureValue(returnedNotification.title) shouldNotEventually] equal:@"asdfghjk"];
+            [[expectFutureValue(returnedNotification.title) shouldEventually] equal:@"title1"];
+        });
+
     });
 
 SPEC_END

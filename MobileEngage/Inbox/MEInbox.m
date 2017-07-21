@@ -18,9 +18,11 @@
 @property(nonatomic, strong) EMSRESTClient *restClient;
 @property(nonatomic, strong) MEConfig *config;
 
-@property(nonatomic, strong) NSMutableSet *notifications;
+@property(nonatomic, strong) NSMutableArray *notifications;
 
 - (NSDictionary<NSString *, NSString *> *)createNotificationsFetchingHeaders;
+
+- (MENotificationInboxStatus *)mergedStatusWithStatus:(MENotificationInboxStatus *)status;
 
 @end
 
@@ -40,7 +42,7 @@
     if (self) {
         _restClient = restClient;
         _config = config;
-        _notifications = [NSMutableSet new];
+        _notifications = [NSMutableArray new];
     }
     return self;
 }
@@ -60,13 +62,7 @@
                                         NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
                                         dispatch_async(dispatch_get_main_queue(), ^{
                                             MENotificationInboxStatus *status = [[MEInboxParser new] parseNotificationInboxStatus:payload];
-
-                                            NSMutableArray *notifications = [NSMutableArray new];
-                                            [notifications addObjectsFromArray:[self.notifications allObjects]];
-                                            [notifications addObjectsFromArray:status.notifications];
-                                            status.notifications = notifications;
-
-                                            resultBlock(status);
+                                            resultBlock([self mergedStatusWithStatus:status]);
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
@@ -138,6 +134,28 @@
     mutableFetchingHeaders[@"x-ems-me-contact-field-id"] = [NSString stringWithFormat:@"%@", self.appLoginParameters.contactFieldId];
     mutableFetchingHeaders[@"x-ems-me-contact-field-value"] = self.appLoginParameters.contactFieldValue;
     return [NSDictionary dictionaryWithDictionary:mutableFetchingHeaders];
+}
+
+- (MENotificationInboxStatus *)mergedStatusWithStatus:(MENotificationInboxStatus *)status {
+    NSMutableArray *notifications = [NSMutableArray new];
+    for (MENotification *notification in self.notifications) {
+        BOOL found = NO;
+        for (MENotification *currentNotification in status.notifications) {
+            if ([currentNotification.id isEqual:notification.id]) {
+                found = YES;
+                break;
+            }
+        }
+        if (!found) {
+            [notifications addObject:notification];
+        }
+    }
+    [notifications addObjectsFromArray:status.notifications];
+
+    MENotificationInboxStatus *result = [MENotificationInboxStatus new];
+    result.badgeCount = status.badgeCount;
+    result.notifications = [NSArray arrayWithArray:notifications];
+    return result;
 }
 
 @end

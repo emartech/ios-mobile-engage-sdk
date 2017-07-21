@@ -6,6 +6,7 @@
 
 @interface NSDictionary (MobileEngage)
 
+- (NSDictionary *)customData;
 - (NSString *)messageId;
 
 @end
