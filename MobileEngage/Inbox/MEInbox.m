@@ -24,6 +24,8 @@
 
 - (MENotificationInboxStatus *)mergedStatusWithStatus:(MENotificationInboxStatus *)status;
 
+- (void)invalidateCachedNotifications:(MENotificationInboxStatus *)status;
+
 @end
 
 @implementation MEInbox
@@ -57,12 +59,13 @@
             NSDictionary *headers = [self createNotificationsFetchingHeaders];
             [[[builder setMethod:HTTPMethodGET] setHeaders:headers] setUrl:@"https://me-inbox.eservice.emarsys.net/api/notifications"];
         }];
+        __weak typeof(self) weakSelf = self;
         [_restClient executeTaskWithRequestModel:request
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
                                         dispatch_async(dispatch_get_main_queue(), ^{
                                             MENotificationInboxStatus *status = [[MEInboxParser new] parseNotificationInboxStatus:payload];
-                                            resultBlock([self mergedStatusWithStatus:status]);
+                                            resultBlock([weakSelf mergedStatusWithStatus:status]);
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
@@ -121,7 +124,8 @@
 
 
 - (void)addNotification:(MENotification *)notification {
-    [self.notifications addObject:notification];
+    [self.notifications insertObject:notification
+                             atIndex:0];
 }
 
 #pragma mark - Private methods
@@ -137,25 +141,28 @@
 }
 
 - (MENotificationInboxStatus *)mergedStatusWithStatus:(MENotificationInboxStatus *)status {
+    [self invalidateCachedNotifications:status];
+
     NSMutableArray *notifications = [NSMutableArray new];
-    for (MENotification *notification in self.notifications) {
-        BOOL found = NO;
-        for (MENotification *currentNotification in status.notifications) {
-            if ([currentNotification.id isEqual:notification.id]) {
-                found = YES;
-                break;
-            }
-        }
-        if (!found) {
-            [notifications addObject:notification];
-        }
-    }
+    [notifications addObjectsFromArray:self.notifications];
     [notifications addObjectsFromArray:status.notifications];
 
     MENotificationInboxStatus *result = [MENotificationInboxStatus new];
     result.badgeCount = status.badgeCount;
     result.notifications = [NSArray arrayWithArray:notifications];
     return result;
+}
+
+- (void)invalidateCachedNotifications:(MENotificationInboxStatus *)status {
+    for (NSUInteger i = [self.notifications count] - 1; i >= 0; --i) {
+        MENotification *notification = self.notifications[i];
+        for (MENotification *currentNotification in status.notifications) {
+            if ([currentNotification.id isEqual:notification.id]) {
+                [self.notifications removeObjectAtIndex:i];
+                break;
+            }
+        }
+    }
 }
 
 @end

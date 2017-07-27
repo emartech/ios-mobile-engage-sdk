@@ -10,6 +10,6 @@
 - (instancetype)initWithRestClient:(EMSRESTClient *)restClient
                             config:(MEConfig *)config;
 
-- (NSMutableSet *)notifications;
+- (NSMutableArray *)notifications;
 
 @end

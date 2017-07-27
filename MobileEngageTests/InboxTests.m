@@ -440,6 +440,37 @@ SPEC_BEGIN(InboxTests)
             [[expectFutureValue(returnedNotification.title) shouldEventually] equal:@"title1"];
         });
 
+        it(@"should remove notifications from cache when they are already present in the fetched list", ^{
+            MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+
+            MENotification *notification1 = [MENotification new];
+            notification1.title = @"asdfghjk";
+            notification1.id = @"id1";
+            [inbox addNotification:notification1];
+
+            MENotification *notification2 = [MENotification new];
+            notification2.title = @"asdfghjk";
+            notification2.id = @"id0";
+            [inbox addNotification:notification2];
+
+            __block MENotification *returnedNotification;
+            [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                for (MENotification *noti in inboxStatus.notifications) {
+                    if ([noti.id isEqualToString:notification1.id]) {
+                        returnedNotification = noti;
+                        break;
+                    }
+                }
+            }                             errorBlock:^(NSError *error) {
+                fail(@"error block invoked");
+            }];
+
+            [[expectFutureValue(returnedNotification.id) shouldEventually] equal:@"id1"];
+
+            [[expectFutureValue(theValue([[inbox notifications] count])) shouldEventually] equal:@1];
+            [[expectFutureValue([inbox notifications][0]) shouldEventually] equal:notification2];
+        });
+
     });
 
 SPEC_END
