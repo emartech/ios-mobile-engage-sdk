@@ -154,11 +154,11 @@
 }
 
 - (void)invalidateCachedNotifications:(MENotificationInboxStatus *)status {
-    for (NSUInteger i = [self.notifications count] - 1; i >= 0; --i) {
-        MENotification *notification = self.notifications[i];
+    for (int i = [self.notifications count] - 1; i >= 0; --i) {
+        MENotification *notification = self.notifications[(NSUInteger) i];
         for (MENotification *currentNotification in status.notifications) {
             if ([currentNotification.id isEqual:notification.id]) {
-                [self.notifications removeObjectAtIndex:i];
+                [self.notifications removeObjectAtIndex:(NSUInteger) i];
                 break;
             }
         }
