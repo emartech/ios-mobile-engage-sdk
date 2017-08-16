@@ -51,8 +51,11 @@ static MEInbox *_inbox;
 }
 
 + (NSString *)trackMessageOpenWithUserInfo:(NSDictionary *)userInfo {
-    MENotification *notification = [[MENotification alloc] initWithUserinfo:userInfo];
-    [_inbox addNotification:notification];
+    NSNumber *inbox = userInfo[@"inbox"];
+    if (inbox && [inbox boolValue]) {
+        MENotification *notification = [[MENotification alloc] initWithUserinfo:userInfo];
+        [_inbox addNotification:notification];
+    }
     return [_mobileEngageInternal trackMessageOpenWithUserInfo:userInfo];
 }
 

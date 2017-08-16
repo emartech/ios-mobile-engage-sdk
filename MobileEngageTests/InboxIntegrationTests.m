@@ -38,6 +38,90 @@ SPEC_BEGIN(InboxIntegrationTests)
             [[_inboxStatus shouldNotEventually] beNil];
         });
 
+        it(@"fetchNotificationsWithResultBlock result should contain the gained notification", ^{
+            NSString *notificationId = @"210268110.1502804498499608577561.BF04349F-87B6-4CB9-859D-6CDE607F7251";
+            NSNumber *inbox = @YES;
+            NSDictionary *userInfo = @{
+                    @"inbox": inbox,
+                    @"u": @{
+                            @"deep_link": @"lifestylelabels.com/mobile/product/3245678",
+                            @"ems_default_title_unused": @"This is a default title",
+                            @"image": @"https://media.giphy.com/media/ktvFa67wmjDEI/giphy.gif",
+                            @"sid": @"1d0a_wqdXUl9Vf9NC",
+                            @"test_field": @""
+                    },
+                    @"rootKey": @"rootValue",
+                    @"id": notificationId,
+                    @"aps": @{
+                            @"alert": @"MESS",
+                            @"sound": @"default"
+                    }
+            };
+            [MobileEngage trackMessageOpenWithUserInfo:userInfo];
+
+            __block MENotification *returnedNotification;
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+            [MobileEngage.inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                        for (MENotification *noti in inboxStatus.notifications) {
+                            if ([noti.id isEqualToString:notificationId]) {
+                                returnedNotification = noti;
+                                break;
+                            }
+                        }
+                        [exp fulfill];
+                    }
+                                                       errorBlock:^(NSError *error) {
+                                                           fail(@"error block invoked");
+                                                       }];
+
+            [XCTWaiter waitForExpectations:@[exp] timeout:30];
+
+            [[returnedNotification shouldNot] beNil];
+            [[returnedNotification.id should] equal:notificationId];
+        });
+
+        it(@"fetchNotificationsWithResultBlock result should not contain the gained notification", ^{
+            NSString *notificationId = @"210268110.1502804498499608577561.BF04349F-87B6-4CB9-859D-6CDE607F7251";
+            NSNumber *inbox = @NO;
+            NSDictionary *userInfo = @{
+                    @"inbox": inbox,
+                    @"u": @{
+                            @"deep_link": @"lifestylelabels.com/mobile/product/3245678",
+                            @"ems_default_title_unused": @"This is a default title",
+                            @"image": @"https://media.giphy.com/media/ktvFa67wmjDEI/giphy.gif",
+                            @"sid": @"1d0a_wqdXUl9Vf9NC",
+                            @"test_field": @""
+                    },
+                    @"rootKey": @"rootValue",
+                    @"id": notificationId,
+                    @"aps": @{
+                            @"alert": @"MESS",
+                            @"sound": @"default"
+                    }
+            };
+            [MobileEngage trackMessageOpenWithUserInfo:userInfo];
+
+            __block MENotificationInboxStatus *resultInboxStatus;
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
+            [MobileEngage.inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                        resultInboxStatus = inboxStatus;
+                        for (MENotification *noti in inboxStatus.notifications) {
+                            if ([noti.id isEqualToString:notificationId]) {
+                                fail(@"fail");
+                            }
+                        }
+                        [exp fulfill];
+                    }
+                                                       errorBlock:^(NSError *error) {
+                                                           fail(@"error block invoked");
+                                                           [exp fulfill];
+                                                       }];
+
+            [XCTWaiter waitForExpectations:@[exp] timeout:30];
+
+            [[resultInboxStatus shouldNot] beNil];
+        });
+
         it(@"resetBadgeCount", ^{
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationCode:@"14C19-A121F"
