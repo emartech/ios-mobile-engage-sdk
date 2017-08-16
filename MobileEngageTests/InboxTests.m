@@ -355,7 +355,7 @@ SPEC_BEGIN(InboxTests)
     });
 
     describe(@"inbox.addNotification:", ^{
-        it(@"should increase the notification set with the notification", ^{
+        it(@"should increase the notifications with the notification", ^{
             MEInbox *inbox = inboxNotifications();
             MENotification *notification = [MENotification new];
 
@@ -365,7 +365,7 @@ SPEC_BEGIN(InboxTests)
         });
     });
 
-    describe(@"inbox.fetchNotificationsWithResultBlock after calling addNotification", ^{
+    describe(@"inbox.fetchNotificationsWithResultBlock include cached notifications", ^{
         it(@"should return with the added notification", ^{
             MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
             MENotification *notification = [MENotification new];
