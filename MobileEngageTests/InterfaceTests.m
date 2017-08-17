@@ -35,7 +35,8 @@ SPEC_BEGIN(PublicInterfaceTest)
                 @"Authorization": [EMSAuthentication createBasicAuthWithUsername:applicationCode
                                                                         password:applicationPassword],
                 @"Content-Type": @"application/json",
-                @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION
+                @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION,
+                @"X-MOBILEENGAGE-SDK-MODE": @"debug"
         };
         id requestManager = [EMSRequestManager mock];
         [[requestManager should] receive:@selector(setAdditionalHeaders:)
