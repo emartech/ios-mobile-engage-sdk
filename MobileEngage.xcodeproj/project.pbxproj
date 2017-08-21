@@ -32,14 +32,18 @@
 		32C6F9742BC7CC58427DA191 /* MobileEngageStatusDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */; };
 		32C6F9AA36B2BC1AAA2EFDD5 /* MobileEngageInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FF185EC94949DE34FF16 /* MobileEngageInternal.m */; };
 		32C6F9BEF9759A037BD8C3D9 /* FakeStatusDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F9EBE29BADE147154DC7 /* FakeStatusDelegate.m */; };
+		32C6FA3B30C34BB53865D159 /* MENotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F722D778C7D3C06A56C7 /* MENotificationService.m */; };
 		32C6FB16C938582D71B70BC3 /* FakeRestClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F93DFEA64AB17BBADDAE /* FakeRestClient.m */; };
+		32C6FB1E00CB787F001B9819 /* MENotificationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F608B7AD453B0540F33D /* MENotificationServiceTests.m */; };
 		32C6FC9F53ECB121BF53EA03 /* NSDictionary+MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */; };
 		32C6FCF5DE2B130DCD04794A /* MEConfigBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FB15634CAA89F68990D1 /* MEConfigBuilder.h */; };
 		32C6FD0B7F3B7647DA9C43EC /* NSDictionary+MobileEngage.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F901EAA453C0FE99E056 /* NSDictionary+MobileEngage.h */; };
 		32C6FD7EEB7E3941D941080F /* MEInbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FA2A7418AC9AED782AEC /* MEInbox.h */; };
 		32C6FDBD2FC3DD9E7B80C096 /* IntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FE99B9488237B00942D3 /* IntegrationTests.m */; };
+		32C6FE323CF65183B7EA1E75 /* UNNotificationAttachment+MobileEngageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F3AA5964C4D13A4B7CD6 /* UNNotificationAttachment+MobileEngageTests.m */; };
 		32C6FE399116DE5778DA0E0D /* MENotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F647028661A86258F4C7 /* MENotification.m */; };
 		32C6FE55F469AAF41FE77725 /* MobileEngage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFD88E2892F183B9C41C /* MobileEngage.framework */; };
+		32C6FE73F3ECF32C15432104 /* UNNotificationAttachment+MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F484DB7E24564BC415CE /* UNNotificationAttachment+MobileEngage.m */; };
 		32C6FF342FC2C54422C8657C /* MobileEngage.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F9F7C741052373E946A2 /* MobileEngage.h */; };
 		32C6FF6CA695A73EA009E40A /* MobileEngageVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FA6991F882C8197DE493 /* MobileEngageVersion.h */; };
 		374600E1F7E23A2E0B9D9F45 /* MEInboxParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3746044F59EDC9970D9A6D24 /* MEInboxParser.h */; };
@@ -106,6 +110,7 @@
 		16ED6B2C1E7FE12600BB9C63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		16ED6B2F1E7FE12600BB9C63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		16ED6B311E7FE12600BB9C63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		32C6F03FF5308CA45877594A /* UNNotificationAttachment+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UNNotificationAttachment+Private.h"; sourceTree = "<group>"; };
 		32C6F0CED986657DA32E7525 /* MEConfigBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEConfigBuilder.m; sourceTree = "<group>"; };
 		32C6F0F5EAFCCF8DD8BEDE99 /* MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngage.m; sourceTree = "<group>"; };
 		32C6F1045F8F067FAC344C7F /* MENotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MENotification.h; sourceTree = "<group>"; };
@@ -115,10 +120,16 @@
 		32C6F22AD8B05632EFE8F29D /* MEConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEConfig.h; sourceTree = "<group>"; };
 		32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngageTests.m"; sourceTree = "<group>"; };
 		32C6F2F7B517867CF069B590 /* InterfaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceTests.m; sourceTree = "<group>"; };
+		32C6F2FB7FA6C4CD663836C9 /* UNNotificationAttachment+MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UNNotificationAttachment+MobileEngage.h"; sourceTree = "<group>"; };
 		32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngageStatusDelegate.h; sourceTree = "<group>"; };
+		32C6F3AA5964C4D13A4B7CD6 /* UNNotificationAttachment+MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UNNotificationAttachment+MobileEngageTests.m"; sourceTree = "<group>"; };
+		32C6F484DB7E24564BC415CE /* UNNotificationAttachment+MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UNNotificationAttachment+MobileEngage.m"; sourceTree = "<group>"; };
 		32C6F48B471B160D168FF06E /* InboxTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxTests.m; sourceTree = "<group>"; };
+		32C6F521956A81704A001885 /* MENotificationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MENotificationService.h; sourceTree = "<group>"; };
+		32C6F608B7AD453B0540F33D /* MENotificationServiceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MENotificationServiceTests.m; sourceTree = "<group>"; };
 		32C6F647028661A86258F4C7 /* MENotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MENotification.m; sourceTree = "<group>"; };
 		32C6F68C59D362926D33BB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
+		32C6F722D778C7D3C06A56C7 /* MENotificationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MENotificationService.m; sourceTree = "<group>"; };
 		32C6F75C6B275FB5F0669AF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32C6F873043EA1EC7E0E057C /* MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngageTests.m; sourceTree = "<group>"; };
 		32C6F8941CDF4E63DBD3D286 /* BuilderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuilderTests.m; sourceTree = "<group>"; };
@@ -263,6 +274,7 @@
 				32C6FD79AB75711E8A5390BC /* Inbox */,
 				37460D3696B359FBDF2A2A85 /* MEDefaultHeaders.m */,
 				37460A6C6D11B17EADC95F08 /* MEDefaultHeaders.h */,
+				32C6FD2EFE9837543F58C1F0 /* RichNotification */,
 			);
 			path = MobileEngage;
 			sourceTree = "<group>";
@@ -302,8 +314,22 @@
 				32C6F1FE55A5070D9906A0F1 /* FakeRestClient.h */,
 				32C6FDB26B21FB77D0C22429 /* InboxIntegrationTests.m */,
 				374609FAE1BDE731ED87A613 /* MEInbox+Private.h */,
+				32C6F3AA5964C4D13A4B7CD6 /* UNNotificationAttachment+MobileEngageTests.m */,
+				32C6F03FF5308CA45877594A /* UNNotificationAttachment+Private.h */,
+				32C6F608B7AD453B0540F33D /* MENotificationServiceTests.m */,
 			);
 			path = MobileEngageTests;
+			sourceTree = "<group>";
+		};
+		32C6FD2EFE9837543F58C1F0 /* RichNotification */ = {
+			isa = PBXGroup;
+			children = (
+				32C6F722D778C7D3C06A56C7 /* MENotificationService.m */,
+				32C6F521956A81704A001885 /* MENotificationService.h */,
+				32C6F484DB7E24564BC415CE /* UNNotificationAttachment+MobileEngage.m */,
+				32C6F2FB7FA6C4CD663836C9 /* UNNotificationAttachment+MobileEngage.h */,
+			);
+			path = RichNotification;
 			sourceTree = "<group>";
 		};
 		32C6FD79AB75711E8A5390BC /* Inbox */ = {
@@ -442,6 +468,11 @@
 					32C6F59736632C8B5808DD7B = {
 						DevelopmentTeam = 8LAPGQR7L8;
 						TestTargetID = 16ED6B1D1E7FE12600BB9C63;
+					};
+					8ABCEB551F46CFA700E49A3E = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = 7ZFXXDJH82;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -619,6 +650,10 @@
 				8A9E703C1EEFE134002F2331 /* InboxParserTests.m in Sources */,
 				32C6FB16C938582D71B70BC3 /* FakeRestClient.m in Sources */,
 				32C6F81B504C3170FFA20580 /* InboxIntegrationTests.m in Sources */,
+				32C6FE323CF65183B7EA1E75 /* UNNotificationAttachment+MobileEngageTests.m in Sources */,
+				32C6FB1E00CB787F001B9819 /* MENotificationServiceTests.m in Sources */,
+				32C6FE73F3ECF32C15432104 /* UNNotificationAttachment+MobileEngage.m in Sources */,
+				32C6FA3B30C34BB53865D159 /* MENotificationService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
