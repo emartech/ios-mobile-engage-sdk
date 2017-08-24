@@ -80,6 +80,53 @@ SPEC_BEGIN(InboxIntegrationTests)
             [[returnedNotification.id should] equal:notificationId];
         });
 
+        it(@"fetchNotificationsWithResultBlock result should contain the gained notification with title and body", ^{
+            NSString *notificationId = @"210268110.1502804498499608577561.BF04349F-87B6-4CB9-859D-6CDE607F7251";
+            NSNumber *inbox = @YES;
+            NSDictionary *userInfo = @{
+                    @"inbox": inbox,
+                    @"u": @{
+                            @"deep_link": @"lifestylelabels.com/mobile/product/3245678",
+                            @"ems_default_title_unused": @"This is a default title",
+                            @"image": @"https://media.giphy.com/media/ktvFa67wmjDEI/giphy.gif",
+                            @"sid": @"1d0a_wqdXUl9Vf9NC",
+                            @"test_field": @""
+                    },
+                    @"rootKey": @"rootValue",
+                    @"id": notificationId,
+                    @"aps": @{
+                            @"alert": @{
+                                    @"title": @"title",
+                                    @"body": @"body"
+                            },
+                            @"sound": @"default"
+                    }
+            };
+            [MobileEngage trackMessageOpenWithUserInfo:userInfo];
+
+            __block MENotification *returnedNotification;
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+            [MobileEngage.inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                        for (MENotification *noti in inboxStatus.notifications) {
+                            if ([noti.id isEqualToString:notificationId]) {
+                                returnedNotification = noti;
+                                break;
+                            }
+                        }
+                        [exp fulfill];
+                    }
+                                                       errorBlock:^(NSError *error) {
+                                                           fail(@"error block invoked");
+                                                       }];
+
+            [XCTWaiter waitForExpectations:@[exp] timeout:30];
+
+            [[returnedNotification shouldNot] beNil];
+            [[returnedNotification.id should] equal:notificationId];
+            [[returnedNotification.title should] equal:@"title"];
+            [[returnedNotification.body should] equal:@"body"];
+        });
+
         it(@"fetchNotificationsWithResultBlock result should not contain the gained notification", ^{
             NSString *notificationId = @"210268110.1502804498499608577561.BF04349F-87B6-4CB9-859D-6CDE607F7251";
             NSNumber *inbox = @NO;

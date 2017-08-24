@@ -10,6 +10,7 @@
 @property(nonatomic, strong) NSString *id;
 @property(nonatomic, strong) NSString *sid;
 @property(nonatomic, strong) NSString *title;
+@property(nonatomic, strong) NSString *body;
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *customData;
 @property(nonatomic, strong) NSDictionary<NSString *, id> *rootParams;
 @property(nonatomic, strong) NSNumber *expirationTime;
@@ -23,4 +24,5 @@
 - (BOOL)isEqualToNotification:(MENotification *)notification;
 
 - (NSUInteger)hash;
+
 @end
