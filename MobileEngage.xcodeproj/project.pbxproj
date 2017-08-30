@@ -49,7 +49,6 @@
 		374600E1F7E23A2E0B9D9F45 /* MEInboxParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3746044F59EDC9970D9A6D24 /* MEInboxParser.h */; };
 		374601D32A5F62AFF997EA8F /* MENotificationInboxStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 37460E12B3DD884B04FE9218 /* MENotificationInboxStatus.h */; };
 		374602FFDFB3E8B95C8CA424 /* MEAppLoginParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460064180D9AE6386F4D91 /* MEAppLoginParameters.m */; };
-		374605573193D1DF9E60973D /* MEInbox+Notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460B778E790EA0246BBAFF /* MEInbox+Notification.m */; };
 		37460580C4F1D671CF020965 /* MEInbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746016139C5A75BC00CF6F2 /* MEInbox.m */; };
 		374606F978D96F3B46B92709 /* MEDefaultHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 37460A6C6D11B17EADC95F08 /* MEDefaultHeaders.h */; };
 		374608097EC048F89D113A3C /* MENotificationInboxStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 374606DCC16B33077DAC2715 /* MENotificationInboxStatus.m */; };
@@ -163,7 +162,6 @@
 		37460A62CFE918ED5D3EE52F /* EMSRequestModelMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestModelMatcher.h; sourceTree = "<group>"; };
 		37460A6C6D11B17EADC95F08 /* MEDefaultHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEDefaultHeaders.h; sourceTree = "<group>"; };
 		37460A987A7E73365F25A559 /* NSData+MobileEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MobileEngine.m"; sourceTree = "<group>"; };
-		37460B778E790EA0246BBAFF /* MEInbox+Notification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MEInbox+Notification.m"; sourceTree = "<group>"; };
 		37460D3696B359FBDF2A2A85 /* MEDefaultHeaders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEDefaultHeaders.m; sourceTree = "<group>"; };
 		37460D9203AFE27B53C80335 /* InboxParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxParserTests.m; sourceTree = "<group>"; };
 		37460DB8C2DE5DC85E245CAF /* MEInboxParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxParser.m; sourceTree = "<group>"; };
@@ -343,7 +341,6 @@
 				374606DCC16B33077DAC2715 /* MENotificationInboxStatus.m */,
 				37460E12B3DD884B04FE9218 /* MENotificationInboxStatus.h */,
 				3746016139C5A75BC00CF6F2 /* MEInbox.m */,
-				37460B778E790EA0246BBAFF /* MEInbox+Notification.m */,
 				3746037DBB3D2CF1327E9CFF /* MEInbox+Notification.h */,
 			);
 			path = Inbox;
@@ -630,7 +627,6 @@
 				37460A79B9C8DBBFFBF4E29E /* MEInboxParser.m in Sources */,
 				374608097EC048F89D113A3C /* MENotificationInboxStatus.m in Sources */,
 				37460580C4F1D671CF020965 /* MEInbox.m in Sources */,
-				374605573193D1DF9E60973D /* MEInbox+Notification.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

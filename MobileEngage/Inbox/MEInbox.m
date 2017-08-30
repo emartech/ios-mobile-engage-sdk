@@ -154,7 +154,7 @@
 }
 
 - (void)invalidateCachedNotifications:(MENotificationInboxStatus *)status {
-    for (int i = [self.notifications count] - 1; i >= 0; --i) {
+    for (int i = (int) [self.notifications count] - 1; i >= 0; --i) {
         MENotification *notification = self.notifications[(NSUInteger) i];
         for (MENotification *currentNotification in status.notifications) {
             if ([currentNotification.id isEqual:notification.id]) {
