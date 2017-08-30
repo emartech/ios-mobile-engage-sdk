@@ -77,6 +77,20 @@ SPEC_BEGIN(InboxParserTests)
             [[notification.expirationTime should] equal:@7200];
             [[notification.receivedAtTimestamp should] equal:@12345678123];
         });
+
+        it(@"should create the correct notification with body as well", ^{
+            MEInboxParser *parser = [MEInboxParser new];
+            NSDictionary *notificationDict = @{@"id": @"id7", @"sid": @"sid1", @"title": @"title7", @"body": @"body7", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678123)};
+            MENotification *notification = [parser parseNotification:notificationDict];
+            [[notification.id should] equal:@"id7"];
+            [[notification.sid should] equal:@"sid1"];
+            [[notification.title should] equal:@"title7"];
+            [[notification.body should] equal:@"body7"];
+            [[notification.customData should] equal:@{}];
+            [[notification.rootParams should] equal:@{}];
+            [[notification.expirationTime should] equal:@7200];
+            [[notification.receivedAtTimestamp should] equal:@12345678123];
+        });
     });
 
 SPEC_END
