@@ -27,4 +27,6 @@ typedef void (^MEInboxResultErrorBlock)(NSError *error);
 
 - (void)resetBadgeCount;
 
+- (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage;
+
 @end

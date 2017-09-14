@@ -12,6 +12,7 @@
 #import "MEAppLoginParameters.h"
 #import "MEInboxParser.h"
 #import "EMSRESTClient.h"
+#import "MobileEngage+Private.h"
 
 @interface MEInbox ()
 
@@ -126,6 +127,10 @@
 - (void)addNotification:(MENotification *)notification {
     [self.notifications insertObject:notification
                              atIndex:0];
+}
+
+- (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage {
+    return [MobileEngage trackMessageOpenWithInboxMessage:inboxMessage];
 }
 
 #pragma mark - Private methods

@@ -72,25 +72,6 @@ SPEC_BEGIN(IntegrationTests)
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
         });
 
-        it(@"should return with eventId, and finish with success for trackMessageOpenWithInboxMessage:", ^{
-            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                [builder setCredentialsWithApplicationCode:@"14C19-A121F"
-                                       applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
-            }];
-            [MobileEngage setupWithConfig:config
-                            launchOptions:nil];
-            FakeStatusDelegate *statusDelegate = createStatusDelegate();
-            [MobileEngage setStatusDelegate:statusDelegate];
-
-            MENotification *notification = [MENotification new];
-            notification.sid = @"161e_D/1UiO/jCmE4";
-            NSString *eventId = [MobileEngage trackMessageOpenWithInboxMessage:notification];
-
-            [[eventId shouldNot] beNil];
-            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
-            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
-        });
-
         it(@"should return with eventId, and finish with success for trackCustomEvent without attributes", ^{
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationCode:@"14C19-A121F"

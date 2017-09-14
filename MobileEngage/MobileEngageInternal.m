@@ -3,10 +3,10 @@
 //
 
 #import "MobileEngageInternal.h"
-#import <CoreSDK/EMSRequestManager.h>
-#import <CoreSDK/EMSRequestModelBuilder.h>
-#import <CoreSDK/EMSDeviceInfo.h>
-#import <CoreSDK/EMSRequestModel.h>
+#import "EMSRequestManager.h"
+#import "EMSRequestModelBuilder.h"
+#import "EMSDeviceInfo.h"
+#import "EMSRequestModel.h"
 #import "MobileEngageStatusDelegate.h"
 #import "MEConfig.h"
 #import "NSDictionary+MobileEngage.h"
@@ -14,7 +14,6 @@
 #import "NSData+MobileEngine.h"
 #import "MEDefaultHeaders.h"
 #import "MobileEngageVersion.h"
-#import "MENotification.h"
 
 @interface MobileEngageInternal ()
 

@@ -10,6 +10,7 @@
 #import "EMSRequestModelBuilder.h"
 #import "EMSRequestModelMatcher.h"
 #import "MEInbox+Notification.h"
+#import "FakeStatusDelegate.h"
 
 static NSString *const kAppId = @"kAppId";
 
@@ -471,6 +472,34 @@ SPEC_BEGIN(InboxTests)
             [[expectFutureValue([inbox notifications][0]) shouldEventually] equal:notification2];
         });
 
+    });
+
+    describe(@"inbox.trackMessageOpen", ^{
+
+        FakeStatusDelegate *(^createStatusDelegate)() = ^FakeStatusDelegate *() {
+            FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+            statusDelegate.printErrors = YES;
+            return statusDelegate;
+        };
+
+        it(@"should return with eventId, and finish with success for trackMessageOpenWithInboxMessage:", ^{
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:@"14C19-A121F"
+                                       applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
+            }];
+            [MobileEngage setupWithConfig:config
+                            launchOptions:nil];
+            FakeStatusDelegate *statusDelegate = createStatusDelegate();
+            [MobileEngage setStatusDelegate:statusDelegate];
+
+            MENotification *notification = [MENotification new];
+            notification.sid = @"161e_D/1UiO/jCmE4";
+            NSString *eventId = [MobileEngage.inbox trackMessageOpenWithInboxMessage:notification];
+
+            [[eventId shouldNot] beNil];
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
+        });
     });
 
 SPEC_END

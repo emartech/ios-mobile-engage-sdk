@@ -7,7 +7,8 @@
 @class MobileEngageInternal;
 
 NS_ASSUME_NONNULL_BEGIN
-@interface MobileEngage (Private)
+
+@interface MobileEngage (Test)
 
 + (void)setupWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal
                                config:(MEConfig *)config

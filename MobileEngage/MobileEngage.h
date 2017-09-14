@@ -27,8 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)trackMessageOpenWithUserInfo:(NSDictionary *)userInfo;
 
-+ (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage;
-
 + (NSString *)trackCustomEvent:(NSString *)eventName
                eventAttributes:(nullable NSDictionary<NSString *, NSString *> *)eventAttributes;
 

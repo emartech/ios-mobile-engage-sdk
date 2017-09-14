@@ -2,6 +2,7 @@
 #import "MEConfigBuilder.h"
 #import "MEConfig.h"
 #import "MobileEngage.h"
+#import "MobileEngage+Test.h"
 #import "MobileEngage+Private.h"
 #import "MobileEngageInternal+Private.h"
 
