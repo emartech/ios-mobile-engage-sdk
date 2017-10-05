@@ -283,12 +283,39 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[uuid should] equal:actualModel.requestId];
         });
 
-        it(@"should submit a corresponding RequestModel", ^{
+        it(@"should submit a corresponding RequestModel when there is no contact_field_id and contact_field_value", ^{
             id requestManager = requestManagerMock();
 
             EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
                     @"application_id": kAppId,
                     @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"sid": @"123456789"
+            });
+
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                        atIndex:0];
+            [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+
+            EMSRequestModel *actualModel = spy.argument;
+            [[model should] beSimilarWithRequest:actualModel];
+        });
+
+        it(@"should submit a corresponding RequestModel when there are contact_field_id and contact_field_value", ^{
+            id requestManager = requestManagerMock();
+            MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
+                                                                                        contactFieldValue:@"contactFieldValue"];
+
+            [_mobileEngage stub:@selector(lastAppLoginParameters)
+                      andReturn:appLoginParameters];
+
+            EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"contact_field_id": @3,
+                    @"contact_field_value": @"contactFieldValue",
                     @"sid": @"123456789"
             });
 
@@ -314,7 +341,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             }
         });
 
-        it(@"should submit a corresponding RequestModel", ^{
+        it(@"should submit a corresponding RequestModel when there is no contact_field_id and contact_field_value", ^{
             id requestManager = requestManagerMock();
 
             EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
@@ -331,6 +358,37 @@ SPEC_BEGIN(PublicInterfaceTest)
                                                         atIndex:0];
             MENotification *message = [MENotification new];
             message.sid = @"testID";
+            [_mobileEngage trackMessageOpenWithInboxMessage:message];
+
+            EMSRequestModel *actualModel = spy.argument;
+            [[model should] beSimilarWithRequest:actualModel];
+        });
+
+        it(@"should submit a corresponding RequestModel when there are contact_field_id and contact_field_value", ^{
+            id requestManager = requestManagerMock();
+
+            MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
+                                                                                        contactFieldValue:@"contactFieldValue"];
+
+            [_mobileEngage stub:@selector(lastAppLoginParameters)
+                      andReturn:appLoginParameters];
+
+            EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"sid": @"valueOfSid",
+                    @"contact_field_id": @3,
+                    @"contact_field_value": @"contactFieldValue",
+                    @"source": @"inbox"
+            });
+
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                        atIndex:0];
+            MENotification *message = [MENotification new];
+            message.sid = @"valueOfSid";
             [_mobileEngage trackMessageOpenWithInboxMessage:message];
 
             EMSRequestModel *actualModel = spy.argument;
@@ -422,7 +480,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             }
         });
 
-        it(@"should submit a corresponding RequestModel, when eventAttributes are set", ^{
+        it(@"should submit a corresponding RequestModel, when eventAttributes are set and there is no saved contactFieldId and contactFieldValue", ^{
             id requestManager = requestManagerMock();
 
             NSString *eventName = @"testEventName";
@@ -447,8 +505,41 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[model should] beSimilarWithRequest:actualModel];
         });
 
+        it(@"should submit a corresponding RequestModel, when eventAttributes are set and there are saved contactFieldId and contactFieldValue", ^{
+            id requestManager = requestManagerMock();
 
-        it(@"should submit a corresponding RequestModel, when eventAttributes are missing", ^{
+            MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
+                                                                                        contactFieldValue:@"contactFieldValue"];
+
+            [_mobileEngage stub:@selector(lastAppLoginParameters)
+                      andReturn:appLoginParameters];
+
+            NSString *eventName = @"testEventName";
+            NSDictionary *eventAttributes = @{@"someKey": @"someValue"};
+
+            NSDictionary *payload = @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"attributes": eventAttributes,
+                    @"contact_field_id": @3,
+                    @"contact_field_value": @"contactFieldValue"
+            };
+
+            EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName], payload);
+
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                        atIndex:0];
+            [_mobileEngage trackCustomEvent:eventName
+                            eventAttributes:eventAttributes];
+            EMSRequestModel *actualModel = spy.argument;
+            [[model should] beSimilarWithRequest:actualModel];
+        });
+
+
+        it(@"should submit a corresponding RequestModel, when eventAttributes are missing and there is no saved contactFieldId and contactFieldValue", ^{
             id requestManager = requestManagerMock();
 
             NSString *eventName = @"testEventName";
@@ -456,6 +547,38 @@ SPEC_BEGIN(PublicInterfaceTest)
             NSDictionary *payload = @{
                     @"application_id": kAppId,
                     @"hardware_id": [EMSDeviceInfo hardwareId],
+            };
+
+            EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName], payload);
+
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                        atIndex:0];
+            [_mobileEngage trackCustomEvent:eventName
+                            eventAttributes:nil];
+            EMSRequestModel *actualModel = spy.argument;
+            [[model should] beSimilarWithRequest:actualModel];
+        });
+
+
+        it(@"should submit a corresponding RequestModel, when eventAttributes are missing and there are saved contactFieldId and contactFieldValue", ^{
+            id requestManager = requestManagerMock();
+
+            MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
+                                                                                        contactFieldValue:@"contactFieldValue"];
+
+            [_mobileEngage stub:@selector(lastAppLoginParameters)
+                      andReturn:appLoginParameters];
+
+            NSString *eventName = @"testEventName";
+
+            NSDictionary *payload = @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"contact_field_id": @3,
+                    @"contact_field_value": @"contactFieldValue"
             };
 
             EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName], payload);

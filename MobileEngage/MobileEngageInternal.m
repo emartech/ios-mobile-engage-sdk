@@ -133,11 +133,19 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
         EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
             [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
             [builder setMethod:HTTPMethodPOST];
-            [builder setPayload:@{
+
+            NSMutableDictionary *payload = [NSMutableDictionary dictionaryWithDictionary:@{
                     @"application_id": self.config.applicationCode,
                     @"hardware_id": [EMSDeviceInfo hardwareId],
                     @"sid": messageId
             }];
+
+            if (self.lastAppLoginParameters.contactFieldId && self.lastAppLoginParameters.contactFieldValue) {
+                payload[@"contact_field_id"] = self.lastAppLoginParameters.contactFieldId;
+                payload[@"contact_field_value"] = self.lastAppLoginParameters.contactFieldValue;
+            }
+
+            [builder setPayload:payload];
         }];
         [self.requestManager submit:requestModel];
         requestId = [requestModel requestId];
@@ -156,12 +164,20 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
     EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
         [builder setMethod:HTTPMethodPOST];
-        [builder setPayload:@{
+
+        NSMutableDictionary *payload = [NSMutableDictionary dictionaryWithDictionary:@{
                 @"application_id": self.config.applicationCode,
                 @"hardware_id": [EMSDeviceInfo hardwareId],
                 @"sid": inboxMessage.sid,
-                @"source": @"inbox"
+                @"source": @"inbox",
         }];
+
+        if (self.lastAppLoginParameters.contactFieldId && self.lastAppLoginParameters.contactFieldValue) {
+            payload[@"contact_field_id"] = self.lastAppLoginParameters.contactFieldId;
+            payload[@"contact_field_value"] = self.lastAppLoginParameters.contactFieldValue;
+        }
+
+        [builder setPayload:payload];
     }];
     [self.requestManager submit:requestModel];
     return [requestModel requestId];
@@ -179,6 +195,12 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
                 @"application_id": self.config.applicationCode,
                 @"hardware_id": [EMSDeviceInfo hardwareId]
         } mutableCopy];
+
+        if (self.lastAppLoginParameters.contactFieldId && self.lastAppLoginParameters.contactFieldValue) {
+            payload[@"contact_field_id"] = self.lastAppLoginParameters.contactFieldId;
+            payload[@"contact_field_value"] = self.lastAppLoginParameters.contactFieldValue;
+        }
+
         if (eventAttributes) {
             payload[@"attributes"] = eventAttributes;
         }
