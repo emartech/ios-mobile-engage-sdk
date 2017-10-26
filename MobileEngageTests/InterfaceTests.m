@@ -233,7 +233,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[uuid should] equal:actualModel.requestId];
         });
 
-        it(@"should submit a corresponding RequestModel", ^{
+        it(@"should submit a corresponding RequestModel if there is no saved applogin parameters", ^{
             id requestManager = requestManagerMock();
             EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/logout", @{
                     @"application_id": kAppId,
@@ -244,6 +244,28 @@ SPEC_BEGIN(PublicInterfaceTest)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
                                                         atIndex:0];
+            [_mobileEngage appLogout];
+
+            EMSRequestModel *actualModel = spy.argument;
+            [[model should] beSimilarWithRequest:actualModel];
+        });
+
+        it(@"should submit a corresponding RequestModel if there is saved applogin parameters", ^{
+            id requestManager = requestManagerMock();
+            EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/logout", @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"contact_field_id": @123456789,
+                    @"contact_field_value": @"contactFieldValue"
+            });
+
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                        atIndex:0];
+
+            [_mobileEngage setLastAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
+                                                                                      contactFieldValue:@"contactFieldValue"]];
             [_mobileEngage appLogout];
 
             EMSRequestModel *actualModel = spy.argument;

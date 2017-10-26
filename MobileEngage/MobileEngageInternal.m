@@ -113,16 +113,21 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
 }
 
 - (NSString *)appLogout {
-    self.lastAppLoginParameters = nil;
     EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/logout"];
         [builder setMethod:HTTPMethodPOST];
-        [builder setPayload:@{
+        NSMutableDictionary *payload = [@{
                 @"application_id": self.config.applicationCode,
-                @"hardware_id": [EMSDeviceInfo hardwareId],
-        }];
+                @"hardware_id": [EMSDeviceInfo hardwareId]
+        } mutableCopy];
+        if (self.lastAppLoginParameters.contactFieldId && self.lastAppLoginParameters.contactFieldValue) {
+            payload[@"contact_field_id"] = self.lastAppLoginParameters.contactFieldId;
+            payload[@"contact_field_value"] = self.lastAppLoginParameters.contactFieldValue;
+        }
+        [builder setPayload:payload];
     }];
     [self.requestManager submit:requestModel];
+    self.lastAppLoginParameters = nil;
     return requestModel.requestId;
 }
 
