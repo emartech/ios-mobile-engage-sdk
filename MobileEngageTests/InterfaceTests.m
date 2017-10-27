@@ -218,7 +218,7 @@ SPEC_BEGIN(PublicInterfaceTest)
 
     describe(@"multiple applogin calls", ^{
 
-        it(@"should not result in multiple applogin requests if the payload is the same", ^{
+        it(@"should not result in multiple applogin requests even if the payload is the same", ^{
             FakeRequestManager *requestManager = [FakeRequestManager new];
             NSString *applicationCode = kAppId;
             NSString *applicationPassword = @"appSecret";
@@ -372,7 +372,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
         });
 
-        it(@"should not result in multiple applogin requests if the payload is the same, even if the app is relaunched", ^{
+        it(@"should not result in multiple applogin requests if the payload is the same, even if MobileEngage is re-initialized", ^{
             NSString *applicationCode = kAppId;
             NSString *applicationPassword = @"appSecret";
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
