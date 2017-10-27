@@ -11,6 +11,7 @@
 #import "EMSDeviceInfo.h"
 #import "MobileEngageVersion.h"
 #import "KiwiMacros.h"
+#import "FakeRequestManager.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
@@ -209,6 +210,163 @@ SPEC_BEGIN(PublicInterfaceTest)
                                     contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
+        });
+    });
+
+    describe(@"multiple applogin calls", ^{
+
+        it(@"should not result in multiple applogin requests if the payload is the same", ^{
+            FakeRequestManager *requestManager = [FakeRequestManager new];
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+
+            [_mobileEngage setupWithRequestManager:requestManager
+                                            config:config
+                                     launchOptions:nil];
+
+            EMSRequestModel *firstModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
+                    @"application_id": kAppId,
+                    @"platform": @"ios",
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"language": [EMSDeviceInfo languageCode],
+                    @"timezone": [EMSDeviceInfo timeZone],
+                    @"device_model": [EMSDeviceInfo deviceModel],
+                    @"os_version": [EMSDeviceInfo osVersion],
+                    @"contact_field_id": @0,
+                    @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
+                    @"push_token": @NO,
+                    @"application_version": @"1.0",
+                    @"ems_sdk": MOBILEENGAGE_SDK_VERSION
+            });
+
+
+            EMSRequestModel *secondModel = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/ems_lastMobileActivity"], @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"contact_field_id": @0,
+                    @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"
+            });
+
+
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
+
+            [[requestManager.submittedModels[0] should] beSimilarWithRequest:firstModel];
+            [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
+        });
+
+        it(@"should result in multiple applogin requests if the payload is not the same", ^{
+            FakeRequestManager *requestManager = [FakeRequestManager new];
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+
+            [_mobileEngage setupWithRequestManager:requestManager
+                                            config:config
+                                     launchOptions:nil];
+
+            EMSRequestModel *firstModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
+                    @"application_id": kAppId,
+                    @"platform": @"ios",
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"language": [EMSDeviceInfo languageCode],
+                    @"timezone": [EMSDeviceInfo timeZone],
+                    @"device_model": [EMSDeviceInfo deviceModel],
+                    @"os_version": [EMSDeviceInfo osVersion],
+                    @"contact_field_id": @0,
+                    @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
+                    @"push_token": @NO,
+                    @"application_version": @"1.0",
+                    @"ems_sdk": MOBILEENGAGE_SDK_VERSION
+            });
+
+
+            EMSRequestModel *secondModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
+                    @"application_id": kAppId,
+                    @"platform": @"ios",
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"language": [EMSDeviceInfo languageCode],
+                    @"timezone": [EMSDeviceInfo timeZone],
+                    @"device_model": [EMSDeviceInfo deviceModel],
+                    @"os_version": [EMSDeviceInfo osVersion],
+                    @"contact_field_id": @0,
+                    @"contact_field_value": @"something",
+                    @"push_token": @NO,
+                    @"application_version": @"1.0",
+                    @"ems_sdk": MOBILEENGAGE_SDK_VERSION
+            });
+
+
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"something"];
+
+            [[requestManager.submittedModels[0] should] beSimilarWithRequest:firstModel];
+            [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
+        });
+
+        it(@"should result in multiple applogin requests if the payload is the same size", ^{
+            FakeRequestManager *requestManager = [FakeRequestManager new];
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+
+            [_mobileEngage setupWithRequestManager:requestManager
+                                            config:config
+                                     launchOptions:nil];
+
+            EMSRequestModel *firstModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
+                    @"application_id": kAppId,
+                    @"platform": @"ios",
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"language": [EMSDeviceInfo languageCode],
+                    @"timezone": [EMSDeviceInfo timeZone],
+                    @"device_model": [EMSDeviceInfo deviceModel],
+                    @"os_version": [EMSDeviceInfo osVersion],
+                    @"contact_field_id": @0,
+                    @"contact_field_value": @"contactFieldValue1",
+                    @"push_token": @NO,
+                    @"application_version": @"1.0",
+                    @"ems_sdk": MOBILEENGAGE_SDK_VERSION
+            });
+
+
+            EMSRequestModel *secondModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
+                    @"application_id": kAppId,
+                    @"platform": @"ios",
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"language": [EMSDeviceInfo languageCode],
+                    @"timezone": [EMSDeviceInfo timeZone],
+                    @"device_model": [EMSDeviceInfo deviceModel],
+                    @"os_version": [EMSDeviceInfo osVersion],
+                    @"contact_field_id": @0,
+                    @"contact_field_value": @"contactFieldValue2",
+                    @"push_token": @NO,
+                    @"application_version": @"1.0",
+                    @"ems_sdk": MOBILEENGAGE_SDK_VERSION
+            });
+
+
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"contactFieldValue1"];
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"contactFieldValue2"];
+
+            [[requestManager.submittedModels[0] should] beSimilarWithRequest:firstModel];
+            [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
         });
     });
 
