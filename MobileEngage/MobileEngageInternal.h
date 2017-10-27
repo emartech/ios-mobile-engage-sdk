@@ -9,6 +9,9 @@
 @protocol MobileEngageStatusDelegate;
 @class MEConfig;
 
+#define kSuiteName @"com.emarsys.mobileengage"
+#define kLastAppLoginPayload @"kLastAppLoginPayload"
+
 NS_ASSUME_NONNULL_BEGIN
 @interface MobileEngageInternal : NSObject
 

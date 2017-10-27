@@ -35,6 +35,7 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
 - (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
                          config:(nonnull MEConfig *)config
                   launchOptions:(NSDictionary *)launchOptions {
+    _lastAppLoginPayload = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] dictionaryForKey:kLastAppLoginPayload];
     _requestManager = requestManager;
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
@@ -193,5 +194,13 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
     [self.requestManager submit:requestModel];
     return requestModel.requestId;
 }
+
+- (void)setLastAppLoginPayload:(NSDictionary *)lastAppLoginPayload {
+    _lastAppLoginPayload = lastAppLoginPayload;
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+    [userDefaults setObject:lastAppLoginPayload forKey:kLastAppLoginPayload];
+    [userDefaults synchronize];
+}
+
 
 @end

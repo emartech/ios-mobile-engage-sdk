@@ -27,6 +27,9 @@ SPEC_BEGIN(PublicInterfaceTest)
         _mobileEngage = [MobileEngageInternal new];
         [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
                                                    error:nil];
+        NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+        [userDefaults setObject:nil forKey:kLastAppLoginPayload];
+        [userDefaults synchronize];
     });
 
     id (^requestManagerMock)() = ^id() {
@@ -364,6 +367,58 @@ SPEC_BEGIN(PublicInterfaceTest)
                                     contactFieldValue:@"contactFieldValue1"];
             [_mobileEngage appLoginWithContactFieldId:@0
                                     contactFieldValue:@"contactFieldValue2"];
+
+            [[requestManager.submittedModels[0] should] beSimilarWithRequest:firstModel];
+            [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
+        });
+
+        it(@"should not result in multiple applogin requests if the payload is the same, even if the app is relaunched", ^{
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+
+            FakeRequestManager *requestManager = [FakeRequestManager new];
+            [_mobileEngage setupWithRequestManager:requestManager
+                                            config:config
+                                     launchOptions:nil];
+
+            EMSRequestModel *firstModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
+                    @"application_id": kAppId,
+                    @"platform": @"ios",
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"language": [EMSDeviceInfo languageCode],
+                    @"timezone": [EMSDeviceInfo timeZone],
+                    @"device_model": [EMSDeviceInfo deviceModel],
+                    @"os_version": [EMSDeviceInfo osVersion],
+                    @"contact_field_id": @0,
+                    @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
+                    @"push_token": @NO,
+                    @"application_version": @"1.0",
+                    @"ems_sdk": MOBILEENGAGE_SDK_VERSION
+            });
+
+
+            EMSRequestModel *secondModel = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/ems_lastMobileActivity"], @{
+                    @"application_id": kAppId,
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"contact_field_id": @0,
+                    @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"
+            });
+
+
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
+
+            _mobileEngage = [MobileEngageInternal new];
+            [_mobileEngage setupWithRequestManager:requestManager
+                                            config:config
+                                     launchOptions:nil];
+
+            [_mobileEngage appLoginWithContactFieldId:@0
+                                    contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
 
             [[requestManager.submittedModels[0] should] beSimilarWithRequest:firstModel];
             [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
