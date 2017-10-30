@@ -8,4 +8,6 @@
 
 - (void)requestPushPermission;
 
+- (void)openExternalLink:(NSString *)link
+       completionHandler:(void (^)(BOOL success))completionHandler;
 @end

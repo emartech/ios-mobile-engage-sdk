@@ -22,7 +22,23 @@
         [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge
                                                                             completionHandler:nil];
     }
+}
 
+- (void)openExternalLink:(NSString *)link
+       completionHandler:(void (^)(BOOL))completionHandler {
+    UIApplication *application = [UIApplication sharedApplication];
+    NSURL *url = [NSURL URLWithString:link];
+    if ([application canOpenURL:url]) {
+        if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
+            completionHandler([application openURL:url]);
+        } else {
+            [application openURL:url options:nil completionHandler:^(BOOL success) {
+                completionHandler(success);
+            }];
+        }
+    } else {
+        completionHandler(false);
+    }
 }
 
 @end
