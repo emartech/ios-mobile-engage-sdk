@@ -11,14 +11,12 @@ SPEC_BEGIN(MEJSBridgeTests)
 
     beforeEach(^{
         _meJsBridge = [MEJSBridge new];
+        _applicationMock = [UIApplication mock];
+        [[UIApplication should] receive:@selector(sharedApplication) andReturn:_applicationMock];
     });
 
     describe(@"requestPushPermission", ^{
 
-        beforeEach(^{
-            _applicationMock = [UIApplication mock];
-            [[UIApplication should] receive:@selector(sharedApplication) andReturn:_applicationMock];
-        });
 
         if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
             it(@"should call registration process on application under iOS 10", ^{
@@ -55,10 +53,6 @@ SPEC_BEGIN(MEJSBridgeTests)
 
     describe(@"openExternalLink", ^{
 
-        beforeEach(^{
-            _applicationMock = [UIApplication mock];
-            [[UIApplication should] receive:@selector(sharedApplication) andReturn:_applicationMock];
-        });
 
         it(@"should return false if link is not valid", ^{
             NSString *link = nil;
