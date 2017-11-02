@@ -26,7 +26,9 @@
 		32C6F52427C098F57A496DBB /* MEJSBridgeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F1FAAB0CC2F3BBE095B5 /* MEJSBridgeTests.m */; };
 		32C6F550B3CD5637A841BB0B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 32C6F68C59D362926D33BB45 /* Info.plist */; };
 		32C6F55A9979DC26FD526D89 /* MEConfigBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F0CED986657DA32E7525 /* MEConfigBuilder.m */; };
+		32C6F682D1A86D0BAF0B663F /* MEIAMViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F33510388FD99D6138EB /* MEIAMViewControllerTests.m */; };
 		32C6F6BB6ABB424822AF34B0 /* MENotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F1045F8F067FAC344C7F /* MENotification.h */; };
+		32C6F71075110B6B546A6DEA /* MEIAMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FBDEADA5F76FAB90106A /* MEIAMViewController.m */; };
 		32C6F791C414CB1E195DF7BF /* MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F0F5EAFCCF8DD8BEDE99 /* MobileEngage.m */; };
 		32C6F7999214937B7CFA2169 /* MobileEngageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F873043EA1EC7E0E057C /* MobileEngageTests.m */; };
 		32C6F81B504C3170FFA20580 /* InboxIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FDB26B21FB77D0C22429 /* InboxIntegrationTests.m */; };
@@ -40,6 +42,7 @@
 		32C6FA3B30C34BB53865D159 /* MENotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F722D778C7D3C06A56C7 /* MENotificationService.m */; };
 		32C6FB16C938582D71B70BC3 /* FakeRestClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F93DFEA64AB17BBADDAE /* FakeRestClient.m */; };
 		32C6FB1E00CB787F001B9819 /* MENotificationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F608B7AD453B0540F33D /* MENotificationServiceTests.m */; };
+		32C6FC1B9D3BC6538D7F0740 /* MEIAMViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F972089752C741BA068C /* MEIAMViewController.h */; };
 		32C6FC21EE1A04450F62F39A /* MobileEngageInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F49D913F9F20EDD5331E /* MobileEngageInternal.m */; };
 		32C6FC962C176A9513A4A711 /* MEIAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F921A695F1A854880600 /* MEIAM.h */; };
 		32C6FC9F53ECB121BF53EA03 /* NSDictionary+MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */; };
@@ -135,6 +138,7 @@
 		32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngageTests.m"; sourceTree = "<group>"; };
 		32C6F2F7B517867CF069B590 /* InterfaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceTests.m; sourceTree = "<group>"; };
 		32C6F2FB7FA6C4CD663836C9 /* UNNotificationAttachment+MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UNNotificationAttachment+MobileEngage.h"; sourceTree = "<group>"; };
+		32C6F33510388FD99D6138EB /* MEIAMViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMViewControllerTests.m; sourceTree = "<group>"; };
 		32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngageStatusDelegate.h; sourceTree = "<group>"; };
 		32C6F3AA5964C4D13A4B7CD6 /* UNNotificationAttachment+MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UNNotificationAttachment+MobileEngageTests.m"; sourceTree = "<group>"; };
 		32C6F484DB7E24564BC415CE /* UNNotificationAttachment+MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UNNotificationAttachment+MobileEngage.m"; sourceTree = "<group>"; };
@@ -156,6 +160,7 @@
 		32C6F901EAA453C0FE99E056 /* NSDictionary+MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MobileEngage.h"; sourceTree = "<group>"; };
 		32C6F921A695F1A854880600 /* MEIAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAM.h; sourceTree = "<group>"; };
 		32C6F93DFEA64AB17BBADDAE /* FakeRestClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeRestClient.m; sourceTree = "<group>"; };
+		32C6F972089752C741BA068C /* MEIAMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMViewController.h; sourceTree = "<group>"; };
 		32C6F979B34ACD8FE94CBAD3 /* MobileEngageSDK.podspec */ = {isa = PBXFileReference; lastKnownFileType = file.podspec; path = MobileEngageSDK.podspec; sourceTree = "<group>"; };
 		32C6F9EBE29BADE147154DC7 /* FakeStatusDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeStatusDelegate.m; sourceTree = "<group>"; };
 		32C6F9F7C741052373E946A2 /* MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngage.h; sourceTree = "<group>"; };
@@ -164,6 +169,7 @@
 		32C6FA6991F882C8197DE493 /* MobileEngageVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngageVersion.h; sourceTree = "<group>"; };
 		32C6FB15634CAA89F68990D1 /* MEConfigBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEConfigBuilder.h; sourceTree = "<group>"; };
 		32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngage.m"; sourceTree = "<group>"; };
+		32C6FBDEADA5F76FAB90106A /* MEIAMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMViewController.m; sourceTree = "<group>"; };
 		32C6FD2227CE808305774D26 /* MobileEngage+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MobileEngage+Test.h"; sourceTree = "<group>"; };
 		32C6FDB26B21FB77D0C22429 /* InboxIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxIntegrationTests.m; sourceTree = "<group>"; };
 		32C6FE11C048D1D103C6B120 /* MEConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEConfig.m; sourceTree = "<group>"; };
@@ -284,6 +290,8 @@
 				32C6F8EE0B6EC22B4D578998 /* MEIAM.m */,
 				32C6F921A695F1A854880600 /* MEIAM.h */,
 				32C6F4ECB33867A9A7354FA1 /* MEIAM+Private.h */,
+				32C6FBDEADA5F76FAB90106A /* MEIAMViewController.m */,
+				32C6F972089752C741BA068C /* MEIAMViewController.h */,
 			);
 			path = IAM;
 			sourceTree = "<group>";
@@ -362,6 +370,7 @@
 				37460C1E41E79DD06989C488 /* FakeRequestManager.h */,
 				32C6F1FAAB0CC2F3BBE095B5 /* MEJSBridgeTests.m */,
 				32C6F112AE2A53AAEDCE0876 /* MEIAMTests.m */,
+				32C6F33510388FD99D6138EB /* MEIAMViewControllerTests.m */,
 			);
 			path = MobileEngageTests;
 			sourceTree = "<group>";
@@ -442,6 +451,7 @@
 				32C6F950CD4FD5947422203D /* MEJSBridge.h in Headers */,
 				32C6FC962C176A9513A4A711 /* MEIAM.h in Headers */,
 				32C6F0A423EB1D4E5EFAA19A /* MEIAM+Private.h in Headers */,
+				32C6FC1B9D3BC6538D7F0740 /* MEIAMViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,6 +709,7 @@
 				3746030B5D8D6E214DDA5B9F /* Experimental.m in Sources */,
 				32C6F052F5E5FE45C1D6686C /* MEJSBridge.m in Sources */,
 				32C6F9D8885D130311B5CDA6 /* MEIAM.m in Sources */,
+				32C6F71075110B6B546A6DEA /* MEIAMViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -726,6 +737,7 @@
 				37460FBD0D4571C66AE8A0C9 /* FakeRequestManager.m in Sources */,
 				32C6F52427C098F57A496DBB /* MEJSBridgeTests.m in Sources */,
 				32C6FD3B97B9D1FF2953905F /* MEIAMTests.m in Sources */,
+				32C6F682D1A86D0BAF0B663F /* MEIAMViewControllerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
