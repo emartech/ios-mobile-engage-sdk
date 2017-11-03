@@ -3,42 +3,50 @@
 //
 
 #import "MEJSBridge.h"
-#import <UIKit/UIKit.h>
-#import <UserNotifications/UserNotifications.h>
+#import "MEIAMJSCommandFactory.h"
+#import "MEIAMRequestPushPermission.h"
+#import "MEIAMOpenExternalLink.h"
+
+@interface MEJSBridge ()
+
+@property(nonatomic, strong) MEIAMJSCommandFactory *factory;
+
+@end
 
 @implementation MEJSBridge
 
-#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
-
-- (void)requestPushPermission {
-    UIApplication *application = [UIApplication sharedApplication];
-    [application registerForRemoteNotifications];
-
-    if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge)
-                                                                                 categories:nil];
-        [application registerUserNotificationSettings:settings];
-    } else {
-        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge
-                                                                            completionHandler:nil];
+- (instancetype)initWithJSCommandFactory:(MEIAMJSCommandFactory *)factory {
+    if (self = [super init]) {
+        _factory = factory;
     }
+    return self;
 }
 
-- (void)openExternalLink:(NSString *)link
-       completionHandler:(void (^)(BOOL))completionHandler {
-    UIApplication *application = [UIApplication sharedApplication];
-    NSURL *url = [NSURL URLWithString:link];
-    if ([application canOpenURL:url]) {
-        if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
-            completionHandler([application openURL:url]);
-        } else {
-            [application openURL:url options:nil completionHandler:^(BOOL success) {
-                completionHandler(success);
-            }];
-        }
-    } else {
-        completionHandler(false);
+- (void)userContentController:(WKUserContentController *)userContentController
+      didReceiveScriptMessage:(WKScriptMessage *)message {
+    NSString *commandName = message.name;
+    NSDictionary *arguments = message.body;
+    id <MEIAMJSCommandProtocol> command = [self.factory commandByName:commandName];
+    __weak typeof(self) weakSelf = self;
+    [command handleMessage:arguments
+               resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+                   if (weakSelf.jsResultBlock) {
+                       weakSelf.jsResultBlock(result);
+                   }
+               }];
+}
+
+- (NSArray<NSString *> *)jsCommandNames {
+    return @[MEIAMRequestPushPermission.commandName, MEIAMOpenExternalLink.commandName];
+}
+
+- (WKUserContentController *)userContentController {
+    WKUserContentController *userContentController = [WKUserContentController new];
+    for (NSString *jsCommandName in self.jsCommandNames) {
+        [userContentController addScriptMessageHandler:self
+                                                  name:jsCommandName];
     }
+    return userContentController;
 }
 
 @end

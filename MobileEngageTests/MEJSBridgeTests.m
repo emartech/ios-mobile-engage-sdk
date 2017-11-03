@@ -1,182 +1,130 @@
 #import "Kiwi.h"
 #import "MEJSBridge.h"
 #import <UserNotifications/UserNotifications.h>
+#import "MEIAMViewController.h"
+#import "MEIAMJSCommandFactory.h"
+#import "MEIAMDidAppear.h"
 
 MEJSBridge *_meJsBridge;
-UIApplication *_applicationMock;
 
-#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+@interface UserContentControllerRegistrationChecker : NSObject
+
++ (void)assertForJSCommand:(NSString *)commandName;
+
+@end
+
+@implementation UserContentControllerRegistrationChecker
+
++ (void)assertForJSCommand:(NSString *)commandName {
+    it([NSString stringWithFormat:@"should register JSCommand_%@", commandName], ^{
+        NSString *message = [NSString stringWithFormat:@"<!DOCTYPE html>\n"
+                                                               "<html lang=\"en\">\n"
+                                                               "  <head>\n"
+                                                               "    <script>\n"
+                                                               "      window.onload = function() {\n"
+                                                               "        window.webkit.messageHandlers.%@.postMessage({success:true});\n"
+                                                               "      };\n"
+                                                               "    </script>\n"
+                                                               "  </head>\n"
+                                                               "  <body style=\"background: transparent;\">\n"
+                                                               "  </body>\n"
+                                                               "</html>", commandName];
+        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:[NSString stringWithFormat:@"wait - %@", commandName]];
+
+        [[_meJsBridge shouldEventually] receive:@selector(userContentController:didReceiveScriptMessage:) withArguments:any(), any()];
+        KWCaptureSpy *spy = [_meJsBridge captureArgument:@selector(userContentController:didReceiveScriptMessage:)
+                                                 atIndex:1];
+        MEIAMViewController *iamViewController = [[MEIAMViewController alloc] initWithJSBridge:_meJsBridge];
+
+        [iamViewController loadMessage:message
+                     completionHandler:^{
+                         [exp fulfill];
+                     }];
+        [XCTWaiter waitForExpectations:@[exp]
+                               timeout:30];
+
+        WKScriptMessage *scriptMessage = spy.argument;
+        [[scriptMessage.name shouldEventually] equal:commandName];
+        [[scriptMessage.body shouldEventually] equal:@{@"success": @YES}];
+    });
+}
+
+@end
 
 SPEC_BEGIN(MEJSBridgeTests)
 
     beforeEach(^{
         _meJsBridge = [MEJSBridge new];
-        _applicationMock = [UIApplication mock];
-        [[UIApplication should] receive:@selector(sharedApplication) andReturn:_applicationMock];
     });
 
-    describe(@"requestPushPermission", ^{
-
-
-        if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
-            it(@"should call registration process on application under iOS 10", ^{
-                [[_applicationMock should] receive:@selector(registerForRemoteNotifications)];
-                [[_applicationMock should] receive:@selector(registerUserNotificationSettings:) withArguments:any()];
-                KWCaptureSpy *spy = [_applicationMock captureArgument:@selector(registerUserNotificationSettings:)
-                                                              atIndex:0];
-
-                [_meJsBridge requestPushPermission];
-                UIUserNotificationSettings *notificationSettings = spy.argument;
-                UIUserNotificationType type = notificationSettings.types;
-                [[theValue(type) should] equal:theValue(UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge)];
-
-            });
-        }
-
-        if (!SYSTEM_VERSION_LESS_THAN(@"10.0")) {
-            it(@"should call registration process on application when os version is greater or equal then iOS 10", ^{
-                UNUserNotificationCenter *userNotificationCenterMock = [UNUserNotificationCenter mock];
-                [[UNUserNotificationCenter should] receive:@selector(currentNotificationCenter) andReturn:userNotificationCenterMock];
-
-                [[_applicationMock should] receive:@selector(registerForRemoteNotifications)];
-                [[userNotificationCenterMock should] receive:@selector(requestAuthorizationWithOptions:completionHandler:) withArguments:any(), any()];
-
-                KWCaptureSpy *spy = [userNotificationCenterMock captureArgument:@selector(requestAuthorizationWithOptions:completionHandler:)
-                                                                        atIndex:0];
-                [_meJsBridge requestPushPermission];
-
-                [[spy.argument should] equal:theValue(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound)];
-            });
-        }
-
+    describe(@"jsCommandNames", ^{
+        it(@"should contain IAMDidAppear, requestPushPermission, openExternalLink", ^{
+            NSArray<NSString *> *const commands = [[MEJSBridge new] jsCommandNames];
+            [[commands should] equal:@[@"requestPushPermission", @"openExternalLink"]];
+        });
     });
 
-    describe(@"openExternalLink", ^{
+    describe(@"userContentController", ^{
 
-
-        it(@"should return false if link is not valid", ^{
-            NSString *link = nil;
-
-            [[_applicationMock should] receive:@selector(canOpenURL:) andReturn:theValue(NO)];
-            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
-
-            __block BOOL returnedContent;
-            [_meJsBridge openExternalLink:link
-                        completionHandler:^(BOOL success) {
-                            returnedContent = success;
-                            [exp fulfill];
-
-                        }];
-
-            [XCTWaiter waitForExpectations:@[exp]
-                                   timeout:30];
-
-            [[theValue(returnedContent) should] beNo];
+        it(@"should not return nil", ^{
+            [[[_meJsBridge userContentController] shouldNot] beNil];
         });
 
-
-        if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
-            it(@"should open the link if it is valid below ios10", ^{
-                NSString *link = @"https://www.google.com";
-
-                _applicationMock = [UIApplication mock];
-                [[UIApplication should] receive:@selector(sharedApplication) andReturn:_applicationMock];
-
-                [[_applicationMock should] receive:@selector(canOpenURL:) andReturn:theValue(YES)];
-                [[_applicationMock should] receive:@selector(openURL:) withArguments:[NSURL URLWithString:link]];
-
-                [_meJsBridge openExternalLink:link
-                            completionHandler:^(BOOL success) {
-
-                            }];
-            });
-
-            void (^testCompletionHandlerWithReturnValue)(BOOL returnValue) = ^void(BOOL expectedValue) {
-                NSString *link = @"https://www.google.com";
-
-                _applicationMock = [UIApplication mock];
-                [[UIApplication should] receive:@selector(sharedApplication) andReturn:_applicationMock];
-
-                [[_applicationMock should] receive:@selector(canOpenURL:) andReturn:theValue(YES)];
-                [[_applicationMock should] receive:@selector(openURL:) andReturn:theValue(expectedValue)];
-
-                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
-                __block BOOL returnedValue;
-                [_meJsBridge openExternalLink:link
-                            completionHandler:^(BOOL success) {
-                                returnedValue = success;
-                                [exp fulfill];
-                            }];
-
-                [XCTWaiter waitForExpectations:@[exp]
-                                       timeout:30];
-
-                [[theValue(returnedValue) should] equal:theValue(expectedValue)];
-            };
-
-
-            it(@"should call completion handler with YES in openURL completionHandler below ios10", ^{
-                testCompletionHandlerWithReturnValue(YES);
-            });
-
-            it(@"should call completion handler with NO in openURL completionHandler below ios10", ^{
-                testCompletionHandlerWithReturnValue(NO);
-            });
+        for (NSString *commandName in [[MEJSBridge new] jsCommandNames]) {
+            [UserContentControllerRegistrationChecker assertForJSCommand:commandName];
         }
 
-        if (!SYSTEM_VERSION_LESS_THAN(@"10.0")) {
-            it(@"should open the link if it is valid above ios10", ^{
-                NSString *link = @"https://www.google.com";
+    });
+    describe(@"userContentController:didReceiveScriptMessage:", ^{
 
-                _applicationMock = [UIApplication mock];
-                [[UIApplication should] receive:@selector(sharedApplication) andReturn:_applicationMock];
+        it(@"should call handleMessage on created command with arguments dictionary", ^{
+            MEIAMDidAppear *commandMock = [MEIAMDidAppear mock];
+            MEIAMJSCommandFactory *factoryMock = [MEIAMJSCommandFactory mock];
+            [[factoryMock should] receive:@selector(commandByName:)
+                                andReturn:commandMock
+                            withArguments:MEIAMDidAppear.commandName];
 
-                [[_applicationMock should] receive:@selector(canOpenURL:) andReturn:theValue(YES)];
-                [[_applicationMock should] receive:@selector(openURL:options:completionHandler:) withArguments:[NSURL URLWithString:link], nil, any()];
+            _meJsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:factoryMock];
 
-                [_meJsBridge openExternalLink:link
-                            completionHandler:^(BOOL success) {
+            NSDictionary *arguments = @{@"key": @"value"};
+            WKScriptMessage *scriptMessageMock = [WKScriptMessage mock];
+            [scriptMessageMock stub:@selector(name) andReturn:MEIAMDidAppear.commandName];
+            [scriptMessageMock stub:@selector(body) andReturn:arguments];
 
-                            }];
-            });
+            [[commandMock should] receive:@selector(handleMessage:resultBlock:)
+                            withArguments:arguments, any()];
 
-            void (^testCompletionHandlerWithReturnValue)(BOOL returnValue) = ^void(BOOL expectedValue) {
-                NSString *link = @"https://www.google.com";
+            [_meJsBridge userContentController:[WKUserContentController mock]
+                       didReceiveScriptMessage:scriptMessageMock];
+        });
 
-                _applicationMock = [UIApplication mock];
-                [[UIApplication should] receive:@selector(sharedApplication) andReturn:_applicationMock];
+        it(@"should call resultBlock when command's resultBlock called", ^{
+            NSDictionary *expectedDictionary = @{@"key": @"value"};
 
-                [[_applicationMock should] receive:@selector(canOpenURL:) andReturn:theValue(YES)];
-                [[_applicationMock should] receive:@selector(openURL:options:completionHandler:)];
-                KWCaptureSpy *spy = [_applicationMock captureArgument:@selector(openURL:options:completionHandler:)
-                                                              atIndex:2];
+            MEIAMDidAppear *command = [MEIAMDidAppear new];
+            MEIAMJSCommandFactory *factoryMock = [MEIAMJSCommandFactory mock];
+            [[factoryMock should] receive:@selector(commandByName:)
+                                andReturn:command
+                            withArguments:MEIAMDidAppear.commandName];
 
-                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
-                __block BOOL returnedValue;
-                [_meJsBridge openExternalLink:link
-                            completionHandler:^(BOOL success) {
-                                returnedValue = success;
-                                [exp fulfill];
-                            }];
+            _meJsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:factoryMock];
 
-                void (^completionBlock)(BOOL success) = spy.argument;
-                completionBlock(expectedValue);
+            WKScriptMessage *scriptMessageMock = [WKScriptMessage mock];
+            [scriptMessageMock stub:@selector(name) andReturn:MEIAMDidAppear.commandName];
+            [scriptMessageMock stub:@selector(body)];
 
-                [XCTWaiter waitForExpectations:@[exp]
-                                       timeout:30];
+            [_meJsBridge userContentController:[WKUserContentController mock]
+                       didReceiveScriptMessage:scriptMessageMock];
 
-                [[theValue(returnedValue) should] equal:theValue(expectedValue)];
-            };
+            [command triggerResultBlockWithDictionary:expectedDictionary];
 
-            it(@"should call completion handler with YES in openURL completionHandler above ios10", ^{
-                testCompletionHandlerWithReturnValue(YES);
-            });
+            __block NSDictionary *resultDictionary;
+            [_meJsBridge setJsResultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+                resultDictionary = result;
+            }];
 
-            it(@"should call completion handler with NO in openURL completionHandler above ios10", ^{
-                testCompletionHandlerWithReturnValue(NO);
-            });
-
-        }
+            [[resultDictionary shouldEventually] equal:expectedDictionary];
+        });
 
     });
 

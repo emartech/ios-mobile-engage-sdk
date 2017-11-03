@@ -3,12 +3,13 @@
 //
 
 #import "MEIAMViewController.h"
+#import "MEJSBridge.h"
 
-@interface MEIAMViewController () <WKNavigationDelegate, WKScriptMessageHandler>
+@interface MEIAMViewController () <WKNavigationDelegate>
 
 @property(nonatomic, strong) MECompletionHandler completionHandler;
 @property(nonatomic, strong) WKWebView *webView;
-@property(nonatomic, weak) id <WKScriptMessageHandler> messageHandler;
+@property(nonatomic, weak) MEJSBridge *bridge;
 
 @end
 
@@ -19,14 +20,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColor.clearColor];
+    [self.bridge setJsResultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+        [self respondToJS:result];
+    }];
 }
 
 #pragma mark - Public methods
 
-- (instancetype)initWithMessageHandler:(id <WKScriptMessageHandler>)messageHandler {
+- (instancetype)initWithJSBridge:(MEJSBridge *)bridge {
     self = [super init];
     if (self) {
-        _messageHandler = messageHandler;
+        _bridge = bridge;
     }
     return self;
 }
@@ -56,12 +60,8 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
 - (WKWebView *)createWebView {
     WKProcessPool *processPool = [WKProcessPool new];
     WKWebViewConfiguration *webViewConfiguration = [WKWebViewConfiguration new];
-    WKUserContentController *userContentController = [WKUserContentController new];
-
-    [userContentController addScriptMessageHandler:self.messageHandler //TODO: change this for JS script handling
-                                              name:@"IAMDidAppear"];
     [webViewConfiguration setProcessPool:processPool];
-    [webViewConfiguration setUserContentController:userContentController];
+    [webViewConfiguration setUserContentController:self.bridge.userContentController];
 
     WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero
                                             configuration:webViewConfiguration];
@@ -94,6 +94,16 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
                                                                          constant:0];
     [self.view addConstraints:@[widthConstraint, heightConstraint]];
     [self.view layoutIfNeeded];
+}
+
+- (void)respondToJS:(NSDictionary<NSString *, NSObject *> *)result {
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:result
+                                                       options:0
+                                                         error:&error];
+    NSString *js = [NSString stringWithFormat:@"callback(%@);", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
+    [self.webView evaluateJavaScript:js
+                   completionHandler:nil];
 }
 
 @end

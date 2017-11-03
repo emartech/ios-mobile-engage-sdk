@@ -3,11 +3,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <WebKit/WebKit.h>
+#import "MEIAMJSCommandProtocol.h"
 
-@interface MEJSBridge : NSObject
+@class MEIAMJSCommandFactory;
 
-- (void)requestPushPermission;
+@interface MEJSBridge : NSObject <WKScriptMessageHandler>
 
-- (void)openExternalLink:(NSString *)link
-       completionHandler:(void (^)(BOOL success))completionHandler;
+@property(nonatomic, strong) MEIAMJSResultBlock jsResultBlock;
+
+- (instancetype)initWithJSCommandFactory:(MEIAMJSCommandFactory *)factory;
+
+- (NSArray<NSString *> *)jsCommandNames;
+
+- (WKUserContentController *)userContentController;
+
 @end

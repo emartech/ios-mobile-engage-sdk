@@ -4,7 +4,6 @@
 //
 
 #import "FakeRequestManager.h"
-#import "EMSRequestModel.h"
 
 
 @implementation FakeRequestManager

@@ -6,12 +6,13 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
+@class MEJSBridge;
+
 typedef void (^MECompletionHandler)();
 
 @interface MEIAMViewController : UIViewController
 
-
-- (instancetype)initWithMessageHandler:(id <WKScriptMessageHandler>)messageHandler;
+- (instancetype)initWithJSBridge:(MEJSBridge *)bridge;
 
 - (void)loadMessage:(NSString *)message
   completionHandler:(MECompletionHandler)completionHandler;
