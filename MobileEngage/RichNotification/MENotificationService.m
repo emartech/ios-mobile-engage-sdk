@@ -5,7 +5,7 @@
 #import "MENotificationService.h"
 #import "UNNotificationAttachment+MobileEngage.h"
 
-#define IMAGE_URL @"imageUrl"
+#define IMAGE_URL @"image_url"
 
 @interface MENotificationService ()
 

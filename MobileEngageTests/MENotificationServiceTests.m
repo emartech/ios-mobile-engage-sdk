@@ -59,7 +59,7 @@ SPEC_BEGIN(MENotificationServiceTests)
         it(@"should invoke contentHandler with the original content when cant create attachment from the imageUrl in the request's userInfo", ^{
             MENotificationService *service = [[MENotificationService alloc] init];
             UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-            content.userInfo = @{@"imageUrl": @""};
+            content.userInfo = @{@"image_url": @""};
             UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"id"
                                                                                   content:content
                                                                                   trigger:nil];
@@ -82,7 +82,7 @@ SPEC_BEGIN(MENotificationServiceTests)
         it(@"should invoke contentHandler with modified content when attachment is available", ^{
             MENotificationService *service = [[MENotificationService alloc] init];
             UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-            content.userInfo = @{@"imageUrl": @"https://cinesnark.files.wordpress.com/2015/05/widow_mace.gif"};
+            content.userInfo = @{@"image_url": @"https://cinesnark.files.wordpress.com/2015/05/widow_mace.gif"};
             UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"id"
                                                                                   content:content
                                                                                   trigger:nil];
