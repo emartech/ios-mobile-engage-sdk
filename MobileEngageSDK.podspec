@@ -8,6 +8,7 @@ Pod::Spec.new do |spec|
 	spec.platform             = :ios, '9.0'
 	spec.source               = { :git => 'https://github.com/emartech/ios-mobile-engage-sdk.git', :tag => spec.version }
 	spec.source_files         = 'MobileEngage/**/*.{h,m}'
+	spec.exclude_files			  = 'MobileEngage/IAM/**/*.{h,m}'
 	spec.public_header_files  = [
 		'MobileEngage/MobileEngage.h',
 		'MobileEngage/MobileEngageStatusDelegate.h',
