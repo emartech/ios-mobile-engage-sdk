@@ -9,12 +9,6 @@ SPEC_BEGIN(MEIAMTests)
     beforeEach(^{
         iam = [[MEIAM alloc] init];
     });
-//
-//    afterEach(^{
-//        for (UIViewController *viewController in [[iam rootViewController] childViewControllers]) {
-//            [viewController removeFromParentViewController];
-//        }
-//    });
 
     describe(@"rootViewController", ^{
 
