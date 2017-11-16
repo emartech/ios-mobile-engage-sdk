@@ -64,9 +64,10 @@
         [_restClient executeTaskWithRequestModel:request
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
+                                        MENotificationInboxStatus *status = [[MEInboxParser new] parseNotificationInboxStatus:payload];
+                                        MENotificationInboxStatus *mergedStatus = [weakSelf mergedStatusWithStatus:status];
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            MENotificationInboxStatus *status = [[MEInboxParser new] parseNotificationInboxStatus:payload];
-                                            resultBlock([weakSelf mergedStatusWithStatus:status]);
+                                            resultBlock(mergedStatus);
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
