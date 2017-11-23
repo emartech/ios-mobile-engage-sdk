@@ -12,10 +12,12 @@
 #import "MobileEngageVersion.h"
 #import "KiwiMacros.h"
 #import "FakeRequestManager.h"
+#import "EMSResponseModel.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
 static NSString *const kAppId = @"kAppId";
+static NSString *const kAppSecret = @"kAppSecret";
 
 MobileEngageInternal *_mobileEngage;
 
@@ -162,6 +164,28 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[model should] beSimilarWithRequest:actualModel];
         });
 
+        it(@"appLogin should save the MEID returned in the response", ^{
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:kAppId
+                                       applicationPassword:kAppSecret];
+            }];
+            MobileEngageInternal *internal = [MobileEngageInternal new];
+            [internal setupWithConfig:config
+                        launchOptions:nil];
+            FakeRequestManager *fakeRequestManager = [FakeRequestManager managerWithSuccessBlock:internal.successBlock
+                                                                                      errorBlock:internal.errorBlock];
+            internal.requestManager = fakeRequestManager;
+
+            NSString *meId = @"nr4io3rn2o3rn";
+            NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id" : meId} options:0 error:nil];
+            fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:data]] mutableCopy];
+
+            [internal appLogin];
+
+            [fakeRequestManager waitForAllExpectations];
+
+            [[expectFutureValue(internal.meId) shouldEventually] equal:meId];
+        });
 
     });
 

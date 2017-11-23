@@ -3,7 +3,6 @@
 //
 
 #import "MobileEngageInternal.h"
-#import "EMSRequestManager.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSDeviceInfo.h"
 #import "EMSRequestModel.h"
@@ -14,19 +13,15 @@
 #import "NSData+MobileEngine.h"
 #import "MEDefaultHeaders.h"
 #import "MobileEngageVersion.h"
+#import "EMSResponseModel.h"
+#import "AbstractResponseHandler.h"
+#import "MEIdResponseHandler.h"
 
 @interface MobileEngageInternal ()
 
-typedef void (^MESuccessBlock)(NSString *requestId, EMSResponseModel *);
-
-typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
-
-@property(nonatomic, strong) EMSRequestManager *requestManager;
 @property(nonatomic, strong) MEConfig *config;
-@property(nonatomic, strong) MESuccessBlock successBlock;
-@property(nonatomic, strong) MEErrorBlock errorBlock;
-
 @property(nonatomic, strong) NSDictionary *lastAppLoginPayload;
+@property(nonatomic, strong) NSArray<AbstractResponseHandler *> *responseHandlers;
 
 @end
 
@@ -39,12 +34,14 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
     _requestManager = requestManager;
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
+    _responseHandlers = @[[[MEIdResponseHandler alloc] initWithMobileEngageInternal:self]];
 }
 
 - (void)setupWithConfig:(nonnull MEConfig *)config
           launchOptions:(NSDictionary *)launchOptions {
     __weak typeof(self) weakSelf = self;
     _successBlock = ^(NSString *requestId, EMSResponseModel *responseModel) {
+        [self handleResponse:responseModel];
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([weakSelf.statusDelegate respondsToSelector:@selector(mobileEngageLogReceivedWithEventId:log:)]) {
                 [weakSelf.statusDelegate mobileEngageLogReceivedWithEventId:requestId
@@ -64,6 +61,12 @@ typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
                                                                   errorBlock:self.errorBlock]
                            config:config
                     launchOptions:launchOptions];
+}
+
+- (void)handleResponse:(EMSResponseModel *)model {
+    for (AbstractResponseHandler *handler in _responseHandlers) {
+        [handler processResponse:model];
+    }
 }
 
 - (void)setPushToken:(NSData *)pushToken {
