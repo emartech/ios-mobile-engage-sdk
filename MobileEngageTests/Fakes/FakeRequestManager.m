@@ -4,9 +4,7 @@
 
 #import "FakeRequestManager.h"
 #import "EMSResponseModel.h"
-#import "../../../../../../Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework/Headers/XCTestExpectation.h"
-#import "../../../../../../Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework/Headers/XCTWaiter.h"
-
+#import <XCTest/XCTest.h>
 
 @implementation FakeRequestManager {
     NSMutableArray<XCTestExpectation *> *_expectations;
