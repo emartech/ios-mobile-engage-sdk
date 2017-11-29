@@ -4,8 +4,14 @@
 
 #import "MEIAM.h"
 #import "MEIAM+Private.h"
+#import "MEIAMViewController.h"
+#import "MEJSBridge.h"
+#import "MEIAMJSCommandFactory.h"
+#import "MEIAMProtocol.h"
 
-@interface MEIAM ()
+@interface MEIAM () <MEIAMProtocol>
+
+@property(nonatomic, weak) MEIAMViewController *meiamViewController;
 
 @end
 
@@ -15,6 +21,19 @@
     if (self = [super init]) {
     }
     return self;
+}
+
+- (void)showMessage:(NSString *)html {
+    MEIAMJSCommandFactory *commandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:self];
+    MEJSBridge *jsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:commandFactory];
+    MEIAMViewController *viewController = [[MEIAMViewController alloc] initWithJSBridge:jsBridge];
+    _meiamViewController = viewController;
+    [_meiamViewController loadMessage:html
+                    completionHandler:^{
+                        [self.topViewController presentViewController:viewController
+                                                             animated:YES
+                                                           completion:nil];
+                    }];
 }
 
 - (UIViewController *)rootViewController {

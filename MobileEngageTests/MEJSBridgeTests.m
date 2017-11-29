@@ -58,9 +58,9 @@ SPEC_BEGIN(MEJSBridgeTests)
     });
 
     describe(@"jsCommandNames", ^{
-        it(@"should contain IAMDidAppear, requestPushPermission, openExternalLink", ^{
+        it(@"should contain IAMDidAppear, requestPushPermission, openExternalLink, close", ^{
             NSArray<NSString *> *const commands = [[MEJSBridge new] jsCommandNames];
-            [[commands should] equal:@[@"requestPushPermission", @"openExternalLink"]];
+            [[commands should] equal:@[@"requestPushPermission", @"openExternalLink", @"close"]];
         });
     });
 
