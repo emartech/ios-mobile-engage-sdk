@@ -19,6 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self.view setBackgroundColor:UIColor.clearColor];
     [self.bridge setJsResultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
         [self respondToJS:result];
