@@ -2,6 +2,8 @@
 #import "MEIAMJSCommandFactory.h"
 #import "MEIAMRequestPushPermission.h"
 #import "MEIAMOpenExternalLink.h"
+#import "MEIAMProtocol.h"
+#import "MEIAMClose.h"
 
 MEIAMJSCommandFactory *_factory;
 
@@ -9,6 +11,15 @@ SPEC_BEGIN(MEIAMJSCommandFactoryTests)
 
     beforeEach(^{
         _factory = [MEIAMJSCommandFactory new];
+    });
+
+    describe(@"initWithMEIAM:", ^{
+        it(@"should initialize MEIAM property", ^{
+            id meiam = [KWMock mockForProtocol:@protocol(MEIAMProtocol)];
+            MEIAMJSCommandFactory *meiamjsCommandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:meiam];
+
+            [[@([meiamjsCommandFactory.meiam isEqual:meiam]) should] beYes];
+        });
     });
 
     describe(@"commandByName", ^{
@@ -20,6 +31,11 @@ SPEC_BEGIN(MEIAMJSCommandFactoryTests)
         it(@"should return MEIAMOpenExternalLink command when the given name is: openExternalLink", ^{
             MEIAMOpenExternalLink *command = [_factory commandByName:@"openExternalLink"];
             [[command should] beKindOfClass:[MEIAMOpenExternalLink class]];
+        });
+
+        it(@"should return MEIAMClose command when the given name is: close", ^{
+            MEIAMOpenExternalLink *command = [_factory commandByName:@"close"];
+            [[command should] beKindOfClass:[MEIAMClose class]];
         });
     });
 

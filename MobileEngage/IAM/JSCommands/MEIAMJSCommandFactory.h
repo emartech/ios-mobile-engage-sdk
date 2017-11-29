@@ -5,7 +5,13 @@
 #import <Foundation/Foundation.h>
 #import "MEIAMJSCommandProtocol.h"
 
+@protocol MEIAMProtocol;
+
 @interface MEIAMJSCommandFactory : NSObject
+
+@property(readonly, nonatomic, weak) id <MEIAMProtocol> meiam;
+
+- (instancetype)initWithMEIAM:(id <MEIAMProtocol>)meiam;
 
 - (id <MEIAMJSCommandProtocol>)commandByName:(NSString *)name;
 

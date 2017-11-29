@@ -5,8 +5,17 @@
 #import "MEIAMJSCommandFactory.h"
 #import "MEIAMRequestPushPermission.h"
 #import "MEIAMOpenExternalLink.h"
+#import "MEIAMClose.h"
+#import "MEIAMProtocol.h"
 
 @implementation MEIAMJSCommandFactory
+
+- (instancetype)initWithMEIAM:(id <MEIAMProtocol>)meiam {
+    if (self = [super init]) {
+        _meiam = meiam;
+    }
+    return self;
+}
 
 - (id <MEIAMJSCommandProtocol>)commandByName:(NSString *)name {
     id <MEIAMJSCommandProtocol> command;
@@ -14,6 +23,8 @@
         command = [MEIAMRequestPushPermission new];
     } else if ([name isEqualToString:MEIAMOpenExternalLink.commandName]) {
         command = [MEIAMOpenExternalLink new];
+    } else if ([name isEqualToString:MEIAMClose.commandName]) {
+        command = [[MEIAMClose alloc] initWithViewController:[self.meiam meiamViewController]];
     }
     return command;
 }
