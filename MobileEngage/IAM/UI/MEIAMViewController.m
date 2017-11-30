@@ -9,7 +9,7 @@
 
 @property(nonatomic, strong) MECompletionHandler completionHandler;
 @property(nonatomic, strong) WKWebView *webView;
-@property(nonatomic, weak) MEJSBridge *bridge;
+@property(nonatomic, strong) MEJSBridge *bridge;
 
 @end
 
@@ -21,8 +21,9 @@
     [super viewDidLoad];
     self.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self.view setBackgroundColor:UIColor.clearColor];
+    __weak typeof(self) weakSelf = self;
     [self.bridge setJsResultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
-        [self respondToJS:result];
+        [weakSelf respondToJS:result];
     }];
 }
 
@@ -39,12 +40,14 @@
 - (void)loadMessage:(NSString *)message
   completionHandler:(MECompletionHandler)completionHandler {
     _completionHandler = completionHandler;
-    if (!self.webView) {
-        _webView = [self createWebView];
-        [self addFullscreenView:self.webView];
-    }
-    [self.webView loadHTMLString:message
-                         baseURL:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.webView) {
+            _webView = [self createWebView];
+            [self addFullscreenView:self.webView];
+        }
+        [self.webView loadHTMLString:message
+                             baseURL:nil];
+    });
 }
 
 #pragma mark - WKNavigationDelegate
