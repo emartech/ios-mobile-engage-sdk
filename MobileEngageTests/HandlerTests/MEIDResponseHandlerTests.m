@@ -5,6 +5,7 @@
 #import "Kiwi.h"
 #import "MEIDResponseHandler.h"
 #import "AbstractResponseHandler+Private.h"
+#import "MobileEngageInternal.h"
 
 SPEC_BEGIN(MEIDResponseHandlerTests)
 

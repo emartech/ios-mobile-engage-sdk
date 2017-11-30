@@ -16,6 +16,14 @@
 #import "EMSResponseModel.h"
 #import "AbstractResponseHandler.h"
 #import "MEIdResponseHandler.h"
+#import "EMSTimestampProvider.h"
+#import "MEIAMViewController.h"
+#import "MEJSBridge.h"
+#import "MEIAMJSCommandFactory.h"
+#import "MEIAM.h"
+#import "MEIAM+Private.h"
+#import "MEIAMResponseHandler.h"
+
 
 @interface MobileEngageInternal ()
 
@@ -34,14 +42,15 @@
     _requestManager = requestManager;
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
-    _responseHandlers = @[[[MEIdResponseHandler alloc] initWithMobileEngageInternal:self]];
+    _responseHandlers = @[[[MEIdResponseHandler alloc] initWithMobileEngageInternal:self], [MEIAMResponseHandler new]];
+    _timestampProvider = [EMSTimestampProvider new];
 }
 
 - (void)setupWithConfig:(nonnull MEConfig *)config
           launchOptions:(NSDictionary *)launchOptions {
     __weak typeof(self) weakSelf = self;
     _successBlock = ^(NSString *requestId, EMSResponseModel *responseModel) {
-        [self handleResponse:responseModel];
+        [weakSelf handleResponse:responseModel];
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([weakSelf.statusDelegate respondsToSelector:@selector(mobileEngageLogReceivedWithEventId:log:)]) {
                 [weakSelf.statusDelegate mobileEngageLogReceivedWithEventId:requestId
@@ -152,7 +161,6 @@
     return requestModel.requestId;
 }
 
-
 - (NSString *)trackMessageOpenWithUserInfo:(NSDictionary *)userInfo {
     NSString *requestId;
     NSString *messageId = [userInfo messageId];
@@ -184,16 +192,31 @@
     return [requestModel requestId];
 }
 
-
 - (NSString *)trackCustomEvent:(nonnull NSString *)eventName
                eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes {
     NSParameterAssert(eventName);
 
-    EMSRequestModel *requestModel = [self requestModelWithUrl:[NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName]
-                                                       method:HTTPMethodPOST
-                                       additionalPayloadBlock:^(NSMutableDictionary *payload) {
-                                           payload[@"attributes"] = eventAttributes;
-                                       }];
+    EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+        [builder setMethod:HTTPMethodPOST];
+        [builder setUrl:[NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", _meId]];
+        NSMutableDictionary *payload = [NSMutableDictionary new];
+        payload[@"clicks"] = @[];
+        payload[@"viewed_messages"] = @[];
+
+        NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
+                @"type": @"custom",
+                @"id": eventName,
+                @"timestamp": [_timestampProvider currentTimeStamp]}];
+
+        if (eventAttributes) {
+            event[@"attributes"] = eventAttributes;
+        }
+
+        payload[@"events"] = @[event];
+
+        [builder setPayload:payload];
+    }];
+
     [self.requestManager submit:requestModel];
     return requestModel.requestId;
 }

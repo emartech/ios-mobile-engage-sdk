@@ -82,6 +82,9 @@ SPEC_BEGIN(IntegrationTests)
             FakeStatusDelegate *statusDelegate = createStatusDelegate();
             [MobileEngage setStatusDelegate:statusDelegate];
 
+            [MobileEngage appLogin];
+            [statusDelegate waitForNextSuccess];
+
             NSString *eventId = [MobileEngage trackCustomEvent:@"eventName"
                                                eventAttributes:nil];
 
@@ -99,6 +102,9 @@ SPEC_BEGIN(IntegrationTests)
                             launchOptions:nil];
             FakeStatusDelegate *statusDelegate = createStatusDelegate();
             [MobileEngage setStatusDelegate:statusDelegate];
+
+            [MobileEngage appLogin];
+            [statusDelegate waitForNextSuccess];
 
             NSString *eventId = [MobileEngage trackCustomEvent:@"eventName"
                                                eventAttributes:@{

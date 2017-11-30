@@ -10,6 +10,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MobileEngage (Test)
 
+@property (class, nonatomic, strong) MEIAM *iam;
+
 + (void)setupWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal
                                config:(MEConfig *)config
                         launchOptions:(nullable NSDictionary *)launchOptions;

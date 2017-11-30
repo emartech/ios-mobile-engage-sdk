@@ -6,17 +6,20 @@
 #import "MEConfig.h"
 #import "MobileEngageInternal.h"
 #import "MEInbox+Notification.h"
+#import "MEIAM.h"
 
 @implementation MobileEngage
 
 static MobileEngageInternal *_mobileEngageInternal;
 static MEInbox *_inbox;
+static MEIAM *_iam;
 
 + (void)setupWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal
                                config:(MEConfig *)config
                         launchOptions:(NSDictionary *)launchOptions {
     _mobileEngageInternal = mobileEngageInternal;
     _inbox = [[MEInbox alloc] initWithConfig:config];
+    _iam = [MEIAM new];
     [_mobileEngageInternal setupWithConfig:config
                              launchOptions:launchOptions];
 }
@@ -79,6 +82,14 @@ static MEInbox *_inbox;
 
 + (MEInbox *)inbox {
     return _inbox;
+}
+
++ (MEIAM *)iam {
+    return _iam;
+}
+
++ (void)setIam:(MEIAM *)iam {
+    _iam = iam;
 }
 
 @end

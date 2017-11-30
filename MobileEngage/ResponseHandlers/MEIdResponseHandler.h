@@ -4,8 +4,9 @@
 
 #import <Foundation/Foundation.h>
 #import "AbstractResponseHandler.h"
-#import "MobileEngageInternal.h"
 
+
+@class MobileEngageInternal;
 @interface MEIdResponseHandler : AbstractResponseHandler
 
 - (instancetype)initWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal;

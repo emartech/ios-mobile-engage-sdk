@@ -6,6 +6,7 @@
 #import "MEAppLoginParameters.h"
 #import "MENotification.h"
 #import "EMSRequestManager.h"
+#import "EMSTimestampProvider.h"
 
 @protocol MobileEngageStatusDelegate;
 @class MEConfig;
@@ -27,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSData *pushToken;
 @property(nonatomic, strong, nullable) MEAppLoginParameters *lastAppLoginParameters;
 @property(nonatomic, strong, nullable) NSString *meId;
+@property(nonatomic, strong, nullable) EMSTimestampProvider *timestampProvider;
 
 - (void)setupWithConfig:(MEConfig *)config
           launchOptions:(nullable NSDictionary *)launchOptions;

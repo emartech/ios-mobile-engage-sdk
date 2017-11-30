@@ -17,4 +17,6 @@
 
 - (UIViewController *)topViewControllerFrom:(UIViewController *)currentViewController;
 
+- (void)showMessage:(NSString *)html;
+
 @end

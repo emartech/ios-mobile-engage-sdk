@@ -11,4 +11,6 @@
 @property(nonatomic, assign) int errorCount;
 @property(nonatomic, assign) BOOL printErrors;
 
+- (void)waitForNextSuccess;
+
 @end

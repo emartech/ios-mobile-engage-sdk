@@ -3,6 +3,7 @@
 //
 
 #import "MEIdResponseHandler.h"
+#import "MobileEngageInternal.h"
 
 @implementation MEIdResponseHandler {
     MobileEngageInternal *_internal;
