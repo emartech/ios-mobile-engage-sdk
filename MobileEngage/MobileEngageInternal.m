@@ -39,6 +39,7 @@
                          config:(nonnull MEConfig *)config
                   launchOptions:(NSDictionary *)launchOptions {
     _lastAppLoginPayload = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] dictionaryForKey:kLastAppLoginPayload];
+    _meId = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID];
     _requestManager = requestManager;
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
@@ -158,6 +159,7 @@
 
     [self.requestManager submit:requestModel];
     self.lastAppLoginParameters = nil;
+    self.meId = nil;
     return requestModel.requestId;
 }
 
@@ -224,9 +226,17 @@
 - (void)setLastAppLoginPayload:(NSDictionary *)lastAppLoginPayload {
     _lastAppLoginPayload = lastAppLoginPayload;
     NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
-    [userDefaults setObject:lastAppLoginPayload forKey:kLastAppLoginPayload];
+    [userDefaults setObject:lastAppLoginPayload
+                     forKey:kLastAppLoginPayload];
     [userDefaults synchronize];
 }
 
+- (void)setMeId:(NSString *)meId {
+    _meId = meId;
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+    [userDefaults setObject:meId
+                     forKey:kMEID];
+    [userDefaults synchronize];
+}
 
 @end

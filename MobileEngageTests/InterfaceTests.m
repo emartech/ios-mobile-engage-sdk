@@ -33,6 +33,7 @@ SPEC_BEGIN(PublicInterfaceTest)
         [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
                                                    error:nil];
         NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+        [userDefaults setObject:nil forKey:kMEID];
         [userDefaults setObject:nil forKey:kLastAppLoginPayload];
         [userDefaults synchronize];
     });
@@ -79,7 +80,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             requestManagerMock();
 
             BOOL registered = NO;
-            for(AbstractResponseHandler *responseHandler in _mobileEngage.responseHandlers) {
+            for (AbstractResponseHandler *responseHandler in _mobileEngage.responseHandlers) {
                 if ([responseHandler isKindOfClass:[MEIdResponseHandler class]]) {
                     registered = YES;
                 }
@@ -92,7 +93,7 @@ SPEC_BEGIN(PublicInterfaceTest)
             requestManagerMock();
 
             BOOL registered = NO;
-            for(AbstractResponseHandler *responseHandler in _mobileEngage.responseHandlers) {
+            for (AbstractResponseHandler *responseHandler in _mobileEngage.responseHandlers) {
                 if ([responseHandler isKindOfClass:[MEIAMResponseHandler class]]) {
                     registered = YES;
                 }
@@ -846,6 +847,64 @@ SPEC_BEGIN(PublicInterfaceTest)
             EMSRequestModel *actualModel = spy.argument;
             [[model should] beSimilarWithRequest:actualModel];
         });
+    });
+
+    describe(@"meID", ^{
+
+        it(@"should store the meID in userDefaults when the setter invoked", ^{
+            NSString *meID = @"meIDValue";
+
+            [_mobileEngage setMeId:meID];
+
+            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+            NSString *returnedValue = [userDefaults stringForKey:kMEID];
+
+            [[returnedValue should] equal:meID];
+        });
+
+        it(@"should load the stored value when setup called on MobileEngageInternal", ^{
+            NSString *meID = @"StoredValueOfMobileEngageId";
+
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+
+            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+            [userDefaults setObject:meID
+                             forKey:kMEID];
+            [userDefaults synchronize];
+
+            [_mobileEngage setupWithConfig:config
+                             launchOptions:nil];
+
+            [[_mobileEngage.meId should] equal:meID];
+        });
+
+        it(@"should be cleared from userdefaults on logout", ^{
+            NSString *meID = @"NotNil";
+
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+            [_mobileEngage setupWithConfig:config
+                             launchOptions:nil];
+
+            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+            [userDefaults setObject:meID
+                             forKey:kMEID];
+            [userDefaults synchronize];
+
+            [_mobileEngage appLogout];
+
+            [[_mobileEngage.meId should] beNil];
+        });
+
     });
 
 SPEC_END

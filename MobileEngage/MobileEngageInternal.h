@@ -13,6 +13,7 @@
 
 #define kSuiteName @"com.emarsys.mobileengage"
 #define kLastAppLoginPayload @"kLastAppLoginPayload"
+#define kMEID @"kMEID"
 
 typedef void (^MESuccessBlock)(NSString *requestId, EMSResponseModel *);
 typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
