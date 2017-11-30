@@ -52,7 +52,9 @@
 - (void)    webView:(WKWebView *)webView
 didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     if (self.completionHandler) {
-        self.completionHandler();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.completionHandler();
+        });
     }
 }
 

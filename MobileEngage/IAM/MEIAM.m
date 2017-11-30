@@ -24,18 +24,16 @@
 }
 
 - (void)showMessage:(NSString *)html {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        MEIAMJSCommandFactory *commandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:self];
-        MEJSBridge *jsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:commandFactory];
-        MEIAMViewController *viewController = [[MEIAMViewController alloc] initWithJSBridge:jsBridge];
-        _meiamViewController = viewController;
-        [_meiamViewController loadMessage:html
-                        completionHandler:^{
-                            [self.topViewController presentViewController:viewController
-                                                                 animated:YES
-                                                               completion:nil];
-                        }];
-    });
+    MEIAMJSCommandFactory *commandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:self];
+    MEJSBridge *jsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:commandFactory];
+    MEIAMViewController *viewController = [[MEIAMViewController alloc] initWithJSBridge:jsBridge];
+    _meiamViewController = viewController;
+    [_meiamViewController loadMessage:html
+                    completionHandler:^{
+                        [self.topViewController presentViewController:viewController
+                                                             animated:YES
+                                                           completion:nil];
+                    }];
 }
 
 - (UIViewController *)rootViewController {
