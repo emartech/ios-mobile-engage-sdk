@@ -35,12 +35,9 @@
     ],
             @"badge_count": @3
     };
-    EMSResponseModel *response = [EMSResponseModel new];
-    response.statusCode = 200;
-    response.headers = @{};
-    response.body = [NSJSONSerialization dataWithJSONObject:jsonResponse
-                                                    options:0
-                                                      error:nil];
+    EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:[NSJSONSerialization dataWithJSONObject:jsonResponse
+                                                                                                                               options:0
+                                                                                                                                 error:nil]];
     NSError *error = [NSError errorWithCode:500 localizedDescription:@"FakeError"];
 
 
