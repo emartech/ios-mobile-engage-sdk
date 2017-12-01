@@ -1,8 +1,8 @@
 #import "Kiwi.h"
 #import <UserNotifications/UserNotifications.h>
 #import "MEIAMRequestPushPermission.h"
+#import "MEOsVersionUtils.h"
 
-#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
 SPEC_BEGIN(MEIAMRequestPushPermissionTests)
 

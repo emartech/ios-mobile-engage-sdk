@@ -4,8 +4,8 @@
 
 #import "MEIAMOpenExternalLink.h"
 #import <UIKit/UIKit.h>
+#import "MEOsVersionUtils.h"
 
-#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define kExternalLink @"link"
 
 @implementation MEIAMOpenExternalLink

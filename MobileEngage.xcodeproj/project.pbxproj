@@ -99,6 +99,7 @@
 		37460EC794D9BE7A0577B4BB /* NSData+MobileEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 374606C19F7396FF90BF0546 /* NSData+MobileEngine.h */; };
 		37460F3B516AF69532F04777 /* MEIAM.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F8EE0B6EC22B4D578998 /* MEIAM.m */; };
 		37460F8AB7A75315B302E899 /* NSData+MobileEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460A987A7E73365F25A559 /* NSData+MobileEngine.m */; };
+		37460FAEE554D06BC0F7EDE7 /* MEOsVersionUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 37460CE4CE4D9C8B3E807863 /* MEOsVersionUtils.h */; };
 		37460FD58D2F210F1B6E3A2E /* MEIAMJSCommandProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FD5134834458FE22A792 /* MEIAMJSCommandProtocol.h */; };
 		3D2E4B52761B24CDC2658F5F /* libPods-MobileEngageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6262C89B7603BAEEEC82477 /* libPods-MobileEngageTests.a */; };
 		69AF135B0B285E983E9BEF76 /* libPods-MobileEngage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBEE9AE6141869888698713 /* libPods-MobileEngage.a */; };
@@ -248,6 +249,7 @@
 		37460A987A7E73365F25A559 /* NSData+MobileEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MobileEngine.m"; sourceTree = "<group>"; };
 		37460B2E4883A424C828A86E /* AbstractResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractResponseHandler.h; sourceTree = "<group>"; };
 		37460BC6EE6EC7C7AC58D0ED /* AbstractResponseHandler+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AbstractResponseHandler+Private.h"; sourceTree = "<group>"; };
+		37460CE4CE4D9C8B3E807863 /* MEOsVersionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEOsVersionUtils.h; sourceTree = "<group>"; };
 		37460D3696B359FBDF2A2A85 /* MEDefaultHeaders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEDefaultHeaders.m; sourceTree = "<group>"; };
 		37460D9203AFE27B53C80335 /* InboxParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxParserTests.m; sourceTree = "<group>"; };
 		37460DB8C2DE5DC85E245CAF /* MEInboxParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxParser.m; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				37460F4BC09D2FDE3CBE1828 /* Flipper */,
 				32C6F3E19D4D7CE95387F0CF /* IAM */,
 				37460299997ACB950FF86D76 /* ResponseHandlers */,
+				37460CE4CE4D9C8B3E807863 /* MEOsVersionUtils.h */,
 			);
 			path = MobileEngage;
 			sourceTree = "<group>";
@@ -602,6 +605,7 @@
 				374600B7A98BD1C6688C90C4 /* MEIAMResponseHandler.h in Headers */,
 				32C6F870C24C426EDEB306AA /* MEIAMProtocol.h in Headers */,
 				32C6FFA3B63FF31166A5E73F /* MEIAMClose.h in Headers */,
+				37460FAEE554D06BC0F7EDE7 /* MEOsVersionUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

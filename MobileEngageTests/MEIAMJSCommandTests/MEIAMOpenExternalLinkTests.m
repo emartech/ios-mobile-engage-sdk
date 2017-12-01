@@ -1,7 +1,6 @@
 #import "Kiwi.h"
 #import "MEIAMOpenExternalLink.h"
-
-#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#import "MEOsVersionUtils.h"
 
 SPEC_BEGIN(MEIAMOpenExternalLinkTests)
 
