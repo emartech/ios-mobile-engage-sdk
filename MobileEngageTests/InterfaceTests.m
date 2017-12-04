@@ -549,6 +549,15 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[_mobileEngage.lastAppLoginParameters should] beNil];
         });
 
+        it(@"should clear lastAppLoginPayload", ^{
+            id requestManager = requestManagerMock();
+            [[requestManager should] receive:@selector(submit:)];
+
+            [_mobileEngage setLastAppLoginPayload:@{@"t" : @"v"}];
+            [_mobileEngage appLogout];
+            [[_mobileEngage.lastAppLoginPayload should] beNil];
+        });
+
     });
 
     describe(@"trackMessageOpenWithUserInfo:", ^{

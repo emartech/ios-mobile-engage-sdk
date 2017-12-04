@@ -28,7 +28,6 @@
 @interface MobileEngageInternal ()
 
 @property(nonatomic, strong) MEConfig *config;
-@property(nonatomic, strong) NSDictionary *lastAppLoginPayload;
 @property(nonatomic, strong) NSArray<AbstractResponseHandler *> *responseHandlers;
 
 @end
@@ -159,6 +158,7 @@
 
     [self.requestManager submit:requestModel];
     self.lastAppLoginParameters = nil;
+    self.lastAppLoginPayload = nil;
     self.meId = nil;
     return requestModel.requestId;
 }
