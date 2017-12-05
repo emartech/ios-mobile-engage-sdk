@@ -2,10 +2,10 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "Experimental.h"
+#import "MEExperimental.h"
 
 
-@implementation Experimental
+@implementation MEExperimental
 static NSMutableSet * _enabledFeatures;
 
 + (BOOL)isFeatureEnabled:(FlipperFeature)feature {

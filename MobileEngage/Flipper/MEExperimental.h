@@ -3,9 +3,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FlipperFeatures.h"
+#import "MEFlipperFeatures.h"
 
-@interface Experimental : NSObject
+@interface MEExperimental : NSObject
 
 + (BOOL)isFeatureEnabled:(FlipperFeature)feature;
 + (void)enableFeature:(FlipperFeature)feature;

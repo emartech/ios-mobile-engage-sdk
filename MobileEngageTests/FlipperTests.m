@@ -1,43 +1,43 @@
 #import "Kiwi.h"
-#import "Experimental.h"
+#import "MEExperimental.h"
 
-@interface Experimental(Tests)
+@interface MEExperimental(Tests)
 + (void)reset;
 @end
 
 SPEC_BEGIN(FlipperTest)
 
 
-    describe(@"Experimental.featureEnabled", ^{
+    describe(@"MEExperimental.featureEnabled", ^{
 
         beforeEach(^{
-            [Experimental reset];
+            [MEExperimental reset];
         });
 
         it(@"should default to being turned off", ^{
-            [[theValue([Experimental isFeatureEnabled:INAPP_MESSAGING]) should] beFalse];
+            [[theValue([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) should] beFalse];
         });
 
         it(@"should return true if the flipper is turned on", ^{
-            [Experimental enableFeature:INAPP_MESSAGING];
-            [[theValue([Experimental isFeatureEnabled:INAPP_MESSAGING]) should] beTrue];
+            [MEExperimental enableFeature:INAPP_MESSAGING];
+            [[theValue([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) should] beTrue];
         });
 
         it(@"should return true for both features if we enabled both", ^{
-            [Experimental enableFeature:INAPP_MESSAGING];
+            [MEExperimental enableFeature:INAPP_MESSAGING];
             NSString *feature = @"secondFeature";
-            [Experimental enableFeature:feature];
-            [[theValue([Experimental isFeatureEnabled:INAPP_MESSAGING]) should] beTrue];
-            [[theValue([Experimental isFeatureEnabled:feature]) should] beTrue];
+            [MEExperimental enableFeature:feature];
+            [[theValue([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) should] beTrue];
+            [[theValue([MEExperimental isFeatureEnabled:feature]) should] beTrue];
         });
 
     });
 
-    describe(@"Experimental.reset", ^{
+    describe(@"MEExperimental.reset", ^{
         it(@"should reset the state", ^{
-            [Experimental enableFeature:INAPP_MESSAGING];
-            [Experimental reset];
-            [[theValue([Experimental isFeatureEnabled:INAPP_MESSAGING]) should] beFalse];
+            [MEExperimental enableFeature:INAPP_MESSAGING];
+            [MEExperimental reset];
+            [[theValue([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) should] beFalse];
         }) ;
     });
 
