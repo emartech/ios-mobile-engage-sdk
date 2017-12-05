@@ -16,6 +16,7 @@
 #import "MEIdResponseHandler.h"
 #import "MEIAMResponseHandler.h"
 #import "MobileEngageInternal+Test.h"
+#import "MEExperimental.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
@@ -917,17 +918,22 @@ SPEC_BEGIN(PublicInterfaceTest)
     });
 
     describe(@"experimental", ^{
-        it(@"should setup an experimental object", ^{
+        it(@"should enable experimental features based on the features given in the config", ^{
+            NSArray<MEFlipperFeature> *features = @[INAPP_MESSAGING];
             NSString *applicationCode = kAppId;
             NSString *applicationPassword = @"appSecret";
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationCode:applicationCode
                                        applicationPassword:applicationPassword];
+                [builder setExperimentalFeatures:features];
             }];
             [_mobileEngage setupWithConfig:config
                              launchOptions:nil];
 
-            [[_mobileEngage.experimental shouldNot] beNil];
+            for (MEFlipperFeature feature in features) {
+                [[theValue([MEExperimental isFeatureEnabled:feature]) should] beYes];
+            }
+
         });
     });
 
