@@ -1,6 +1,6 @@
 .DS_Store
 .idea/
-MobileEngage.xcodeproj/xcuserdata/
+/MobileEngage.xcodeproj/xcuserdata/
 /Pods
 /Podfile.lock
 /MobileEngage.xcworkspace/
