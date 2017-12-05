@@ -4,6 +4,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define FlipperFeature const NSString *
+#define MEFlipperFeature const NSString *
 
-static const FlipperFeature INAPP_MESSAGING = @"INAPP_MESSAGING";
+static const MEFlipperFeature INAPP_MESSAGING = @"INAPP_MESSAGING";

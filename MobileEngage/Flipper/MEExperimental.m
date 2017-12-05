@@ -8,11 +8,11 @@
 @implementation MEExperimental
 static NSMutableSet * _enabledFeatures;
 
-+ (BOOL)isFeatureEnabled:(FlipperFeature)feature {
++ (BOOL)isFeatureEnabled:(MEFlipperFeature)feature {
     return [_enabledFeatures containsObject:feature];
 }
 
-+ (void)enableFeature:(FlipperFeature)feature {
++ (void)enableFeature:(MEFlipperFeature)feature {
     if(_enabledFeatures == nil) {
         _enabledFeatures = [NSMutableSet new];
     }

@@ -7,7 +7,7 @@
 
 @interface MEExperimental : NSObject
 
-+ (BOOL)isFeatureEnabled:(FlipperFeature)feature;
-+ (void)enableFeature:(FlipperFeature)feature;
++ (BOOL)isFeatureEnabled:(MEFlipperFeature)feature;
++ (void)enableFeature:(MEFlipperFeature)feature;
 
 @end
