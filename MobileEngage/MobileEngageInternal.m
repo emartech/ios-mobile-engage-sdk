@@ -37,6 +37,7 @@
 - (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
                          config:(nonnull MEConfig *)config
                   launchOptions:(NSDictionary *)launchOptions {
+    _experimental = [MEExperimental new];
     _lastAppLoginPayload = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] dictionaryForKey:kLastAppLoginPayload];
     _meId = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID];
     _requestManager = requestManager;

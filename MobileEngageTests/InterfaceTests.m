@@ -916,4 +916,19 @@ SPEC_BEGIN(PublicInterfaceTest)
 
     });
 
+    describe(@"experimental", ^{
+        it(@"should setup an experimental object", ^{
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+            [_mobileEngage setupWithConfig:config
+                             launchOptions:nil];
+
+            [[_mobileEngage.experimental shouldNot] beNil];
+        });
+    });
+
 SPEC_END
