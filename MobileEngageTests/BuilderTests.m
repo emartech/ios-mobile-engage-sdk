@@ -4,7 +4,20 @@
 
 SPEC_BEGIN(BuilderTest)
 
-    describe(@"Builder", ^{
+    describe(@"setExperimentalFeatures", ^{
+        it(@"should set the given accepted experimental features in the config", ^{
+            NSArray *features = @[INAPP_MESSAGING];
+
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:@"code" applicationPassword:@"pass"];
+                [builder setExperimentalFeatures:features];
+            }];
+
+            [[config.experimentalFeatures should] equal:features];
+        });
+    });
+
+    describe(@"setCredentialsWithApplicationCode", ^{
 
         it(@"should create a config with applicationCode", ^{
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {

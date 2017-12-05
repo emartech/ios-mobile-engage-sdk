@@ -13,4 +13,9 @@
     return self;
 }
 
+- (MEConfigBuilder *)setExperimentalFeatures:(NSArray<MEFlipperFeature> *)features {
+    _experimentalFeatures = features;
+    return self;
+}
+
 @end

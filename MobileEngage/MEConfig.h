@@ -3,6 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MEFlipperFeatures.h"
 
 @class MEConfigBuilder;
 
@@ -11,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, readonly) NSString *applicationCode;
 @property(nonatomic, readonly) NSString *applicationPassword;
+@property(nonatomic, readonly) NSArray<MEFlipperFeature> *experimentalFeatures;
 
 typedef void(^MEConfigBuilderBlock)(MEConfigBuilder *builder);
 

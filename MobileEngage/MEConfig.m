@@ -5,7 +5,6 @@
 #import "MEConfig.h"
 #import "MEConfigBuilder.h"
 
-
 @implementation MEConfig
 
 + (nonnull MEConfig *)makeWithBuilder:(MEConfigBuilderBlock)builderBlock {
@@ -23,6 +22,7 @@
     if (self = [super init]) {
         _applicationCode = builder.applicationCode;
         _applicationPassword = builder.applicationPassword;
+        _experimentalFeatures = builder.experimentalFeatures;
     }
 
     return self;
