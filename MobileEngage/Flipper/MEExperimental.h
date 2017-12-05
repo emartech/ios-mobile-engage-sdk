@@ -9,5 +9,6 @@
 
 + (BOOL)isFeatureEnabled:(MEFlipperFeature)feature;
 + (void)enableFeature:(MEFlipperFeature)feature;
++ (void)enableFeatures:(NSArray<MEFlipperFeature> *)features;
 
 @end

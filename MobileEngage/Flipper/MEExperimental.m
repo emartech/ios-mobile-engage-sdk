@@ -19,6 +19,12 @@ static NSMutableSet * _enabledFeatures;
     [_enabledFeatures addObject:feature];
 }
 
++ (void)enableFeatures:(NSArray<MEFlipperFeature> *)features {
+    for (MEFlipperFeature feature in features) {
+        [MEExperimental enableFeature:feature];
+    }
+}
+
 + (void)reset {
     _enabledFeatures = nil;
 }

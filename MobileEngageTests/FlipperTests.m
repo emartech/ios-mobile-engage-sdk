@@ -33,6 +33,16 @@ SPEC_BEGIN(FlipperTest)
 
     });
 
+    describe(@"enableFeatures", ^{
+       it(@"should enable all the given features", ^{
+           NSArray<MEFlipperFeature> *features = @[INAPP_MESSAGING];
+           [MEExperimental enableFeatures:features];
+           for (MEFlipperFeature feature in features) {
+                [[theValue([MEExperimental isFeatureEnabled:feature]) should] beYes];
+           }
+       });
+    });
+
     describe(@"MEExperimental.reset", ^{
         it(@"should reset the state", ^{
             [MEExperimental enableFeature:INAPP_MESSAGING];
