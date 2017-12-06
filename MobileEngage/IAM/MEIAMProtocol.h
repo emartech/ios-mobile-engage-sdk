@@ -5,9 +5,11 @@
 #import <Foundation/Foundation.h>
 
 @class MEIAMViewController;
+@protocol MEInAppMessageHandler;
 
 @protocol MEIAMProtocol <NSObject>
 
 - (MEIAMViewController *)meiamViewController;
+- (id <MEInAppMessageHandler>)inAppMessageHandler;
 
 @end

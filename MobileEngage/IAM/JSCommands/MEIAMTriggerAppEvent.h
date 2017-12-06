@@ -4,7 +4,10 @@
 #import <Foundation/Foundation.h>
 #import "MEIAMJSCommandProtocol.h"
 
+@protocol MEInAppMessageHandler;
+
 @interface MEIAMTriggerAppEvent : NSObject <MEIAMJSCommandProtocol>
 
+- (instancetype)initWithInAppMessageHandler:(id<MEInAppMessageHandler>)inAppMessageHandler;
 
 @end

@@ -7,8 +7,23 @@
 //
 
 #import "MEIAMTriggerAppEvent.h"
+#import "MEInAppMessageHandler.h"
+
+@interface MEIAMTriggerAppEvent()
+
+@property(nonatomic, weak, nullable) id <MEInAppMessageHandler> inAppMessageHandler;
+
+@end
 
 @implementation MEIAMTriggerAppEvent
+
+- (instancetype)initWithInAppMessageHandler:(id <MEInAppMessageHandler>)inAppMessageHandler {
+    if (self = [super init]) {
+        _inAppMessageHandler = inAppMessageHandler;
+    }
+    return self;
+}
+
 
 + (NSString *)commandName {
     return @"triggerAppEvent";
@@ -18,6 +33,9 @@
           resultBlock:(MEIAMJSResultBlock)resultBlock {
     NSString *name = message[@"name"];
     NSDictionary *payload = message[@"payload"];
+    [self.inAppMessageHandler handleApplicationEvent:name
+                                             payload:payload];
+    resultBlock(@{@"success": @YES});
 }
 
 @end
