@@ -7,6 +7,7 @@
 #import "MEIAMOpenExternalLink.h"
 #import "MEIAMClose.h"
 #import "MEIAMProtocol.h"
+#import "MEIAMTriggerAppEvent.h"
 
 @implementation MEIAMJSCommandFactory
 
@@ -25,6 +26,8 @@
         command = [MEIAMOpenExternalLink new];
     } else if ([name isEqualToString:MEIAMClose.commandName]) {
         command = [[MEIAMClose alloc] initWithViewController:[self.meiam meiamViewController]];
+    } else if ([name isEqualToString:MEIAMTriggerAppEvent.commandName]) {
+        command = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:[self.meiam inAppMessageHandler]];
     }
     return command;
 }

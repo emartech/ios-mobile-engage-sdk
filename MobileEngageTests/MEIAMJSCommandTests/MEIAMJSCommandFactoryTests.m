@@ -4,6 +4,7 @@
 #import "MEIAMOpenExternalLink.h"
 #import "MEIAMProtocol.h"
 #import "MEIAMClose.h"
+#import "MEIAMTriggerAppEvent.h"
 
 MEIAMJSCommandFactory *_factory;
 
@@ -34,8 +35,13 @@ SPEC_BEGIN(MEIAMJSCommandFactoryTests)
         });
 
         it(@"should return MEIAMClose command when the given name is: close", ^{
-            MEIAMOpenExternalLink *command = [_factory commandByName:@"close"];
+            MEIAMClose *command = [_factory commandByName:@"close"];
             [[command should] beKindOfClass:[MEIAMClose class]];
+        });
+
+        it(@"should return MEIAMTriggerAppEvent command when the given name is: triggerAppEvent", ^{
+            MEIAMTriggerAppEvent *command = [_factory commandByName:@"triggerAppEvent"];
+            [[command should] beKindOfClass:[MEIAMTriggerAppEvent class]];
         });
     });
 
