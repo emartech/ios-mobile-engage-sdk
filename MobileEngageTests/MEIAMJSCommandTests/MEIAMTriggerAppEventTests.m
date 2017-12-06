@@ -1,18 +1,7 @@
 #import "Kiwi.h"
 #import "MEIAMTriggerAppEvent.h"
 #import "MEInAppMessageHandler.h"
-
-@interface InAppHandler : NSObject <MEInAppMessageHandler>
-
-@end
-
-@implementation InAppHandler
-
-- (void)handleApplicationEvent:(NSString *)eventName
-                       payload:(nullable NSDictionary *)payload {
-}
-
-@end
+#import "FakeInAppHandler.h"
 
 SPEC_BEGIN(MEIAMTriggerAppEventTests)
 
@@ -30,7 +19,7 @@ SPEC_BEGIN(MEIAMTriggerAppEventTests)
     describe(@"handleMessage:resultBlock:", ^{
 
         it(@"should pass the eventName and payload to the given inAppMessageHandler's handleApplicationEvent:payload: method", ^{
-            InAppHandler *inAppHandler = [InAppHandler mock];
+            FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
             NSString *eventName = @"nameOfTheEvent";
             NSDictionary <NSString *, NSObject *> *payload = @{
                     @"payloadKey1": @{

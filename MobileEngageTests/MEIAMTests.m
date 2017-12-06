@@ -1,6 +1,7 @@
 #import "Kiwi.h"
 #import "MEIAM.h"
 #import "MEIAM+Private.h"
+#import "FakeInAppHandler.h"
 
 MEIAM *iam;
 
@@ -90,6 +91,36 @@ SPEC_BEGIN(MEIAMTests)
             UIViewController *topViewController = [iam topViewController];
 
             [[topViewController should] equal:selectedViewController];
+        });
+    });
+
+    describe(@"inAppMessageHandler", ^{
+        it(@"should pass the eventName and payload to the given inAppMessageHandler's handleApplicationEvent:payload: method", ^{
+            NSString *expectedName = @"nameOfTheEvent";
+            NSDictionary <NSString *, NSObject *> *expectedPayload = @{
+                    @"payloadKey1": @{
+                            @"payloadKey2": @"payloadValue"
+                    }
+            };
+
+            FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
+            [iam setInAppMessageHandler:inAppHandler];
+            NSString *message = @"<!DOCTYPE html>\n"
+                    "<html lang=\"en\">\n"
+                    "  <head>\n"
+                    "    <script>\n"
+                    "      window.onload = function() {\n"
+                    "        window.webkit.messageHandlers.triggerAppEvent.postMessage({name: 'nameOfTheEvent', payload:{payloadKey1:{payloadKey2: 'payloadValue'}}});\n"
+                    "      };\n"
+                    "    </script>\n"
+                    "  </head>\n"
+                    "  <body style=\"background: transparent;\">\n"
+                    "  </body>\n"
+                    "</html>";
+            [[inAppHandler shouldEventually] receive:@selector(handleApplicationEvent:payload:)
+                                       withArguments:expectedName, expectedPayload];
+
+            [iam showMessage:message];
         });
     });
 
