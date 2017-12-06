@@ -12,11 +12,12 @@ Pod::Spec.new do |spec|
 		'MobileEngage/MobileEngage.h',
 		'MobileEngage/MobileEngageStatusDelegate.h',
 		'MobileEngage/MEConfigBuilder.h',
-		'MobileEngage/MEConfig.h',
-        'MobileEngage/Inbox/MEInbox.h',
-        'MobileEngage/Inbox/MENotification.h',
-        'MobileEngage/Inbox/MENotificationInboxStatus.h'
-	]
+	        'MobileEngage/MEConfig.h',
+	       	'MobileEngage/Flipper/MEFlipperFeatures.h',
+	        'MobileEngage/Inbox/MEInbox.h',
+	        'MobileEngage/Inbox/MENotification.h',
+	        'MobileEngage/Inbox/MENotificationInboxStatus.h'
+   	]
 	spec.dependency 'CoreSDK'
 	spec.libraries = 'z', 'c++'
 end
