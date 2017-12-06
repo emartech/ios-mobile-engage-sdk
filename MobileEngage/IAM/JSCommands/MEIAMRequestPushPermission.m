@@ -22,9 +22,12 @@
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge)
                                                                                  categories:nil];
         [application registerUserNotificationSettings:settings];
+        resultBlock(@{@"success": @([application isRegisteredForRemoteNotifications])});
     } else {
         [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge
-                                                                            completionHandler:nil];
+                                                                            completionHandler:^(BOOL granted, NSError *error) {
+                                                                                resultBlock(@{@"success": @(granted)});
+                                                                            }];
     }
 }
 
