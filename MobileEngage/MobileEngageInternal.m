@@ -30,6 +30,9 @@
 @property(nonatomic, strong) MEConfig *config;
 @property(nonatomic, strong) NSArray<AbstractResponseHandler *> *responseHandlers;
 
+- (NSString *)trackCustomEventV2:(nonnull NSString *)eventName
+                 eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes;
+
 @end
 
 @implementation MobileEngageInternal
@@ -44,7 +47,11 @@
     _requestManager = requestManager;
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
-    _responseHandlers = @[[[MEIdResponseHandler alloc] initWithMobileEngageInternal:self], [MEIAMResponseHandler new]];
+    if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
+        _responseHandlers = @[[[MEIdResponseHandler alloc] initWithMobileEngageInternal:self], [MEIAMResponseHandler new]];
+    } else {
+        _responseHandlers = @[];
+    }
     _timestampProvider = [EMSTimestampProvider new];
 }
 
@@ -200,6 +207,11 @@
                eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes {
     NSParameterAssert(eventName);
 
+    if (![MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
+        return [self trackCustomEventV2:eventName
+                        eventAttributes:eventAttributes];
+    }
+
     EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setMethod:HTTPMethodPOST];
         [builder setUrl:[NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", _meId]];
@@ -221,6 +233,19 @@
         [builder setPayload:payload];
     }];
 
+    [self.requestManager submit:requestModel];
+    return requestModel.requestId;
+}
+
+- (NSString *)trackCustomEventV2:(nonnull NSString *)eventName
+                 eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes {
+    NSParameterAssert(eventName);
+
+    EMSRequestModel *requestModel = [self requestModelWithUrl:[NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName]
+                                                       method:HTTPMethodPOST
+                                       additionalPayloadBlock:^(NSMutableDictionary *payload) {
+                                           payload[@"attributes"] = eventAttributes;
+                                       }];
     [self.requestManager submit:requestModel];
     return requestModel.requestId;
 }

@@ -3,6 +3,7 @@
 #import "MobileEngage.h"
 #import "MEConfigBuilder.h"
 #import "MEConfig.h"
+#import "MEExperimental.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
@@ -15,6 +16,8 @@ SPEC_BEGIN(IntegrationTests)
     };
 
     beforeEach(^{
+        [MEExperimental stub:@selector(isFeatureEnabled:)
+                   andReturn:theValue(YES)];
         [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
                                                    error:nil];
     });
@@ -105,6 +108,52 @@ SPEC_BEGIN(IntegrationTests)
 
             [MobileEngage appLogin];
             [statusDelegate waitForNextSuccess];
+
+            NSString *eventId = [MobileEngage trackCustomEvent:@"eventName"
+                                               eventAttributes:@{
+                                                       @"animal": @"cat",
+                                                       @"drink": @"palinka",
+                                                       @"food": @"pizza"
+                                               }];
+
+            [[eventId shouldNot] beNil];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
+        });
+
+        it(@"should return with eventId, and finish with success for trackCustomEvent without attributes", ^{
+            [MEExperimental stub:@selector(isFeatureEnabled:)
+                       andReturn:theValue(NO)];
+
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:@"14C19-A121F"
+                                       applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
+            }];
+            [MobileEngage setupWithConfig:config
+                            launchOptions:nil];
+            FakeStatusDelegate *statusDelegate = createStatusDelegate();
+            [MobileEngage setStatusDelegate:statusDelegate];
+
+            NSString *eventId = [MobileEngage trackCustomEvent:@"eventName"
+                                               eventAttributes:nil];
+
+            [[eventId shouldNot] beNil];
+            [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];
+            [[expectFutureValue(@(statusDelegate.successCount)) shouldEventually] equal:@1];
+        });
+
+        it(@"should return with eventId, and finish with success for trackCustomEvent with attributes", ^{
+            [MEExperimental stub:@selector(isFeatureEnabled:)
+                       andReturn:theValue(NO)];
+
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:@"14C19-A121F"
+                                       applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
+            }];
+            [MobileEngage setupWithConfig:config
+                            launchOptions:nil];
+            FakeStatusDelegate *statusDelegate = createStatusDelegate();
+            [MobileEngage setStatusDelegate:statusDelegate];
 
             NSString *eventId = [MobileEngage trackCustomEvent:@"eventName"
                                                eventAttributes:@{
