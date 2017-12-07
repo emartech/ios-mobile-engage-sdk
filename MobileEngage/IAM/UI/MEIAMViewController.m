@@ -108,8 +108,10 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
                                                        options:0
                                                          error:&error];
     NSString *js = [NSString stringWithFormat:@"callback(%@);", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
-    [self.webView evaluateJavaScript:js
-                   completionHandler:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.webView evaluateJavaScript:js
+                       completionHandler:nil];
+    });
 }
 
 @end
