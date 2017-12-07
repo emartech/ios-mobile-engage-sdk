@@ -218,10 +218,11 @@
         NSMutableDictionary *payload = [NSMutableDictionary new];
         payload[@"clicks"] = @[];
         payload[@"viewed_messages"] = @[];
+        payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
 
         NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
                 @"type": @"custom",
-                @"id": eventName,
+                @"name": eventName,
                 @"timestamp": [_timestampProvider currentTimeStamp]}];
 
         if (eventAttributes) {

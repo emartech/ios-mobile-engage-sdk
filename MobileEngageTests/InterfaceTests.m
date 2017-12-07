@@ -796,11 +796,12 @@ SPEC_BEGIN(PublicInterfaceTest)
 
             NSDictionary *payload = @{
                     @"clicks": @[],
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
                     @"viewed_messages": @[],
                     @"events": @[
                             @{
                                     @"type": @"custom",
-                                    @"id": eventName,
+                                    @"name": eventName,
                                     @"attributes": eventAttributes,
                                     @"timestamp": timeStamp
                             }
@@ -834,12 +835,13 @@ SPEC_BEGIN(PublicInterfaceTest)
             NSString *eventName = @"testEventName";
 
             NSDictionary *payload = @{
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
                     @"clicks": @[],
                     @"viewed_messages": @[],
                     @"events": @[
                             @{
                                     @"type": @"custom",
-                                    @"id": eventName,
+                                    @"name": eventName,
                                     @"timestamp": timeStamp
                             }
                     ]
