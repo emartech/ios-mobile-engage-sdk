@@ -17,16 +17,17 @@
           resultBlock:(MEIAMJSResultBlock)resultBlock {
     UIApplication *application = [UIApplication sharedApplication];
     [application registerForRemoteNotifications];
-
+    NSString *eventId = message[@"id"];
+    
     if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge)
                                                                                  categories:nil];
         [application registerUserNotificationSettings:settings];
-        resultBlock(@{@"success": @([application isRegisteredForRemoteNotifications])});
+        resultBlock(@{@"success": @([application isRegisteredForRemoteNotifications]), @"id": eventId});
     } else {
         [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge
                                                                             completionHandler:^(BOOL granted, NSError *error) {
-                                                                                resultBlock(@{@"success": @(granted)});
+                                                                                resultBlock(@{@"success": @(granted), @"id": eventId});
                                                                             }];
     }
 }

@@ -27,6 +27,7 @@ SPEC_BEGIN(MEIAMTriggerAppEventTests)
                     }
             };
             NSDictionary *scriptMessage = @{
+                    @"id": @1,
                     @"name": eventName,
                     @"payload": payload
             };
@@ -45,14 +46,14 @@ SPEC_BEGIN(MEIAMTriggerAppEventTests)
 
             XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
             __block NSDictionary<NSString *, NSObject *> *returnedResult;
-            [appEvent handleMessage:@{@"name": @"name"}
+            [appEvent handleMessage:@{@"name": @"name", @"id": @1}
                         resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                             returnedResult = result;
                             [exp fulfill];
                         }];
             [XCTWaiter waitForExpectations:@[exp] timeout:30];
 
-            [[returnedResult should] equal:@{@"success": @YES}];
+            [[returnedResult should] equal:@{@"success": @YES, @"id" : @1}];
         });
 
     });

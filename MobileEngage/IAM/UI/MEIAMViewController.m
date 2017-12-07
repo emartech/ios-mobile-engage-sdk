@@ -107,7 +107,7 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:result
                                                        options:0
                                                          error:&error];
-    NSString *js = [NSString stringWithFormat:@"callback(%@);", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
+    NSString *js = [NSString stringWithFormat:@"MEIAM.handleResponse(%@);", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.webView evaluateJavaScript:js
                        completionHandler:nil];

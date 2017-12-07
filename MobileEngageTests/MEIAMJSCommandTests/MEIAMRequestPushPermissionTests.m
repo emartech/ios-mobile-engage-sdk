@@ -40,14 +40,14 @@ SPEC_BEGIN(MEIAMRequestPushPermissionTests)
 
                 XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                 __block NSDictionary<NSString *, NSObject *> *returnedResult;
-                [_command handleMessage:@{}
+                [_command handleMessage:@{@"id": @1}
                             resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                                 returnedResult = result;
                                 [exp fulfill];
                             }];
                 [XCTWaiter waitForExpectations:@[exp] timeout:30];
 
-                [[returnedResult should] equal:@{@"success": @YES}];
+                [[returnedResult should] equal:@{@"success": @YES, @"id": @1}];
             });
         }
 
@@ -79,7 +79,7 @@ SPEC_BEGIN(MEIAMRequestPushPermissionTests)
 
                 XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                 __block NSDictionary<NSString *, NSObject *> *returnedResult;
-                [_command handleMessage:@{}
+                [_command handleMessage:@{@"id": @1}
                             resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                                 returnedResult = result;
                                 [exp fulfill];
@@ -90,7 +90,7 @@ SPEC_BEGIN(MEIAMRequestPushPermissionTests)
 
                 [XCTWaiter waitForExpectations:@[exp] timeout:30];
 
-                [[returnedResult should] equal:@{@"success": @YES}];
+                [[returnedResult should] equal:@{@"success": @YES, @"id": @1}];
             });
         }
 

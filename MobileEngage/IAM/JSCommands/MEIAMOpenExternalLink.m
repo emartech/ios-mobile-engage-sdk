@@ -6,7 +6,7 @@
 #import <UIKit/UIKit.h>
 #import "MEOsVersionUtils.h"
 
-#define kExternalLink @"link"
+#define kExternalLink @"url"
 
 @implementation MEIAMOpenExternalLink
 
@@ -19,6 +19,8 @@
     UIApplication *application = [UIApplication sharedApplication];
     NSString *externalLink = message[kExternalLink];
     NSURL *url = [NSURL URLWithString:externalLink];
+    NSString *eventId = message[@"id"];
+    
     if ([application canOpenURL:url]) {
         if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
             resultBlock(@{@"success": @([application openURL:url])});
@@ -26,11 +28,11 @@
             [application openURL:url
                          options:nil
                completionHandler:^(BOOL success) {
-                   resultBlock(@{@"success": @(success)});
+                   resultBlock(@{@"success": @(success), @"id": eventId});
                }];
         }
     } else {
-        resultBlock(@{@"success": @NO});
+        resultBlock(@{@"success": @NO, @"id": eventId});
     }
 }
 

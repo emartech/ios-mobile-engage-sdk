@@ -110,7 +110,7 @@ SPEC_BEGIN(MEIAMTests)
                     "  <head>\n"
                     "    <script>\n"
                     "      window.onload = function() {\n"
-                    "        window.webkit.messageHandlers.triggerAppEvent.postMessage({name: 'nameOfTheEvent', payload:{payloadKey1:{payloadKey2: 'payloadValue'}}});\n"
+                    "        window.webkit.messageHandlers.triggerAppEvent.postMessage({id: '1', name: 'nameOfTheEvent', payload:{payloadKey1:{payloadKey2: 'payloadValue'}}});\n"
                     "      };\n"
                     "    </script>\n"
                     "  </head>\n"

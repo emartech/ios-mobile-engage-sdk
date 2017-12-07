@@ -33,9 +33,10 @@
           resultBlock:(MEIAMJSResultBlock)resultBlock {
     NSString *name = message[@"name"];
     NSDictionary *payload = message[@"payload"];
+    NSString *eventId = message[@"id"];
     [self.inAppMessageHandler handleApplicationEvent:name
                                              payload:payload];
-    resultBlock(@{@"success": @YES});
+    resultBlock(@{@"success": @YES, @"id": eventId});
 }
 
 @end

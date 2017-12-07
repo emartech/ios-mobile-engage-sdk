@@ -22,7 +22,7 @@ SPEC_BEGIN(MEIAMOpenExternalLinkTests)
             XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
 
             __block BOOL returnedContent;
-            [_command handleMessage:@{}
+            [_command handleMessage:@{@"id": @1}
                         resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                             returnedContent = [((NSNumber *) result[@"success"]) boolValue];
                             [exp fulfill];
@@ -94,7 +94,7 @@ SPEC_BEGIN(MEIAMOpenExternalLinkTests)
                 [[_applicationMock should] receive:@selector(canOpenURL:) andReturn:theValue(YES)];
                 [[_applicationMock should] receive:@selector(openURL:options:completionHandler:) withArguments:[NSURL URLWithString:link], nil, any()];
 
-                [_command handleMessage:@{@"link": link}
+                [_command handleMessage:@{@"url": link, @"id": @1}
                             resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                             }];
             });
@@ -112,7 +112,7 @@ SPEC_BEGIN(MEIAMOpenExternalLinkTests)
 
                 XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
                 __block BOOL returnedValue;
-                [_command handleMessage:@{@"link": link}
+                [_command handleMessage:@{@"url": link, @"id": @1}
                             resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                                 returnedValue = [((NSNumber *) result[@"success"]) boolValue];
                                 [exp fulfill];
