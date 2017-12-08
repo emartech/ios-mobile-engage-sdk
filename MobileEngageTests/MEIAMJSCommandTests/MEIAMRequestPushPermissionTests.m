@@ -25,7 +25,7 @@ SPEC_BEGIN(MEIAMRequestPushPermissionTests)
                 KWCaptureSpy *spy = [_applicationMock captureArgument:@selector(registerUserNotificationSettings:)
                                                               atIndex:0];
 
-                [_command handleMessage:nil
+                [_command handleMessage:@{@"id": @1}
                             resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                             }];
                 UIUserNotificationSettings *notificationSettings = spy.argument;

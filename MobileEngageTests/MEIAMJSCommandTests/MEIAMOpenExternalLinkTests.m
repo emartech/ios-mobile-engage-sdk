@@ -45,7 +45,7 @@ SPEC_BEGIN(MEIAMOpenExternalLinkTests)
                 [[_applicationMock should] receive:@selector(canOpenURL:) andReturn:theValue(YES)];
                 [[_applicationMock should] receive:@selector(openURL:) withArguments:[NSURL URLWithString:link]];
 
-                [_command handleMessage:@{@"link": link}
+                [_command handleMessage:@{@"url": link, @"id": @1}
                             resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                             }];
             });
