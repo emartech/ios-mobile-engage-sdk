@@ -27,7 +27,7 @@
     } else if ([name isEqualToString:MEIAMClose.commandName]) {
         command = [[MEIAMClose alloc] initWithViewController:[self.meiam meiamViewController]];
     } else if ([name isEqualToString:MEIAMTriggerAppEvent.commandName]) {
-        command = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:[self.meiam inAppMessageHandler]];
+        command = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:[self.meiam messageHandler]];
     }
     return command;
 }

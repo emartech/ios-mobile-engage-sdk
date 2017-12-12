@@ -4,10 +4,10 @@
 
 #import <Foundation/Foundation.h>
 #import "MEInbox.h"
+#import "MEInApp.h"
 
 @class MEConfig;
 @protocol MobileEngageStatusDelegate;
-@class MEIAM;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(class, nonatomic, weak, nullable) id <MobileEngageStatusDelegate> statusDelegate;
 @property(class, nonatomic, readonly) MEInbox *inbox;
-@property(class, nonatomic, readonly) MEIAM *iam;
+@property(class, nonatomic, readonly) MEInApp *inApp;
 
 + (void)setupWithConfig:(MEConfig *)config
           launchOptions:(nullable NSDictionary *)launchOptions;

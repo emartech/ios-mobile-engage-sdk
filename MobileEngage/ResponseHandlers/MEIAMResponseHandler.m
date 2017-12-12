@@ -4,7 +4,7 @@
 
 #import "MEIAMResponseHandler.h"
 #import "MobileEngage.h"
-#import "MEIAM+Private.h"
+#import "MEInApp+Private.h"
 
 
 @implementation MEIAMResponseHandler
@@ -16,7 +16,7 @@
 
 - (void)handleResponse:(EMSResponseModel *)response {
     NSString *html = response.parsedBody[@"message"][@"html"];
-    [[MobileEngage iam] showMessage:html];
+    [[MobileEngage inApp] showMessage:html];
 }
 
 @end

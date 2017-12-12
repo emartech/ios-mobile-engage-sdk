@@ -1,14 +1,14 @@
 #import "Kiwi.h"
-#import "MEIAM.h"
-#import "MEIAM+Private.h"
+#import "MEInApp.h"
+#import "MEInApp+Private.h"
 #import "FakeInAppHandler.h"
 
-MEIAM *iam;
+MEInApp *iam;
 
 SPEC_BEGIN(MEIAMTests)
 
     beforeEach(^{
-        iam = [[MEIAM alloc] init];
+        iam = [[MEInApp alloc] init];
     });
 
     describe(@"rootViewController", ^{
@@ -94,8 +94,8 @@ SPEC_BEGIN(MEIAMTests)
         });
     });
 
-    describe(@"inAppMessageHandler", ^{
-        it(@"should pass the eventName and payload to the given inAppMessageHandler's handleApplicationEvent:payload: method", ^{
+    describe(@"messageHandler", ^{
+        it(@"should pass the eventName and payload to the given messageHandler's handleApplicationEvent:payload: method", ^{
             NSString *expectedName = @"nameOfTheEvent";
             NSDictionary <NSString *, NSObject *> *expectedPayload = @{
                     @"payloadKey1": @{
@@ -104,7 +104,7 @@ SPEC_BEGIN(MEIAMTests)
             };
 
             FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
-            [iam setInAppMessageHandler:inAppHandler];
+            [iam setMessageHandler:inAppHandler];
             NSString *message = @"<!DOCTYPE html>\n"
                     "<html lang=\"en\">\n"
                     "  <head>\n"

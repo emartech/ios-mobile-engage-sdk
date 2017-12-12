@@ -18,7 +18,7 @@ SPEC_BEGIN(MEIAMTriggerAppEventTests)
 
     describe(@"handleMessage:resultBlock:", ^{
 
-        it(@"should pass the eventName and payload to the given inAppMessageHandler's handleApplicationEvent:payload: method", ^{
+        it(@"should pass the eventName and payload to the given messageHandler's handleApplicationEvent:payload: method", ^{
             FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
             NSString *eventName = @"nameOfTheEvent";
             NSDictionary <NSString *, NSObject *> *payload = @{

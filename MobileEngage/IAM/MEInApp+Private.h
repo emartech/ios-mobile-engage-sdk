@@ -3,11 +3,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MEIAM.h"
+#import "MEInApp.h"
 #import "MobileEngage.h"
 #import <UIKit/UIKit.h>
 
-@interface MEIAM (Private)
+@interface MEInApp (Private)
 
 - (instancetype)init;
 

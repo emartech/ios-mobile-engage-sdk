@@ -10,6 +10,6 @@
 @protocol MEIAMProtocol <NSObject>
 
 - (MEIAMViewController *)meiamViewController;
-- (id <MEInAppMessageHandler>)inAppMessageHandler;
+- (id <MEInAppMessageHandler>)messageHandler;
 
 @end

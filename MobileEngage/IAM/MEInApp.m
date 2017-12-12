@@ -2,20 +2,20 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "MEIAM.h"
-#import "MEIAM+Private.h"
+#import "MEInApp.h"
+#import "MEInApp+Private.h"
 #import "MEIAMViewController.h"
 #import "MEJSBridge.h"
 #import "MEIAMJSCommandFactory.h"
 #import "MEIAMProtocol.h"
 
-@interface MEIAM () <MEIAMProtocol>
+@interface MEInApp () <MEIAMProtocol>
 
 @property(nonatomic, weak) MEIAMViewController *meiamViewController;
 
 @end
 
-@implementation MEIAM
+@implementation MEInApp
 
 - (instancetype)init {
     if (self = [super init]) {

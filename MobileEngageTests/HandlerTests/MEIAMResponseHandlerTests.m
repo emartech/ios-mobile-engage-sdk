@@ -6,7 +6,7 @@
 #import "MEIDResponseHandler.h"
 #import "MEIAMResponseHandler.h"
 #import "AbstractResponseHandler+Private.h"
-#import "MEIAM.h"
+#import "MEInApp.h"
 #import "MobileEngage+Test.h"
 
 SPEC_BEGIN(MEIAMResponseHandlerTests)
@@ -61,14 +61,14 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
 
     describe(@"MEIAMResponseHandler.handleResponse", ^{
 
-        it(@"should call showMessage on MEIAM", ^{
+        it(@"should call showMessage on MEInApp", ^{
             NSString *html = @"<html><body style=\"background-color:red\"></body></html>";
             NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"html" : html}} options:0 error:nil];
             EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:body];
 
-            id iamMock = [MEIAM mock];
+            id iamMock = [MEInApp mock];
             [[iamMock should] receive:@selector(showMessage:) withArguments:html];
-            MobileEngage.iam = iamMock;
+            MobileEngage.inApp = iamMock;
 
             MEIAMResponseHandler *handler = [MEIAMResponseHandler new];
             [handler handleResponse:response];

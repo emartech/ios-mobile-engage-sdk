@@ -15,7 +15,7 @@ SPEC_BEGIN(MEIAMJSCommandFactoryTests)
     });
 
     describe(@"initWithMEIAM:", ^{
-        it(@"should initialize MEIAM property", ^{
+        it(@"should initialize MEInApp property", ^{
             id meiam = [KWMock mockForProtocol:@protocol(MEIAMProtocol)];
             MEIAMJSCommandFactory *meiamjsCommandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:meiam];
 
