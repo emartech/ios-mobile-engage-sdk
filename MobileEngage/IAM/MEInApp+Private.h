@@ -6,6 +6,7 @@
 #import "MEInApp.h"
 #import "MobileEngage.h"
 #import <UIKit/UIKit.h>
+#import "MEInAppMessage.h"
 
 @interface MEInApp (Private)
 
@@ -17,6 +18,6 @@
 
 - (UIViewController *)topViewControllerFrom:(UIViewController *)currentViewController;
 
-- (void)showMessage:(NSString *)html;
+- (void)showMessage:(MEInAppMessage *)message;
 
 @end

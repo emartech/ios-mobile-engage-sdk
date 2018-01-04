@@ -15,8 +15,7 @@
 }
 
 - (void)handleResponse:(EMSResponseModel *)response {
-    NSString *html = response.parsedBody[@"message"][@"html"];
-    [[MobileEngage inApp] showMessage:html];
+    [[MobileEngage inApp] showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:response.parsedBody]];
 }
 
 @end

@@ -28,8 +28,17 @@ SPEC_BEGIN(MEIAMTests)
         });
 
         it(@"should return rootViewController, when there is no more presented ViewController", ^{
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForExpectation"];
+
+            [[[iam rootViewController] presentedViewController] dismissViewControllerAnimated:NO completion:^{
+                [exp fulfill];
+            }];
+            [XCTWaiter waitForExpectations:@[exp]
+                                   timeout:30];
+
             UIViewController *topViewController = [iam topViewController];
             [[topViewController should] equal:[iam rootViewController]];
+
         });
 
         it(@"should return the presentedViewController, when available", ^{
@@ -120,7 +129,7 @@ SPEC_BEGIN(MEIAMTests)
             [[inAppHandler shouldEventually] receive:@selector(handleApplicationEvent:payload:)
                                        withArguments:expectedName, expectedPayload];
 
-            [iam showMessage:message];
+            [iam showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message": @{@"id": @"campaignId", @"html": message}}]];
         });
     });
 

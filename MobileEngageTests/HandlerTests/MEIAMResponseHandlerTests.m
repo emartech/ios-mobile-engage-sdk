@@ -8,6 +8,13 @@
 #import "AbstractResponseHandler+Private.h"
 #import "MEInApp.h"
 #import "MobileEngage+Test.h"
+#import "MEDisplayedIAMRepository.h"
+#import "MobileEngage+Private.h"
+#import "MEDisplayedIAMFilterByCampaignIdSpecification.h"
+#import "MEConfigBuilder.h"
+#import "MEConfig.h"
+#import "MEInAppMessage.h"
+#import "FakeDbHelper.h"
 
 SPEC_BEGIN(MEIAMResponseHandlerTests)
 
@@ -63,15 +70,35 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
 
         it(@"should call showMessage on MEInApp", ^{
             NSString *html = @"<html><body style=\"background-color:red\"></body></html>";
-            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"html" : html}} options:0 error:nil];
+            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id": @"campaignId", @"html" : html}} options:0 error:nil];
             EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:body];
 
             id iamMock = [MEInApp mock];
-            [[iamMock should] receive:@selector(showMessage:) withArguments:html];
+            [[iamMock should] receive:@selector(showMessage:) withArguments:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message": @{@"id": @"campaignId", @"html": html}}]];
             MobileEngage.inApp = iamMock;
 
             MEIAMResponseHandler *handler = [MEIAMResponseHandler new];
             [handler handleResponse:response];
+        });
+
+        it(@"should save the inapp display", ^{
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:@"appid"
+                                       applicationPassword:@"pw"];
+            }];
+
+            [MobileEngage setupWithConfig:config launchOptions:nil];
+            FakeDbHelper *dbHelper = [FakeDbHelper new];
+            [MobileEngage setDbHelper:dbHelper];
+
+            NSString *html = @"<html><body style=\"background-color:red\"></body></html>";
+            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id" : @"iamId001" , @"html" : html}} options:0 error:nil];
+            EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:body];
+
+            [[MEIAMResponseHandler new] handleResponse:response];
+
+            [dbHelper waitForInsert];
+            [[[dbHelper.insertedModel campaignId] should] equal:@"iamId001"];
         });
 
     });

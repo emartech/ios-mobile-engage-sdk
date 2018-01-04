@@ -8,6 +8,8 @@
 #import "MEJSBridge.h"
 #import "MEIAMJSCommandFactory.h"
 #import "MEIAMProtocol.h"
+#import "MobileEngage+Private.h"
+#import "MEDisplayedIAMRepository.h"
 
 @interface MEInApp () <MEIAMProtocol>
 
@@ -23,16 +25,19 @@
     return self;
 }
 
-- (void)showMessage:(NSString *)html {
+- (void)showMessage:(MEInAppMessage *)message {
     MEIAMJSCommandFactory *commandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:self];
     MEJSBridge *jsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:commandFactory];
     MEIAMViewController *viewController = [[MEIAMViewController alloc] initWithJSBridge:jsBridge];
     _meiamViewController = viewController;
-    [_meiamViewController loadMessage:html
+    [_meiamViewController loadMessage:message.html
                     completionHandler:^{
                         [self.topViewController presentViewController:viewController
                                                              animated:YES
-                                                           completion:nil];
+                                                           completion:^{
+                                                               MEDisplayedIAMRepository *repository = [[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]];
+                                                               [repository add:[[MEDisplayedIAM alloc] initWithCampaignId:message.campaignId timestamp:[NSDate new]]];
+                                                           }];
                     }];
 }
 

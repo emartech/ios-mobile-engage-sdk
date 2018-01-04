@@ -2,7 +2,6 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 #import "Kiwi.h"
-#import "EMSQueueProtocol.h"
 #import "MEDisplayedIAMRepository.h"
 #import "MEDisplayedIAMFilterNoneSpecification.h"
 #import "MEDisplayedIAMFilterByCampaignIdSpecification.h"
@@ -29,7 +28,7 @@ SPEC_BEGIN(StorageTests)
 
     describe(@"repository", ^{
         it(@"should add the element to the database", ^{
-            MEDisplayedIAM *displayedIAM = [[MEDisplayedIAM alloc] initWithCampaignId:@"kamp" eventName:@"event" timestamp:[NSDate date]];
+            MEDisplayedIAM *displayedIAM = [[MEDisplayedIAM alloc] initWithCampaignId:@"kamp" timestamp:[NSDate date]];
 
             [repository add:displayedIAM];
 
@@ -38,8 +37,8 @@ SPEC_BEGIN(StorageTests)
         });
 
         it(@"should delete element from database", ^{
-            MEDisplayedIAM *displayedIAMFirst = [[MEDisplayedIAM alloc] initWithCampaignId:@"kamp1" eventName:@"event1" timestamp:[NSDate date]];
-            MEDisplayedIAM *displayedIAMSecond = [[MEDisplayedIAM alloc] initWithCampaignId:@"kamp2" eventName:@"event2" timestamp:[NSDate date]];
+            MEDisplayedIAM *displayedIAMFirst = [[MEDisplayedIAM alloc] initWithCampaignId:@"kamp1" timestamp:[NSDate date]];
+            MEDisplayedIAM *displayedIAMSecond = [[MEDisplayedIAM alloc] initWithCampaignId:@"kamp2" timestamp:[NSDate date]];
 
             [repository add:displayedIAMFirst];
             [repository add:displayedIAMSecond];

@@ -6,17 +6,29 @@
 #import "MEConfig.h"
 #import "MobileEngageInternal.h"
 #import "MEInbox+Notification.h"
-#import "MEInApp.h"
+#import "EMSSQLiteHelper.h"
+#import "MESchemaDelegate.h"
+#import <UIKit/UIKit.h>
+
+#define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"MEDB.db"]
 
 @implementation MobileEngage
 
 static MobileEngageInternal *_mobileEngageInternal;
 static MEInbox *_inbox;
 static MEInApp *_iam;
+static EMSSQLiteHelper *_dbHelper;
+
 
 + (void)setupWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal
                                config:(MEConfig *)config
                         launchOptions:(NSDictionary *)launchOptions {
+    _dbHelper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH schemaDelegate:[MESchemaDelegate new]];
+    [_dbHelper open];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        [_dbHelper close];
+    }];
+
     _mobileEngageInternal = mobileEngageInternal;
     _inbox = [[MEInbox alloc] initWithConfig:config];
     _iam = [MEInApp new];
@@ -90,6 +102,14 @@ static MEInApp *_iam;
 
 + (void)setInApp:(MEInApp *)inApp {
     _iam = inApp;
+}
+
++ (EMSSQLiteHelper *)dbHelper {
+    return _dbHelper;
+}
+
++ (void)setDbHelper:(EMSSQLiteHelper *)dbHelper {
+    _dbHelper = dbHelper;
 }
 
 @end
