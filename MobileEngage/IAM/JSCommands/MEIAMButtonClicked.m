@@ -19,14 +19,17 @@
     return @"buttonClicked";
 }
 
-- (void)handleMessage:(NSDictionary *)message resultBlock:(MEIAMJSResultBlock)resultBlock {
+- (void)handleMessage:(NSDictionary *)message
+          resultBlock:(MEIAMJSResultBlock)resultBlock {
     NSString *buttonId = message[@"buttonId"];
     if (buttonId) {
         [_repository add:[[MEButtonClick alloc] initWithCampaignId:_campaignId
                                                           buttonId:buttonId
                                                          timestamp:[NSDate date]]];
+        resultBlock(@{@"success": @YES, @"id": message[@"id"]});
+    } else {
+        resultBlock(@{@"success": @NO, @"id": message[@"id"]});
     }
 }
-
 
 @end
