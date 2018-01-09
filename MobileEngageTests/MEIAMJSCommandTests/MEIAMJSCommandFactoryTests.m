@@ -5,13 +5,26 @@
 #import "MEIAMProtocol.h"
 #import "MEIAMClose.h"
 #import "MEIAMTriggerAppEvent.h"
+#import "MEIAMButtonClicked.h"
+#import "MEIAMViewController.h"
+#import "MEButtonClickRepository+Private.h"
+#import "MobileEngage+Private.h"
 
 MEIAMJSCommandFactory *_factory;
 
 SPEC_BEGIN(MEIAMJSCommandFactoryTests)
 
+    __block NSString *currentCampaignId;
+    __block id _meiam;
+
     beforeEach(^{
-        _factory = [MEIAMJSCommandFactory new];
+        currentCampaignId = @"123";
+        _meiam = [KWMock mockForProtocol:@protocol(MEIAMProtocol)];
+        [_meiam stub:@selector(currentCampaignId) andReturn:currentCampaignId];
+        [_meiam stub:@selector(meiamViewController) andReturn:[MEIAMViewController mock]];
+        [_meiam stub:@selector(messageHandler) andReturn:[KWMock mockForProtocol:@protocol(MEInAppMessageHandler)]];
+        [MobileEngage stub:@selector(dbHelper) andReturn:[EMSSQLiteHelper mock]];
+        _factory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:_meiam];
     });
 
     describe(@"initWithMEIAM:", ^{
@@ -42,6 +55,19 @@ SPEC_BEGIN(MEIAMJSCommandFactoryTests)
         it(@"should return MEIAMTriggerAppEvent command when the given name is: triggerAppEvent", ^{
             MEIAMTriggerAppEvent *command = [_factory commandByName:@"triggerAppEvent"];
             [[command should] beKindOfClass:[MEIAMTriggerAppEvent class]];
+        });
+
+        it(@"should return MEIAMButtonClicked command when the given name is: buttonClicked", ^{
+            MEIAMButtonClicked *command = [_factory commandByName:@"buttonClicked"];
+            [[command should] beKindOfClass:[MEIAMButtonClicked class]];
+        });
+
+        it(@"should initialize the MEIAMButtonClicked command", ^{
+            MEIAMButtonClicked *command = [_factory commandByName:@"buttonClicked"];
+            [[command.campaignId shouldNot] beNil];
+            [[command.campaignId should] equal:currentCampaignId];
+            [[command.repository shouldNot] beNil];
+            [[command.repository.sqliteHelper should] equal:[MobileEngage dbHelper]];
         });
     });
 

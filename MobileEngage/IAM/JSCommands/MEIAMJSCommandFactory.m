@@ -8,6 +8,9 @@
 #import "MEIAMClose.h"
 #import "MEIAMProtocol.h"
 #import "MEIAMTriggerAppEvent.h"
+#import "MEIAMButtonClicked.h"
+#import "MobileEngage.h"
+#import "MobileEngage+Private.h"
 
 @implementation MEIAMJSCommandFactory
 
@@ -28,6 +31,9 @@
         command = [[MEIAMClose alloc] initWithViewController:[self.meiam meiamViewController]];
     } else if ([name isEqualToString:MEIAMTriggerAppEvent.commandName]) {
         command = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:[self.meiam messageHandler]];
+    } else if ([name isEqualToString:MEIAMButtonClicked.commandName]) {
+        command = [[MEIAMButtonClicked alloc] initWithCampaignId:[self.meiam currentCampaignId]
+                                                      repository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]];
     }
     return command;
 }

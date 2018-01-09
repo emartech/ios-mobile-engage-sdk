@@ -11,5 +11,6 @@
 
 - (MEIAMViewController *)meiamViewController;
 - (id <MEInAppMessageHandler>)messageHandler;
+- (NSString *)currentCampaignId;
 
 @end

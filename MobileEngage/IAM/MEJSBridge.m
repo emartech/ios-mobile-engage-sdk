@@ -8,6 +8,7 @@
 #import "MEIAMOpenExternalLink.h"
 #import "MEIAMClose.h"
 #import "MEIAMTriggerAppEvent.h"
+#import "MEIAMButtonClicked.h"
 
 @interface MEJSBridge ()
 
@@ -39,7 +40,12 @@
 }
 
 - (NSArray<NSString *> *)jsCommandNames {
-    return @[MEIAMRequestPushPermission.commandName, MEIAMOpenExternalLink.commandName, MEIAMClose.commandName, MEIAMTriggerAppEvent.commandName];
+    return @[MEIAMRequestPushPermission.commandName,
+            MEIAMOpenExternalLink.commandName,
+            MEIAMClose.commandName,
+            MEIAMTriggerAppEvent.commandName,
+            MEIAMButtonClicked.commandName
+    ];
 }
 
 - (WKUserContentController *)userContentController {

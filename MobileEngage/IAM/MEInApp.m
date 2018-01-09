@@ -14,6 +14,7 @@
 @interface MEInApp () <MEIAMProtocol>
 
 @property(nonatomic, weak) MEIAMViewController *meiamViewController;
+@property(nonatomic, weak) NSString *currentCampaignId;
 
 @end
 
