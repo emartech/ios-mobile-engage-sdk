@@ -9,7 +9,7 @@
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestMEDB.db"]
 
-SPEC_BEGIN(StorageTests)
+SPEC_BEGIN(MEDisplayedIAMRepositoryTests)
 
     __block EMSSQLiteHelper *helper;
     __block MEDisplayedIAMRepository *repository;
@@ -33,6 +33,7 @@ SPEC_BEGIN(StorageTests)
             [repository add:displayedIAM];
 
             NSArray<MEDisplayedIAM *> *items = [repository query:[MEDisplayedIAMFilterNoneSpecification new]];
+            [[theValue([items count]) should] equal:theValue(1)];
             [[[items lastObject] should] equal:displayedIAM];
         });
 
@@ -46,6 +47,7 @@ SPEC_BEGIN(StorageTests)
             [repository remove:[[MEDisplayedIAMFilterByCampaignIdSpecification alloc] initWithCampaignId:@"kamp2"]];
 
             NSArray<MEDisplayedIAM *> *items = [repository query:[MEDisplayedIAMFilterNoneSpecification new]];
+            [[theValue([items count]) should] equal:theValue(1)];
             [[[items lastObject] should] equal:displayedIAMFirst];
         });
     });

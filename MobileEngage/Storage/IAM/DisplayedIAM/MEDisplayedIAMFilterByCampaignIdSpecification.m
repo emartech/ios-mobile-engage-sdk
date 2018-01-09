@@ -26,5 +26,4 @@
     sqlite3_bind_text(statement, 1, [self.campaignId UTF8String], -1, SQLITE_TRANSIENT);
 }
 
-
 @end
