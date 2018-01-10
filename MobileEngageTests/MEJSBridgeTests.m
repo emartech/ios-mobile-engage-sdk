@@ -1,5 +1,9 @@
 #import "Kiwi.h"
+#import "MEJSBridge.h"
 #import <UserNotifications/UserNotifications.h>
+#import "MEIAMViewController.h"
+#import "MEIAMDidAppear.h"
+#import "MEIAMJSCommandFactory.h"
 
 MEJSBridge *_meJsBridge;
 
