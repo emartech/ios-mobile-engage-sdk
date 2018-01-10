@@ -1,9 +1,5 @@
 #import "Kiwi.h"
-#import "MEJSBridge.h"
 #import <UserNotifications/UserNotifications.h>
-#import "MEIAMViewController.h"
-#import "MEIAMJSCommandFactory.h"
-#import "MEIAMDidAppear.h"
 
 MEJSBridge *_meJsBridge;
 
@@ -58,7 +54,7 @@ SPEC_BEGIN(MEJSBridgeTests)
     });
 
     describe(@"jsCommandNames", ^{
-        it(@"should contain IAMDidAppear, requestPushPermission, openExternalLink, close", ^{
+        it(@"should contain IAMDidAppear, requestPushPermission, openExternalLink, close, triggerAppEvent, buttonClicked", ^{
             NSArray<NSString *> *const commands = [[MEJSBridge new] jsCommandNames];
             [[commands should] equal:@[
                     @"requestPushPermission",
