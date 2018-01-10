@@ -56,6 +56,21 @@ SPEC_BEGIN(MEIAMTriggerAppEventTests)
             [[returnedResult should] equal:@{@"success": @YES, @"id" : @"123"}];
         });
 
+        it(@"should receive failure in resultBlock, when there is no name", ^{
+            MEIAMTriggerAppEvent *appEvent = [MEIAMTriggerAppEvent new];
+
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+            __block NSDictionary<NSString *, NSObject *> *returnedResult;
+            [appEvent handleMessage:@{@"id": @"123"}
+                        resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+                            returnedResult = result;
+                            [exp fulfill];
+                        }];
+            [XCTWaiter waitForExpectations:@[exp] timeout:30];
+
+            [[returnedResult should] equal:@{@"success": @NO, @"id" : @"123", @"error": @"Missing name!"}];
+        });
+
     });
 
 SPEC_END

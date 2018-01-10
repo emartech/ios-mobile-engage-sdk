@@ -34,9 +34,15 @@
     NSString *name = message[@"name"];
     NSDictionary *payload = message[@"payload"];
     NSString *eventId = message[@"id"];
-    [self.inAppMessageHandler handleApplicationEvent:name
-                                             payload:payload];
-    resultBlock(@{@"success": @YES, @"id": eventId});
+    if (name) {
+        [self.inAppMessageHandler handleApplicationEvent:name
+                                                 payload:payload];
+        resultBlock(@{@"success": @YES, @"id": eventId});
+    } else {
+        resultBlock(@{@"id": eventId,
+                @"success": @NO,
+                @"error": @"Missing name!"});
+    }
 }
 
 @end
