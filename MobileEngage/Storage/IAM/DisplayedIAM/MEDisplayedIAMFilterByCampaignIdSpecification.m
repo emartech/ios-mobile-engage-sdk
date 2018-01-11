@@ -8,7 +8,7 @@
 
 @implementation MEDisplayedIAMFilterByCampaignIdSpecification
 
-- (instancetype)initWithCampaignId:(NSString *)campaignId {
+- (instancetype)initWithCampaignId:(long)campaignId {
     self = [super init];
     if (self) {
         _campaignId = campaignId;
@@ -23,7 +23,7 @@
 
 
 - (void)bindStatement:(sqlite3_stmt *)statement {
-    sqlite3_bind_text(statement, 1, [self.campaignId UTF8String], -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int64(statement, 1, self.campaignId);
 }
 
 @end

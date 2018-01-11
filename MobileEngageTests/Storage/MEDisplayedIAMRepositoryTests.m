@@ -28,7 +28,7 @@ SPEC_BEGIN(MEDisplayedIAMRepositoryTests)
 
     describe(@"repository", ^{
         it(@"should add the element to the database", ^{
-            MEDisplayedIAM *displayedIAM = [[MEDisplayedIAM alloc] initWithCampaignId:@"kamp" timestamp:[NSDate date]];
+            MEDisplayedIAM *displayedIAM = [[MEDisplayedIAM alloc] initWithCampaignId:12345678 timestamp:[NSDate date]];
 
             [repository add:displayedIAM];
 
@@ -38,13 +38,13 @@ SPEC_BEGIN(MEDisplayedIAMRepositoryTests)
         });
 
         it(@"should delete element from database", ^{
-            MEDisplayedIAM *displayedIAMFirst = [[MEDisplayedIAM alloc] initWithCampaignId:@"kamp1" timestamp:[NSDate date]];
-            MEDisplayedIAM *displayedIAMSecond = [[MEDisplayedIAM alloc] initWithCampaignId:@"kamp2" timestamp:[NSDate date]];
+            MEDisplayedIAM *displayedIAMFirst = [[MEDisplayedIAM alloc] initWithCampaignId:12345678 timestamp:[NSDate date]];
+            MEDisplayedIAM *displayedIAMSecond = [[MEDisplayedIAM alloc] initWithCampaignId:98765432 timestamp:[NSDate date]];
 
             [repository add:displayedIAMFirst];
             [repository add:displayedIAMSecond];
 
-            [repository remove:[[MEDisplayedIAMFilterByCampaignIdSpecification alloc] initWithCampaignId:@"kamp2"]];
+            [repository remove:[[MEDisplayedIAMFilterByCampaignIdSpecification alloc] initWithCampaignId:98765432]];
 
             NSArray<MEDisplayedIAM *> *items = [repository query:[MEDisplayedIAMFilterNoneSpecification new]];
             [[theValue([items count]) should] equal:theValue(1)];

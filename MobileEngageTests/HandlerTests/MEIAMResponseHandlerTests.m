@@ -92,13 +92,13 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
             [MobileEngage setDbHelper:dbHelper];
 
             NSString *html = @"<html><body style=\"background-color:red\"></body></html>";
-            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id" : @"iamId001" , @"html" : html}} options:0 error:nil];
+            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id" : @12345678 , @"html" : html}} options:0 error:nil];
             EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:body];
 
             [[MEIAMResponseHandler new] handleResponse:response];
 
             [dbHelper waitForInsert];
-            [[[dbHelper.insertedModel campaignId] should] equal:@"iamId001"];
+            [[theValue([dbHelper.insertedModel campaignId]) should] equal:theValue(12345678)];
         });
 
     });

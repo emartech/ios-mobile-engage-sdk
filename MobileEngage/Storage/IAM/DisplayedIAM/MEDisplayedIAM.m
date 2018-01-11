@@ -7,7 +7,7 @@
 @implementation MEDisplayedIAM {
 
 }
-- (instancetype)initWithCampaignId:(NSString *)campaignId timestamp:(NSDate *)timestamp {
+- (instancetype)initWithCampaignId:(long)campaignId timestamp:(NSDate *)timestamp {
     self = [super init];
     if (self) {
         _campaignId = campaignId;
@@ -31,7 +31,7 @@
         return YES;
     if (iam == nil)
         return NO;
-    if (self.campaignId != iam.campaignId && ![self.campaignId isEqualToString:iam.campaignId])
+    if (self.campaignId != iam.campaignId)
         return NO;
     if (self.timestamp != iam.timestamp && [self.timestamp timeIntervalSince1970] != [iam.timestamp timeIntervalSince1970])
         return NO;
@@ -39,14 +39,15 @@
 }
 
 - (NSUInteger)hash {
-    NSUInteger hash = [self.campaignId hash];
+    NSUInteger hash = (NSUInteger) self.campaignId;
     hash = hash * 31u + [self.timestamp hash];
     return hash;
 }
 
+
 - (NSString *)description {
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"self.campaignId=%@", self.campaignId];
+    [description appendFormat:@"self.campaignId=%ld", self.campaignId];
     [description appendFormat:@", self.timestamp=%@", self.timestamp];
     [description appendString:@">"];
     return description;

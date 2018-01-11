@@ -3,13 +3,14 @@
 //
 
 #import "MEInAppMessage.h"
+#import "KWValue.h"
 
 @implementation MEInAppMessage
 
 - (instancetype)initWithResponseParsedBody:(NSDictionary *)parsedBody; {
     if (self = [super init]) {
         _html = parsedBody[@"message"][@"html"];
-        _campaignId = parsedBody[@"message"][@"id"];
+        _campaignId = [parsedBody[@"message"][@"id"] intValue];
     }
     return self;
 }
@@ -28,7 +29,7 @@
         return YES;
     if (message == nil)
         return NO;
-    if (self.campaignId != message.campaignId && ![self.campaignId isEqualToString:message.campaignId])
+    if (self.campaignId != message.campaignId)
         return NO;
     if (self.html != message.html && ![self.html isEqualToString:message.html])
         return NO;
@@ -36,9 +37,10 @@
 }
 
 - (NSUInteger)hash {
-    NSUInteger hash = [self.campaignId hash];
+    NSUInteger hash = (NSUInteger) self.campaignId;
     hash = hash * 31u + [self.html hash];
     return hash;
 }
+
 
 @end

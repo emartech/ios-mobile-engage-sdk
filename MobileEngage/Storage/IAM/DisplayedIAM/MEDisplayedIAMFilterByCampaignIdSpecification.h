@@ -7,9 +7,9 @@
 
 @interface MEDisplayedIAMFilterByCampaignIdSpecification : NSObject <MESQLSpecification>
 
-@property (nonatomic, readonly) NSString *campaignId;
+@property (nonatomic, readonly) long campaignId;
 
-- (instancetype)initWithCampaignId:(NSString *)campaignId;
+- (instancetype)initWithCampaignId:(long)campaignId;
 
 
 @end

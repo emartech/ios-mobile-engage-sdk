@@ -7,7 +7,7 @@
 
 @interface MEInAppMessage : NSObject
 
-@property (nonatomic, readonly) NSString *campaignId;
+@property (nonatomic, readonly) long campaignId;
 @property (nonatomic, readonly) NSString *html;
 
 - (instancetype)initWithResponseParsedBody:(NSDictionary *)parsedBody;
