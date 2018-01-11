@@ -71,6 +71,36 @@ SPEC_BEGIN(MEIAMTriggerAppEventTests)
             [[returnedResult should] equal:@{@"success": @NO, @"id" : @"123", @"error": @"Missing name!"}];
         });
 
+        it(@"should call the given messageHandler's handleApplicationEvent:payload: method on main thread", ^{
+            NSString *eventName = @"nameOfTheEvent";
+            NSDictionary <NSString *, NSObject *> *payload = @{
+                    @"payloadKey1": @{
+                            @"payloadKey2": @"payloadValue"
+                    }
+            };
+            NSDictionary *scriptMessage = @{
+                    @"id": @1,
+                    @"name": eventName,
+                    @"payload": payload
+            };
+
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+            __block NSNumber *_mainThread;
+            FakeInAppHandler *inAppHandler = [[FakeInAppHandler alloc] initWithMainThreadCheckerBlock:^(BOOL mainThread) {
+                _mainThread = @(mainThread);
+                [exp fulfill];
+            }];
+
+            MEIAMTriggerAppEvent *appEvent = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:inAppHandler];
+
+            [appEvent handleMessage:scriptMessage
+                        resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+                        }];
+            [XCTWaiter waitForExpectations:@[exp] timeout:30];
+
+            [[_mainThread should] equal:@(YES)];
+        });
+
     });
 
 SPEC_END

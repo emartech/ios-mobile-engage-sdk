@@ -1,8 +1,4 @@
 //
-//  MEIAMTriggerAppEvent.m
-//  MobileEngage
-//
-//  Created by Laszlo Ori on 2017. 12. 06..
 //  Copyright © 2017 Emarsys. All rights reserved.
 //
 

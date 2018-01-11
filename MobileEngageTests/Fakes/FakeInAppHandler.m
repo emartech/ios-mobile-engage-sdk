@@ -6,8 +6,21 @@
 
 @implementation FakeInAppHandler
 
-- (void)handleApplicationEvent:(NSString *)eventName payload:(nullable NSDictionary<NSString *, NSObject *> *)payload {
 
+- (instancetype)initWithMainThreadCheckerBlock:(MainThreadCheckerBlock)mainThreadCheckerBlock {
+    if (self = [super init]) {
+        _mainThreadCheckerBlock = mainThreadCheckerBlock;
+    }
+    return self;
+}
+
+
+- (void)handleApplicationEvent:(NSString *)eventName
+                       payload:(nullable NSDictionary<NSString *, NSObject *> *)payload {
+    NSThread *currentThread = [NSThread currentThread];
+    if (self.mainThreadCheckerBlock) {
+        _mainThreadCheckerBlock([[NSThread mainThread] isEqual:currentThread]);
+    }
 }
 
 @end
