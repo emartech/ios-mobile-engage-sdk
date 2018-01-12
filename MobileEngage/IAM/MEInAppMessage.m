@@ -3,7 +3,6 @@
 //
 
 #import "MEInAppMessage.h"
-#import "KWValue.h"
 
 @implementation MEInAppMessage
 
