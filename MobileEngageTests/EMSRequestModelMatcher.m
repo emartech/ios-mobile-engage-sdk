@@ -2,7 +2,7 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import <CoreSDK/EMSRequestModelBuilder.h>
+#import "EMSRequestModelBuilder.h"
 #import "EMSRequestModelMatcher.h"
 
 
