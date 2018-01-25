@@ -5,7 +5,6 @@
 #import "MobileEngageInternal.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSDeviceInfo.h"
-#import "EMSRequestModel.h"
 #import "MobileEngageStatusDelegate.h"
 #import "MEConfig.h"
 #import "NSDictionary+MobileEngage.h"
@@ -16,7 +15,6 @@
 #import "EMSResponseModel.h"
 #import "AbstractResponseHandler.h"
 #import "MEIdResponseHandler.h"
-#import "MEIAMViewController.h"
 #import "MEIAMResponseHandler.h"
 #import "MEExperimental.h"
 
@@ -214,6 +212,11 @@
         payload[@"clicks"] = @[];
         payload[@"viewed_messages"] = @[];
         payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
+
+//        payload[@"device_language"] = [EMSDeviceInfo languageCode];
+//        payload[@"application_version"] = [EMSDeviceInfo applicationVersion];
+//        payload[@"sdk_version"] = MOBILEENGAGE_SDK_VERSION;
+
 
         NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
                 @"type": @"custom",
