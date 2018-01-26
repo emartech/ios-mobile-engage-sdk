@@ -18,4 +18,6 @@
 
 - (NSUInteger)hash;
 
+- (NSDictionary *)dictionaryRepresentation;
+
 @end

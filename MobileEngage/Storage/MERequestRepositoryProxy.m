@@ -10,11 +10,13 @@
 #import "EMSCompositeRequestModel.h"
 #import "MERequestTools.h"
 #import "MEButtonClickFilterNoneSpecification.h"
+#import "MEDisplayedIAMFilterNoneSpecification.h"
 
 @interface MERequestRepositoryProxy ()
 
 @property(nonatomic, strong) EMSRequestModelRepository *requestModelRepository;
 @property(nonatomic, strong) MEButtonClickRepository *clickRepository;
+@property(nonatomic, strong) MEDisplayedIAMRepository *displayedIAMRepository;
 
 @end
 
@@ -27,6 +29,7 @@
     if (self) {
         _requestModelRepository = requestModelRepository;
         _clickRepository = buttonClickRepository;
+        _displayedIAMRepository = displayedIAMRepository;
     }
 
     return self;
@@ -61,25 +64,48 @@
 
 - (EMSRequestModel *)createCompositeRequestModel:(EMSRequestModel *)requestModel {
     NSArray *allCustomEvents = [self.requestModelRepository query:[MERequestModelSelectEventsSpecification new]];
-    NSMutableArray <NSString *> *requestIds = [NSMutableArray array];
+    NSArray<NSString *> *requestIds = [self extractRequestIds:allCustomEvents];
+
     EMSCompositeRequestModel *composite = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setUrl:[[requestModel url] absoluteString]];
-        NSMutableArray *eventNames = [NSMutableArray new];
-        for (EMSRequestModel *model in allCustomEvents) {
-            [eventNames addObject:[model.payload[@"events"] firstObject]];
-            [requestIds addObject:model.requestId];
-        }
-
-        NSArray<MEButtonClick *> *buttonModels = [self.clickRepository query:[MEButtonClickFilterNoneSpecification new]];
-        NSMutableArray *clicks = [NSMutableArray new];
-        for(MEButtonClick *click in buttonModels) {
-            [clicks addObject:[click dictionaryRepresentation]];
-        }
-
-        [builder setPayload:@{@"clicks": [NSArray arrayWithArray:clicks] , @"events": eventNames}];
+        [builder setPayload:@{@"viewed_messages": [self displayRepresentations], @"clicks": [self clickRepresentations], @"events": [self eventRepresentations:allCustomEvents]}];
     }];
     composite.originalRequestIds = [NSArray arrayWithArray:requestIds];
     return composite;
+}
+
+- (NSArray<NSString *> *)extractRequestIds:(NSArray *)allCustomEvents {
+    NSMutableArray <NSString *> *requestIds = [NSMutableArray array];
+    for(EMSRequestModel *request in allCustomEvents) {
+        [requestIds addObject:[request requestId]];
+    }
+    return [NSArray arrayWithArray:requestIds];
+}
+
+- (NSArray *)eventRepresentations:(NSArray *)allCustomEvents {
+    NSMutableArray *events = [NSMutableArray new];
+    for (EMSRequestModel *model in allCustomEvents) {
+        [events addObject:[model.payload[@"events"] firstObject]];
+    }
+    return [NSArray arrayWithArray:events];
+}
+
+- (NSArray *)clickRepresentations {
+    NSArray<MEButtonClick *> *buttonModels = [self.clickRepository query:[MEButtonClickFilterNoneSpecification new]];
+    NSMutableArray *clicks = [NSMutableArray new];
+    for (MEButtonClick *click in buttonModels) {
+        [clicks addObject:[click dictionaryRepresentation]];
+    }
+    return [NSArray arrayWithArray:clicks];
+}
+
+- (NSArray *)displayRepresentations {
+    NSArray<MEDisplayedIAM *> *displayModels = [self.displayedIAMRepository query:[MEDisplayedIAMFilterNoneSpecification new]];
+    NSMutableArray *viewedMessages = [NSMutableArray new];
+    for (MEDisplayedIAM *display in displayModels) {
+        [viewedMessages addObject:[display dictionaryRepresentation]];
+    }
+    return [NSArray arrayWithArray:viewedMessages];
 }
 
 - (BOOL)isCustomEvent:(EMSRequestModel *)requestModel {

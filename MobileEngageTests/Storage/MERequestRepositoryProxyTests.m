@@ -70,9 +70,8 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
     };
 
     beforeEach(^{
-        timestampProvider = [EMSTimestampProvider mock];
-        [[timestampProvider should] receive:@selector(currentTimeStamp) andReturn:@42 withCountAtLeast:0];
-        displayedRepository = [MEDisplayedIAMRepository mock];
+        timestampProvider = [EMSTimestampProvider new];
+        displayedRepository = [MEDisplayedIAMRepository nullMock];
         buttonClickRepository = [MEButtonClickRepository nullMock];
         requestModelRepository = [EMSRequestModelRepository mock];
         compositeRequestModelRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:requestModelRepository
@@ -101,12 +100,33 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
                     @[modelCustomEvent1]
             );
 
-            EMSTimestampProvider *timestampProvider = [EMSTimestampProvider new];
-
             NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectAllSpecification new]];
             [[[result[0] payload][@"clicks"] should] equal:@[
                     @{@"message_id": [clicks[0] campaignId], @"button_id": [clicks[0] buttonId], @"timestamp": [timestampProvider timeStampOfDate:[clicks[0] timestamp]]},
                     @{@"message_id": [clicks[1] campaignId], @"button_id": [clicks[1] buttonId], @"timestamp": [timestampProvider timeStampOfDate:[clicks[1] timestamp]]}
+            ]];
+        });
+
+        it(@"should add viewed_messages on the custom event requests", ^{
+            NSArray<MEDisplayedIAM *> *viewedMessages = @[
+                    [[MEDisplayedIAM alloc] initWithCampaignId:123 timestamp:[NSDate date]],
+                    [[MEDisplayedIAM alloc] initWithCampaignId:42 timestamp:[NSDate date]]
+            ];
+
+            [[displayedRepository should] receive:@selector(query:) andReturn:viewedMessages];
+
+            EMSRequestModel *modelCustomEvent1 = customEventRequestModel(@"event1", nil);
+
+            createFakeRequestRepository(
+                    @[modelCustomEvent1],
+                    @[modelCustomEvent1],
+                    @[modelCustomEvent1]
+            );
+
+            NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectAllSpecification new]];
+            [[[result[0] payload][@"viewed_messages"] should] equal:@[
+                    @{@"message_id": @([viewedMessages[0] campaignId]), @"timestamp": [timestampProvider timeStampOfDate:[viewedMessages[0] timestamp]]},
+                    @{@"message_id": @([viewedMessages[1] campaignId]), @"timestamp": [timestampProvider timeStampOfDate:[viewedMessages[1] timestamp]]}
             ]];
         });
 
@@ -157,7 +177,7 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
             EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
                 [builder setMethod:HTTPMethodPOST];
-                [builder setPayload:@{@"clicks": @[], @"events": @[
+                [builder setPayload:@{@"viewed_messages": @[],@"clicks": @[], @"events": @[
                         [modelCustomEvent1.payload[@"events"] firstObject],
                         [modelCustomEvent2.payload[@"events"] firstObject],
                         [modelCustomEvent3.payload[@"events"] firstObject]]}];
@@ -185,7 +205,7 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
             EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
                 [builder setMethod:HTTPMethodPOST];
-                [builder setPayload:@{@"clicks": @[], @"events": @[
+                [builder setPayload:@{@"viewed_messages": @[],@"clicks": @[], @"events": @[
                         [modelCustomEvent1.payload[@"events"] firstObject],
                         [modelCustomEvent2.payload[@"events"] firstObject],
                         [modelCustomEvent3.payload[@"events"] firstObject]]}];

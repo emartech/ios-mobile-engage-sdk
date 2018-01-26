@@ -3,6 +3,7 @@
 //
 
 #import "MEDisplayedIAM.h"
+#import "EMSTimestampProvider.h"
 
 @implementation MEDisplayedIAM {
 
@@ -51,6 +52,14 @@
     [description appendFormat:@", self.timestamp=%@", self.timestamp];
     [description appendString:@">"];
     return description;
+}
+
+- (NSDictionary *)dictionaryRepresentation {
+    EMSTimestampProvider *timestampProvider = [EMSTimestampProvider new];
+    return @{
+            @"message_id" : @(self.campaignId),
+            @"timestamp" : [timestampProvider timeStampOfDate:self.timestamp]
+    };
 }
 
 @end
