@@ -8,6 +8,7 @@
 #import "MERequestModelSelectEventsSpecification.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSCompositeRequestModel.h"
+#import "MERequestTools.h"
 
 @interface MERequestRepositoryProxy ()
 
@@ -72,7 +73,7 @@
 }
 
 - (BOOL)isCustomEvent:(EMSRequestModel *)requestModel {
-    return [[[requestModel url] absoluteString] containsString:@"/v3/devices/"];
+    return [MERequestTools isRequestCustomEvent:requestModel];
 }
 
 - (BOOL)isEmpty {

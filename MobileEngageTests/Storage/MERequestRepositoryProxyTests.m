@@ -46,9 +46,9 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
         }];
     };
 
-    id (^normalRequestModel)() = ^id() {
+    id (^normalRequestModel)(NSString *url) = ^id(NSString *url) {
         return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            [builder setUrl:@"https://www.google.com"];
+            [builder setUrl:url];
             [builder setMethod:HTTPMethodGET];
         }];
     };
@@ -108,9 +108,9 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
 
         it(@"should query composite RequestModel from RequestRepository when select first", ^{
             EMSRequestModel *modelCustomEvent1 = customEventRequestModel(@"event1", nil);
-            EMSRequestModel *model1 = normalRequestModel();
+            EMSRequestModel *model1 = normalRequestModel(@"https://www.google.com");
             EMSRequestModel *modelCustomEvent2 = customEventRequestModel(@"event2", @{@"key1": @"value1", @"key2": @"value2"});
-            EMSRequestModel *model2 = normalRequestModel();
+            EMSRequestModel *model2 = normalRequestModel(@"https://www.google.com");
             EMSRequestModel *modelCustomEvent3 = customEventRequestModel(@"event3", @{@"star": @"wars"});
 
             EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
@@ -125,12 +125,12 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
 
             EMSRequestModelSelectFirstSpecification *selectFirstSpecification = [EMSRequestModelSelectFirstSpecification new];
             MERequestModelSelectEventsSpecification *selectAllCustomEventSpecification = [MERequestModelSelectEventsSpecification new];
-            EMSRequestModelSelectAllSpecification *selectAllEventSpecification = [EMSRequestModelSelectAllSpecification new];
+            EMSRequestModelSelectAllSpecification *selectAllRequestSpecification = [EMSRequestModelSelectAllSpecification new];
 
             FakeRequestRepository *fakeRequestRepository = [FakeRequestRepository new];
             fakeRequestRepository.queryResponseMapping = @{[selectFirstSpecification sql]: @[modelCustomEvent1],
                     [selectAllCustomEventSpecification sql]: @[modelCustomEvent1, modelCustomEvent2, modelCustomEvent3],
-                    [selectAllEventSpecification sql]: @[modelCustomEvent1, model1, modelCustomEvent2, model2, modelCustomEvent3]};
+                    [selectAllRequestSpecification sql]: @[modelCustomEvent1, model1, modelCustomEvent2, model2, modelCustomEvent3]};
 
             compositeRequestModelRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:fakeRequestRepository
                                                                                                   buttonClickRepository:buttonClickRepository
@@ -142,10 +142,10 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
         });
 
         it(@"should query composite RequestModels from RequestRepository when select all", ^{
-            EMSRequestModel *model1 = normalRequestModel();
+            EMSRequestModel *model1 = normalRequestModel(@"https://www.google.com");
             EMSRequestModel *modelCustomEvent1 = customEventRequestModel(@"event1", nil);
             EMSRequestModel *modelCustomEvent2 = customEventRequestModel(@"event2", @{@"key1": @"value1", @"key2": @"value2"});
-            EMSRequestModel *model2 = normalRequestModel();
+            EMSRequestModel *model2 = normalRequestModel(@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events534");
             EMSRequestModel *modelCustomEvent3 = customEventRequestModel(@"event3", @{@"star": @"wars"});
 
             EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
