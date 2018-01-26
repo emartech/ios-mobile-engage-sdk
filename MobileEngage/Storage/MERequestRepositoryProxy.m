@@ -9,10 +9,12 @@
 #import "EMSRequestModelBuilder.h"
 #import "EMSCompositeRequestModel.h"
 #import "MERequestTools.h"
+#import "MEButtonClickFilterNoneSpecification.h"
 
 @interface MERequestRepositoryProxy ()
 
 @property(nonatomic, strong) EMSRequestModelRepository *requestModelRepository;
+@property(nonatomic, strong) MEButtonClickRepository *clickRepository;
 
 @end
 
@@ -24,6 +26,7 @@
     self = [super init];
     if (self) {
         _requestModelRepository = requestModelRepository;
+        _clickRepository = buttonClickRepository;
     }
 
     return self;
@@ -66,7 +69,14 @@
             [eventNames addObject:[model.payload[@"events"] firstObject]];
             [requestIds addObject:model.requestId];
         }
-        [builder setPayload:@{@"events": eventNames}];
+
+        NSArray<MEButtonClick *> *buttonModels = [self.clickRepository query:[MEButtonClickFilterNoneSpecification new]];
+        NSMutableArray *clicks = [NSMutableArray new];
+        for(MEButtonClick *click in buttonModels) {
+            [clicks addObject:[click dictionaryRepresentation]];
+        }
+
+        [builder setPayload:@{@"clicks": [NSArray arrayWithArray:clicks] , @"events": eventNames}];
     }];
     composite.originalRequestIds = [NSArray arrayWithArray:requestIds];
     return composite;

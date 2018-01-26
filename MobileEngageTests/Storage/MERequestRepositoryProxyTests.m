@@ -53,21 +53,62 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
         }];
     };
 
+    id (^createFakeRequestRepository)(NSArray *nextRequest, NSArray *allCustomEvents, NSArray *AllRequests) = ^id(NSArray *nextRequest, NSArray *allCustomEvents, NSArray *AllRequests) {
+        EMSRequestModelSelectFirstSpecification *selectFirstSpecification = [EMSRequestModelSelectFirstSpecification new];
+        MERequestModelSelectEventsSpecification *selectAllCustomEventSpecification = [MERequestModelSelectEventsSpecification new];
+        EMSRequestModelSelectAllSpecification *selectAllRequestsSpecification = [EMSRequestModelSelectAllSpecification new];
+
+        FakeRequestRepository *fakeRequestRepository = [FakeRequestRepository new];
+        fakeRequestRepository.queryResponseMapping = @{[selectFirstSpecification sql]: nextRequest,
+                [selectAllCustomEventSpecification sql]: allCustomEvents,
+                [selectAllRequestsSpecification sql]: AllRequests};
+
+        compositeRequestModelRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:fakeRequestRepository
+                                                                                     buttonClickRepository:buttonClickRepository
+                                                                                    displayedIAMRepository:displayedRepository];
+        return compositeRequestModelRepository;
+    };
+
     beforeEach(^{
         timestampProvider = [EMSTimestampProvider mock];
         [[timestampProvider should] receive:@selector(currentTimeStamp) andReturn:@42 withCountAtLeast:0];
         displayedRepository = [MEDisplayedIAMRepository mock];
-        buttonClickRepository = [MEButtonClickRepository mock];
+        buttonClickRepository = [MEButtonClickRepository nullMock];
         requestModelRepository = [EMSRequestModelRepository mock];
         compositeRequestModelRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:requestModelRepository
-                                                                                              buttonClickRepository:buttonClickRepository
-                                                                                             displayedIAMRepository:displayedRepository];
+                                                                                     buttonClickRepository:buttonClickRepository
+                                                                                    displayedIAMRepository:displayedRepository];
     });
 
     afterEach(^{
     });
 
     describe(@"MERequestRepositoryProxy", ^{
+
+        it(@"should add buttonClicks on the custom event requests", ^{
+            NSArray<MEButtonClick *> *clicks = @[
+                    [[MEButtonClick alloc] initWithCampaignId:@"campaignID" buttonId:@"buttonID" timestamp:[NSDate date]],
+                    [[MEButtonClick alloc] initWithCampaignId:@"campaignID2" buttonId:@"buttonID2" timestamp:[NSDate date]]
+            ];
+
+            [[buttonClickRepository should] receive:@selector(query:) andReturn:clicks];
+
+            EMSRequestModel *modelCustomEvent1 = customEventRequestModel(@"event1", nil);
+
+            createFakeRequestRepository(
+                    @[modelCustomEvent1],
+                    @[modelCustomEvent1],
+                    @[modelCustomEvent1]
+            );
+
+            EMSTimestampProvider *timestampProvider = [EMSTimestampProvider new];
+
+            NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectAllSpecification new]];
+            [[[result[0] payload][@"clicks"] should] equal:@[
+                    @{@"message_id": [clicks[0] campaignId], @"button_id": [clicks[0] buttonId], @"timestamp": [timestampProvider timeStampOfDate:[clicks[0] timestamp]]},
+                    @{@"message_id": [clicks[1] campaignId], @"button_id": [clicks[1] buttonId], @"timestamp": [timestampProvider timeStampOfDate:[clicks[1] timestamp]]}
+            ]];
+        });
 
         it(@"should add the element to the requestModelRepository", ^{
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
@@ -116,25 +157,18 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
             EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
                 [builder setMethod:HTTPMethodPOST];
-                [builder setPayload:@{@"events": @[
+                [builder setPayload:@{@"clicks": @[], @"events": @[
                         [modelCustomEvent1.payload[@"events"] firstObject],
                         [modelCustomEvent2.payload[@"events"] firstObject],
                         [modelCustomEvent3.payload[@"events"] firstObject]]}];
             }];
             compositeModel.originalRequestIds = @[modelCustomEvent1.requestId, modelCustomEvent2.requestId, modelCustomEvent3.requestId];
 
-            EMSRequestModelSelectFirstSpecification *selectFirstSpecification = [EMSRequestModelSelectFirstSpecification new];
-            MERequestModelSelectEventsSpecification *selectAllCustomEventSpecification = [MERequestModelSelectEventsSpecification new];
-            EMSRequestModelSelectAllSpecification *selectAllRequestSpecification = [EMSRequestModelSelectAllSpecification new];
-
-            FakeRequestRepository *fakeRequestRepository = [FakeRequestRepository new];
-            fakeRequestRepository.queryResponseMapping = @{[selectFirstSpecification sql]: @[modelCustomEvent1],
-                    [selectAllCustomEventSpecification sql]: @[modelCustomEvent1, modelCustomEvent2, modelCustomEvent3],
-                    [selectAllRequestSpecification sql]: @[modelCustomEvent1, model1, modelCustomEvent2, model2, modelCustomEvent3]};
-
-            compositeRequestModelRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:fakeRequestRepository
-                                                                                                  buttonClickRepository:buttonClickRepository
-                                                                                                 displayedIAMRepository:displayedRepository];
+            createFakeRequestRepository(
+                    @[modelCustomEvent1],
+                    @[modelCustomEvent1, modelCustomEvent2, modelCustomEvent3],
+                    @[modelCustomEvent1, model1, modelCustomEvent2, model2, modelCustomEvent3]
+            );
 
             NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectFirstSpecification new]];
             [[theValue([result count]) should] equal:theValue(1)];
@@ -151,25 +185,19 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
             EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
                 [builder setMethod:HTTPMethodPOST];
-                [builder setPayload:@{@"events": @[
+                [builder setPayload:@{@"clicks": @[], @"events": @[
                         [modelCustomEvent1.payload[@"events"] firstObject],
                         [modelCustomEvent2.payload[@"events"] firstObject],
                         [modelCustomEvent3.payload[@"events"] firstObject]]}];
             }];
             compositeModel.originalRequestIds = @[modelCustomEvent1.requestId, modelCustomEvent2.requestId, modelCustomEvent3.requestId];
 
-            EMSRequestModelSelectFirstSpecification *selectFirstSpecification = [EMSRequestModelSelectFirstSpecification new];
-            MERequestModelSelectEventsSpecification *selectAllCustomEventSpecification = [MERequestModelSelectEventsSpecification new];
-            EMSRequestModelSelectAllSpecification *selectAllEventSpecification = [EMSRequestModelSelectAllSpecification new];
 
-            FakeRequestRepository *fakeRequestRepository = [FakeRequestRepository new];
-            fakeRequestRepository.queryResponseMapping = @{[selectFirstSpecification sql]: @[modelCustomEvent1],
-                    [selectAllCustomEventSpecification sql]: @[modelCustomEvent1, modelCustomEvent2, modelCustomEvent3],
-                    [selectAllEventSpecification sql]: @[model1, modelCustomEvent1, modelCustomEvent2, model2, modelCustomEvent3]};
-
-            compositeRequestModelRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:fakeRequestRepository
-                                                                                                  buttonClickRepository:buttonClickRepository
-                                                                                                 displayedIAMRepository:displayedRepository];
+            createFakeRequestRepository(
+                    @[modelCustomEvent1],
+                    @[modelCustomEvent1, modelCustomEvent2, modelCustomEvent3],
+                    @[model1, modelCustomEvent1, modelCustomEvent2, model2, modelCustomEvent3]
+            );
 
             NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectAllSpecification new]];
             [[theValue([result count]) should] equal:theValue(3)];
