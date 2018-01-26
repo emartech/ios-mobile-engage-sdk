@@ -5,7 +5,7 @@
 #import "MEDisplayedIAMRepository.h"
 #import "MEButtonClickRepository.h"
 #import "EMSRequestModelRepository.h"
-#import "MECompositeRequestModelRepository.h"
+#import "MERequestRepositoryProxy.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSRequestModelSelectAllSpecification.h"
 #import "EMSCompositeRequestModel.h"
@@ -18,12 +18,12 @@
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestMEDB.db"]
 
 
-SPEC_BEGIN(MECompositeRequestModelRepositoryTests)
+SPEC_BEGIN(MERequestRepositoryProxyTests)
 
     __block MEDisplayedIAMRepository *displayedRepository;
     __block MEButtonClickRepository *buttonClickRepository;
     __block EMSRequestModelRepository *requestModelRepository;
-    __block MECompositeRequestModelRepository *compositeRequestModelRepository;
+    __block MERequestRepositoryProxy *compositeRequestModelRepository;
     __block EMSTimestampProvider *timestampProvider;
 
     registerMatchers(@"EMS");
@@ -59,7 +59,7 @@ SPEC_BEGIN(MECompositeRequestModelRepositoryTests)
         displayedRepository = [MEDisplayedIAMRepository mock];
         buttonClickRepository = [MEButtonClickRepository mock];
         requestModelRepository = [EMSRequestModelRepository mock];
-        compositeRequestModelRepository = [[MECompositeRequestModelRepository alloc] initWithRequestModelRepository:requestModelRepository
+        compositeRequestModelRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:requestModelRepository
                                                                                               buttonClickRepository:buttonClickRepository
                                                                                              displayedIAMRepository:displayedRepository];
     });
@@ -67,7 +67,7 @@ SPEC_BEGIN(MECompositeRequestModelRepositoryTests)
     afterEach(^{
     });
 
-    describe(@"MECompositeRequestModelRepository", ^{
+    describe(@"MERequestRepositoryProxy", ^{
 
         it(@"should add the element to the requestModelRepository", ^{
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
@@ -132,7 +132,7 @@ SPEC_BEGIN(MECompositeRequestModelRepositoryTests)
                     [selectAllCustomEventSpecification sql]: @[modelCustomEvent1, modelCustomEvent2, modelCustomEvent3],
                     [selectAllEventSpecification sql]: @[modelCustomEvent1, model1, modelCustomEvent2, model2, modelCustomEvent3]};
 
-            compositeRequestModelRepository = [[MECompositeRequestModelRepository alloc] initWithRequestModelRepository:fakeRequestRepository
+            compositeRequestModelRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:fakeRequestRepository
                                                                                                   buttonClickRepository:buttonClickRepository
                                                                                                  displayedIAMRepository:displayedRepository];
 
@@ -167,7 +167,7 @@ SPEC_BEGIN(MECompositeRequestModelRepositoryTests)
                     [selectAllCustomEventSpecification sql]: @[modelCustomEvent1, modelCustomEvent2, modelCustomEvent3],
                     [selectAllEventSpecification sql]: @[model1, modelCustomEvent1, modelCustomEvent2, model2, modelCustomEvent3]};
 
-            compositeRequestModelRepository = [[MECompositeRequestModelRepository alloc] initWithRequestModelRepository:fakeRequestRepository
+            compositeRequestModelRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:fakeRequestRepository
                                                                                                   buttonClickRepository:buttonClickRepository
                                                                                                  displayedIAMRepository:displayedRepository];
 

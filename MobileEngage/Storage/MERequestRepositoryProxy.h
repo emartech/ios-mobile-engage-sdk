@@ -9,7 +9,7 @@
 @class MEButtonClickRepository;
 @class MEDisplayedIAMRepository;
 
-@interface MECompositeRequestModelRepository : NSObject <EMSRequestModelRepositoryProtocol>
+@interface MERequestRepositoryProxy : NSObject <EMSRequestModelRepositoryProtocol>
 
 - (instancetype)initWithRequestModelRepository:(EMSRequestModelRepository *)requestModelRepository
                          buttonClickRepository:(MEButtonClickRepository *)buttonClickRepository

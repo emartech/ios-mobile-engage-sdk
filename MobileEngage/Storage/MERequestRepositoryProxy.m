@@ -2,20 +2,20 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 
-#import "MECompositeRequestModelRepository.h"
+#import "MERequestRepositoryProxy.h"
 #import "MEButtonClickRepository.h"
 #import "MEDisplayedIAMRepository.h"
 #import "MERequestModelSelectEventsSpecification.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSCompositeRequestModel.h"
 
-@interface MECompositeRequestModelRepository ()
+@interface MERequestRepositoryProxy ()
 
 @property(nonatomic, strong) EMSRequestModelRepository *requestModelRepository;
 
 @end
 
-@implementation MECompositeRequestModelRepository
+@implementation MERequestRepositoryProxy
 
 - (instancetype)initWithRequestModelRepository:(EMSRequestModelRepository *)requestModelRepository
                          buttonClickRepository:(MEButtonClickRepository *)buttonClickRepository
