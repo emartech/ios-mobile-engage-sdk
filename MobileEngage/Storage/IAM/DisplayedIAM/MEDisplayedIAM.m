@@ -34,7 +34,7 @@
         return NO;
     if (self.campaignId != iam.campaignId && ![self.campaignId isEqualToString:iam.campaignId])
         return NO;
-    if (self.timestamp != iam.timestamp && ![self.timestamp isEqualToDate:iam.timestamp])
+    if (self.timestamp != iam.timestamp && [self.timestamp timeIntervalSince1970] != [iam.timestamp timeIntervalSince1970])
         return NO;
     return YES;
 }
