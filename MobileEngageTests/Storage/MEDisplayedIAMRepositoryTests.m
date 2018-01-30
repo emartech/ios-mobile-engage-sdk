@@ -15,6 +15,8 @@ SPEC_BEGIN(MEDisplayedIAMRepositoryTests)
     __block MEDisplayedIAMRepository *repository;
 
     beforeEach(^{
+        [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH
+                                                   error:nil];
         helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:TEST_DB_PATH schemaDelegate:[MESchemaDelegate new]];
         [helper open];
         repository = [[MEDisplayedIAMRepository alloc] initWithDbHelper:helper];
@@ -22,13 +24,11 @@ SPEC_BEGIN(MEDisplayedIAMRepositoryTests)
 
     afterEach(^{
         [helper close];
-        [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH
-                                                   error:nil];
     });
 
     describe(@"repository", ^{
         it(@"should add the element to the database", ^{
-            MEDisplayedIAM *displayedIAM = [[MEDisplayedIAM alloc] initWithCampaignId:12345678 timestamp:[NSDate date]];
+            MEDisplayedIAM *displayedIAM = [[MEDisplayedIAM alloc] initWithCampaignId:@"12345678" timestamp:[NSDate date]];
 
             [repository add:displayedIAM];
 
@@ -38,8 +38,8 @@ SPEC_BEGIN(MEDisplayedIAMRepositoryTests)
         });
 
         it(@"should delete element from database", ^{
-            MEDisplayedIAM *displayedIAMFirst = [[MEDisplayedIAM alloc] initWithCampaignId:12345678 timestamp:[NSDate date]];
-            MEDisplayedIAM *displayedIAMSecond = [[MEDisplayedIAM alloc] initWithCampaignId:98765432 timestamp:[NSDate date]];
+            MEDisplayedIAM *displayedIAMFirst = [[MEDisplayedIAM alloc] initWithCampaignId:@"12345678" timestamp:[NSDate date]];
+            MEDisplayedIAM *displayedIAMSecond = [[MEDisplayedIAM alloc] initWithCampaignId:@"98765432" timestamp:[NSDate date]];
 
             [repository add:displayedIAMFirst];
             [repository add:displayedIAMSecond];

@@ -7,17 +7,17 @@
 
 @interface MEDisplayedIAM : NSObject
 
-@property (nonatomic, assign) long campaignId;
+@property (nonatomic, strong) NSString *campaignId;
 @property (nonatomic, strong) NSDate *timestamp;
 
-- (instancetype)initWithCampaignId:(long)campaignId timestamp:(NSDate *)timestamp;
+- (instancetype)initWithCampaignId:(NSString *)campaignId timestamp:(NSDate *)timestamp;
+
+- (NSDictionary *)dictionaryRepresentation;
 
 - (BOOL)isEqual:(id)other;
 
 - (BOOL)isEqualToIam:(MEDisplayedIAM *)iam;
 
 - (NSUInteger)hash;
-
-- (NSDictionary *)dictionaryRepresentation;
 
 @end

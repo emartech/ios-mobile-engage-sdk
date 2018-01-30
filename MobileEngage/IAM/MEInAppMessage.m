@@ -9,7 +9,7 @@
 - (instancetype)initWithResponseParsedBody:(NSDictionary *)parsedBody; {
     if (self = [super init]) {
         _html = parsedBody[@"message"][@"html"];
-        _campaignId = [parsedBody[@"message"][@"id"] intValue];
+        _campaignId = parsedBody[@"message"][@"id"];
     }
     return self;
 }
@@ -28,7 +28,7 @@
         return YES;
     if (message == nil)
         return NO;
-    if (self.campaignId != message.campaignId)
+    if (self.campaignId != message.campaignId && ![self.campaignId isEqualToString:message.campaignId])
         return NO;
     if (self.html != message.html && ![self.html isEqualToString:message.html])
         return NO;
@@ -36,7 +36,7 @@
 }
 
 - (NSUInteger)hash {
-    NSUInteger hash = (NSUInteger) self.campaignId;
+    NSUInteger hash = [self.campaignId hash];
     hash = hash * 31u + [self.html hash];
     return hash;
 }

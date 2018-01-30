@@ -10,7 +10,6 @@
 #import "MobileEngage+Test.h"
 #import "MEDisplayedIAMRepository.h"
 #import "MobileEngage+Private.h"
-#import "MEDisplayedIAMFilterByCampaignIdSpecification.h"
 #import "MEConfigBuilder.h"
 #import "MEConfig.h"
 #import "MEInAppMessage.h"
@@ -92,13 +91,13 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
             [MobileEngage setDbHelper:dbHelper];
 
             NSString *html = @"<html><body style=\"background-color:red\"></body></html>";
-            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id" : @12345678 , @"html" : html}} options:0 error:nil];
+            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id" : @"12345678" , @"html" : html}} options:0 error:nil];
             EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:body];
 
             [[MEIAMResponseHandler new] handleResponse:response];
 
             [dbHelper waitForInsert];
-            [[theValue([dbHelper.insertedModel campaignId]) should] equal:theValue(12345678)];
+            [[[(MEDisplayedIAM *)dbHelper.insertedModel campaignId] should] equal:@"12345678"];
         });
 
     });

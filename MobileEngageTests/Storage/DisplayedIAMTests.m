@@ -9,9 +9,9 @@ SPEC_BEGIN(MEDisplayedIAMTests)
 
     describe(@"dictionaryRepresentation", ^{
         it(@"should return correct dictionary", ^{
-            MEDisplayedIAM *display = [[MEDisplayedIAM alloc] initWithCampaignId:123 timestamp:[NSDate dateWithTimeIntervalSince1970:12345]];
+            MEDisplayedIAM *display = [[MEDisplayedIAM alloc] initWithCampaignId:@"123" timestamp:[NSDate dateWithTimeIntervalSince1970:12345]];
             [[[display dictionaryRepresentation] should] equal:@{
-                    @"message_id" : @123,
+                    @"message_id" : @"123",
                     @"timestamp" : @12345000
             }];
         });

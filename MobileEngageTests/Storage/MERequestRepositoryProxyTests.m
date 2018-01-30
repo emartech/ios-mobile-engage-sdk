@@ -110,8 +110,8 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
 
         it(@"should add viewed_messages on the custom event requests", ^{
             NSArray<MEDisplayedIAM *> *viewedMessages = @[
-                    [[MEDisplayedIAM alloc] initWithCampaignId:123 timestamp:[NSDate date]],
-                    [[MEDisplayedIAM alloc] initWithCampaignId:42 timestamp:[NSDate date]]
+                    [[MEDisplayedIAM alloc] initWithCampaignId:@"123" timestamp:[NSDate date]],
+                    [[MEDisplayedIAM alloc] initWithCampaignId:@"42" timestamp:[NSDate date]]
             ];
 
             [[displayedRepository should] receive:@selector(query:) andReturn:viewedMessages];
@@ -126,8 +126,8 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
 
             NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectAllSpecification new]];
             [[[result[0] payload][@"viewed_messages"] should] equal:@[
-                    @{@"message_id": @([viewedMessages[0] campaignId]), @"timestamp": [timestampProvider timeStampOfDate:[viewedMessages[0] timestamp]]},
-                    @{@"message_id": @([viewedMessages[1] campaignId]), @"timestamp": [timestampProvider timeStampOfDate:[viewedMessages[1] timestamp]]}
+                    @{@"message_id": [viewedMessages[0] campaignId], @"timestamp": [timestampProvider timeStampOfDate:[viewedMessages[0] timestamp]]},
+                    @{@"message_id": [viewedMessages[1] campaignId], @"timestamp": [timestampProvider timeStampOfDate:[viewedMessages[1] timestamp]]}
             ]];
         });
 
