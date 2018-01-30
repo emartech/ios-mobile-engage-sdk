@@ -11,6 +11,7 @@
 #import "MERequestTools.h"
 #import "MEButtonClickFilterNoneSpecification.h"
 #import "MEDisplayedIAMFilterNoneSpecification.h"
+#import "EMSDeviceInfo.h"
 
 @interface MERequestRepositoryProxy ()
 
@@ -67,8 +68,9 @@
     NSArray<NSString *> *requestIds = [self extractRequestIds:allCustomEvents];
 
     EMSCompositeRequestModel *composite = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+        [builder setHeaders:requestModel.headers];
         [builder setUrl:[[requestModel url] absoluteString]];
-        [builder setPayload:@{@"viewed_messages": [self displayRepresentations], @"clicks": [self clickRepresentations], @"events": [self eventRepresentations:allCustomEvents]}];
+        [builder setPayload:@{@"hardware_id": [EMSDeviceInfo hardwareId], @"viewed_messages": [self displayRepresentations], @"clicks": [self clickRepresentations], @"events": [self eventRepresentations:allCustomEvents]}];
     }];
     composite.originalRequestIds = [NSArray arrayWithArray:requestIds];
     return composite;
@@ -76,7 +78,7 @@
 
 - (NSArray<NSString *> *)extractRequestIds:(NSArray *)allCustomEvents {
     NSMutableArray <NSString *> *requestIds = [NSMutableArray array];
-    for(EMSRequestModel *request in allCustomEvents) {
+    for (EMSRequestModel *request in allCustomEvents) {
         [requestIds addObject:[request requestId]];
     }
     return [NSArray arrayWithArray:requestIds];

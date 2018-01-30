@@ -14,6 +14,7 @@
 #import "MERequestModelSelectEventsSpecification.h"
 #import "EMSRequestModelMatcher.h"
 #import "EMSTimestampProvider.h"
+#import "EMSDeviceInfo.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestMEDB.db"]
 
@@ -177,7 +178,7 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
             EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
                 [builder setMethod:HTTPMethodPOST];
-                [builder setPayload:@{@"viewed_messages": @[],@"clicks": @[], @"events": @[
+                [builder setPayload:@{@"hardware_id": [EMSDeviceInfo hardwareId], @"viewed_messages": @[], @"clicks": @[], @"events": @[
                         [modelCustomEvent1.payload[@"events"] firstObject],
                         [modelCustomEvent2.payload[@"events"] firstObject],
                         [modelCustomEvent3.payload[@"events"] firstObject]]}];
@@ -205,7 +206,7 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
             EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
                 [builder setMethod:HTTPMethodPOST];
-                [builder setPayload:@{@"viewed_messages": @[],@"clicks": @[], @"events": @[
+                [builder setPayload:@{@"hardware_id": [EMSDeviceInfo hardwareId], @"viewed_messages": @[], @"clicks": @[], @"events": @[
                         [modelCustomEvent1.payload[@"events"] firstObject],
                         [modelCustomEvent2.payload[@"events"] firstObject],
                         [modelCustomEvent3.payload[@"events"] firstObject]]}];
