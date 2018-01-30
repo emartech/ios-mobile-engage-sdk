@@ -17,6 +17,8 @@
 #import "MEIAMResponseHandler.h"
 #import "MobileEngageInternal+Test.h"
 #import "MEExperimental.h"
+#import "EMSRequestModelRepository.h"
+#import "MERequestRepositoryProxy.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
@@ -103,6 +105,21 @@ SPEC_BEGIN(PublicInterfaceTest)
             }
 
             [[theValue(registered) should] beYes];
+        });
+
+        it(@"should call setupWithRequestManager:config:launchOptions: with MERequestRepositoryProxy when INAPP feature turned on", ^{
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:kAppId
+                                       applicationPassword:kAppSecret];
+                [builder setExperimentalFeatures:@[INAPP_MESSAGING]];
+            }];
+            MobileEngageInternal *internal = [MobileEngageInternal new];
+            KWCaptureSpy *spy = [internal captureArgument:@selector(setupWithRequestManager:config:launchOptions:)
+                                                  atIndex:0];
+            [internal setupWithConfig:config
+                        launchOptions:nil];
+            EMSRequestManager *manager = spy.argument;
+            [[[manager.repository class] should] equal:[MERequestRepositoryProxy class]];
         });
     });
 

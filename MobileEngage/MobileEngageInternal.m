@@ -17,6 +17,13 @@
 #import "MEIdResponseHandler.h"
 #import "MEIAMResponseHandler.h"
 #import "MEExperimental.h"
+#import "EMSRequestModelRepository.h"
+#import "EMSSQLiteHelper.h"
+#import "MERequestRepositoryProxy.h"
+#import "MEButtonClickRepository.h"
+#import "MobileEngage.h"
+#import "MobileEngage+Private.h"
+#import "MEDisplayedIAMRepository.h"
 
 @interface MobileEngageInternal ()
 
@@ -33,8 +40,6 @@
 - (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
                          config:(nonnull MEConfig *)config
                   launchOptions:(NSDictionary *)launchOptions {
-
-    [MEExperimental enableFeatures:config.experimentalFeatures];
     _lastAppLoginPayload = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] dictionaryForKey:kLastAppLoginPayload];
     _meId = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID];
     _requestManager = requestManager;
@@ -50,6 +55,7 @@
 
 - (void)setupWithConfig:(nonnull MEConfig *)config
           launchOptions:(NSDictionary *)launchOptions {
+    [MEExperimental enableFeatures:config.experimentalFeatures];
     __weak typeof(self) weakSelf = self;
     _successBlock = ^(NSString *requestId, EMSResponseModel *responseModel) {
         [weakSelf handleResponse:responseModel];
@@ -68,10 +74,22 @@
             }
         });
     };
-    [self setupWithRequestManager:[EMSRequestManager managerWithSuccessBlock:self.successBlock
-                                                                  errorBlock:self.errorBlock]
-                           config:config
-                    launchOptions:launchOptions];
+    if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
+        MERequestRepositoryProxy *requestRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:[[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDefaultDatabase]]
+                                                                                                 buttonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
+                                                                                                displayedIAMRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]];
+        [self setupWithRequestManager:[EMSRequestManager managerWithSuccessBlock:self.successBlock
+                                                                      errorBlock:self.errorBlock
+                                                               requestRepository:requestRepository]
+                               config:config
+                        launchOptions:launchOptions];
+    } else {
+        [self setupWithRequestManager:[EMSRequestManager managerWithSuccessBlock:self.successBlock
+                                                                      errorBlock:self.errorBlock]
+                               config:config
+                        launchOptions:launchOptions];
+    }
+
 }
 
 - (void)handleResponse:(EMSResponseModel *)model {
