@@ -3,8 +3,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MESQLSpecification.h"
+#import "EMSSQLSpecificationProtocol.h"
 
-@interface MEDisplayedIAMFilterNoneSpecification : NSObject <MESQLSpecification>
+@interface MEDisplayedIAMFilterNoneSpecification : NSObject <EMSSQLSpecificationProtocol>
 
 @end

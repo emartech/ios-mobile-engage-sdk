@@ -4,7 +4,6 @@
 #import "MobileEngageInternal+Private.h"
 #import "MEConfigBuilder.h"
 #import "MEConfig.h"
-#import "EMSRequestModel.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSRequestModelMatcher.h"
 #import "EMSAuthentication.h"
@@ -17,8 +16,8 @@
 #import "MEIAMResponseHandler.h"
 #import "MobileEngageInternal+Test.h"
 #import "MEExperimental.h"
-#import "EMSRequestModelRepository.h"
 #import "MERequestRepositoryProxy.h"
+#import "MEIAMCleanupResponseHandler.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
@@ -100,6 +99,19 @@ SPEC_BEGIN(PublicInterfaceTest)
             BOOL registered = NO;
             for (AbstractResponseHandler *responseHandler in _mobileEngage.responseHandlers) {
                 if ([responseHandler isKindOfClass:[MEIAMResponseHandler class]]) {
+                    registered = YES;
+                }
+            }
+
+            [[theValue(registered) should] beYes];
+        });
+
+        it(@"should register MEIAMCleanupResponseHandler", ^{
+            requestManagerMock();
+
+            BOOL registered = NO;
+            for (AbstractResponseHandler *responseHandler in _mobileEngage.responseHandlers) {
+                if ([responseHandler isKindOfClass:[MEIAMCleanupResponseHandler class]]) {
                     registered = YES;
                 }
             }

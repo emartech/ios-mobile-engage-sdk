@@ -5,13 +5,14 @@
 #import <Foundation/Foundation.h>
 #import "EMSSQLiteHelper.h"
 #import "MEDisplayedIAM.h"
-#import "MESQLSpecification.h"
+#import "EMSSQLSpecificationProtocol.h"
+#import "EMSRepositoryProtocol.h"
 
-@interface MEDisplayedIAMRepository : NSObject
+@interface MEDisplayedIAMRepository : NSObject <EMSRepositoryProtocol>
 
 - (instancetype)initWithDbHelper:(EMSSQLiteHelper *)sqliteHelper;
 - (void)add:(MEDisplayedIAM *)item;
-- (void)remove:(id<MESQLSpecification>)sqlSpecification;
-- (NSArray<MEDisplayedIAM *> *)query:(id<MESQLSpecification>)sqlSpecification;
+- (void)remove:(id<EMSSQLSpecificationProtocol>)sqlSpecification;
+- (NSArray<MEDisplayedIAM *> *)query:(id<EMSSQLSpecificationProtocol>)sqlSpecification;
 
 @end

@@ -18,12 +18,12 @@
 #import "MEIAMResponseHandler.h"
 #import "MEExperimental.h"
 #import "EMSRequestModelRepository.h"
-#import "EMSSQLiteHelper.h"
 #import "MERequestRepositoryProxy.h"
 #import "MEButtonClickRepository.h"
 #import "MobileEngage.h"
 #import "MobileEngage+Private.h"
 #import "MEDisplayedIAMRepository.h"
+#import "MEIAMCleanupResponseHandler.h"
 
 @interface MobileEngageInternal ()
 
@@ -46,7 +46,12 @@
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
     if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
-        _responseHandlers = @[[[MEIdResponseHandler alloc] initWithMobileEngageInternal:self], [MEIAMResponseHandler new]];
+        _responseHandlers = @[
+                [[MEIdResponseHandler alloc] initWithMobileEngageInternal:self],
+                [MEIAMResponseHandler new],
+                [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
+                                                              displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]
+        ];
     } else {
         _responseHandlers = @[];
     }
@@ -230,11 +235,6 @@
         payload[@"clicks"] = @[];
         payload[@"viewed_messages"] = @[];
         payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
-
-//        payload[@"device_language"] = [EMSDeviceInfo languageCode];
-//        payload[@"application_version"] = [EMSDeviceInfo applicationVersion];
-//        payload[@"sdk_version"] = MOBILEENGAGE_SDK_VERSION;
-
 
         NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
                 @"type": @"custom",

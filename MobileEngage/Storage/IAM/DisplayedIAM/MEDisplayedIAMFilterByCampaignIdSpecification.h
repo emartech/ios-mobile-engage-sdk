@@ -3,13 +3,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MESQLSpecification.h"
+#import "EMSSQLSpecificationProtocol.h"
 
-@interface MEDisplayedIAMFilterByCampaignIdSpecification : NSObject <MESQLSpecification>
+@interface MEDisplayedIAMFilterByCampaignIdSpecification : NSObject <EMSSQLSpecificationProtocol>
 
-@property (nonatomic, readonly) long campaignId;
+@property (nonatomic, readonly) NSString *campaignId;
 
-- (instancetype)initWithCampaignId:(long)campaignId;
+- (instancetype)initWithCampaignId:(NSString *)campaignId;
 
 
 @end

@@ -3,14 +3,15 @@
 //
 #import <Foundation/Foundation.h>
 #import "EMSSQLiteHelper.h"
-#import "MESQLSpecification.h"
+#import "EMSSQLSpecificationProtocol.h"
 #import "MEButtonClick.h"
+#import "EMSRepositoryProtocol.h"
 
-@interface MEButtonClickRepository : NSObject
+@interface MEButtonClickRepository : NSObject <EMSRepositoryProtocol>
 
 - (instancetype)initWithDbHelper:(EMSSQLiteHelper *)sqliteHelper;
 - (void)add:(MEButtonClick *)item;
-- (void)remove:(id<MESQLSpecification>)sqlSpecification;
-- (NSArray<MEButtonClick *> *)query:(id<MESQLSpecification>)sqlSpecification;
+- (void)remove:(id<EMSSQLSpecificationProtocol>)sqlSpecification;
+- (NSArray<MEButtonClick *> *)query:(id<EMSSQLSpecificationProtocol>)sqlSpecification;
 
 @end

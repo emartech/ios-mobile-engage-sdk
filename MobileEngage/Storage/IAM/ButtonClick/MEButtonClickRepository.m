@@ -29,14 +29,14 @@
                             mapper:self.mapper];
 }
 
-- (void)remove:(id <MESQLSpecification>)sqlSpecification {
+- (void)remove:(id <EMSSQLSpecificationProtocol>)sqlSpecification {
     [self.sqliteHelper execute:SQL_DELETE_ITEM_FROM_BUTTON_CLICK(sqlSpecification.sql)
                  withBindBlock:^(sqlite3_stmt *statement) {
                      [sqlSpecification bindStatement:statement];
                  }];
 }
 
-- (NSArray<MEButtonClick *> *)query:(id <MESQLSpecification>)sqlSpecification {
+- (NSArray<MEButtonClick *> *)query:(id <EMSSQLSpecificationProtocol>)sqlSpecification {
     return [self.sqliteHelper executeQuery:SQL_SELECT(sqlSpecification.sql)
                                     mapper:self.mapper];
 }

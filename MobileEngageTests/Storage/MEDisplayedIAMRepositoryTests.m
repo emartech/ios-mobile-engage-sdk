@@ -44,7 +44,7 @@ SPEC_BEGIN(MEDisplayedIAMRepositoryTests)
             [repository add:displayedIAMFirst];
             [repository add:displayedIAMSecond];
 
-            [repository remove:[[MEDisplayedIAMFilterByCampaignIdSpecification alloc] initWithCampaignId:98765432]];
+            [repository remove:[[MEDisplayedIAMFilterByCampaignIdSpecification alloc] initWithCampaignId:@"98765432"]];
 
             NSArray<MEDisplayedIAM *> *items = [repository query:[MEDisplayedIAMFilterNoneSpecification new]];
             [[theValue([items count]) should] equal:theValue(1)];
