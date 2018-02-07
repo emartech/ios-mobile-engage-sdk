@@ -3,6 +3,7 @@
 //
 
 #import "MEIAMButtonClicked.h"
+#import "MEIAMCommamndResultUtils.h"
 
 @implementation MEIAMButtonClicked
 
@@ -22,13 +23,15 @@
 - (void)handleMessage:(NSDictionary *)message
           resultBlock:(MEIAMJSResultBlock)resultBlock {
     NSString *buttonId = message[@"buttonId"];
+    NSString *eventId = message[@"id"];
     if (buttonId) {
         [_repository add:[[MEButtonClick alloc] initWithCampaignId:_campaignId
                                                           buttonId:buttonId
                                                          timestamp:[NSDate date]]];
-        resultBlock(@{@"success": @YES, @"id": message[@"id"]});
+        resultBlock([MEIAMCommamndResultUtils createSuccessResultWith:eventId]);
     } else {
-        resultBlock(@{@"success": @NO, @"id": message[@"id"]});
+        resultBlock([MEIAMCommamndResultUtils createMissingParameterErrorResultWith:eventId
+                                                                   missingParameter:@"buttonId"]);
     }
 }
 

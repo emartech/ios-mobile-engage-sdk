@@ -4,6 +4,7 @@
 
 #import "MEIAMTriggerAppEvent.h"
 #import "MEInAppMessageHandler.h"
+#import "MEIAMCommamndResultUtils.h"
 
 @interface MEIAMTriggerAppEvent()
 
@@ -33,11 +34,10 @@
     if (name) {
         [self.inAppMessageHandler handleApplicationEvent:name
                                                  payload:payload];
-        resultBlock(@{@"success": @YES, @"id": eventId});
+        resultBlock([MEIAMCommamndResultUtils createSuccessResultWith:eventId]);
     } else {
-        resultBlock(@{@"id": eventId,
-                @"success": @NO,
-                @"error": @"Missing name!"});
+        resultBlock([MEIAMCommamndResultUtils createMissingParameterErrorResultWith:eventId
+                                                                   missingParameter:@"name"]);
     }
 }
 

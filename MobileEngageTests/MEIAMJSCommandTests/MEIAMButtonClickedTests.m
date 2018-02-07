@@ -85,7 +85,7 @@ SPEC_BEGIN(MEIAMButtonClickedTests)
                                   }];
             [XCTWaiter waitForExpectations:@[exp] timeout:30];
 
-            [[returnedResult should] equal:@{@"success": @NO, @"id": @"999"}];
+            [[returnedResult should] equal:@{@"success": @NO, @"id": @"999", @"error": @"Missing buttonId!"}];
         });
 
     });

@@ -16,13 +16,13 @@ SPEC_BEGIN(MEIAMOpenExternalLinkTests)
         });
 
         it(@"should return false if link is not valid", ^{
-            NSString *link = nil;
+            NSString *link = @"notAValidUrl";
 
             [[_applicationMock should] receive:@selector(canOpenURL:) andReturn:theValue(NO)];
             XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
 
             __block BOOL returnedContent;
-            [_command handleMessage:@{@"id": @1}
+            [_command handleMessage:@{@"id": @1, @"url": link}
                         resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                             returnedContent = [((NSNumber *) result[@"success"]) boolValue];
                             [exp fulfill];
@@ -34,6 +34,20 @@ SPEC_BEGIN(MEIAMOpenExternalLinkTests)
             [[theValue(returnedContent) should] beNo];
         });
 
+        it(@"should return false if there is no url", ^{
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+            __block NSDictionary<NSString *, NSObject *> *returnedResult;
+
+            [_command handleMessage:@{@"id": @"999"}
+                        resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+                            returnedResult = result;
+                            [exp fulfill];
+                        }];
+            [XCTWaiter waitForExpectations:@[exp] timeout:30];
+
+            [[returnedResult should] equal:@{@"success": @NO, @"id": @"999", @"error": @"Missing url!"}];
+
+        });
 
         if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
             it(@"should open the link if it is valid below ios10", ^{
