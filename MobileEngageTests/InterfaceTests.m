@@ -814,8 +814,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             id requestManager = requestManagerMock();
 
             id timeStampProviderMock = [EMSTimestampProvider mock];
-            NSNumber *timeStamp = @42;
-            [[timeStampProviderMock should] receive:@selector(currentTimeStamp) andReturn:timeStamp withCountAtLeast:0];
+            NSString *timeStamp = @"2017-12-07T10:46:09.100Z";
+            [[timeStampProviderMock should] receive:@selector(currentTimestampInUTC) andReturn:timeStamp withCountAtLeast:0];
             _mobileEngage.timestampProvider = timeStampProviderMock;
 
             NSString *meId = @"testMeId";
@@ -855,8 +855,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             id requestManager = requestManagerMock();
 
             id timeStampProviderMock = [EMSTimestampProvider mock];
-            NSNumber *timeStamp = @42;
-            [[timeStampProviderMock should] receive:@selector(currentTimeStamp) andReturn:timeStamp withCountAtLeast:0];
+            NSString *timeStamp = @"2017-12-07T10:46:09.100Z";
+            [[timeStampProviderMock should] receive:@selector(currentTimestampInUTC) andReturn:timeStamp withCountAtLeast:0];
             _mobileEngage.timestampProvider = timeStampProviderMock;
 
             NSString *meId = @"testMeId";

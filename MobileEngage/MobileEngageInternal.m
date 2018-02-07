@@ -239,7 +239,7 @@
         NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
                 @"type": @"custom",
                 @"name": eventName,
-                @"timestamp": [_timestampProvider currentTimeStamp]}];
+                @"timestamp": [self.timestampProvider currentTimestampInUTC]}];
 
         if (eventAttributes) {
             event[@"attributes"] = eventAttributes;

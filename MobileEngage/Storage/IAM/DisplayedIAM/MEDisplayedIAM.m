@@ -55,10 +55,9 @@
 }
 
 - (NSDictionary *)dictionaryRepresentation {
-    EMSTimestampProvider *timestampProvider = [EMSTimestampProvider new];
     return @{
             @"message_id" : self.campaignId,
-            @"timestamp" : [timestampProvider timeStampOfDate:self.timestamp]
+            @"timestamp" : [EMSTimestampProvider utcFormattedStringFromDate:self.timestamp]
     };
 }
 

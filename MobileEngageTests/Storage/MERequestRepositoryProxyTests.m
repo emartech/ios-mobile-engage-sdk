@@ -103,8 +103,8 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
 
             NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectAllSpecification new]];
             [[[result[0] payload][@"clicks"] should] equal:@[
-                    @{@"message_id": [clicks[0] campaignId], @"button_id": [clicks[0] buttonId], @"timestamp": [timestampProvider timeStampOfDate:[clicks[0] timestamp]]},
-                    @{@"message_id": [clicks[1] campaignId], @"button_id": [clicks[1] buttonId], @"timestamp": [timestampProvider timeStampOfDate:[clicks[1] timestamp]]}
+                    @{@"message_id": [clicks[0] campaignId], @"button_id": [clicks[0] buttonId], @"timestamp": [EMSTimestampProvider utcFormattedStringFromDate:[clicks[0] timestamp]]},
+                    @{@"message_id": [clicks[1] campaignId], @"button_id": [clicks[1] buttonId], @"timestamp": [EMSTimestampProvider utcFormattedStringFromDate:[clicks[1] timestamp]]}
             ]];
         });
 
@@ -126,8 +126,8 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
 
             NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectAllSpecification new]];
             [[[result[0] payload][@"viewed_messages"] should] equal:@[
-                    @{@"message_id": [viewedMessages[0] campaignId], @"timestamp": [timestampProvider timeStampOfDate:[viewedMessages[0] timestamp]]},
-                    @{@"message_id": [viewedMessages[1] campaignId], @"timestamp": [timestampProvider timeStampOfDate:[viewedMessages[1] timestamp]]}
+                    @{@"message_id": [viewedMessages[0] campaignId], @"timestamp": [EMSTimestampProvider utcFormattedStringFromDate:[viewedMessages[0] timestamp]]},
+                    @{@"message_id": [viewedMessages[1] campaignId], @"timestamp": [EMSTimestampProvider utcFormattedStringFromDate:[viewedMessages[1] timestamp]]}
             ]];
         });
 
