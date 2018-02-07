@@ -76,7 +76,7 @@ SPEC_BEGIN(MEIAMOpenExternalLinkTests)
                 XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
                 __block BOOL returnedValue;
 
-                [_command handleMessage:@{@"link": link}
+                [_command handleMessage:@{@"id": @"123", @"url": link}
                             resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
                                 returnedValue = [((NSNumber *) result[@"success"]) boolValue];
                                 [exp fulfill];
