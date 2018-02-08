@@ -17,16 +17,20 @@
 }
 
 - (BOOL)shouldHandleResponse:(EMSResponseModel *)response {
-    return [self getMeId:response] != nil;
+    return [self getMeId:response] && [self getMeIdSignature:response];
 }
 
 - (void)handleResponse:(EMSResponseModel *)response {
     _internal.meId = [self getMeId:response];
+    _internal.meIdSignature = [self getMeIdSignature:response];
 }
 
 - (NSString *)getMeId:(EMSResponseModel *)response {
     return response.parsedBody[@"api_me_id"];
 }
 
+- (NSString *)getMeIdSignature:(EMSResponseModel *)response {
+    return response.parsedBody[@"me_id_signature"];
+}
 
 @end

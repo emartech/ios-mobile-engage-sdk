@@ -35,7 +35,7 @@
 		32C6F4118B9B8C7D23BDA23C /* MEIAMButtonClickedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F6624E3DEEF55D19A6ED /* MEIAMButtonClickedTests.m */; };
 		32C6F43B1FAF365197AD5B21 /* MEButtonClick.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F8B1FF64F2826D1B8F7E /* MEButtonClick.m */; };
 		32C6F44011A76E0AB338F607 /* MEIAMJSCommandFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FC6DA1CC8BA2CDD14A35 /* MEIAMJSCommandFactoryTests.m */; };
-		32C6F443B74763D4785022F9 /* InterfaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2F7B517867CF069B590 /* InterfaceTests.m */; };
+		32C6F443B74763D4785022F9 /* MobileEngageInternalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2F7B517867CF069B590 /* MobileEngageInternalTests.m */; };
 		32C6F4B2232DC52583DED63D /* MEInAppMessageHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F0AE4DC9A27CE49FA06C /* MEInAppMessageHandler.h */; };
 		32C6F4BC994065F6407ED61D /* MERequestRepositoryProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FE8D316E447082C46F2E /* MERequestRepositoryProxy.h */; };
 		32C6F4BFDB188B474E9CFF03 /* MEConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FE11C048D1D103C6B120 /* MEConfig.m */; };
@@ -230,7 +230,7 @@
 		32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngageTests.m"; sourceTree = "<group>"; };
 		32C6F2B8236EECA673E630CD /* MERequestModelSelectEventsSpecification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MERequestModelSelectEventsSpecification.h; sourceTree = "<group>"; };
 		32C6F2D86CE207643F9DE547 /* MEIAMCloseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMCloseTests.m; sourceTree = "<group>"; };
-		32C6F2F7B517867CF069B590 /* InterfaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterfaceTests.m; sourceTree = "<group>"; };
+		32C6F2F7B517867CF069B590 /* MobileEngageInternalTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngageInternalTests.m; sourceTree = "<group>"; };
 		32C6F2FB7FA6C4CD663836C9 /* UNNotificationAttachment+MobileEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UNNotificationAttachment+MobileEngage.h"; sourceTree = "<group>"; };
 		32C6F33510388FD99D6138EB /* MEIAMViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMViewControllerTests.m; sourceTree = "<group>"; };
 		32C6F3432166DDF94429FA90 /* MERequestModelSelectEventsSpecification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestModelSelectEventsSpecification.m; sourceTree = "<group>"; };
@@ -582,7 +582,7 @@
 			isa = PBXGroup;
 			children = (
 				32C6F68C59D362926D33BB45 /* Info.plist */,
-				32C6F2F7B517867CF069B590 /* InterfaceTests.m */,
+				32C6F2F7B517867CF069B590 /* MobileEngageInternalTests.m */,
 				32C6F8941CDF4E63DBD3D286 /* BuilderTests.m */,
 				32C6F1CFFCD7F0A4AB4BD0BA /* MobileEngageInternal+Private.h */,
 				374600D2C87F4E59AE3EB5C1 /* EMSRequestModelMatcher.m */,
@@ -1136,7 +1136,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				32C6F906E9F3410E5BF08A2D /* BuilderTests.m in Sources */,
-				32C6F443B74763D4785022F9 /* InterfaceTests.m in Sources */,
+				32C6F443B74763D4785022F9 /* MobileEngageInternalTests.m in Sources */,
 				37460906FC12301114D82BAF /* EMSRequestModelMatcher.m in Sources */,
 				32C6F841AFC3F9D8BFD08191 /* NSDictionary+MobileEngageTests.m in Sources */,
 				32C6F7999214937B7CFA2169 /* MobileEngageTests.m in Sources */,

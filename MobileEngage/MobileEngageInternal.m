@@ -42,6 +42,7 @@
                   launchOptions:(NSDictionary *)launchOptions {
     _lastAppLoginPayload = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] dictionaryForKey:kLastAppLoginPayload];
     _meId = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID];
+    _meIdSignature = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID_SIGNATURE];
     _requestManager = requestManager;
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
@@ -185,6 +186,7 @@
     self.lastAppLoginParameters = nil;
     self.lastAppLoginPayload = nil;
     self.meId = nil;
+    self.meIdSignature = nil;
     return requestModel.requestId;
 }
 
@@ -280,6 +282,14 @@
     NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
     [userDefaults setObject:meId
                      forKey:kMEID];
+    [userDefaults synchronize];
+}
+
+- (void)setMeIdSignature:(NSString *)meIdSignature{
+    _meIdSignature = meIdSignature;
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+    [userDefaults setObject:meIdSignature
+                     forKey:kMEID_SIGNATURE];
     [userDefaults synchronize];
 }
 

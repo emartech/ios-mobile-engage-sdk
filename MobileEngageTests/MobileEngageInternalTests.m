@@ -26,7 +26,7 @@ static NSString *const kAppSecret = @"kAppSecret";
 
 MobileEngageInternal *_mobileEngage;
 
-SPEC_BEGIN(PublicInterfaceTest)
+SPEC_BEGIN(MobileEngageInternalTests)
 
     registerMatchers(@"EMS");
 
@@ -239,7 +239,8 @@ SPEC_BEGIN(PublicInterfaceTest)
             internal.requestManager = fakeRequestManager;
 
             NSString *meId = @"nr4io3rn2o3rn";
-            NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId} options:0 error:nil];
+            NSString *meIdSignature = @"signature";
+            NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature} options:0 error:nil];
             fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:data]] mutableCopy];
 
             [internal appLogin];
@@ -1021,7 +1022,6 @@ SPEC_BEGIN(PublicInterfaceTest)
     });
 
     describe(@"meID", ^{
-
         it(@"should store the meID in userDefaults when the setter invoked", ^{
             NSString *meID = @"meIDValue";
 
@@ -1076,6 +1076,62 @@ SPEC_BEGIN(PublicInterfaceTest)
             [[_mobileEngage.meId should] beNil];
         });
 
+    });
+
+    describe(@"meIdSignature", ^{
+        it(@"should store the meIDSignature in userDefaults when the setter invoked", ^{
+            NSString *meIDSignature = @"meIDSignatureValue";
+
+            [_mobileEngage setMeIdSignature:meIDSignature];
+
+            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+            NSString *returnedValue = [userDefaults stringForKey:kMEID_SIGNATURE];
+
+            [[returnedValue should] equal:meIDSignature];
+        });
+
+        it(@"should load the stored value when setup called on MobileEngageInternal", ^{
+            NSString *meIDSignature = @"signature";
+
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+
+            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+            [userDefaults setObject:meIDSignature
+                             forKey:kMEID_SIGNATURE];
+            [userDefaults synchronize];
+
+            [_mobileEngage setupWithConfig:config
+                             launchOptions:nil];
+
+            [[_mobileEngage.meIdSignature should] equal:meIDSignature];
+        });
+
+        it(@"should be cleared from userdefaults on logout", ^{
+            NSString *meIdSignature = @"NotNil";
+
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+            [_mobileEngage setupWithConfig:config
+                             launchOptions:nil];
+
+            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+            [userDefaults setObject:meIdSignature
+                             forKey:kMEID_SIGNATURE];
+            [userDefaults synchronize];
+
+            [_mobileEngage appLogout];
+
+            [[_mobileEngage.meIdSignature should] beNil];
+        });
     });
 
     describe(@"experimental", ^{

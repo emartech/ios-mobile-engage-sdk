@@ -14,6 +14,7 @@
 #define kSuiteName @"com.emarsys.mobileengage"
 #define kLastAppLoginPayload @"kLastAppLoginPayload"
 #define kMEID @"kMEID"
+#define kMEID_SIGNATURE @"kMEID_SIGNATURE"
 
 typedef void (^MESuccessBlock)(NSString *requestId, EMSResponseModel *);
 typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
@@ -30,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) MEAppLoginParameters *lastAppLoginParameters;
 @property(nonatomic, strong, nullable) NSDictionary *lastAppLoginPayload;
 @property(nonatomic, strong, nullable) NSString *meId;
+@property(nonatomic, strong, nullable) NSString *meIdSignature;
 @property(nonatomic, strong, nullable) EMSTimestampProvider *timestampProvider;
 
 - (void)setupWithConfig:(MEConfig *)config
