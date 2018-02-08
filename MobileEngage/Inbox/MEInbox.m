@@ -13,6 +13,7 @@
 #import "MEInboxParser.h"
 #import "EMSRESTClient.h"
 #import "MobileEngage+Private.h"
+#import "EMSAuthentication.h"
 
 @interface MEInbox ()
 
@@ -143,6 +144,8 @@
     mutableFetchingHeaders[@"x-ems-me-application-code"] = self.config.applicationCode;
     mutableFetchingHeaders[@"x-ems-me-contact-field-id"] = [NSString stringWithFormat:@"%@", self.appLoginParameters.contactFieldId];
     mutableFetchingHeaders[@"x-ems-me-contact-field-value"] = self.appLoginParameters.contactFieldValue;
+    mutableFetchingHeaders[@"Authorization"] = [EMSAuthentication createBasicAuthWithUsername:self.config.applicationCode
+                                                                                     password:self.config.applicationPassword];
     return [NSDictionary dictionaryWithDictionary:mutableFetchingHeaders];
 }
 

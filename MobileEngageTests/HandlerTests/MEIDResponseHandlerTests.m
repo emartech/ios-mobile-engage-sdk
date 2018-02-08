@@ -13,7 +13,7 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
 
         it(@"should return YES when the response contains meId and meIdSignature", ^{
             NSData *body = [NSJSONSerialization dataWithJSONObject:@{
-                            @"api_me_id": @"id123456789",
+                            @"api_me_id": @123456789,
                             @"me_id_signature": @"TheValueOfTheMeIdSignature!"}
                                                            options:0
                                                              error:nil];
@@ -38,7 +38,7 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
         });
 
         it(@"should return NO when the response lacks meIdSignature", ^{
-            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": @"id123456789"}
+            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": @123456789}
                                                            options:0
                                                              error:nil];
             EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
@@ -53,8 +53,25 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
 
     describe(@"MEIdResponseHandler.handleResponse", ^{
 
-        it(@"should call setMeId, setMeIdSignature on MobileEngageInternal", ^{
-            NSString *meId = @"id123456789";
+        it(@"should call setMeId, setMeIdSignature on MobileEngageInternal when meId is a number", ^{
+            NSNumber *meId = @123456789;
+            NSString *meIdSignature = @"meidsignature";
+            NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature}
+                                                           options:0
+                                                             error:nil];
+            EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
+                                                                              headers:@{}
+                                                                                 body:body];
+            id mobileEngageInternalMock = [MobileEngageInternal mock];
+            [[mobileEngageInternalMock should] receive:@selector(setMeId:) withArguments:[meId stringValue]];
+            [[mobileEngageInternalMock should] receive:@selector(setMeIdSignature:) withArguments:meIdSignature];
+            MEIdResponseHandler *handler = [[MEIdResponseHandler alloc] initWithMobileEngageInternal:mobileEngageInternalMock];
+
+            [handler handleResponse:response];
+        });
+
+        it(@"should call setMeId, setMeIdSignature on MobileEngageInternal when meId is a string", ^{
+            NSString *meId = @"me123456789";
             NSString *meIdSignature = @"meidsignature";
             NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature}
                                                            options:0

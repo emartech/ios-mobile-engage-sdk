@@ -10,13 +10,10 @@
 @implementation MEDefaultHeaders
 
 + (NSDictionary *)additionalHeadersWithConfig:(MEConfig *)config {
-    return @{
-            @"Authorization": [EMSAuthentication createBasicAuthWithUsername:config.applicationCode
-                                                                    password:config.applicationPassword],
-            @"Content-Type": @"application/json",
+    return @{@"Content-Type": @"application/json",
             @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION,
 #if DEBUG
-            @"X-MOBILEENGAGE-SDK-MODE" : @"debug"
+            @"X-MOBILEENGAGE-SDK-MODE": @"debug"
 #else
             @"X-MOBILEENGAGE-SDK-MODE" : @"production"
 #endif

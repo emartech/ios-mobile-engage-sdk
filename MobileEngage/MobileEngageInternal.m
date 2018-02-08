@@ -24,6 +24,7 @@
 #import "MobileEngage+Private.h"
 #import "MEDisplayedIAMRepository.h"
 #import "MEIAMCleanupResponseHandler.h"
+#import "EMSAuthentication.h"
 
 @interface MobileEngageInternal ()
 
@@ -157,17 +158,18 @@
 - (EMSRequestModel *)requestModelWithUrl:(NSString *)url
                                   method:(HTTPMethod)method
                   additionalPayloadBlock:(void (^)(NSMutableDictionary *payload))payloadBlock {
+    __weak typeof(self) weakSelf = self;
     EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setUrl:url];
         [builder setMethod:method];
         NSMutableDictionary *payload = [@{
-                @"application_id": self.config.applicationCode,
+                @"application_id": weakSelf.config.applicationCode,
                 @"hardware_id": [EMSDeviceInfo hardwareId]
         } mutableCopy];
 
-        if (self.lastAppLoginParameters.contactFieldId && self.lastAppLoginParameters.contactFieldValue) {
-            payload[@"contact_field_id"] = self.lastAppLoginParameters.contactFieldId;
-            payload[@"contact_field_value"] = self.lastAppLoginParameters.contactFieldValue;
+        if (self.lastAppLoginParameters.contactFieldId && weakSelf.lastAppLoginParameters.contactFieldValue) {
+            payload[@"contact_field_id"] = weakSelf.lastAppLoginParameters.contactFieldId;
+            payload[@"contact_field_value"] = weakSelf.lastAppLoginParameters.contactFieldValue;
         }
 
         if (payloadBlock) {
@@ -175,6 +177,8 @@
         }
 
         [builder setPayload:payload];
+        [builder setHeaders:@{@"Authorization": [EMSAuthentication createBasicAuthWithUsername:weakSelf.config.applicationCode
+                                                                                      password:weakSelf.config.applicationPassword]}];
     }];
     return requestModel;
 }
@@ -248,6 +252,15 @@
         }
 
         payload[@"events"] = @[event];
+        NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionary];
+        if (self.meId) {
+            mutableHeaders[@"X-ME-ID"] = self.meId;
+        }
+        if (self.meIdSignature) {
+            mutableHeaders[@"X-ME-ID-SIGNATURE"] = self.meIdSignature;
+        }
+        mutableHeaders[@"X-ME-APPLICATIONCODE"] = self.config.applicationCode;
+        [builder setHeaders:mutableHeaders];
 
         [builder setPayload:payload];
     }];
@@ -285,7 +298,7 @@
     [userDefaults synchronize];
 }
 
-- (void)setMeIdSignature:(NSString *)meIdSignature{
+- (void)setMeIdSignature:(NSString *)meIdSignature {
     _meIdSignature = meIdSignature;
     NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
     [userDefaults setObject:meIdSignature

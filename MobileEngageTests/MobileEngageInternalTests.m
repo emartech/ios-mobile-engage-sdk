@@ -23,6 +23,8 @@
 
 static NSString *const kAppId = @"kAppId";
 static NSString *const kAppSecret = @"kAppSecret";
+static NSString *const kMEId = @"kMeId";
+static NSString *const kMEIdSignature = @"kMeIdSignature";
 
 MobileEngageInternal *_mobileEngage;
 
@@ -38,6 +40,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                    error:nil];
         NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
         [userDefaults setObject:nil forKey:kMEID];
+        [userDefaults setObject:nil forKey:kMEID_SIGNATURE];
         [userDefaults setObject:nil forKey:kLastAppLoginPayload];
         [userDefaults synchronize];
     });
@@ -46,8 +49,6 @@ SPEC_BEGIN(MobileEngageInternalTests)
         NSString *applicationCode = kAppId;
         NSString *applicationPassword = @"appSecret";
         NSDictionary *additionalHeaders = @{
-                @"Authorization": [EMSAuthentication createBasicAuthWithUsername:applicationCode
-                                                                        password:applicationPassword],
                 @"Content-Type": @"application/json",
                 @"X-MOBILEENGAGE-SDK-VERSION": MOBILEENGAGE_SDK_VERSION,
                 @"X-MOBILEENGAGE-SDK-MODE": @"debug"
@@ -72,6 +73,19 @@ SPEC_BEGIN(MobileEngageInternalTests)
             [builder setUrl:url];
             [builder setMethod:HTTPMethodPOST];
             [builder setPayload:payload];
+            [builder setHeaders:@{@"Authorization": [EMSAuthentication createBasicAuthWithUsername:kAppId
+                                                                                          password:@"appSecret"]}];
+        }];
+    };
+
+    id (^requestModelV3)(NSString *url, NSDictionary *payload) = ^id(NSString *url, NSDictionary *payload) {
+        return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+            [builder setUrl:url];
+            [builder setMethod:HTTPMethodPOST];
+            [builder setPayload:payload];
+            [builder setHeaders:@{@"X-ME-ID": kMEID,
+                    @"X-ME-ID-SIGNATURE": kMEID_SIGNATURE,
+                    @"X-ME-APPLICATIONCODE": kAppId}];
         }];
     };
 
@@ -238,7 +252,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                                                       errorBlock:internal.errorBlock];
             internal.requestManager = fakeRequestManager;
 
-            NSString *meId = @"nr4io3rn2o3rn";
+            NSNumber *meId = @123456789;
             NSString *meIdSignature = @"signature";
             NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature} options:0 error:nil];
             fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:data]] mutableCopy];
@@ -247,7 +261,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
             [fakeRequestManager waitForAllExpectations];
 
-            [[expectFutureValue(internal.meId) shouldEventually] equal:meId];
+            [[expectFutureValue(internal.meId) shouldEventually] equal:[meId stringValue]];
         });
 
     });
@@ -783,6 +797,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
             id requestManager = requestManagerMock();
             [[requestManager should] receive:@selector(submit:)
                                withArguments:any(), any(), any()];
+            _mobileEngage.meId = kMEID;
+            _mobileEngage.meIdSignature = kMEID_SIGNATURE;
             NSString *uuid = [_mobileEngage trackCustomEvent:@""
                                              eventAttributes:@{}];
             [[uuid shouldNot] beNil];
@@ -794,6 +810,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                withArguments:any(), any(), any()];
             KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
                                                         atIndex:0];
+            _mobileEngage.meId = kMEID;
+            _mobileEngage.meIdSignature = kMEID_SIGNATURE;
             NSString *uuid = [_mobileEngage trackCustomEvent:@""
                                              eventAttributes:@{}];
 
@@ -819,8 +837,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
             [[timeStampProviderMock should] receive:@selector(currentTimestampInUTC) andReturn:timeStamp withCountAtLeast:0];
             _mobileEngage.timestampProvider = timeStampProviderMock;
 
-            NSString *meId = @"testMeId";
-            _mobileEngage.meId = meId;
+            _mobileEngage.meId = kMEID;
+            _mobileEngage.meIdSignature = kMEID_SIGNATURE;
             NSString *eventName = @"testEventName";
             NSDictionary *eventAttributes = @{@"someKey": @"someValue"};
 
@@ -838,7 +856,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     ]
             };
 
-            EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", meId], payload);
+            EMSRequestModel *model = requestModelV3([NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", kMEID], payload);
 
             [[requestManager should] receive:@selector(submit:)
                                withArguments:any(), any(), any()];
@@ -860,8 +878,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
             [[timeStampProviderMock should] receive:@selector(currentTimestampInUTC) andReturn:timeStamp withCountAtLeast:0];
             _mobileEngage.timestampProvider = timeStampProviderMock;
 
-            NSString *meId = @"testMeId";
-            _mobileEngage.meId = meId;
+            _mobileEngage.meId = kMEID;
+            _mobileEngage.meIdSignature = kMEID_SIGNATURE;
             NSString *eventName = @"testEventName";
 
             NSDictionary *payload = @{
@@ -877,7 +895,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     ]
             };
 
-            EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", meId], payload);
+            EMSRequestModel *model = requestModelV3([NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", kMEID], payload);
 
             [[requestManager should] receive:@selector(submit:)
                                withArguments:any(), any(), any()];

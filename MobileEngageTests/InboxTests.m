@@ -11,6 +11,7 @@
 #import "EMSRequestModelMatcher.h"
 #import "MEInbox+Notification.h"
 #import "FakeStatusDelegate.h"
+#import "EMSAuthentication.h"
 
 static NSString *const kAppId = @"kAppId";
 
@@ -45,16 +46,16 @@ SPEC_BEGIN(InboxTests)
         return inbox;
     };
 
-
-
     id (^expectedHeaders)() = ^id() {
         NSDictionary *defaultHeaders = [MEDefaultHeaders additionalHeadersWithConfig:config];
-        NSMutableDictionary *mutableFetchingHeaders = [NSMutableDictionary dictionaryWithDictionary:defaultHeaders];
-        mutableFetchingHeaders[@"x-ems-me-hardware-id"] = [EMSDeviceInfo hardwareId];
-        mutableFetchingHeaders[@"x-ems-me-application-code"] = config.applicationCode;
-        mutableFetchingHeaders[@"x-ems-me-contact-field-id"] = [NSString stringWithFormat:@"%@", contactFieldId];
-        mutableFetchingHeaders[@"x-ems-me-contact-field-value"] = contactFieldValue;
-        return [NSDictionary dictionaryWithDictionary:mutableFetchingHeaders];
+        NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionaryWithDictionary:defaultHeaders];
+        mutableHeaders[@"x-ems-me-hardware-id"] = [EMSDeviceInfo hardwareId];
+        mutableHeaders[@"x-ems-me-application-code"] = config.applicationCode;
+        mutableHeaders[@"x-ems-me-contact-field-id"] = [NSString stringWithFormat:@"%@", contactFieldId];
+        mutableHeaders[@"x-ems-me-contact-field-value"] = contactFieldValue;
+        mutableHeaders[@"Authorization"] = [EMSAuthentication createBasicAuthWithUsername:config.applicationCode
+                                                                                         password:config.applicationPassword];
+        return [NSDictionary dictionaryWithDictionary:mutableHeaders];
     };
 
     describe(@"inbox.fetchNotificationsWithResultBlock", ^{

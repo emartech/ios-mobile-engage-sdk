@@ -26,7 +26,14 @@
 }
 
 - (NSString *)getMeId:(EMSResponseModel *)response {
-    return response.parsedBody[@"api_me_id"];
+    NSString *result;
+    id meId = response.parsedBody[@"api_me_id"];
+    if ([meId isKindOfClass:[NSString class]]) {
+        result = meId;
+    } else if ([meId isKindOfClass:[NSNumber class]]) {
+        result = [(NSNumber *)response.parsedBody[@"api_me_id"] stringValue];
+    }
+    return result;
 }
 
 - (NSString *)getMeIdSignature:(EMSResponseModel *)response {
