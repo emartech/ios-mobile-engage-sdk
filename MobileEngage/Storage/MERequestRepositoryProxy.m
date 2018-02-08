@@ -12,6 +12,7 @@
 #import "MEButtonClickFilterNoneSpecification.h"
 #import "MEDisplayedIAMFilterNoneSpecification.h"
 #import "EMSDeviceInfo.h"
+#import "MobileEngageVersion.h"
 
 @interface MERequestRepositoryProxy ()
 
@@ -70,7 +71,21 @@
     EMSCompositeRequestModel *composite = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setHeaders:requestModel.headers];
         [builder setUrl:[[requestModel url] absoluteString]];
-        [builder setPayload:@{@"hardware_id": [EMSDeviceInfo hardwareId], @"viewed_messages": [self displayRepresentations], @"clicks": [self clickRepresentations], @"events": [self eventRepresentations:allCustomEvents]}];
+
+        NSMutableDictionary *payload = [NSMutableDictionary dictionary];
+        payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
+        payload[@"viewed_messages"] = [self displayRepresentations];
+        payload[@"clicks"] = [self clickRepresentations];
+        payload[@"events"] = [self eventRepresentations:allCustomEvents];
+
+        payload[@"language"] = [EMSDeviceInfo languageCode];
+        payload[@"ems_sdk"] = MOBILEENGAGE_SDK_VERSION;
+
+        NSString *appVersion = [EMSDeviceInfo applicationVersion];
+        if (appVersion) {
+            payload[@"application_version"] = appVersion;
+        }
+        [builder setPayload:payload];
     }];
     composite.originalRequestIds = [NSArray arrayWithArray:requestIds];
     return composite;
