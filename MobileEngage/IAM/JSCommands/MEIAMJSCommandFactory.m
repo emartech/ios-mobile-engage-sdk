@@ -28,7 +28,7 @@
     } else if ([name isEqualToString:MEIAMOpenExternalLink.commandName]) {
         command = [MEIAMOpenExternalLink new];
     } else if ([name isEqualToString:MEIAMClose.commandName]) {
-        command = [[MEIAMClose alloc] initWithViewController:[self.meiam meiamViewController]];
+        command = [[MEIAMClose alloc] initWithMEIAM:self.meiam];
     } else if ([name isEqualToString:MEIAMTriggerAppEvent.commandName]) {
         command = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:[self.meiam messageHandler]];
     } else if ([name isEqualToString:MEIAMButtonClicked.commandName]) {

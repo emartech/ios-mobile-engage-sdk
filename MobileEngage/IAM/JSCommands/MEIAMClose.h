@@ -6,9 +6,10 @@
 #import "MEIAMJSCommandProtocol.h"
 
 @class MEIAMViewController;
+@protocol MEIAMProtocol;
 
 @interface MEIAMClose : NSObject <MEIAMJSCommandProtocol>
 
-- (instancetype)initWithViewController:(MEIAMViewController *)viewController;
+- (instancetype)initWithMEIAM:(id<MEIAMProtocol>)meiam;
 
 @end

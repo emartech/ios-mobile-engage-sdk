@@ -9,8 +9,8 @@
 
 @protocol MEIAMProtocol <NSObject>
 
-- (MEIAMViewController *)meiamViewController;
 - (id <MEInAppMessageHandler>)messageHandler;
 - (NSString *)currentCampaignId;
+- (void)closeInAppMessage;
 
 @end

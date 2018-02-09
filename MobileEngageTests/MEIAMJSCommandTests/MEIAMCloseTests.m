@@ -1,15 +1,16 @@
 #import "Kiwi.h"
 #import "MEIAMClose.h"
 #import "MEIAMViewController.h"
+#import "MEInApp.h"
 
 SPEC_BEGIN(MEIAMCloseTests)
 
-    __block MEIAMViewController *viewController;
+    __block MEInApp *meInApp;
     __block MEIAMClose *meiamClose;
 
     beforeEach(^{
-        viewController = [MEIAMViewController mock];
-        meiamClose = [[MEIAMClose alloc] initWithViewController:viewController];
+        meInApp = [MEIAMViewController mock];
+        meiamClose = [[MEIAMClose alloc] initWithMEIAM:meInApp];
     });
 
     describe(@"commandName", ^{
@@ -21,13 +22,10 @@ SPEC_BEGIN(MEIAMCloseTests)
     });
 
     describe(@"handleMessage:resultBlock:", ^{
-
-        it(@"should close the viewController", ^{
-            [[viewController should] receive:@selector(dismissViewControllerAnimated:completion:)];
-            [meiamClose handleMessage:@{}
-                          resultBlock:nil];
+        it(@"should invoke closeInAppMessage on meInApp", ^{
+            [[meInApp should] receive:@selector(closeInAppMessage)];
+            [meiamClose handleMessage:@{} resultBlock:nil];
         });
-
     });
 
 SPEC_END

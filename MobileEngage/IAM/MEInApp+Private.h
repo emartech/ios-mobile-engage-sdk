@@ -10,13 +10,9 @@
 
 @interface MEInApp (Private)
 
-- (instancetype)init;
+- (UIWindow *)iamWindow;
 
-- (UIViewController *)rootViewController;
-
-- (UIViewController *)topViewController;
-
-- (UIViewController *)topViewControllerFrom:(UIViewController *)currentViewController;
+- (void)setIamWindow:(UIWindow *)window;
 
 - (void)showMessage:(MEInAppMessage *)message;
 

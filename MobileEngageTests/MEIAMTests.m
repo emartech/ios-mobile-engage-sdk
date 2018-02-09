@@ -2,6 +2,7 @@
 #import "MEInApp.h"
 #import "MEInApp+Private.h"
 #import "FakeInAppHandler.h"
+#import "MEIAMProtocol.h"
 
 MEInApp *iam;
 
@@ -9,98 +10,6 @@ SPEC_BEGIN(MEIAMTests)
 
     beforeEach(^{
         iam = [[MEInApp alloc] init];
-    });
-
-    describe(@"rootViewController", ^{
-
-        it(@"should not be nil", ^{
-            UIViewController *rootViewController = [iam rootViewController];
-            [[rootViewController shouldNot] beNil];
-        });
-
-    });
-
-    describe(@"topViewController", ^{
-
-        it(@"should not be nil", ^{
-            UIViewController *topViewController = [iam topViewController];
-            [[topViewController shouldNot] beNil];
-        });
-
-        it(@"should return rootViewController, when there is no more presented ViewController", ^{
-            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForExpectation"];
-
-            [[[iam rootViewController] presentedViewController] dismissViewControllerAnimated:NO completion:^{
-                [exp fulfill];
-            }];
-            [XCTWaiter waitForExpectations:@[exp]
-                                   timeout:30];
-
-            UIViewController *topViewController = [iam topViewController];
-            [[topViewController should] equal:[iam rootViewController]];
-
-        });
-
-        it(@"should return the presentedViewController, when available", ^{
-            UIViewController *rootViewController = [UIViewController mock];
-            UIViewController *presentedViewController = [UIViewController mock];
-
-            [iam stub:@selector(rootViewController) andReturn:rootViewController];
-            [rootViewController stub:@selector(presentedViewController) andReturn:presentedViewController];
-            [presentedViewController stub:@selector(presentedViewController)];
-
-            UIViewController *topViewController = [iam topViewController];
-
-            [[topViewController should] equal:presentedViewController];
-        });
-
-        it(@"should return the nestedViewController, when available", ^{
-            UIViewController *rootViewController = [UIViewController mock];
-            UIViewController *presentedViewController = [UIViewController mock];
-            UIViewController *nestedViewController = [UIViewController mock];
-
-            [iam stub:@selector(rootViewController) andReturn:rootViewController];
-            [rootViewController stub:@selector(presentedViewController) andReturn:presentedViewController];
-            [presentedViewController stub:@selector(presentedViewController) andReturn:nestedViewController];
-            [nestedViewController stub:@selector(presentedViewController)];
-
-            UIViewController *topViewController = [iam topViewController];
-
-            [[topViewController should] equal:nestedViewController];
-        });
-
-        it(@"should return the lastViewController, when available", ^{
-            UIViewController *rootViewController = [UIViewController mock];
-            UIViewController *navigationController = [UINavigationController mock];
-            UIViewController *viewControllerLast = [UIViewController mock];
-            NSArray *viewControllers = @[[UIViewController mock], viewControllerLast];
-
-            [iam stub:@selector(rootViewController) andReturn:rootViewController];
-            [rootViewController stub:@selector(presentedViewController) andReturn:navigationController];
-            [navigationController stub:@selector(presentedViewController)];
-            [navigationController stub:@selector(viewControllers) andReturn:viewControllers];
-            [viewControllerLast stub:@selector(presentedViewController)];
-
-            UIViewController *topViewController = [iam topViewController];
-
-            [[topViewController should] equal:viewControllerLast];
-        });
-
-        it(@"should return the selectedViewController, when available", ^{
-            UIViewController *rootViewController = [UIViewController mock];
-            UIViewController *tabBarController = [UITabBarController mock];
-            UIViewController *selectedViewController = [UIViewController mock];
-
-            [iam stub:@selector(rootViewController) andReturn:rootViewController];
-            [rootViewController stub:@selector(presentedViewController) andReturn:tabBarController];
-            [tabBarController stub:@selector(presentedViewController)];
-            [tabBarController stub:@selector(selectedViewController) andReturn:selectedViewController];
-            [selectedViewController stub:@selector(presentedViewController)];
-
-            UIViewController *topViewController = [iam topViewController];
-
-            [[topViewController should] equal:selectedViewController];
-        });
     });
 
     describe(@"messageHandler", ^{
@@ -131,6 +40,38 @@ SPEC_BEGIN(MEIAMTests)
 
             [iam showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message": @{@"id": @"campaignId", @"html": message}}]];
         });
+    });
+
+
+    describe(@"showMessage", ^{
+        it(@"it should set currentCampaignId", ^{
+            MEInApp *meInApp = [MEInApp new];
+            [meInApp showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message":@{@"id":@"testId", @"html" : @"<html></html>"}}]];
+            [[[((id <MEIAMProtocol>) meInApp) currentCampaignId] should] equal:@"testId"];
+        });
+    });
+
+    describe(@"closeInAppMessage", ^{
+
+        it(@"should close the inapp message", ^{
+
+            UIViewController *rootViewControllerMock = [UIViewController nullMock];
+            [[rootViewControllerMock should] receive:@selector(dismissViewControllerAnimated:completion:)];
+            KWCaptureSpy *spy = [rootViewControllerMock captureArgument:@selector(dismissViewControllerAnimated:completion:) atIndex:1];
+
+            UIWindow *window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+            window.rootViewController = rootViewControllerMock;
+
+            MEInApp *meInApp = [MEInApp new];
+            meInApp.iamWindow = window;
+
+            [((id <MEIAMProtocol>) meInApp) closeInAppMessage];
+
+            void (^completionBlock)(void) = spy.argument;
+            completionBlock();
+            [[meInApp.iamWindow should] beNil];
+        });
+
     });
 
 SPEC_END

@@ -3,11 +3,11 @@
 //
 
 #import "MEIAMClose.h"
-#import "MEIAMViewController.h"
+#import "MEIAMProtocol.h"
 
 @interface MEIAMClose ()
 
-@property(weak, nonatomic) MEIAMViewController *viewController;
+@property(weak, nonatomic) id <MEIAMProtocol> meiam;
 
 @end
 
@@ -17,17 +17,16 @@
     return @"close";
 }
 
-- (instancetype)initWithViewController:(MEIAMViewController *)viewController {
+- (instancetype)initWithMEIAM:(id <MEIAMProtocol>)meiam {
     if (self = [super init]) {
-        _viewController = viewController;
+        _meiam = meiam;
     }
     return self;
 }
 
 - (void)handleMessage:(NSDictionary *)message
           resultBlock:(MEIAMJSResultBlock)resultBlock {
-    [self.viewController dismissViewControllerAnimated:NO
-                                            completion:nil];
+    [self.meiam closeInAppMessage];
 }
 
 @end
