@@ -10,6 +10,7 @@
 
 @protocol MobileEngageStatusDelegate;
 @class MEConfig;
+@class MENotificationCenterManager;
 
 #define kSuiteName @"com.emarsys.mobileengage"
 #define kLastAppLoginPayload @"kLastAppLoginPayload"
@@ -33,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSString *meId;
 @property(nonatomic, strong, nullable) NSString *meIdSignature;
 @property(nonatomic, strong, nullable) EMSTimestampProvider *timestampProvider;
+@property(nonatomic, strong, nullable) MENotificationCenterManager *notificationCenterManager;
 
 - (void)setupWithConfig:(MEConfig *)config
           launchOptions:(nullable NSDictionary *)launchOptions;

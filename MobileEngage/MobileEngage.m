@@ -8,6 +8,7 @@
 #import "MEInbox+Notification.h"
 #import "EMSSQLiteHelper.h"
 #import "MESchemaDelegate.h"
+#import "MENotificationCenterManager.h"
 #import <UIKit/UIKit.h>
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"MEDB.db"]
@@ -32,6 +33,7 @@ static EMSSQLiteHelper *_dbHelper;
     _mobileEngageInternal = mobileEngageInternal;
     _inbox = [[MEInbox alloc] initWithConfig:config];
     _iam = [MEInApp new];
+    _mobileEngageInternal.notificationCenterManager = [MENotificationCenterManager new];
     [_mobileEngageInternal setupWithConfig:config
                              launchOptions:launchOptions];
 }

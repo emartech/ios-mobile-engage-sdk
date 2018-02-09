@@ -14,6 +14,7 @@ SPEC_BEGIN(MobileEngageTests)
         id mobileEngageInternalMock = [MobileEngageInternal mock];
 
         [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:)];
+        [[mobileEngageInternalMock should] receive:@selector(setNotificationCenterManager:) withArguments:any()];
 
         NSString *applicationCode = kAppId;
         NSString *applicationPassword = @"appSecret";
@@ -45,6 +46,27 @@ SPEC_BEGIN(MobileEngageTests)
             MEInbox *inbox2 = MobileEngage.inbox;
 
             [[inbox1 should] equal:inbox2];
+        });
+
+        it(@"should create MENotificationCenterManager instance", ^{
+            id mobileEngageInternalMock = [MobileEngageInternal mock];
+            [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:)];
+            [[mobileEngageInternalMock should] receive:@selector(setNotificationCenterManager:) withArguments:any()];
+            KWCaptureSpy *spy = [mobileEngageInternalMock captureArgument:@selector(setNotificationCenterManager:) atIndex:0];
+
+            NSString *applicationCode = kAppId;
+            NSString *applicationPassword = @"appSecret";
+
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:applicationCode
+                                       applicationPassword:applicationPassword];
+            }];
+
+            [MobileEngage setupWithMobileEngageInternal:mobileEngageInternalMock
+                                                 config:config
+                                          launchOptions:nil];
+
+            [[spy.argument shouldNot] beNil];
         });
     });
 

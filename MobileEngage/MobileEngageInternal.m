@@ -25,6 +25,7 @@
 #import "MEDisplayedIAMRepository.h"
 #import "MEIAMCleanupResponseHandler.h"
 #import "EMSAuthentication.h"
+#import "MENotificationCenterManager.h"
 #import <UIKit/UIKit.h>
 
 @interface MobileEngageInternal ()
@@ -60,16 +61,12 @@
     }
     _timestampProvider = [EMSTimestampProvider new];
 
-
     __weak typeof(self) weakSelf = self;
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [weakSelf.requestManager submit:[weakSelf createCustomEventModel:@"app:start"
-                                                                                                       eventAttributes:nil
-                                                                                                                  type:@"internal"]];
-                                                  }];
+    [_notificationCenterManager addHandlerBlock:^{
+        [weakSelf.requestManager submit:[weakSelf createCustomEventModel:@"app:start"
+                                                         eventAttributes:nil
+                                                                    type:@"internal"]];
+    }                           forNotification:UIApplicationDidBecomeActiveNotification];
 }
 
 - (void)setupWithConfig:(nonnull MEConfig *)config
@@ -255,7 +252,7 @@
 - (EMSRequestModel *)createCustomEventModel:(NSString *)eventName eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes type:(NSString *)type {
     return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setMethod:HTTPMethodPOST];
-        [builder setUrl:[NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", _meId]];
+        [builder setUrl:[NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", self.meId]];
         NSMutableDictionary *payload = [NSMutableDictionary new];
         payload[@"clicks"] = @[];
         payload[@"viewed_messages"] = @[];
