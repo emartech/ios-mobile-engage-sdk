@@ -25,6 +25,7 @@
 #import "MEDisplayedIAMRepository.h"
 #import "MEIAMCleanupResponseHandler.h"
 #import "EMSAuthentication.h"
+#import <UIKit/UIKit.h>
 
 @interface MobileEngageInternal ()
 
@@ -58,6 +59,17 @@
         _responseHandlers = @[];
     }
     _timestampProvider = [EMSTimestampProvider new];
+
+
+    __weak typeof(self) weakSelf = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [weakSelf.requestManager submit:[weakSelf createCustomEventModel:@"app:start"
+                                                                                                       eventAttributes:nil
+                                                                                                                  type:@"internal"]];
+                                                  }];
 }
 
 - (void)setupWithConfig:(nonnull MEConfig *)config
@@ -234,7 +246,14 @@
                         eventAttributes:eventAttributes];
     }
 
-    EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+    EMSRequestModel *requestModel = [self createCustomEventModel:eventName eventAttributes:eventAttributes type:@"custom"];
+
+    [self.requestManager submit:requestModel];
+    return requestModel.requestId;
+}
+
+- (EMSRequestModel *)createCustomEventModel:(NSString *)eventName eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes type:(NSString *)type {
+    return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setMethod:HTTPMethodPOST];
         [builder setUrl:[NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", _meId]];
         NSMutableDictionary *payload = [NSMutableDictionary new];
@@ -243,7 +262,7 @@
         payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
 
         NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
-                @"type": @"custom",
+                @"type": type,
                 @"name": eventName,
                 @"timestamp": [self.timestampProvider currentTimestampInUTC]}];
 
@@ -264,9 +283,6 @@
 
         [builder setPayload:payload];
     }];
-
-    [self.requestManager submit:requestModel];
-    return requestModel.requestId;
 }
 
 - (NSString *)trackCustomEventV2:(nonnull NSString *)eventName

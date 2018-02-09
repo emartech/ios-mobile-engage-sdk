@@ -1039,6 +1039,48 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
     });
 
+
+    describe(@"appStart", ^{
+        it(@"should submit an internal RequestModel with app:start name to requestManager when app did enter foreground", ^{
+            id requestManager = requestManagerMock();
+
+            id timeStampProviderMock = [EMSTimestampProvider mock];
+            NSString *timeStamp = @"2017-12-07T10:46:09.100Z";
+            [[timeStampProviderMock should] receive:@selector(currentTimestampInUTC) andReturn:timeStamp withCountAtLeast:0];
+            _mobileEngage.timestampProvider = timeStampProviderMock;
+
+            _mobileEngage.meId = kMEID;
+            _mobileEngage.meIdSignature = kMEID_SIGNATURE;
+            NSString *eventName = @"app:start";
+
+            NSDictionary *payload = @{
+                    @"clicks": @[],
+                    @"hardware_id": [EMSDeviceInfo hardwareId],
+                    @"viewed_messages": @[],
+                    @"events": @[
+                            @{
+                                    @"type": @"internal",
+                                    @"name": eventName,
+                                    @"timestamp": timeStamp
+                            }
+                    ]
+            };
+
+            EMSRequestModel *model = requestModelV3([NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", kMEID], payload);
+
+            [[requestManager should] receive:@selector(submit:)
+                               withArguments:any(), any(), any()];
+
+            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                        atIndex:0];
+
+            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:UIApplicationDidBecomeActiveNotification
+                                                                                                 object:nil]];
+            EMSRequestModel *actualModel = spy.argument;
+            [[model shouldEventually] beSimilarWithRequest:actualModel];
+        });
+    });
+
     describe(@"meID", ^{
         it(@"should store the meID in userDefaults when the setter invoked", ^{
             NSString *meID = @"meIDValue";
