@@ -63,9 +63,11 @@
 
     __weak typeof(self) weakSelf = self;
     [_notificationCenterManager addHandlerBlock:^{
-        [weakSelf.requestManager submit:[weakSelf createCustomEventModel:@"app:start"
-                                                         eventAttributes:nil
-                                                                    type:@"internal"]];
+        if (_meId != nil) {
+            [weakSelf.requestManager submit:[weakSelf createCustomEventModel:@"app:start"
+                                                             eventAttributes:nil
+                                                                        type:@"internal"]];
+        }
     }                           forNotification:UIApplicationDidBecomeActiveNotification];
 }
 

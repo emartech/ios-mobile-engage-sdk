@@ -1054,67 +1054,49 @@ SPEC_BEGIN(MobileEngageInternalTests)
         });
 
         it(@"should register UIApplicationDidBecomeActiveNotification", ^{
-            id requestManager = requestManagerMock();
-            NSString *applicationCode = kAppId;
-            NSString *applicationPassword = @"appSecret";
-
-            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                [builder setCredentialsWithApplicationCode:applicationCode
-                                       applicationPassword:applicationPassword];
-            }];
-
             id notificationCenterManagerMock = [MENotificationCenterManager mock];
-            [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:) withArguments:any(), UIApplicationDidBecomeActiveNotification];
-
             [_mobileEngage setNotificationCenterManager:notificationCenterManagerMock];
-            [_mobileEngage setupWithRequestManager:requestManager
-                                            config:config
-                                     launchOptions:nil];
+
+            [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:) withArguments:any(), UIApplicationDidBecomeActiveNotification];
+            requestManagerMock();
         });
 
-//        it(@"should submit an internal RequestModel with app:start name to requestManager when app did enter foreground", ^{
-//            id requestManager = requestManagerMock();
-//            NSString *applicationCode = kAppId;
-//            NSString *applicationPassword = @"appSecret";
-//
-//            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-//                [builder setCredentialsWithApplicationCode:applicationCode
-//                                       applicationPassword:applicationPassword];
-//            }];
-//
-//            [_mobileEngage setupWithRequestManager:requestManager
-//                                            config:config
-//                                     launchOptions:nil];
-//            id timeStampProviderMock = [EMSTimestampProvider mock];
-//            NSString *timeStamp = @"2017-12-07T10:46:09.100Z";
-//            [[timeStampProviderMock should] receive:@selector(currentTimestampInUTC) andReturn:timeStamp withCountAtLeast:0];
-//            _mobileEngage.timestampProvider = timeStampProviderMock;
-//
-//            NSString *eventName = @"inapp:start";
-//
-//            NSDictionary *payload = @{
-//                    @"clicks": @[],
-//                    @"hardware_id": [EMSDeviceInfo hardwareId],
-//                    @"viewed_messages": @[],
-//                    @"events": @[
-//                            @{
-//                                    @"type": @"internal",
-//                                    @"name": eventName,
-//                                    @"timestamp": timeStamp
-//                            }
-//                    ]
-//            };
-//
-//            EMSRequestModel *model = requestModelV3([NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", kMEID], payload);
-//            [[requestManager should] receive:@selector(submit:) withCountAtLeast:1 arguments:any(), any(), any()];
-//            KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
-//                                                        atIndex:0];
-//
-//            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:UIApplicationDidBecomeActiveNotification
-//                                                                                                 object:nil]];
-//            EMSRequestModel *actualModel = spy.argument;
-//            [[model shouldEventually] beSimilarWithRequest:actualModel];
-//        });
+        it(@"should submit appstart event on UIApplicationDidBecomeActiveNotification", ^{
+            id notificationCenterManagerMock = [MENotificationCenterManager mock];
+            [_mobileEngage setNotificationCenterManager:notificationCenterManagerMock];
+            [_mobileEngage setMeId:@"testMeId"];
+            [_mobileEngage setMeIdSignature:@"testMeIdSig"];
+
+            [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:) withArguments:any(), UIApplicationDidBecomeActiveNotification];
+            KWCaptureSpy *spy = [notificationCenterManagerMock captureArgument:@selector(addHandlerBlock:forNotification:) atIndex:0];
+
+            id requestManager = requestManagerMock();
+            [[requestManager should] receive:@selector(submit:) withCountAtLeast:1];
+            KWCaptureSpy *submitSpy = [requestManager captureArgument:@selector(submit:) atIndex:0];
+            MEHandlerBlock block = spy.argument;
+            block();
+
+
+            EMSRequestModel *result = submitSpy.argument;
+            [[[result.url absoluteString] should] equal:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/testMeId/events"];
+            [[result.payload[@"events"][0][@"type"] should] equal:@"internal"];
+            [[result.payload[@"events"][0][@"name"] should] equal:@"app:start"];
+        });
+
+        it(@"should not call submit on RequestManager when there is no meid (no login)", ^{
+            id notificationCenterManagerMock = [MENotificationCenterManager mock];
+            [_mobileEngage setNotificationCenterManager:notificationCenterManagerMock];
+            [_mobileEngage setMeId:nil];
+
+            [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:) withArguments:any(), UIApplicationDidBecomeActiveNotification];
+            KWCaptureSpy *spy = [notificationCenterManagerMock captureArgument:@selector(addHandlerBlock:forNotification:) atIndex:0];
+
+            id requestManager = requestManagerMock();
+            [[requestManager shouldNot] receive:@selector(submit:)];
+            MEHandlerBlock block = spy.argument;
+            block();
+        });
+
     });
 
     describe(@"meID", ^{
