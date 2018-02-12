@@ -21,16 +21,18 @@
 @implementation MEInApp
 
 - (void)showMessage:(MEInAppMessage *)message {
-    self.currentCampaignId = message.campaignId;
-    MEIAMJSCommandFactory *commandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:self];
-    MEJSBridge *jsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:commandFactory];
-    MEIAMViewController *meiamViewController = [[MEIAMViewController alloc] initWithJSBridge:jsBridge];
-    __weak typeof(self) weakSelf = self;
-    [meiamViewController loadMessage:message.html
-                   completionHandler:^{
-                       [weakSelf displayInAppViewController:message
-                                             viewController:meiamViewController];
-                   }];
+    if (!self.iamWindow) {
+        self.currentCampaignId = message.campaignId;
+        MEIAMJSCommandFactory *commandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:self];
+        MEJSBridge *jsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:commandFactory];
+        MEIAMViewController *meiamViewController = [[MEIAMViewController alloc] initWithJSBridge:jsBridge];
+        __weak typeof(self) weakSelf = self;
+        [meiamViewController loadMessage:message.html
+                       completionHandler:^{
+                           [weakSelf displayInAppViewController:message
+                                                 viewController:meiamViewController];
+                       }];
+    }
 }
 
 #pragma mark - Private methods

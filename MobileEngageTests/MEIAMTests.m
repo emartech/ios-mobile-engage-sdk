@@ -40,6 +40,37 @@ SPEC_BEGIN(MEIAMTests)
 
             [iam showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message": @{@"id": @"campaignId", @"html": message}}]];
         });
+
+        it(@"should not try to display inapp in case if there is already one being displayed", ^{
+            NSString *expectedName = @"nameOfTheEvent";
+            NSDictionary <NSString *, NSObject *> *expectedPayload = @{
+                    @"payloadKey1": @{
+                            @"payloadKey2": @"payloadValue"
+                    }
+            };
+
+            FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
+            [iam setMessageHandler:inAppHandler];
+            NSString *message = @"<!DOCTYPE html>\n"
+                    "<html lang=\"en\">\n"
+                    "  <head>\n"
+                    "    <script>\n"
+                    "      window.onload = function() {\n"
+                    "        window.webkit.messageHandlers.triggerAppEvent.postMessage({id: '1', name: 'nameOfTheEvent', payload:{payloadKey1:{payloadKey2: 'payloadValue'}}});\n"
+                    "      };\n"
+                    "    </script>\n"
+                    "  </head>\n"
+                    "  <body style=\"background: transparent;\">\n"
+                    "  </body>\n"
+                    "</html>";
+            [[inAppHandler shouldEventually] receive:@selector(handleApplicationEvent:payload:) withCountAtMost:1 arguments:expectedName, expectedPayload];
+
+
+            [iam showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message": @{@"id": @"campaignId", @"html": message}}]];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+            [iam showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message": @{@"id": @"campaignId", @"html": message}}]];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        });
     });
 
 
