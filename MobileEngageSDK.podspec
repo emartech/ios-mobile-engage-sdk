@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'MobileEngageSDK'
-	spec.version              = '0.9.1'
+	spec.version              = '1.0.0'
 	spec.homepage             = 'https://help.emarsys.com/hc/en-us/articles/115002410625'
 	spec.license              = 'Mozilla Public License 2.0'
     spec.author               = { 'Emarsys Technologies' => 'mobile-team@emarsys.com' }
@@ -13,11 +13,11 @@ Pod::Spec.new do |spec|
 		'MobileEngage/MobileEngage.h',
 		'MobileEngage/MobileEngageStatusDelegate.h',
 		'MobileEngage/MEConfigBuilder.h',
-        'MobileEngage/MEConfig.h',
-        'MobileEngage/Flipper/MEFlipperFeatures.h',
-        'MobileEngage/Inbox/MEInbox.h',
-        'MobileEngage/Inbox/MENotification.h',
-        'MobileEngage/Inbox/MENotificationInboxStatus.h',
+	    'MobileEngage/MEConfig.h',
+	   	'MobileEngage/Flipper/MEFlipperFeatures.h',
+	    'MobileEngage/Inbox/MEInbox.h',
+	    'MobileEngage/Inbox/MENotification.h',
+	    'MobileEngage/Inbox/MENotificationInboxStatus.h',
         'MobileEngage/IAM/MEInApp.h',
         'MobileEngage/IAM/MEInAppMessageHandler.h'
    	]
