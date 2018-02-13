@@ -21,18 +21,21 @@
 @implementation MEInApp
 
 - (void)showMessage:(MEInAppMessage *)message {
-    if (!self.iamWindow) {
-        self.currentCampaignId = message.campaignId;
-        MEIAMJSCommandFactory *commandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:self];
-        MEJSBridge *jsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:commandFactory];
-        MEIAMViewController *meiamViewController = [[MEIAMViewController alloc] initWithJSBridge:jsBridge];
-        __weak typeof(self) weakSelf = self;
-        [meiamViewController loadMessage:message.html
-                       completionHandler:^{
-                           [weakSelf displayInAppViewController:message
-                                                 viewController:meiamViewController];
-                       }];
-    }
+    self.currentCampaignId = message.campaignId;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.iamWindow) {
+            self.iamWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            MEIAMJSCommandFactory *commandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:self];
+            MEJSBridge *jsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:commandFactory];
+            MEIAMViewController *meiamViewController = [[MEIAMViewController alloc] initWithJSBridge:jsBridge];
+            __weak typeof(self) weakSelf = self;
+            [meiamViewController loadMessage:message.html
+                           completionHandler:^{
+                               [weakSelf displayInAppViewController:message
+                                                     viewController:meiamViewController];
+                           }];
+        }
+    });
 }
 
 #pragma mark - Private methods
@@ -41,7 +44,6 @@
                     viewController:(MEIAMViewController *)meiamViewController {
     UIViewController *rootViewController = [UIViewController new];
     rootViewController.view.backgroundColor = [UIColor clearColor];
-    self.iamWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.iamWindow.backgroundColor = [UIColor clearColor];
     self.iamWindow.rootViewController = rootViewController;
     self.iamWindow.windowLevel = UIWindowLevelAlert;
