@@ -80,12 +80,19 @@ SPEC_BEGIN(MEIAMTests)
             [meInApp showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message":@{@"id":@"testId", @"html" : @"<html></html>"}}]];
             [[[((id <MEIAMProtocol>) meInApp) currentCampaignId] should] equal:@"testId"];
         });
+
+        it(@"should call trackInAppDisplay: on inAppTracker", ^{
+            id inAppTracker = [KWMock mockForProtocol:@protocol(MEInAppTrackingProtocol)];
+            [[inAppTracker should] receive:@selector(trackInAppDisplay:) withArguments:@"testId"];
+            iam.inAppTracker = inAppTracker;
+            [iam showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message":@{@"id":@"testId", @"html" : @"<html></html>"}}]];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        });
     });
 
     describe(@"closeInAppMessage", ^{
 
         it(@"should close the inapp message", ^{
-
             UIViewController *rootViewControllerMock = [UIViewController nullMock];
             [[rootViewControllerMock should] receive:@selector(dismissViewControllerAnimated:completion:)];
             KWCaptureSpy *spy = [rootViewControllerMock captureArgument:@selector(dismissViewControllerAnimated:completion:) atIndex:1];

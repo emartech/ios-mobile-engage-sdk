@@ -8,10 +8,12 @@
 @implementation MEIAMButtonClicked
 
 - (instancetype)initWithCampaignId:(NSString *)campaignId
-                        repository:(MEButtonClickRepository *)repository {
+                        repository:(MEButtonClickRepository *)repository
+                      inAppTracker:(id <MEInAppTrackingProtocol>)inAppTracker {
     if (self = [super init]) {
         _campaignId = campaignId;
         _repository = repository;
+        _inAppTracker = inAppTracker;
     }
     return self;
 }
@@ -25,9 +27,10 @@
     NSString *buttonId = message[@"buttonId"];
     NSString *eventId = message[@"id"];
     if (buttonId) {
-        [_repository add:[[MEButtonClick alloc] initWithCampaignId:_campaignId
-                                                          buttonId:buttonId
-                                                         timestamp:[NSDate date]]];
+        [self.repository add:[[MEButtonClick alloc] initWithCampaignId:self.campaignId
+                                                              buttonId:buttonId
+                                                             timestamp:[NSDate date]]];
+        [self.inAppTracker trackInAppClick:self.campaignId buttonId:buttonId];
         resultBlock([MEIAMCommamndResultUtils createSuccessResultWith:eventId]);
     } else {
         resultBlock([MEIAMCommamndResultUtils createMissingParameterErrorResultWith:eventId

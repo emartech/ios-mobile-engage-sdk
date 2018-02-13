@@ -2,7 +2,6 @@
 #import "MEIAMJSCommandFactory.h"
 #import "MEIAMRequestPushPermission.h"
 #import "MEIAMOpenExternalLink.h"
-#import "MEIAMProtocol.h"
 #import "MEIAMClose.h"
 #import "MEIAMTriggerAppEvent.h"
 #import "MEIAMButtonClicked.h"
@@ -22,6 +21,7 @@ SPEC_BEGIN(MEIAMJSCommandFactoryTests)
         _meiam = [KWMock mockForProtocol:@protocol(MEIAMProtocol)];
         [_meiam stub:@selector(currentCampaignId) andReturn:currentCampaignId];
         [_meiam stub:@selector(meiamViewController) andReturn:[MEIAMViewController mock]];
+        [_meiam stub:@selector(inAppTracker) andReturn:[KWMock mockForProtocol:@protocol(MEInAppTrackingProtocol)]];
         [_meiam stub:@selector(messageHandler) andReturn:[KWMock mockForProtocol:@protocol(MEInAppMessageHandler)]];
         [MobileEngage stub:@selector(dbHelper) andReturn:[EMSSQLiteHelper mock]];
         _factory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:_meiam];
@@ -67,6 +67,7 @@ SPEC_BEGIN(MEIAMJSCommandFactoryTests)
             [[command.campaignId shouldNot] beNil];
             [[command.campaignId should] equal:currentCampaignId];
             [[command.repository shouldNot] beNil];
+            [[(NSObject *)command.inAppTracker shouldNot] beNil];
             [[command.repository.sqliteHelper should] equal:[MobileEngage dbHelper]];
         });
     });

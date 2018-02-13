@@ -4,6 +4,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MEInAppMessageHandler.h"
+#import "MEInAppTrackingProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

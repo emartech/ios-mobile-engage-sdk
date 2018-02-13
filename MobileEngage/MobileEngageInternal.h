@@ -7,6 +7,7 @@
 #import "MENotification.h"
 #import "EMSRequestManager.h"
 #import "EMSTimestampProvider.h"
+#import "MEInAppTrackingProtocol.h"
 
 @protocol MobileEngageStatusDelegate;
 @class MEConfig;
@@ -21,7 +22,7 @@ typedef void (^MESuccessBlock)(NSString *requestId, EMSResponseModel *);
 typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
 
 NS_ASSUME_NONNULL_BEGIN
-@interface MobileEngageInternal : NSObject
+@interface MobileEngageInternal : NSObject <MEInAppTrackingProtocol>
 
 @property(nonatomic, strong) EMSRequestManager *requestManager;
 @property(nonatomic, strong) MESuccessBlock successBlock;

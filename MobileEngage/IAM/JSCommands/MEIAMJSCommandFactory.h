@@ -4,8 +4,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MEIAMJSCommandProtocol.h"
+#import "MEIAMProtocol.h"
 
-@protocol MEIAMProtocol;
 
 @interface MEIAMJSCommandFactory : NSObject
 

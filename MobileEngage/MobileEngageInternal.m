@@ -71,6 +71,18 @@
     }                           forNotification:UIApplicationDidBecomeActiveNotification];
 }
 
+- (void)trackInAppDisplay:(NSString *)campaignId {
+    [self.requestManager submit:[self createCustomEventModel:@"inapp:viewed"
+                                             eventAttributes:@{@"message_id": campaignId}
+                                                        type:@"internal"]];
+}
+
+- (void)trackInAppClick:(NSString *)campaignId buttonId:(NSString *)buttonId {
+    [self.requestManager submit:[self createCustomEventModel:@"inapp:click"
+                                             eventAttributes:@{@"message_id": campaignId, @"button_id": buttonId}
+                                                        type:@"internal"]];
+}
+
 - (void)setupWithConfig:(nonnull MEConfig *)config
           launchOptions:(NSDictionary *)launchOptions {
     [MEExperimental enableFeatures:config.experimentalFeatures];

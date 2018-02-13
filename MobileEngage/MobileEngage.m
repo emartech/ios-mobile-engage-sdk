@@ -9,7 +9,7 @@
 #import "EMSSQLiteHelper.h"
 #import "MESchemaDelegate.h"
 #import "MENotificationCenterManager.h"
-#import <UIKit/UIKit.h>
+#import "MEInApp+Private.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"MEDB.db"]
 
@@ -36,6 +36,7 @@ static EMSSQLiteHelper *_dbHelper;
     _mobileEngageInternal.notificationCenterManager = [MENotificationCenterManager new];
     [_mobileEngageInternal setupWithConfig:config
                              launchOptions:launchOptions];
+    _iam.inAppTracker = _mobileEngageInternal;
 }
 
 + (void)setupWithConfig:(MEConfig *)config

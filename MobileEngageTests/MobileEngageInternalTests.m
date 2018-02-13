@@ -1083,6 +1083,41 @@ SPEC_BEGIN(MobileEngageInternalTests)
             [[result.payload[@"events"][0][@"name"] should] equal:@"app:start"];
         });
 
+        it(@"should submit inapp:viewed event when trackInAppDisplay: called", ^{
+            [_mobileEngage setMeId:@"testMeId"];
+            [_mobileEngage setMeIdSignature:@"testMeIdSig"];
+
+            id requestManager = requestManagerMock();
+            [[requestManager should] receive:@selector(submit:) withCountAtLeast:1];
+            KWCaptureSpy *submitSpy = [requestManager captureArgument:@selector(submit:) atIndex:0];
+
+            [_mobileEngage trackInAppDisplay:@"testCampaignId"];
+
+            EMSRequestModel *result = submitSpy.argument;
+            [[[result.url absoluteString] should] equal:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/testMeId/events"];
+            [[result.payload[@"events"][0][@"type"] should] equal:@"internal"];
+            [[result.payload[@"events"][0][@"name"] should] equal:@"inapp:viewed"];
+            [[result.payload[@"events"][0][@"attributes"][@"message_id"] should] equal:@"testCampaignId"];
+        });
+
+        it(@"should submit inapp:viewed event when trackInAppClick: called", ^{
+            [_mobileEngage setMeId:@"testMeId"];
+            [_mobileEngage setMeIdSignature:@"testMeIdSig"];
+
+            id requestManager = requestManagerMock();
+            [[requestManager should] receive:@selector(submit:) withCountAtLeast:1];
+            KWCaptureSpy *submitSpy = [requestManager captureArgument:@selector(submit:) atIndex:0];
+
+            [_mobileEngage trackInAppClick:@"testCampaignId" buttonId:@"123"];
+
+            EMSRequestModel *result = submitSpy.argument;
+            [[[result.url absoluteString] should] equal:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/testMeId/events"];
+            [[result.payload[@"events"][0][@"type"] should] equal:@"internal"];
+            [[result.payload[@"events"][0][@"name"] should] equal:@"inapp:click"];
+            [[result.payload[@"events"][0][@"attributes"][@"message_id"] should] equal:@"testCampaignId"];
+            [[result.payload[@"events"][0][@"attributes"][@"button_id"] should] equal:@"123"];
+        });
+
         it(@"should not call submit on RequestManager when there is no meid (no login)", ^{
             id notificationCenterManagerMock = [MENotificationCenterManager mock];
             [_mobileEngage setNotificationCenterManager:notificationCenterManagerMock];

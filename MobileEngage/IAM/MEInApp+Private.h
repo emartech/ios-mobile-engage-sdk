@@ -10,6 +10,8 @@
 
 @interface MEInApp (Private)
 
+@property(nonatomic, weak, nullable) id <MEInAppTrackingProtocol> inAppTracker;
+
 - (UIWindow *)iamWindow;
 
 - (void)setIamWindow:(UIWindow *)window;

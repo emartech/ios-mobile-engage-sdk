@@ -1,17 +1,18 @@
 #import "Kiwi.h"
 #import "MEIAMButtonClicked.h"
-#import "MEButtonClickRepository.h"
 
 SPEC_BEGIN(MEIAMButtonClickedTests)
 
     __block NSString *campaignId;
     __block MEButtonClickRepository *repositoryMock;
+    __block id inAppTrackerMock;
     __block MEIAMButtonClicked *meiamButtonClicked;
 
     beforeEach(^{
         campaignId = @"123";
         repositoryMock = [MEButtonClickRepository mock];
-        meiamButtonClicked = [[MEIAMButtonClicked alloc] initWithCampaignId:campaignId repository:repositoryMock];
+        inAppTrackerMock = [KWMock nullMockForProtocol:@protocol(MEInAppTrackingProtocol)];
+        meiamButtonClicked = [[MEIAMButtonClicked alloc] initWithCampaignId:campaignId repository:repositoryMock inAppTracker:inAppTrackerMock];
     });
 
     describe(@"commandName", ^{
@@ -32,6 +33,22 @@ SPEC_BEGIN(MEIAMButtonClickedTests)
 
             [meiamButtonClicked handleMessage:dictionary
                                   resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+                                  }];
+        });
+
+        it(@"should call track on trackInAppClick:buttonId:", ^{
+            NSString *buttonId = @"789";
+
+            NSDictionary *dictionary = @{
+                    @"buttonId": buttonId,
+                    @"id": @"messageId"
+            };
+            [[repositoryMock should] receive:@selector(add:)];
+            [[inAppTrackerMock should] receive:@selector(trackInAppClick:buttonId:) withArguments:@"123", buttonId];
+
+            [meiamButtonClicked handleMessage:dictionary
+                                  resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+
                                   }];
         });
 

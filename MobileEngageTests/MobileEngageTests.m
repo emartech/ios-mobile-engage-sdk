@@ -5,6 +5,7 @@
 #import "MobileEngage+Test.h"
 #import "MobileEngage+Private.h"
 #import "MobileEngageInternal+Private.h"
+#import "MEInApp+Private.h"
 
 static NSString *const kAppId = @"kAppId";
 
@@ -67,6 +68,11 @@ SPEC_BEGIN(MobileEngageTests)
                                           launchOptions:nil];
 
             [[spy.argument shouldNot] beNil];
+        });
+
+        it(@"should assign tracker to MEInApp", ^{
+            mobileEngageInternal();
+            [[(NSObject *)MobileEngage.inApp.inAppTracker shouldNot] beNil];
         });
     });
 

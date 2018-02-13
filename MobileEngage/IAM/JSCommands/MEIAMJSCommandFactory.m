@@ -6,7 +6,6 @@
 #import "MEIAMRequestPushPermission.h"
 #import "MEIAMOpenExternalLink.h"
 #import "MEIAMClose.h"
-#import "MEIAMProtocol.h"
 #import "MEIAMTriggerAppEvent.h"
 #import "MEIAMButtonClicked.h"
 #import "MobileEngage.h"
@@ -33,7 +32,8 @@
         command = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:[self.meiam messageHandler]];
     } else if ([name isEqualToString:MEIAMButtonClicked.commandName]) {
         command = [[MEIAMButtonClicked alloc] initWithCampaignId:[self.meiam currentCampaignId]
-                                                      repository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]];
+                                                      repository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
+                                                    inAppTracker:self.meiam.inAppTracker];
     }
     return command;
 }

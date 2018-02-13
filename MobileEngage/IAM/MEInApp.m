@@ -9,12 +9,12 @@
 #import "MEIAMJSCommandFactory.h"
 #import "MobileEngage+Private.h"
 #import "MEDisplayedIAMRepository.h"
-#import "MEIAMProtocol.h"
 
 @interface MEInApp () <MEIAMProtocol>
 
 @property(nonatomic, weak) NSString *currentCampaignId;
 @property(nonatomic, strong) UIWindow *iamWindow;
+@property(nonatomic, weak, nullable) id <MEInAppTrackingProtocol> inAppTracker;
 
 @end
 
@@ -58,6 +58,8 @@
 - (void)trackIAMDisplay:(MEInAppMessage *)message {
     MEDisplayedIAMRepository *repository = [[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]];
     [repository add:[[MEDisplayedIAM alloc] initWithCampaignId:message.campaignId timestamp:[NSDate new]]];
+
+    [self.inAppTracker trackInAppDisplay:message.campaignId];
 }
 
 - (void)closeInAppMessage {
