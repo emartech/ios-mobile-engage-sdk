@@ -3,8 +3,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EMSRequestModelRepositoryProtocol.h"
-#import "EMSRequestModelRepository.h"
+#import <CoreSDK/EMSRequestModelRepositoryProtocol.h>
+#import <CoreSDK/EMSRequestModelRepository.h>
 
 @class MEButtonClickRepository;
 @class MEDisplayedIAMRepository;

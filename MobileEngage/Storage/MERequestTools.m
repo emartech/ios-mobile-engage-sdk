@@ -3,7 +3,7 @@
 //
 
 #import "MERequestTools.h"
-#import "EMSRequestModel.h"
+#import <CoreSDK/EMSRequestModel.h>
 
 
 @implementation MERequestTools

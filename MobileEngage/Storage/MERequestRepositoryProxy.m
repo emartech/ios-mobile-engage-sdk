@@ -6,12 +6,12 @@
 #import "MEButtonClickRepository.h"
 #import "MEDisplayedIAMRepository.h"
 #import "MERequestModelSelectEventsSpecification.h"
-#import "EMSRequestModelBuilder.h"
-#import "EMSCompositeRequestModel.h"
+#import <CoreSDK/EMSRequestModelBuilder.h>
+#import <CoreSDK/EMSCompositeRequestModel.h>
 #import "MERequestTools.h"
 #import "MEButtonClickFilterNoneSpecification.h"
 #import "MEDisplayedIAMFilterNoneSpecification.h"
-#import "EMSDeviceInfo.h"
+#import <CoreSDK/EMSDeviceInfo.h>
 #import "MobileEngageVersion.h"
 
 @interface MERequestRepositoryProxy ()

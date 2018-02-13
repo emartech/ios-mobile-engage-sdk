@@ -2,10 +2,10 @@
 //  Copyright © 2018 Emarsys. All rights reserved.
 //
 #import <Foundation/Foundation.h>
-#import "EMSSQLiteHelper.h"
-#import "EMSSQLSpecificationProtocol.h"
+#import <CoreSDK/EMSSQLiteHelper.h>
+#import <CoreSDK/EMSSQLSpecificationProtocol.h>
 #import "MEButtonClick.h"
-#import "EMSRepositoryProtocol.h"
+#import <CoreSDK/EMSRepositoryProtocol.h>
 
 @interface MEButtonClickRepository : NSObject <EMSRepositoryProtocol>
 

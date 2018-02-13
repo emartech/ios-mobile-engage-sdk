@@ -3,7 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EMSSQLiteHelper.h"
+#import <CoreSDK/EMSSQLiteHelper.h>
 
 @interface MESchemaDelegate : NSObject <EMSSQLiteHelperSchemaHandler>
 @end

@@ -4,7 +4,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MobileEngage.h"
-#import "EMSSQLiteHelper.h"
+#import <CoreSDK/EMSSQLiteHelper.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

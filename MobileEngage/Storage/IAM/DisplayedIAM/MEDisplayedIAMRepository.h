@@ -3,10 +3,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EMSSQLiteHelper.h"
+#import <CoreSDK/EMSSQLiteHelper.h>
 #import "MEDisplayedIAM.h"
-#import "EMSSQLSpecificationProtocol.h"
-#import "EMSRepositoryProtocol.h"
+#import <CoreSDK/EMSSQLSpecificationProtocol.h>
+#import <CoreSDK/EMSRepositoryProtocol.h>
 
 @interface MEDisplayedIAMRepository : NSObject <EMSRepositoryProtocol>
 

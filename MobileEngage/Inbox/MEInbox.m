@@ -4,16 +4,16 @@
 
 #import "NSError+EMSCore.h"
 #import "MEInbox.h"
-#import "EMSRequestModelBuilder.h"
-#import "EMSResponseModel.h"
+#import <CoreSDK/EMSRequestModelBuilder.h>
+#import <CoreSDK/EMSResponseModel.h>
 #import "MEDefaultHeaders.h"
 #import "MEConfig.h"
-#import "EMSDeviceInfo.h"
+#import <CoreSDK/EMSDeviceInfo.h>
 #import "MEAppLoginParameters.h"
 #import "MEInboxParser.h"
-#import "EMSRESTClient.h"
+#import <CoreSDK/EMSRESTClient.h>
 #import "MobileEngage+Private.h"
-#import "EMSAuthentication.h"
+#import <CoreSDK/EMSAuthentication.h>
 
 @interface MEInbox ()
 

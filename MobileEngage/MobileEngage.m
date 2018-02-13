@@ -6,7 +6,7 @@
 #import "MEConfig.h"
 #import "MobileEngageInternal.h"
 #import "MEInbox+Notification.h"
-#import "EMSSQLiteHelper.h"
+#import <CoreSDK/EMSSQLiteHelper.h>
 #import "MESchemaDelegate.h"
 #import "MENotificationCenterManager.h"
 #import "MEInApp+Private.h"

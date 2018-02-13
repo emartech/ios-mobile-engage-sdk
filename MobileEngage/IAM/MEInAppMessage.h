@@ -3,7 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EMSResponseModel.h"
+#import <CoreSDK/EMSResponseModel.h>
 
 @interface MEInAppMessage : NSObject
 

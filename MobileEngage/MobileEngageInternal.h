@@ -5,8 +5,8 @@
 #import <Foundation/Foundation.h>
 #import "MEAppLoginParameters.h"
 #import "MENotification.h"
-#import "EMSRequestManager.h"
-#import "EMSTimestampProvider.h"
+#import <CoreSDK/EMSRequestManager.h>
+#import <CoreSDK/EMSTimestampProvider.h>
 #import "MEInAppTrackingProtocol.h"
 
 @protocol MobileEngageStatusDelegate;

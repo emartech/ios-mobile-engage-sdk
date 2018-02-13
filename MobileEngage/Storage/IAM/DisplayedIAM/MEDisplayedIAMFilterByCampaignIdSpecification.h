@@ -3,7 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EMSSQLSpecificationProtocol.h"
+#import <CoreSDK/EMSSQLSpecificationProtocol.h>
 
 @interface MEDisplayedIAMFilterByCampaignIdSpecification : NSObject <EMSSQLSpecificationProtocol>
 

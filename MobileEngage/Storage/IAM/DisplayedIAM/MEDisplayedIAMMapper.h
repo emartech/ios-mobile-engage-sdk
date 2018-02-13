@@ -3,7 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EMSModelMapperProtocol.h"
+#import <CoreSDK/EMSModelMapperProtocol.h>
 
 @interface MEDisplayedIAMMapper : NSObject <EMSModelMapperProtocol>
 @end
