@@ -27,7 +27,7 @@ SPEC_BEGIN(RequestModelSpecificationTests)
                 event[@"attributes"] = eventAttributes;
             }
 
-            [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
+            [builder setUrl:@"https://mobile-events.eservice.emarsys.net/v3/devices/12345/events"];
             [builder setMethod:HTTPMethodPOST];
             [builder setPayload:@{@"events": @[event]}];
         }];

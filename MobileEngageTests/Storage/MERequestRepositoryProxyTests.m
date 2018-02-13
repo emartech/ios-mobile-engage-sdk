@@ -42,7 +42,7 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
                 event[@"attributes"] = eventAttributes;
             }
 
-            [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
+            [builder setUrl:@"https://mobile-events.eservice.emarsys.net/v3/devices/12345/events"];
             [builder setMethod:HTTPMethodPOST];
             [builder setPayload:@{@"events": @[event]}];
         }];
@@ -177,7 +177,7 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
                     EMSRequestModel *modelCustomEvent3 = customEventRequestModel(@"event3", @{@"star": @"wars"});
 
                     EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                        [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
+                        [builder setUrl:@"https://mobile-events.eservice.emarsys.net/v3/devices/12345/events"];
                         [builder setMethod:HTTPMethodPOST];
                         [builder setPayload:@{
                                 @"hardware_id": [EMSDeviceInfo hardwareId],
@@ -210,11 +210,11 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
                     EMSRequestModel *model1 = normalRequestModel(@"https://www.google.com");
                     EMSRequestModel *modelCustomEvent1 = customEventRequestModel(@"event1", nil);
                     EMSRequestModel *modelCustomEvent2 = customEventRequestModel(@"event2", @{@"key1": @"value1", @"key2": @"value2"});
-                    EMSRequestModel *model2 = normalRequestModel(@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events534");
+                    EMSRequestModel *model2 = normalRequestModel(@"https://mobile-events.eservice.emarsys.net/v3/devices/12345/events534");
                     EMSRequestModel *modelCustomEvent3 = customEventRequestModel(@"event3", @{@"star": @"wars"});
 
                     EMSCompositeRequestModel *compositeModel = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                        [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/12345/events"];
+                        [builder setUrl:@"https://mobile-events.eservice.emarsys.net/v3/devices/12345/events"];
                         [builder setMethod:HTTPMethodPOST];
                         [builder setPayload:@{
                                 @"hardware_id": [EMSDeviceInfo hardwareId],

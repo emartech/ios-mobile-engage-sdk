@@ -13,7 +13,7 @@ SPEC_BEGIN(EMSRequestToolsTests)
 
         it(@"should return YES if the request is a custom event", ^{
             EMSRequestModel *customEvent = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/2398732872/events"];
+                [builder setUrl:@"https://mobile-events.eservice.emarsys.net/v3/devices/2398732872/events"];
             }];
 
             [[theValue([MERequestTools isRequestCustomEvent:customEvent]) should] beYes];
@@ -21,7 +21,7 @@ SPEC_BEGIN(EMSRequestToolsTests)
 
         it(@"should return NO if the request is a NOT custom event", ^{
             EMSRequestModel *customEvent = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setUrl:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/2398732872/events2"];
+                [builder setUrl:@"https://mobile-events.eservice.emarsys.net/v3/devices/2398732872/events2"];
             }];
 
             [[theValue([MERequestTools isRequestCustomEvent:customEvent]) should] beNo];

@@ -266,7 +266,7 @@
 - (EMSRequestModel *)createCustomEventModel:(NSString *)eventName eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes type:(NSString *)type {
     return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setMethod:HTTPMethodPOST];
-        [builder setUrl:[NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", self.meId]];
+        [builder setUrl:[NSString stringWithFormat:@"https://mobile-events.eservice.emarsys.net/v3/devices/%@/events", self.meId]];
         NSMutableDictionary *payload = [NSMutableDictionary new];
         payload[@"clicks"] = @[];
         payload[@"viewed_messages"] = @[];

@@ -857,7 +857,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     ]
             };
 
-            EMSRequestModel *model = requestModelV3([NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", kMEID], payload);
+            EMSRequestModel *model = requestModelV3([NSString stringWithFormat:@"https://mobile-events.eservice.emarsys.net/v3/devices/%@/events", kMEID], payload);
 
             [[requestManager should] receive:@selector(submit:)
                                withArguments:any(), any(), any()];
@@ -896,7 +896,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     ]
             };
 
-            EMSRequestModel *model = requestModelV3([NSString stringWithFormat:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/%@/events", kMEID], payload);
+            EMSRequestModel *model = requestModelV3([NSString stringWithFormat:@"https://mobile-events.eservice.emarsys.net/v3/devices/%@/events", kMEID], payload);
 
             [[requestManager should] receive:@selector(submit:)
                                withArguments:any(), any(), any()];
@@ -1078,7 +1078,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
 
             EMSRequestModel *result = submitSpy.argument;
-            [[[result.url absoluteString] should] equal:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/testMeId/events"];
+            [[[result.url absoluteString] should] equal:@"https://mobile-events.eservice.emarsys.net/v3/devices/testMeId/events"];
             [[result.payload[@"events"][0][@"type"] should] equal:@"internal"];
             [[result.payload[@"events"][0][@"name"] should] equal:@"app:start"];
         });
@@ -1094,7 +1094,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
             [_mobileEngage trackInAppDisplay:@"testCampaignId"];
 
             EMSRequestModel *result = submitSpy.argument;
-            [[[result.url absoluteString] should] equal:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/testMeId/events"];
+            [[[result.url absoluteString] should] equal:@"https://mobile-events.eservice.emarsys.net/v3/devices/testMeId/events"];
             [[result.payload[@"events"][0][@"type"] should] equal:@"internal"];
             [[result.payload[@"events"][0][@"name"] should] equal:@"inapp:viewed"];
             [[result.payload[@"events"][0][@"attributes"][@"message_id"] should] equal:@"testCampaignId"];
@@ -1111,7 +1111,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
             [_mobileEngage trackInAppClick:@"testCampaignId" buttonId:@"123"];
 
             EMSRequestModel *result = submitSpy.argument;
-            [[[result.url absoluteString] should] equal:@"https://ems-me-deviceevent.herokuapp.com/v3/devices/testMeId/events"];
+            [[[result.url absoluteString] should] equal:@"https://mobile-events.eservice.emarsys.net/v3/devices/testMeId/events"];
             [[result.payload[@"events"][0][@"type"] should] equal:@"internal"];
             [[result.payload[@"events"][0][@"name"] should] equal:@"inapp:click"];
             [[result.payload[@"events"][0][@"attributes"][@"message_id"] should] equal:@"testCampaignId"];
