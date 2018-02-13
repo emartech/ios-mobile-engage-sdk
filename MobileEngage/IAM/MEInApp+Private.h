@@ -7,6 +7,7 @@
 #import "MobileEngage.h"
 #import <UIKit/UIKit.h>
 #import "MEInAppMessage.h"
+#import "MEInAppTrackingProtocol.h"
 
 @interface MEInApp (Private)
 
