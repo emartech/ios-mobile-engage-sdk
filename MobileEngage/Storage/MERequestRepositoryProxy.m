@@ -11,7 +11,7 @@
 #import "MERequestTools.h"
 #import "MEButtonClickFilterNoneSpecification.h"
 #import "MEDisplayedIAMFilterNoneSpecification.h"
-#import "EMSDeviceInfo.h"
+#import <CoreSDK/EMSDeviceInfo.h>
 #import "MobileEngageVersion.h"
 
 @interface MERequestRepositoryProxy ()
