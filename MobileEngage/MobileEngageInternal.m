@@ -3,7 +3,7 @@
 //
 
 #import "MobileEngageInternal.h"
-#import <CoreSDK/EMSRequestModelBuilder.h>
+#import "EMSRequestModelBuilder.h"
 #import "EMSDeviceInfo.h"
 #import "MobileEngageStatusDelegate.h"
 #import "MEConfig.h"
@@ -12,19 +12,19 @@
 #import "NSData+MobileEngine.h"
 #import "MEDefaultHeaders.h"
 #import "MobileEngageVersion.h"
-#import <CoreSDK/EMSResponseModel.h>
+#import "EMSResponseModel.h"
 #import "AbstractResponseHandler.h"
 #import "MEIdResponseHandler.h"
 #import "MEIAMResponseHandler.h"
 #import "MEExperimental.h"
-#import <CoreSDK/EMSRequestModelRepository.h>
+#import "EMSRequestModelRepository.h"
 #import "MERequestRepositoryProxy.h"
 #import "MEButtonClickRepository.h"
 #import "MobileEngage.h"
 #import "MobileEngage+Private.h"
 #import "MEDisplayedIAMRepository.h"
 #import "MEIAMCleanupResponseHandler.h"
-#import <CoreSDK/EMSAuthentication.h>
+#import "EMSAuthentication.h"
 #import "MENotificationCenterManager.h"
 #import <UIKit/UIKit.h>
 
