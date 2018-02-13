@@ -3,7 +3,7 @@
 //
 
 #import "MEButtonClick.h"
-#import <CoreSDK/EMSTimestampProvider.h>
+#import "EMSTimestampProvider.h"
 
 @implementation MEButtonClick
 
