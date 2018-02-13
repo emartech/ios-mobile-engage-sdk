@@ -4,6 +4,7 @@
 
 #import "MEIAMViewController.h"
 #import "MEJSBridge.h"
+#import "MEOsVersionUtils.h"
 
 @interface MEIAMViewController () <WKNavigationDelegate>
 
@@ -78,12 +79,34 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     [webView.scrollView setScrollEnabled:NO];
     [webView.scrollView setBounces:NO];
     [webView.scrollView setBouncesZoom:NO];
+
+    if (!SYSTEM_VERSION_LESS_THAN(@"11.0")) {
+         webView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    }
     return webView;
 }
 
 - (void)addFullscreenView:(UIView *)view {
     [self.view addSubview:view];
     [view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:view
+                                                           attribute:NSLayoutAttributeTop
+                                                           relatedBy:NSLayoutRelationEqual
+                                                              toItem:self.view
+                                                           attribute:NSLayoutAttributeTop
+                                                          multiplier:1
+                                                            constant:0];
+    
+    NSLayoutConstraint *left = [NSLayoutConstraint constraintWithItem:view
+                                                           attribute:NSLayoutAttributeLeft
+                                                           relatedBy:NSLayoutRelationEqual
+                                                              toItem:self.view
+                                                           attribute:NSLayoutAttributeLeft
+                                                          multiplier:1
+                                                            constant:0];
+    
+    
     NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:view
                                                                        attribute:NSLayoutAttributeWidth
                                                                        relatedBy:NSLayoutRelationEqual
@@ -98,7 +121,7 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
                                                                         attribute:NSLayoutAttributeHeight
                                                                        multiplier:1
                                                                          constant:0];
-    [self.view addConstraints:@[widthConstraint, heightConstraint]];
+    [self.view addConstraints:@[top, left, widthConstraint, heightConstraint]];
     [self.view layoutIfNeeded];
 }
 
