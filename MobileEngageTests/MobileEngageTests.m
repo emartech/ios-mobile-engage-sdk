@@ -76,6 +76,18 @@ SPEC_BEGIN(MobileEngageTests)
         });
     });
 
+    describe(@"trackDeepLinkWith:sourceHandler:", ^{
+        it(@"should call internal implementation's method", ^{
+            NSUserActivity *userActivity = [NSUserActivity mock];
+            MESourceHandler sourceHandler = ^(NSString *source) {};
+            [[mobileEngageInternal() should] receive:@selector(trackDeepLinkWith:sourceHandler:)
+                                       withArguments:userActivity, sourceHandler];
+
+            [MobileEngage trackDeepLinkWith:userActivity
+                              sourceHandler:sourceHandler];
+        });
+    });
+
     describe(@"setPushToken:", ^{
         it(@"should call internal implementation's method", ^{
             NSData *deviceToken = [NSData new];

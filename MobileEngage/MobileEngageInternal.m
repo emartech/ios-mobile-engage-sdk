@@ -71,6 +71,43 @@
     }                           forNotification:UIApplicationDidBecomeActiveNotification];
 }
 
+- (BOOL)trackDeepLinkWith:(NSUserActivity *)userActivity
+            sourceHandler:(nullable MESourceHandler)sourceHandler {
+    BOOL result = NO;
+    if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
+        NSString *const webPageURL = userActivity.webpageURL.absoluteString;
+        NSString *const queryNameDeepLink = @"ems_dl";
+        NSURLQueryItem *queryItem = [self extractQueryItemFromUrl:webPageURL
+                                                        queryName:queryNameDeepLink];
+        if (queryItem && queryItem.value) {
+            result = YES;
+            if (sourceHandler) {
+                sourceHandler(webPageURL);
+            }
+            EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://deep-link.eservice.emarsys.net/api/clicks"];
+                [builder setPayload:@{queryNameDeepLink: queryItem.value}];
+                [builder setMethod:HTTPMethodPOST];
+            }];
+            [self.requestManager submit:requestModel];
+        }
+    }
+    return result;
+}
+
+- (NSURLQueryItem *)extractQueryItemFromUrl:(NSString *const)webPageURL
+                                  queryName:(NSString *const)queryName {
+    NSURLQueryItem *result;
+    for (NSURLQueryItem *queryItem in [[NSURLComponents componentsWithString:webPageURL] queryItems]) {
+        if ([queryItem.name isEqualToString:queryName]) {
+            result = queryItem;
+            break;
+        }
+    }
+    return result;
+}
+
+
 - (void)trackInAppDisplay:(NSString *)campaignId {
     [self.requestManager submit:[self createCustomEventModel:@"inapp:viewed"
                                              eventAttributes:@{@"message_id": campaignId}

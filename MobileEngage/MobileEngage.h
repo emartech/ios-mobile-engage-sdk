@@ -9,6 +9,8 @@
 @class MEConfig;
 @protocol MobileEngageStatusDelegate;
 
+typedef void(^MESourceHandler)(NSString *source);
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MobileEngage : NSObject
@@ -21,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
           launchOptions:(nullable NSDictionary *)launchOptions;
 
 + (void)setPushToken:(NSData *)deviceToken;
+
++ (BOOL)trackDeepLinkWith:(NSUserActivity *)userActivity
+            sourceHandler:(nullable MESourceHandler)sourceHandler;
 
 + (NSString *)appLogin;
 

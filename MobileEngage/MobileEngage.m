@@ -50,6 +50,12 @@ static EMSSQLiteHelper *_dbHelper;
     [_mobileEngageInternal setPushToken:deviceToken];
 }
 
++ (BOOL)trackDeepLinkWith:(NSUserActivity *)userActivity
+            sourceHandler:(nullable MESourceHandler)sourceHandler {
+    return [_mobileEngageInternal trackDeepLinkWith:userActivity
+                                      sourceHandler:sourceHandler];
+}
+
 + (NSString *)appLogin {
     [_inbox setAppLoginParameters:[MEAppLoginParameters new]];
     return [_mobileEngageInternal appLogin];
