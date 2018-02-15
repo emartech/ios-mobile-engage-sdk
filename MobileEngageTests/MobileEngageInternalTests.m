@@ -1271,7 +1271,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
         it(@"should return true when the userActivity type is NSUserActivityTypeBrowsingWeb and webpageURL contains ems_dl query parameter when sourceHandler is exist", ^{
             NSUserActivity *userActivity = [NSUserActivity mock];
             [[userActivity should] receive:@selector(activityType)
-                                 andReturn:NSUserActivityTypeBrowsingWeb];
+                                 andReturn:[NSString stringWithFormat:@"%@", NSUserActivityTypeBrowsingWeb]];
             [[userActivity should] receive:@selector(webpageURL)
                                  andReturn:[[NSURL alloc] initWithString:@"http://www.google.com/something?fancy_url=1&ems_dl=1_2_3_4_5"]];
 

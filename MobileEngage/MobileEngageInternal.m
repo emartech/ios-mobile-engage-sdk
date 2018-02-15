@@ -74,7 +74,7 @@
 - (BOOL)trackDeepLinkWith:(NSUserActivity *)userActivity
             sourceHandler:(nullable MESourceHandler)sourceHandler {
     BOOL result = NO;
-    if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
+    if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         NSString *const webPageURL = userActivity.webpageURL.absoluteString;
         NSString *const queryNameDeepLink = @"ems_dl";
         NSURLQueryItem *queryItem = [self extractQueryItemFromUrl:webPageURL
