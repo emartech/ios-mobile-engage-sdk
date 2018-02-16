@@ -25,7 +25,7 @@ SPEC_BEGIN(MEIAMViewControllerTests)
                                                                    "</html>", @"IAMDidAppear"];
             XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:[NSString stringWithFormat:@"wait - %@", @"IAMDidAppear"]];
 
-            [[meJsBridge shouldEventually] receive:@selector(userContentController:didReceiveScriptMessage:) withArguments:any(), any()];
+            [[meJsBridge shouldEventually] receive:@selector(userContentController:didReceiveScriptMessage:) withArguments:kw_any(), kw_any()];
             KWCaptureSpy *spy = [meJsBridge captureArgument:@selector(userContentController:didReceiveScriptMessage:)
                                                     atIndex:1];
             MEIAMViewController *iamViewController = [[MEIAMViewController alloc] initWithJSBridge:meJsBridge];

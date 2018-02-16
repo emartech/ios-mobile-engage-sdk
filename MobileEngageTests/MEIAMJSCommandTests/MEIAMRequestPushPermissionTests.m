@@ -21,7 +21,7 @@ SPEC_BEGIN(MEIAMRequestPushPermissionTests)
             it(@"should call registration process on application under iOS 10", ^{
                 [_applicationMock stub:@selector(isRegisteredForRemoteNotifications) andReturn:theValue(YES)];
                 [[_applicationMock should] receive:@selector(registerForRemoteNotifications)];
-                [[_applicationMock should] receive:@selector(registerUserNotificationSettings:) withArguments:any()];
+                [[_applicationMock should] receive:@selector(registerUserNotificationSettings:) withArguments:kw_any()];
                 KWCaptureSpy *spy = [_applicationMock captureArgument:@selector(registerUserNotificationSettings:)
                                                               atIndex:0];
 
@@ -57,7 +57,7 @@ SPEC_BEGIN(MEIAMRequestPushPermissionTests)
                 [[UNUserNotificationCenter should] receive:@selector(currentNotificationCenter) andReturn:userNotificationCenterMock];
 
                 [[_applicationMock should] receive:@selector(registerForRemoteNotifications)];
-                [[userNotificationCenterMock should] receive:@selector(requestAuthorizationWithOptions:completionHandler:) withArguments:any(), any()];
+                [[userNotificationCenterMock should] receive:@selector(requestAuthorizationWithOptions:completionHandler:) withArguments:kw_any(), kw_any()];
 
                 KWCaptureSpy *spy = [userNotificationCenterMock captureArgument:@selector(requestAuthorizationWithOptions:completionHandler:)
                                                                         atIndex:0];
@@ -72,7 +72,7 @@ SPEC_BEGIN(MEIAMRequestPushPermissionTests)
                 [[UNUserNotificationCenter should] receive:@selector(currentNotificationCenter) andReturn:userNotificationCenterMock];
 
                 [[_applicationMock should] receive:@selector(registerForRemoteNotifications)];
-                [[userNotificationCenterMock should] receive:@selector(requestAuthorizationWithOptions:completionHandler:) withArguments:any(), any()];
+                [[userNotificationCenterMock should] receive:@selector(requestAuthorizationWithOptions:completionHandler:) withArguments:kw_any(), kw_any()];
 
                 KWCaptureSpy *spy = [userNotificationCenterMock captureArgument:@selector(requestAuthorizationWithOptions:completionHandler:)
                                                                         atIndex:1];

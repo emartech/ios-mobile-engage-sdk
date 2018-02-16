@@ -31,7 +31,7 @@ MEJSBridge *_meJsBridge;
                                                                "</html>", commandName];
         XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:[NSString stringWithFormat:@"wait - %@", commandName]];
 
-        [[_meJsBridge shouldEventually] receive:@selector(userContentController:didReceiveScriptMessage:) withArguments:any(), any()];
+        [[_meJsBridge shouldEventually] receive:@selector(userContentController:didReceiveScriptMessage:) withArguments:kw_any(), kw_any()];
         KWCaptureSpy *spy = [_meJsBridge captureArgument:@selector(userContentController:didReceiveScriptMessage:)
                                                  atIndex:1];
         MEIAMViewController *iamViewController = [[MEIAMViewController alloc] initWithJSBridge:_meJsBridge];
@@ -98,7 +98,7 @@ SPEC_BEGIN(MEJSBridgeTests)
             [scriptMessageMock stub:@selector(body) andReturn:arguments];
 
             [[commandMock should] receive:@selector(handleMessage:resultBlock:)
-                            withArguments:arguments, any()];
+                            withArguments:arguments, kw_any()];
 
             [_meJsBridge userContentController:[WKUserContentController mock]
                        didReceiveScriptMessage:scriptMessageMock];
