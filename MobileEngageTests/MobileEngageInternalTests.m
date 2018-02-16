@@ -1281,19 +1281,6 @@ SPEC_BEGIN(MobileEngageInternalTests)
             [[theValue(returnValue) should] beYes];
         });
 
-        it(@"should return false when the userActivity type is NSUserActivityTypeBrowsingWeb and webpageURL ems_dl is not a queryItem", ^{
-            NSUserActivity *userActivity = [NSUserActivity mock];
-            [[userActivity should] receive:@selector(activityType)
-                                 andReturn:NSUserActivityTypeBrowsingWeb];
-            [[userActivity should] receive:@selector(webpageURL)
-                                 andReturn:[[NSURL alloc] initWithString:@"http://www.google.com/something?fancy_url=1&ems_dl"]];
-
-            BOOL returnValue = [_mobileEngage trackDeepLinkWith:userActivity
-                                                  sourceHandler:nil];
-
-            [[theValue(returnValue) should] beNo];
-        });
-
         it(@"should return false when the userActivity type is not NSUserActivityTypeBrowsingWeb", ^{
             NSUserActivity *userActivity = [NSUserActivity mock];
             [[userActivity should] receive:@selector(activityType)
@@ -1344,6 +1331,26 @@ SPEC_BEGIN(MobileEngageInternalTests)
             EMSRequestModel *result = submitSpy.argument;
             [[[result.url absoluteString] should] equal:@"https://deep-link.eservice.emarsys.net/api/clicks"];
             [[result.payload[@"ems_dl"] should] equal:@"1_2_3_4_5"];
+            [[result.method should] equal:@"POST"];
+        });
+
+        it(@"should submit deepLinkTracker requestModel into requestManager with empty string payload when ems_dl is not a queryItem", ^{
+            NSString *source = @"http://www.google.com/something?fancy_url=1&ems_dl";
+            NSUserActivity *userActivity = [NSUserActivity mock];
+            [[userActivity should] receive:@selector(activityType)
+                                 andReturn:NSUserActivityTypeBrowsingWeb];
+            [[userActivity should] receive:@selector(webpageURL)
+                                 andReturn:[[NSURL alloc] initWithString:source]];
+            id requestManager = requestManagerMock();
+            [[requestManager should] receive:@selector(submit:) withCount:1];
+            KWCaptureSpy *submitSpy = [requestManager captureArgument:@selector(submit:) atIndex:0];
+
+            [_mobileEngage trackDeepLinkWith:userActivity
+                               sourceHandler:nil];
+
+            EMSRequestModel *result = submitSpy.argument;
+            [[[result.url absoluteString] should] equal:@"https://deep-link.eservice.emarsys.net/api/clicks"];
+            [[result.payload[@"ems_dl"] should] equal:@""];
             [[result.method should] equal:@"POST"];
         });
     });

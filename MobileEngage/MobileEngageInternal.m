@@ -79,14 +79,14 @@
         NSString *const queryNameDeepLink = @"ems_dl";
         NSURLQueryItem *queryItem = [self extractQueryItemFromUrl:webPageURL
                                                         queryName:queryNameDeepLink];
-        if (queryItem && queryItem.value) {
+        if (queryItem) {
             result = YES;
             if (sourceHandler) {
                 sourceHandler(webPageURL);
             }
             EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"https://deep-link.eservice.emarsys.net/api/clicks"];
-                [builder setPayload:@{queryNameDeepLink: queryItem.value}];
+                [builder setPayload:@{queryNameDeepLink: queryItem.value ? queryItem.value : @""}];
                 [builder setMethod:HTTPMethodPOST];
             }];
             [self.requestManager submit:requestModel];

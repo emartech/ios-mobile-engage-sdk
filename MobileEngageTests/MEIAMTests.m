@@ -86,7 +86,7 @@ SPEC_BEGIN(MEIAMTests)
             [[inAppTracker should] receive:@selector(trackInAppDisplay:) withArguments:@"testId"];
             iam.inAppTracker = inAppTracker;
             [iam showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message":@{@"id":@"testId", @"html" : @"<html></html>"}}]];
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2]];
         });
     });
 
