@@ -28,8 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, weak, nullable) id <MobileEngageStatusDelegate> statusDelegate;
 @property(nonatomic, strong) NSData *pushToken;
-@property(nonatomic, strong, nullable) MEAppLoginParameters *lastAppLoginParameters;
-@property(nonatomic, strong, nullable) EMSTimestampProvider *timestampProvider;
 @property(nonatomic, strong, nullable) MENotificationCenterManager *notificationCenterManager;
 @property(nonatomic, strong) MERequestContext *requestContext;
 

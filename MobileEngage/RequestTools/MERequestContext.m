@@ -1,16 +1,19 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
+#import <CoreSDK/EMSTimestampProvider.h>
 #import "MERequestContext.h"
 
 
 @implementation MERequestContext
 
-- (instancetype)init {
+- (instancetype)initWithConfig:(MEConfig *)config {
     if (self = [super init]) {
         _lastAppLoginPayload = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] dictionaryForKey:kLastAppLoginPayload];
         _meId = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID];
         _meIdSignature = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID_SIGNATURE];
+        _config = config;
+        _timestampProvider = [EMSTimestampProvider new];
     }
     return self;
 }
@@ -37,6 +40,13 @@
     [userDefaults setObject:meIdSignature
                      forKey:kMEID_SIGNATURE];
     [userDefaults synchronize];
+}
+
+- (void)reset {
+    self.lastAppLoginParameters = nil;
+    self.lastAppLoginPayload = nil;
+    self.meId = nil;
+    self.meIdSignature = nil;
 }
 
 @end
