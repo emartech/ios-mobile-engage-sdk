@@ -11,6 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, weak, nullable) id <MEInAppMessageHandler> messageHandler;
 
+- (void)pause;
+- (void)resume;
+
 @end
 
 NS_ASSUME_NONNULL_END
