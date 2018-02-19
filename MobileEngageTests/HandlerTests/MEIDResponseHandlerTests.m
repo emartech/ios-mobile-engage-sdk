@@ -6,6 +6,7 @@
 #import "MEIDResponseHandler.h"
 #import "AbstractResponseHandler+Private.h"
 #import "MobileEngageInternal.h"
+#import "MERequestContext.h"
 
 SPEC_BEGIN(MEIDResponseHandlerTests)
 
@@ -62,10 +63,10 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
             EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                               headers:@{}
                                                                                  body:body];
-            id mobileEngageInternalMock = [MobileEngageInternal mock];
-            [[mobileEngageInternalMock should] receive:@selector(setMeId:) withArguments:[meId stringValue]];
-            [[mobileEngageInternalMock should] receive:@selector(setMeIdSignature:) withArguments:meIdSignature];
-            MEIdResponseHandler *handler = [[MEIdResponseHandler alloc] initWithMobileEngageInternal:mobileEngageInternalMock];
+            MERequestContext *requestContext = [MERequestContext mock];
+            [[requestContext should] receive:@selector(setMeId:) withArguments:[meId stringValue]];
+            [[requestContext should] receive:@selector(setMeIdSignature:) withArguments:meIdSignature];
+            MEIdResponseHandler *handler = [[MEIdResponseHandler alloc] initWithRequestContext:requestContext];
 
             [handler handleResponse:response];
         });
@@ -79,10 +80,10 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
             EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                               headers:@{}
                                                                                  body:body];
-            id mobileEngageInternalMock = [MobileEngageInternal mock];
-            [[mobileEngageInternalMock should] receive:@selector(setMeId:) withArguments:meId];
-            [[mobileEngageInternalMock should] receive:@selector(setMeIdSignature:) withArguments:meIdSignature];
-            MEIdResponseHandler *handler = [[MEIdResponseHandler alloc] initWithMobileEngageInternal:mobileEngageInternalMock];
+            MERequestContext *requestContext = [MERequestContext mock];
+            [[requestContext should] receive:@selector(setMeId:) withArguments:meId];
+            [[requestContext should] receive:@selector(setMeIdSignature:) withArguments:meIdSignature];
+            MEIdResponseHandler *handler = [[MEIdResponseHandler alloc] initWithRequestContext:requestContext];
 
             [handler handleResponse:response];
         });

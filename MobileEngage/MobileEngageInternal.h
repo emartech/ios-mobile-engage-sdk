@@ -12,11 +12,7 @@
 @protocol MobileEngageStatusDelegate;
 @class MEConfig;
 @class MENotificationCenterManager;
-
-#define kSuiteName @"com.emarsys.mobileengage"
-#define kLastAppLoginPayload @"kLastAppLoginPayload"
-#define kMEID @"kMEID"
-#define kMEID_SIGNATURE @"kMEID_SIGNATURE"
+@class MERequestContext;
 
 typedef void (^MESuccessBlock)(NSString *requestId, EMSResponseModel *);
 typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
@@ -33,11 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, weak, nullable) id <MobileEngageStatusDelegate> statusDelegate;
 @property(nonatomic, strong) NSData *pushToken;
 @property(nonatomic, strong, nullable) MEAppLoginParameters *lastAppLoginParameters;
-@property(nonatomic, strong, nullable) NSDictionary *lastAppLoginPayload;
-@property(nonatomic, strong, nullable) NSString *meId;
-@property(nonatomic, strong, nullable) NSString *meIdSignature;
 @property(nonatomic, strong, nullable) EMSTimestampProvider *timestampProvider;
 @property(nonatomic, strong, nullable) MENotificationCenterManager *notificationCenterManager;
+@property(nonatomic, strong) MERequestContext *requestContext;
 
 - (BOOL)trackDeepLinkWith:(NSUserActivity *)userActivity
             sourceHandler:(nullable MESourceHandler)sourceHandler;

@@ -26,6 +26,7 @@
 #import "MEIAMCleanupResponseHandler.h"
 #import <CoreSDK/EMSAuthentication.h>
 #import "MENotificationCenterManager.h"
+#import "MERequestContext.h"
 #import <UIKit/UIKit.h>
 
 @interface MobileEngageInternal ()
@@ -43,15 +44,13 @@
 - (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
                          config:(nonnull MEConfig *)config
                   launchOptions:(NSDictionary *)launchOptions {
-    _lastAppLoginPayload = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] dictionaryForKey:kLastAppLoginPayload];
-    _meId = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID];
-    _meIdSignature = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID_SIGNATURE];
+    _requestContext = [MERequestContext new];
     _requestManager = requestManager;
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
     if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
         _responseHandlers = @[
-                [[MEIdResponseHandler alloc] initWithMobileEngageInternal:self],
+                [[MEIdResponseHandler alloc] initWithRequestContext:_requestContext],
                 [MEIAMResponseHandler new],
                 [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
                                                               displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]
@@ -63,7 +62,7 @@
 
     __weak typeof(self) weakSelf = self;
     [_notificationCenterManager addHandlerBlock:^{
-        if (_meId != nil) {
+        if (self.requestContext.meId != nil) {
             [weakSelf.requestManager submit:[weakSelf createCustomEventModel:@"app:start"
                                                              eventAttributes:nil
                                                                         type:@"internal"]];
@@ -203,12 +202,12 @@
                                            }
                                        }];
 
-    if ([self.lastAppLoginPayload isEqual:requestModel.payload]) {
+    if ([self.requestContext.lastAppLoginPayload isEqual:requestModel.payload]) {
         requestModel = [self requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/ems_lastMobileActivity"
                                           method:HTTPMethodPOST
                           additionalPayloadBlock:nil];
     } else {
-        self.lastAppLoginPayload = requestModel.payload;
+        self.requestContext.lastAppLoginPayload = requestModel.payload;
     }
 
     [self.requestManager submit:requestModel];
@@ -248,9 +247,9 @@
 
     [self.requestManager submit:requestModel];
     self.lastAppLoginParameters = nil;
-    self.lastAppLoginPayload = nil;
-    self.meId = nil;
-    self.meIdSignature = nil;
+    self.requestContext.lastAppLoginPayload = nil;
+    self.requestContext.meId = nil;
+    self.requestContext.meIdSignature = nil;
     return requestModel.requestId;
 }
 
@@ -303,7 +302,7 @@
 - (EMSRequestModel *)createCustomEventModel:(NSString *)eventName eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes type:(NSString *)type {
     return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setMethod:HTTPMethodPOST];
-        [builder setUrl:[NSString stringWithFormat:@"https://mobile-events.eservice.emarsys.net/v3/devices/%@/events", self.meId]];
+        [builder setUrl:[NSString stringWithFormat:@"https://mobile-events.eservice.emarsys.net/v3/devices/%@/events", self.requestContext.meId]];
         NSMutableDictionary *payload = [NSMutableDictionary new];
         payload[@"clicks"] = @[];
         payload[@"viewed_messages"] = @[];
@@ -320,11 +319,11 @@
 
         payload[@"events"] = @[event];
         NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionary];
-        if (self.meId) {
-            mutableHeaders[@"X-ME-ID"] = self.meId;
+        if (self.requestContext.meId) {
+            mutableHeaders[@"X-ME-ID"] = self.requestContext.meId;
         }
-        if (self.meIdSignature) {
-            mutableHeaders[@"X-ME-ID-SIGNATURE"] = self.meIdSignature;
+        if (self.requestContext.meIdSignature) {
+            mutableHeaders[@"X-ME-ID-SIGNATURE"] = self.requestContext.meIdSignature;
         }
         mutableHeaders[@"X-ME-APPLICATIONCODE"] = self.config.applicationCode;
         [builder setHeaders:mutableHeaders];
@@ -344,30 +343,6 @@
                                        }];
     [self.requestManager submit:requestModel];
     return requestModel.requestId;
-}
-
-- (void)setLastAppLoginPayload:(NSDictionary *)lastAppLoginPayload {
-    _lastAppLoginPayload = lastAppLoginPayload;
-    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
-    [userDefaults setObject:lastAppLoginPayload
-                     forKey:kLastAppLoginPayload];
-    [userDefaults synchronize];
-}
-
-- (void)setMeId:(NSString *)meId {
-    _meId = meId;
-    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
-    [userDefaults setObject:meId
-                     forKey:kMEID];
-    [userDefaults synchronize];
-}
-
-- (void)setMeIdSignature:(NSString *)meIdSignature {
-    _meIdSignature = meIdSignature;
-    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
-    [userDefaults setObject:meIdSignature
-                     forKey:kMEID_SIGNATURE];
-    [userDefaults synchronize];
 }
 
 @end

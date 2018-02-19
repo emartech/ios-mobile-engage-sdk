@@ -3,15 +3,15 @@
 //
 
 #import "MEIdResponseHandler.h"
-#import "MobileEngageInternal.h"
+#import "MERequestContext.h"
 
 @implementation MEIdResponseHandler {
-    MobileEngageInternal *_internal;
+    MERequestContext *_requestContext;
 }
 
-- (instancetype)initWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal {
+- (instancetype)initWithRequestContext:(MERequestContext *)requestContext {
     if (self = [super init]) {
-        _internal = mobileEngageInternal;
+        _requestContext = requestContext;
     }
     return self;
 }
@@ -21,8 +21,8 @@
 }
 
 - (void)handleResponse:(EMSResponseModel *)response {
-    _internal.meId = [self getMeId:response];
-    _internal.meIdSignature = [self getMeIdSignature:response];
+    _requestContext.meId = [self getMeId:response];
+    _requestContext.meIdSignature = [self getMeIdSignature:response];
 }
 
 - (NSString *)getMeId:(EMSResponseModel *)response {

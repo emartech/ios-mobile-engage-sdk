@@ -6,9 +6,9 @@
 #import "AbstractResponseHandler.h"
 
 
-@class MobileEngageInternal;
+@class MERequestContext;
 @interface MEIdResponseHandler : AbstractResponseHandler
 
-- (instancetype)initWithMobileEngageInternal:(MobileEngageInternal *)mobileEngageInternal;
+- (instancetype)initWithRequestContext:(MERequestContext *)requestContext;
 
 @end
