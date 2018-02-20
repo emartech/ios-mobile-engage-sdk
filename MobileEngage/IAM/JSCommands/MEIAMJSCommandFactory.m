@@ -10,6 +10,7 @@
 #import "MEIAMButtonClicked.h"
 #import "MobileEngage.h"
 #import "MobileEngage+Private.h"
+#import "MEIAMTriggerMEEvent.h"
 
 @implementation MEIAMJSCommandFactory
 
@@ -34,6 +35,8 @@
         command = [[MEIAMButtonClicked alloc] initWithCampaignId:[self.meiam currentCampaignId]
                                                       repository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
                                                     inAppTracker:self.meiam.inAppTracker];
+    } else if ([name isEqualToString:MEIAMTriggerMEEvent.commandName]) {
+        command = [MEIAMTriggerMEEvent new];
     }
     return command;
 }

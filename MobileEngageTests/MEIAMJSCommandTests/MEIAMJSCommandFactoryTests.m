@@ -8,6 +8,7 @@
 #import "MEIAMViewController.h"
 #import "MEButtonClickRepository+Private.h"
 #import "MobileEngage+Private.h"
+#import "MEIAMTriggerMEEvent.h"
 
 MEIAMJSCommandFactory *_factory;
 
@@ -69,6 +70,11 @@ SPEC_BEGIN(MEIAMJSCommandFactoryTests)
             [[command.repository shouldNot] beNil];
             [[(NSObject *)command.inAppTracker shouldNot] beNil];
             [[command.repository.sqliteHelper should] equal:[MobileEngage dbHelper]];
+        });
+
+        it(@"should return MEIAMTriggerMEEvent command when the given name is: triggerMEEvent", ^{
+            MEIAMTriggerMEEvent *command = [_factory commandByName:@"triggerMEEvent"];
+            [[command should] beKindOfClass:[MEIAMTriggerMEEvent class]];
         });
     });
 
