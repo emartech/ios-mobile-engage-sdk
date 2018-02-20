@@ -65,7 +65,8 @@ SPEC_BEGIN(MEJSBridgeTests)
                     @"openExternalLink",
                     @"close",
                     @"triggerAppEvent",
-                    @"buttonClicked"
+                    @"buttonClicked",
+                    @"triggerMEEvent"
             ]];
         });
     });

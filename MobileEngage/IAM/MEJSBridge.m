@@ -9,6 +9,7 @@
 #import "MEIAMClose.h"
 #import "MEIAMTriggerAppEvent.h"
 #import "MEIAMButtonClicked.h"
+#import "MEIAMTriggerMEEvent.h"
 
 @interface MEJSBridge ()
 
@@ -44,7 +45,8 @@
             MEIAMOpenExternalLink.commandName,
             MEIAMClose.commandName,
             MEIAMTriggerAppEvent.commandName,
-            MEIAMButtonClicked.commandName
+            MEIAMButtonClicked.commandName,
+            MEIAMTriggerMEEvent.commandName
     ];
 }
 
