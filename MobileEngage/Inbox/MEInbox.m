@@ -2,18 +2,15 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "NSError+EMSCore.h"
+@import Foundation;
+@import EmarsysCore;
+
 #import "MEInbox.h"
-#import <CoreSDK/EMSRequestModelBuilder.h>
-#import <CoreSDK/EMSResponseModel.h>
 #import "MEDefaultHeaders.h"
 #import "MEConfig.h"
-#import <CoreSDK/EMSDeviceInfo.h>
 #import "MEAppLoginParameters.h"
 #import "MEInboxParser.h"
-#import <CoreSDK/EMSRESTClient.h>
 #import "MobileEngage+Private.h"
-#import <CoreSDK/EMSAuthentication.h>
 
 @interface MEInbox ()
 

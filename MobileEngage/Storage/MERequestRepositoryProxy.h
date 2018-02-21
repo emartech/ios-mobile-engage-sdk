@@ -2,9 +2,8 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreSDK/EMSRequestModelRepositoryProtocol.h>
-#import <CoreSDK/EMSRequestModelRepository.h>
+@import Foundation;
+@import EmarsysCore;
 
 @class MEButtonClickRepository;
 @class MEDisplayedIAMRepository;

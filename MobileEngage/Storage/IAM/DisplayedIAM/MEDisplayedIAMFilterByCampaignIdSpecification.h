@@ -2,8 +2,8 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreSDK/EMSSQLSpecificationProtocol.h>
+@import Foundation;
+@import EmarsysCore;
 
 @interface MEDisplayedIAMFilterByCampaignIdSpecification : NSObject <EMSSQLSpecificationProtocol>
 

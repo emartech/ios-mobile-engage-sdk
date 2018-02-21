@@ -2,10 +2,11 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+@import EmarsysCore;
+
 #import "MEAppLoginParameters.h"
 #import "MEConfig.h"
-#import <CoreSDK/EMSTimestampProvider.h>
 
 #define kSuiteName @"com.emarsys.mobileengage"
 #define kLastAppLoginPayload @"kLastAppLoginPayload"

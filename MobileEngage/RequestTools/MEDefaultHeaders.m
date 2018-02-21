@@ -2,7 +2,9 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import <CoreSDK/EMSAuthentication.h>
+@import Foundation;
+@import EmarsysCore;
+
 #import "MEDefaultHeaders.h"
 #import "MEConfig.h"
 #import "MobileEngageVersion.h"

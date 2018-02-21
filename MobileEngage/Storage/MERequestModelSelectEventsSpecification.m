@@ -1,8 +1,11 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
+
+@import Foundation;
+@import EmarsysCore;
+
 #import "MERequestModelSelectEventsSpecification.h"
-#import <CoreSDK/EMSRequestContract.h>
 
 @implementation MERequestModelSelectEventsSpecification
 

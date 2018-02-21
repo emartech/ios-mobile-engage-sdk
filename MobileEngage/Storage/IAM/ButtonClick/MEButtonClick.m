@@ -2,8 +2,10 @@
 //  Copyright © 2018 Emarsys. All rights reserved.
 //
 
+@import Foundation;
+@import EmarsysCore;
+
 #import "MEButtonClick.h"
-#import <CoreSDK/EMSTimestampProvider.h>
 
 @implementation MEButtonClick
 

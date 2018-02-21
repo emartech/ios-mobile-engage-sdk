@@ -1,8 +1,9 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
-#import <Foundation/Foundation.h>
-#import <CoreSDK/EMSRequestContract.h>
+
+@import Foundation;
+@import EmarsysCore;
 
 @class MERequestContext;
 @class MENotification;

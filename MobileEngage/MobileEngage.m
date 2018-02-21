@@ -2,11 +2,13 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
+@import Foundation;
+@import EmarsysCore;
+
 #import "MobileEngage.h"
 #import "MEConfig.h"
 #import "MobileEngageInternal.h"
 #import "MEInbox+Notification.h"
-#import <CoreSDK/EMSSQLiteHelper.h>
 #import "MESchemaDelegate.h"
 #import "MENotificationCenterManager.h"
 #import "MEInApp+Private.h"

@@ -2,16 +2,16 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 
+@import Foundation;
+@import EmarsysCore;
+
 #import "MERequestRepositoryProxy.h"
 #import "MEButtonClickRepository.h"
 #import "MEDisplayedIAMRepository.h"
 #import "MERequestModelSelectEventsSpecification.h"
-#import <CoreSDK/EMSRequestModelBuilder.h>
-#import <CoreSDK/EMSCompositeRequestModel.h>
 #import "MERequestTools.h"
 #import "MEButtonClickFilterNoneSpecification.h"
 #import "MEDisplayedIAMFilterNoneSpecification.h"
-#import <CoreSDK/EMSDeviceInfo.h>
 #import "MobileEngageVersion.h"
 
 @interface MERequestRepositoryProxy ()

@@ -2,11 +2,11 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+@import EmarsysCore;
+
 #import "MEAppLoginParameters.h"
 #import "MENotification.h"
-#import <CoreSDK/EMSRequestManager.h>
-#import <CoreSDK/EMSTimestampProvider.h>
 #import "MEInAppTrackingProtocol.h"
 
 @protocol MobileEngageStatusDelegate;

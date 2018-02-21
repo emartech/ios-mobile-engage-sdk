@@ -2,9 +2,10 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 
-#import "MERequestTools.h"
-#import <CoreSDK/EMSRequestModel.h>
+@import Foundation;
+@import EmarsysCore;
 
+#import "MERequestTools.h"
 
 @implementation MERequestTools
 

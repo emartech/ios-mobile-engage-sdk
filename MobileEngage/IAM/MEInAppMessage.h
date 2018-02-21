@@ -2,8 +2,8 @@
 //  Copyright © 2018 Emarsys. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreSDK/EMSResponseModel.h>
+@import Foundation;
+@import EmarsysCore;
 
 @interface MEInAppMessage : NSObject
 

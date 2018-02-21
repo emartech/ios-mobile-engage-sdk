@@ -1,12 +1,13 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
-#import <CoreSDK/EMSRequestModel.h>
+
+@import Foundation;
+@import EmarsysCore;
+
 #import "MERequestFactory.h"
 #import "MERequestContext.h"
 #import "MobileEngageVersion.h"
-#import <CoreSDK/EMSDeviceInfo.h>
-#import <CoreSDK/EMSAuthentication.h>
 #import "NSData+MobileEngine.h"
 #import "MENotification.h"
 #import "MEExperimental.h"

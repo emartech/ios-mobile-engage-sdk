@@ -2,8 +2,10 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 
+@import Foundation;
+@import EmarsysCore;
+
 #import "MEDisplayedIAM.h"
-#import <CoreSDK/EMSTimestampProvider.h>
 
 @implementation MEDisplayedIAM {
 

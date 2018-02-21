@@ -2,11 +2,10 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreSDK/EMSSQLiteHelper.h>
+@import Foundation;
+@import EmarsysCore;
+
 #import "MEDisplayedIAM.h"
-#import <CoreSDK/EMSSQLSpecificationProtocol.h>
-#import <CoreSDK/EMSRepositoryProtocol.h>
 
 @interface MEDisplayedIAMRepository : NSObject <EMSRepositoryProtocol>
 

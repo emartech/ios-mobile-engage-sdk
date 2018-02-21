@@ -1,9 +1,11 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
-#import <CoreSDK/EMSTimestampProvider.h>
-#import "MERequestContext.h"
 
+@import Foundation;
+@import EmarsysCore;
+
+#import "MERequestContext.h"
 
 @implementation MERequestContext
 

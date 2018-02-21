@@ -1,0 +1,6 @@
+framework module EmarsysMobileEngage {
+  umbrella header "EmarsysMobileEngage.h"
+
+  export *
+  module * { export * }
+}

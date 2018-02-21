@@ -2,14 +2,13 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
+@import Foundation;
+@import EmarsysCore;
+
 #import "MobileEngageInternal.h"
-#import <CoreSDK/EMSRequestModelBuilder.h>
-#import <CoreSDK/EMSRequestModelRepository.h>
-#import <CoreSDK/EMSResponseModel.h>
 #import "MobileEngageStatusDelegate.h"
 #import "MEConfig.h"
 #import "NSDictionary+MobileEngage.h"
-#import "NSError+EMSCore.h"
 #import "MEDefaultHeaders.h"
 #import "AbstractResponseHandler.h"
 #import "MEIdResponseHandler.h"

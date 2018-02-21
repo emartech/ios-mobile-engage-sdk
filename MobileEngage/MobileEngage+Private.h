@@ -2,9 +2,10 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+@import EmarsysCore;
+
 #import "MobileEngage.h"
-#import <CoreSDK/EMSSQLiteHelper.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

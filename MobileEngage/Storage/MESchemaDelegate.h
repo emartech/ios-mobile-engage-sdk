@@ -2,8 +2,8 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreSDK/EMSSQLiteHelper.h>
+@import Foundation;
+@import EmarsysCore;
 
 @interface MESchemaDelegate : NSObject <EMSSQLiteHelperSchemaHandler>
 @end
