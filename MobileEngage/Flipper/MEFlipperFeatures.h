@@ -6,4 +6,4 @@
 
 #define MEFlipperFeature const NSString *
 
-static const MEFlipperFeature INAPP_MESSAGING = @"INAPP_MESSAGING";
+static MEFlipperFeature INAPP_MESSAGING = @"INAPP_MESSAGING";
