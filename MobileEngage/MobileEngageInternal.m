@@ -4,7 +4,6 @@
 
 #import "MobileEngageInternal.h"
 #import <CoreSDK/EMSRequestModelBuilder.h>
-#import <CoreSDK/EMSRequestModelRepository.h>
 #import <CoreSDK/EMSResponseModel.h>
 #import "MobileEngageStatusDelegate.h"
 #import "MEConfig.h"
@@ -15,7 +14,6 @@
 #import "MEIdResponseHandler.h"
 #import "MEIAMResponseHandler.h"
 #import "MEExperimental.h"
-#import "MERequestRepositoryProxy.h"
 #import "MEButtonClickRepository.h"
 #import "MobileEngage.h"
 #import "MobileEngage+Private.h"
@@ -24,6 +22,7 @@
 #import "MENotificationCenterManager.h"
 #import "MERequestContext.h"
 #import "MERequestFactory.h"
+#import "MERequestModelRepositoryFactory.h"
 #import <UIKit/UIKit.h>
 
 @interface MobileEngageInternal ()
@@ -34,6 +33,40 @@
 @end
 
 @implementation MobileEngageInternal
+
+- (void)setupWithConfig:(nonnull MEConfig *)config
+          launchOptions:(NSDictionary *)launchOptions
+requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory {
+    NSParameterAssert(requestRepositoryFactory);
+    [MEExperimental enableFeatures:config.experimentalFeatures];
+    __weak typeof(self) weakSelf = self;
+    _successBlock = ^(NSString *requestId, EMSResponseModel *responseModel) {
+        [weakSelf handleResponse:responseModel];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([weakSelf.statusDelegate respondsToSelector:@selector(mobileEngageLogReceivedWithEventId:log:)]) {
+                [weakSelf.statusDelegate mobileEngageLogReceivedWithEventId:requestId
+                                                                        log:@"Success"];
+            }
+        });
+    };
+    _errorBlock = ^(NSString *requestId, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([weakSelf.statusDelegate respondsToSelector:@selector(mobileEngageErrorHappenedWithEventId:error:)]) {
+                [weakSelf.statusDelegate mobileEngageErrorHappenedWithEventId:requestId
+                                                                        error:error];
+            }
+        });
+    };
+
+    const id <EMSRequestModelRepositoryProtocol> requestRepository = [requestRepositoryFactory createWithBatchCustomEventProcessing:[MEExperimental isFeatureEnabled:INAPP_MESSAGING]];
+    EMSRequestManager *manager = [EMSRequestManager managerWithSuccessBlock:self.successBlock
+                                                                 errorBlock:self.errorBlock
+                                                          requestRepository:requestRepository];
+    [self setupWithRequestManager:manager
+                           config:config
+                    launchOptions:launchOptions];
+}
+
 
 - (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
                          config:(nonnull MEConfig *)config
@@ -104,45 +137,6 @@
 
 - (void)trackInAppClick:(NSString *)campaignId buttonId:(NSString *)buttonId {
     [self.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"inapp:click" eventAttributes:@{@"message_id": campaignId, @"button_id": buttonId} type:@"internal" requestContext:self.requestContext]];
-}
-
-- (void)setupWithConfig:(nonnull MEConfig *)config
-          launchOptions:(NSDictionary *)launchOptions {
-    [MEExperimental enableFeatures:config.experimentalFeatures];
-    __weak typeof(self) weakSelf = self;
-    _successBlock = ^(NSString *requestId, EMSResponseModel *responseModel) {
-        [weakSelf handleResponse:responseModel];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([weakSelf.statusDelegate respondsToSelector:@selector(mobileEngageLogReceivedWithEventId:log:)]) {
-                [weakSelf.statusDelegate mobileEngageLogReceivedWithEventId:requestId
-                                                                        log:@"Success"];
-            }
-        });
-    };
-    _errorBlock = ^(NSString *requestId, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([weakSelf.statusDelegate respondsToSelector:@selector(mobileEngageErrorHappenedWithEventId:error:)]) {
-                [weakSelf.statusDelegate mobileEngageErrorHappenedWithEventId:requestId
-                                                                        error:error];
-            }
-        });
-    };
-    if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
-        MERequestRepositoryProxy *requestRepository = [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:[[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDefaultDatabase]]
-                                                                                                 buttonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
-                                                                                                displayedIAMRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]];
-        [self setupWithRequestManager:[EMSRequestManager managerWithSuccessBlock:self.successBlock
-                                                                      errorBlock:self.errorBlock
-                                                               requestRepository:requestRepository]
-                               config:config
-                        launchOptions:launchOptions];
-    } else {
-        [self setupWithRequestManager:[EMSRequestManager managerWithSuccessBlock:self.successBlock
-                                                                      errorBlock:self.errorBlock]
-                               config:config
-                        launchOptions:launchOptions];
-    }
-
 }
 
 - (void)handleResponse:(EMSResponseModel *)model {

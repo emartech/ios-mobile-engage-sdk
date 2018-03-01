@@ -7,7 +7,7 @@
 
 MEInApp *iam;
 
-SPEC_BEGIN(MEIAMTests)
+SPEC_BEGIN(MEInAppTests)
 
     beforeEach(^{
         iam = [[MEInApp alloc] init];
@@ -111,27 +111,6 @@ SPEC_BEGIN(MEIAMTests)
             [[meInApp.iamWindow should] beNil];
         });
 
-    });
-
-    describe(@"pause", ^{
-        it(@"should not create window for displaying message when in paused state", ^{
-            MEInApp *meInApp = [MEInApp new];
-            [meInApp pause];
-            [meInApp showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message":@{@"id":@"testId", @"html" : @"<html></html>"}}]];
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-            [[meInApp.iamWindow should] beNil];
-        });
-    });
-
-    describe(@"resume", ^{
-        it(@"should create window for displaying message when in resumed state", ^{
-            MEInApp *meInApp = [MEInApp new];
-            [meInApp pause];
-            [meInApp resume];
-            [meInApp showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message":@{@"id":@"testId", @"html" : @"<html></html>"}}]];
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-            [[meInApp.iamWindow shouldNot] beNil];
-        });
     });
 
 SPEC_END

@@ -13,27 +13,24 @@
 #import "MEDisplayedIAMFilterNoneSpecification.h"
 #import <CoreSDK/EMSDeviceInfo.h>
 #import "MobileEngageVersion.h"
-
-@interface MERequestRepositoryProxy ()
-
-@property(nonatomic, strong) EMSRequestModelRepository *requestModelRepository;
-@property(nonatomic, strong) MEButtonClickRepository *clickRepository;
-@property(nonatomic, strong) MEDisplayedIAMRepository *displayedIAMRepository;
-
-@end
+#import "MEInApp.h"
 
 @implementation MERequestRepositoryProxy
 
 - (instancetype)initWithRequestModelRepository:(EMSRequestModelRepository *)requestModelRepository
                          buttonClickRepository:(MEButtonClickRepository *)buttonClickRepository
-                        displayedIAMRepository:(MEDisplayedIAMRepository *)displayedIAMRepository {
-    self = [super init];
-    if (self) {
+                        displayedIAMRepository:(MEDisplayedIAMRepository *)displayedIAMRepository
+                                         inApp:(MEInApp *)inApp {
+    NSParameterAssert(requestModelRepository);
+    NSParameterAssert(buttonClickRepository);
+    NSParameterAssert(displayedIAMRepository);
+    NSParameterAssert(inApp);
+    if (self = [super init]) {
         _requestModelRepository = requestModelRepository;
         _clickRepository = buttonClickRepository;
         _displayedIAMRepository = displayedIAMRepository;
+        _inApp = inApp;
     }
-
     return self;
 }
 
@@ -76,6 +73,9 @@
         payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
         payload[@"viewed_messages"] = [self displayRepresentations];
         payload[@"clicks"] = [self clickRepresentations];
+        if (self.inApp.paused) {
+            payload[@"dnd"] = @(self.inApp.paused);
+        }
         payload[@"events"] = [self eventRepresentations:allCustomEvents];
 
         payload[@"language"] = [EMSDeviceInfo languageCode];

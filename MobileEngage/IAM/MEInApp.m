@@ -15,7 +15,6 @@
 @property(nonatomic, weak) NSString *currentCampaignId;
 @property(nonatomic, strong) UIWindow *iamWindow;
 @property(nonatomic, weak, nullable) id <MEInAppTrackingProtocol> inAppTracker;
-@property(nonatomic, assign) BOOL isPaused;
 
 @end
 
@@ -23,19 +22,11 @@
 
 #pragma mark - Public methods
 
-- (void)pause {
-    _isPaused = YES;
-}
-
-- (void)resume {
-    _isPaused = NO;
-}
-
-
 - (void)showMessage:(MEInAppMessage *)message {
     self.currentCampaignId = message.campaignId;
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.iamWindow && !self.isPaused) {
+        if (!self.iamWindow) {
             self.iamWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
             MEIAMJSCommandFactory *commandFactory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:self];
             MEJSBridge *jsBridge = [[MEJSBridge alloc] initWithJSCommandFactory:commandFactory];

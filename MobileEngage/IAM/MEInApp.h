@@ -10,9 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MEInApp : NSObject
 
 @property(nonatomic, weak, nullable) id <MEInAppMessageHandler> messageHandler;
-
-- (void)pause;
-- (void)resume;
+@property(nonatomic, assign) BOOL paused;
 
 @end
 

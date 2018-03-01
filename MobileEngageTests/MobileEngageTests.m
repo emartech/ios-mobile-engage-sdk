@@ -14,7 +14,7 @@ SPEC_BEGIN(MobileEngageTests)
     id (^mobileEngageInternal)() = ^id() {
         id mobileEngageInternalMock = [MobileEngageInternal mock];
 
-        [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:)];
+        [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:)];
         [[mobileEngageInternalMock should] receive:@selector(setNotificationCenterManager:) withArguments:kw_any()];
 
         NSString *applicationCode = kAppId;
@@ -31,7 +31,7 @@ SPEC_BEGIN(MobileEngageTests)
         return mobileEngageInternalMock;
     };
 
-    describe(@"setupWithConfig:launchOptions:", ^{
+    describe(@"setupWithConfig:launchOptions:inApp:requestRepositoryFactory:", ^{
         it(@"should call internal implementation's method", ^{
             mobileEngageInternal();
         });
@@ -49,9 +49,15 @@ SPEC_BEGIN(MobileEngageTests)
             [[inbox1 should] equal:inbox2];
         });
 
+        it(@"should create inApp instance", ^{
+            mobileEngageInternal();
+
+            [[MobileEngage.inApp shouldNot] beNil];
+        });
+
         it(@"should create MENotificationCenterManager instance", ^{
             id mobileEngageInternalMock = [MobileEngageInternal mock];
-            [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:)];
+            [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:)];
             [[mobileEngageInternalMock should] receive:@selector(setNotificationCenterManager:) withArguments:kw_any()];
             KWCaptureSpy *spy = [mobileEngageInternalMock captureArgument:@selector(setNotificationCenterManager:) atIndex:0];
 

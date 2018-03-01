@@ -13,6 +13,8 @@
 @class MEConfig;
 @class MENotificationCenterManager;
 @class MERequestContext;
+@class MEInApp;
+@class MERequestModelRepositoryFactory;
 
 typedef void (^MESuccessBlock)(NSString *requestId, EMSResponseModel *);
 typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
@@ -34,8 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)trackDeepLinkWith:(NSUserActivity *)userActivity
             sourceHandler:(nullable MESourceHandler)sourceHandler;
 
-- (void)setupWithConfig:(MEConfig *)config
-          launchOptions:(nullable NSDictionary *)launchOptions;
+- (void)setupWithConfig:(nonnull MEConfig *)config
+          launchOptions:(NSDictionary *)launchOptions
+requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory;
 
 - (NSString *)appLogin;
 

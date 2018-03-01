@@ -10,6 +10,7 @@
 #import "MESchemaDelegate.h"
 #import "MENotificationCenterManager.h"
 #import "MEInApp+Private.h"
+#import "MERequestModelRepositoryFactory.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"MEDB.db"]
 
@@ -35,7 +36,8 @@ static EMSSQLiteHelper *_dbHelper;
     _iam = [MEInApp new];
     _mobileEngageInternal.notificationCenterManager = [MENotificationCenterManager new];
     [_mobileEngageInternal setupWithConfig:config
-                             launchOptions:launchOptions];
+                             launchOptions:launchOptions
+                  requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:_iam]];
     _iam.inAppTracker = _mobileEngageInternal;
 }
 
