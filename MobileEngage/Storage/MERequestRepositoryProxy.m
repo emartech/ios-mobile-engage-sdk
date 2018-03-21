@@ -63,7 +63,6 @@
 
 - (EMSRequestModel *)createCompositeRequestModel:(EMSRequestModel *)requestModel {
     NSArray *allCustomEvents = [self.requestModelRepository query:[MERequestModelSelectEventsSpecification new]];
-    NSArray<NSString *> *requestIds = [self extractRequestIds:allCustomEvents];
 
     EMSCompositeRequestModel *composite = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
         [builder setHeaders:requestModel.headers];
@@ -87,16 +86,8 @@
         }
         [builder setPayload:payload];
     }];
-    composite.originalRequestIds = [NSArray arrayWithArray:requestIds];
+    composite.originalRequests = allCustomEvents;
     return composite;
-}
-
-- (NSArray<NSString *> *)extractRequestIds:(NSArray *)allCustomEvents {
-    NSMutableArray <NSString *> *requestIds = [NSMutableArray array];
-    for (EMSRequestModel *request in allCustomEvents) {
-        [requestIds addObject:[request requestId]];
-    }
-    return [NSArray arrayWithArray:requestIds];
 }
 
 - (NSArray *)eventRepresentations:(NSArray *)allCustomEvents {

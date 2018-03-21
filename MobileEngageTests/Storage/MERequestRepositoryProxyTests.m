@@ -17,6 +17,7 @@
 #import "EMSDeviceInfo.h"
 #import "MobileEngageVersion.h"
 #import "MEInApp.h"
+#import <CoreSDK/NSDate+EMSCore.h>
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestMEDB.db"]
 
@@ -36,7 +37,7 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
             NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
                     @"type": @"custom",
                     @"name": eventName,
-                    @"timestamp": [timestampProvider currentTimeStamp]}];
+                    @"timestamp": [[timestampProvider provideTimestamp] numberValueInMillis]}];
 
             if (eventAttributes) {
                 event[@"attributes"] = eventAttributes;
@@ -171,8 +172,8 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
 
             NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectAllSpecification new]];
             [[[result[0] payload][@"clicks"] should] equal:@[
-                    @{@"message_id": [clicks[0] campaignId], @"button_id": [clicks[0] buttonId], @"timestamp": [EMSTimestampProvider utcFormattedStringFromDate:[clicks[0] timestamp]]},
-                    @{@"message_id": [clicks[1] campaignId], @"button_id": [clicks[1] buttonId], @"timestamp": [EMSTimestampProvider utcFormattedStringFromDate:[clicks[1] timestamp]]}
+                    @{@"message_id": [clicks[0] campaignId], @"button_id": [clicks[0] buttonId], @"timestamp": [clicks[0] timestamp].stringValueInUTC},
+                    @{@"message_id": [clicks[1] campaignId], @"button_id": [clicks[1] buttonId], @"timestamp": [clicks[1] timestamp].stringValueInUTC}
             ]];
         });
 
@@ -195,8 +196,8 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
 
             NSArray<EMSRequestModel *> *result = [compositeRequestModelRepository query:[EMSRequestModelSelectAllSpecification new]];
             [[[result[0] payload][@"viewed_messages"] should] equal:@[
-                    @{@"message_id": [viewedMessages[0] campaignId], @"timestamp": [EMSTimestampProvider utcFormattedStringFromDate:[viewedMessages[0] timestamp]]},
-                    @{@"message_id": [viewedMessages[1] campaignId], @"timestamp": [EMSTimestampProvider utcFormattedStringFromDate:[viewedMessages[1] timestamp]]}
+                    @{@"message_id": [viewedMessages[0] campaignId], @"timestamp": [viewedMessages[0] timestamp].stringValueInUTC},
+                    @{@"message_id": [viewedMessages[1] campaignId], @"timestamp": [viewedMessages[1] timestamp].stringValueInUTC}
             ]];
         });
 
@@ -261,7 +262,7 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
                         @"application_version": [EMSDeviceInfo applicationVersion]
                 }];
             }];
-            compositeModel.originalRequestIds = @[modelCustomEvent1.requestId, modelCustomEvent2.requestId, modelCustomEvent3.requestId];
+            compositeModel.originalRequests = @[modelCustomEvent1, modelCustomEvent2, modelCustomEvent3];
 
             createFakeRequestRepository(
                     @[modelCustomEvent1],
@@ -299,7 +300,7 @@ SPEC_BEGIN(MERequestRepositoryProxyTests)
                         @"application_version": [EMSDeviceInfo applicationVersion]
                 }];
             }];
-            compositeModel.originalRequestIds = @[modelCustomEvent1.requestId, modelCustomEvent2.requestId, modelCustomEvent3.requestId];
+            compositeModel.originalRequests = @[modelCustomEvent1, modelCustomEvent2, modelCustomEvent3];
 
 
             createFakeRequestRepository(

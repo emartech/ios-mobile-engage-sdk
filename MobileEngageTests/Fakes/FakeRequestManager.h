@@ -18,7 +18,8 @@
 @property (nonatomic, strong) CoreSuccessBlock successBlock;
 @property (nonatomic, strong) CoreErrorBlock errorBlock;
 
-
++ (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
+                             errorBlock:(nullable CoreErrorBlock)errorBlock;
 - (void)waitForAllExpectations;
 
 @end

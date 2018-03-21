@@ -23,6 +23,7 @@
 #import "KWNilMatcher.h"
 #import "MEInApp.h"
 #import "MERequestModelRepositoryFactory.h"
+#import <CoreSDK/NSDate+EMSCore.h>
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
@@ -286,7 +287,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 NSNumber *meId = @123456789;
                 NSString *meIdSignature = @"signature";
                 NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature} options:0 error:nil];
-                fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:data]] mutableCopy];
+                fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:data timestampProvider:[EMSTimestampProvider new]]] mutableCopy];
 
                 [internal appLogin];
 
@@ -864,8 +865,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 id requestManager = requestManagerMock();
 
                 id timeStampProviderMock = [EMSTimestampProvider mock];
-                NSString *timeStamp = @"2017-12-07T10:46:09.100Z";
-                [[timeStampProviderMock should] receive:@selector(currentTimestampInUTC) andReturn:timeStamp withCountAtLeast:0];
+                NSDate *timestamp = [NSDate date];
+                [[timeStampProviderMock should] receive:@selector(provideTimestamp)
+                                              andReturn:timestamp
+                                       withCountAtLeast:0];
                 _mobileEngage.requestContext.timestampProvider = timeStampProviderMock;
 
                 _mobileEngage.requestContext.meId = kMEID;
@@ -882,7 +885,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                         @"type": @"custom",
                                         @"name": eventName,
                                         @"attributes": eventAttributes,
-                                        @"timestamp": timeStamp
+                                        @"timestamp": [timestamp stringValueInUTC]
                                 }
                         ]
                 };
@@ -905,8 +908,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 id requestManager = requestManagerMock();
 
                 id timeStampProviderMock = [EMSTimestampProvider mock];
-                NSString *timeStamp = @"2017-12-07T10:46:09.100Z";
-                [[timeStampProviderMock should] receive:@selector(currentTimestampInUTC) andReturn:timeStamp withCountAtLeast:0];
+                NSDate *timeStamp = [NSDate date];
+                [[timeStampProviderMock should] receive:@selector(provideTimestamp) andReturn:timeStamp withCountAtLeast:0];
                 _mobileEngage.requestContext.timestampProvider = timeStampProviderMock;
 
                 _mobileEngage.requestContext.meId = kMEID;
@@ -921,7 +924,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                 @{
                                         @"type": @"custom",
                                         @"name": eventName,
-                                        @"timestamp": timeStamp
+                                        @"timestamp": [timeStamp stringValueInUTC]
                                 }
                         ]
                 };

@@ -3,7 +3,7 @@
 //
 
 #import "MEDisplayedIAM.h"
-#import <CoreSDK/EMSTimestampProvider.h>
+#import <CoreSDK/NSDate+EMSCore.h>
 
 @implementation MEDisplayedIAM {
 
@@ -57,7 +57,7 @@
 - (NSDictionary *)dictionaryRepresentation {
     return @{
             @"message_id" : self.campaignId,
-            @"timestamp" : [EMSTimestampProvider utcFormattedStringFromDate:self.timestamp]
+            @"timestamp" : [self.timestamp stringValueInUTC]
     };
 }
 

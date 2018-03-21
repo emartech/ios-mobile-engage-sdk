@@ -23,6 +23,7 @@
 #import "MERequestContext.h"
 #import "MERequestFactory.h"
 #import "MERequestModelRepositoryFactory.h"
+#import "MELogRepository.h"
 #import <UIKit/UIKit.h>
 
 @interface MobileEngageInternal ()
@@ -61,7 +62,8 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
     const id <EMSRequestModelRepositoryProtocol> requestRepository = [requestRepositoryFactory createWithBatchCustomEventProcessing:[MEExperimental isFeatureEnabled:INAPP_MESSAGING]];
     EMSRequestManager *manager = [EMSRequestManager managerWithSuccessBlock:self.successBlock
                                                                  errorBlock:self.errorBlock
-                                                          requestRepository:requestRepository];
+                                                          requestRepository:requestRepository
+                                                              logRepository:[MELogRepository new]];
     [self setupWithRequestManager:manager
                            config:config
                     launchOptions:launchOptions];

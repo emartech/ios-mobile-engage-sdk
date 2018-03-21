@@ -3,7 +3,7 @@
 //
 
 #import "MEButtonClick.h"
-#import <CoreSDK/EMSTimestampProvider.h>
+#import <CoreSDK/NSDate+EMSCore.h>
 
 @implementation MEButtonClick
 
@@ -52,7 +52,7 @@
     return @{
             @"message_id" : self.campaignId,
             @"button_id" : self.buttonId,
-            @"timestamp" : [EMSTimestampProvider utcFormattedStringFromDate:self.timestamp]
+            @"timestamp" : [self.timestamp stringValueInUTC]
     };
 }
 

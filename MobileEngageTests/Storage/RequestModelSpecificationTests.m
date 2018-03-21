@@ -8,6 +8,7 @@
 #import "EMSRequestModelRepository.h"
 #import "MERequestModelSelectEventsSpecification.h"
 #import "EMSSqliteQueueSchemaHandler.h"
+#import <CoreSDK/NSDate+EMSCore.h>
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestMEDB.db"]
 
@@ -21,7 +22,7 @@ SPEC_BEGIN(RequestModelSpecificationTests)
             NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
                     @"type": @"custom",
                     @"name": eventName,
-                    @"timestamp": [[EMSTimestampProvider new] currentTimeStamp]}];
+                    @"timestamp": [[[EMSTimestampProvider new] provideTimestamp] numberValueInMillis]}];
 
             if (eventAttributes) {
                 event[@"attributes"] = eventAttributes;

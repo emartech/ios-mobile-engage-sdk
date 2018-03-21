@@ -2,10 +2,17 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
+#import <CoreSDK/EMSTimestampProvider.h>
 #import "Kiwi.h"
 #import "FakeResponseHandler.h"
 
 SPEC_BEGIN(AbstractResponseHandlerTests)
+
+    __block EMSTimestampProvider *timestampProvider;
+
+    beforeEach(^{
+        timestampProvider = [EMSTimestampProvider new];
+    });
 
     describe(@"AbstractResponseHandler", ^{
 
@@ -13,7 +20,10 @@ SPEC_BEGIN(AbstractResponseHandlerTests)
             FakeResponseHandler *fakeResponseHandler = [FakeResponseHandler new];
             fakeResponseHandler.shouldHandle = YES;
 
-            EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:nil];
+            EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
+                                                                              headers:@{}
+                                                                                 body:nil
+                                                                    timestampProvider:timestampProvider];
 
             [fakeResponseHandler processResponse:response];
 
@@ -24,7 +34,10 @@ SPEC_BEGIN(AbstractResponseHandlerTests)
             FakeResponseHandler *fakeResponseHandler = [FakeResponseHandler new];
             fakeResponseHandler.shouldHandle = NO;
 
-            EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:nil];
+            EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
+                                                                              headers:@{}
+                                                                                 body:nil
+                                                                    timestampProvider:timestampProvider];
             [fakeResponseHandler processResponse:response];
 
             [[fakeResponseHandler.handledResponseModel should] beNil];

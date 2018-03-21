@@ -10,6 +10,7 @@
 #import "NSData+MobileEngine.h"
 #import "MENotification.h"
 #import "MEExperimental.h"
+#import "../../../ios-core-sdk/Core/Categories/NSDate+EMSCore.h"
 
 @implementation MERequestFactory
 
@@ -116,7 +117,7 @@
         NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
                 @"type": type,
                 @"name": eventName,
-                @"timestamp": [requestContext.timestampProvider currentTimestampInUTC]}];
+                @"timestamp": [[requestContext.timestampProvider provideTimestamp] stringValueInUTC]}];
 
         if (eventAttributes) {
             event[@"attributes"] = eventAttributes;

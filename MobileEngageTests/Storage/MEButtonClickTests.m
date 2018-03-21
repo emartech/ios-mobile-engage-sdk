@@ -4,7 +4,7 @@
 #import <CoreSDK/EMSRequestModelBuilder.h>
 #import "Kiwi.h"
 #import "MEButtonClick.h"
-#import "EMSTimestampProvider.h"
+#import <CoreSDK/NSDate+EMSCore.h>
 
 SPEC_BEGIN(MEButtonClickTests)
 
@@ -15,7 +15,7 @@ SPEC_BEGIN(MEButtonClickTests)
             [[[click dictionaryRepresentation] should] equal:@{
                     @"message_id" : @"123",
                     @"button_id" : @"456",
-                    @"timestamp" : [EMSTimestampProvider utcFormattedStringFromDate:date]
+                    @"timestamp" : date.stringValueInUTC
             }];
         });
     });
