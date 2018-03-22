@@ -21,6 +21,6 @@ Pod::Spec.new do |spec|
         'MobileEngage/IAM/MEInApp.h',
         'MobileEngage/IAM/MEInAppMessageHandler.h'
    	]
-	spec.dependency 'CoreSDK', '~> 1.1.0'
+	spec.dependency 'CoreSDK', '~> 1.2.0'
 	spec.libraries = 'z', 'c++'
 end

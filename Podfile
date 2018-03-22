@@ -10,7 +10,7 @@ target "MobileEngage" do
     puts 'Running in BLEEDING_EDGE mode'
     pod 'CoreSDK', :git => 'https://github.com/emartech/ios-core-sdk.git'
   else
-    pod 'CoreSDK', '1.0.0'
+    pod 'CoreSDK', '1.2.0'
   end
 end
 

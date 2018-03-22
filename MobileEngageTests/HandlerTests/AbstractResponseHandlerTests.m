@@ -8,41 +8,43 @@
 
 SPEC_BEGIN(AbstractResponseHandlerTests)
 
-    __block EMSTimestampProvider *timestampProvider;
+        __block EMSTimestampProvider *timestampProvider;
 
-    beforeEach(^{
-        timestampProvider = [EMSTimestampProvider new];
-    });
-
-    describe(@"AbstractResponseHandler", ^{
-
-        it(@"should call handleResponse: when shouldHandleResponse: returns true", ^{
-            FakeResponseHandler *fakeResponseHandler = [FakeResponseHandler new];
-            fakeResponseHandler.shouldHandle = YES;
-
-            EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
-                                                                              headers:@{}
-                                                                                 body:nil
-                                                                    timestampProvider:timestampProvider];
-
-            [fakeResponseHandler processResponse:response];
-
-            [[fakeResponseHandler.handledResponseModel should] equal:response];
+        beforeEach(^{
+            timestampProvider = [EMSTimestampProvider new];
         });
 
-        it(@"should not call handleResponse: when shouldHandleResponse: returns false", ^{
-            FakeResponseHandler *fakeResponseHandler = [FakeResponseHandler new];
-            fakeResponseHandler.shouldHandle = NO;
+        describe(@"AbstractResponseHandler", ^{
 
-            EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
-                                                                              headers:@{}
-                                                                                 body:nil
-                                                                    timestampProvider:timestampProvider];
-            [fakeResponseHandler processResponse:response];
+            it(@"should call handleResponse: when shouldHandleResponse: returns true", ^{
+                FakeResponseHandler *fakeResponseHandler = [FakeResponseHandler new];
+                fakeResponseHandler.shouldHandle = YES;
 
-            [[fakeResponseHandler.handledResponseModel should] beNil];
+                EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
+                                                                                  headers:@{}
+                                                                                     body:nil
+                                                                             requestModel:[EMSRequestModel mock]
+                                                                        timestampProvider:timestampProvider];
+
+                [fakeResponseHandler processResponse:response];
+
+                [[fakeResponseHandler.handledResponseModel should] equal:response];
+            });
+
+            it(@"should not call handleResponse: when shouldHandleResponse: returns false", ^{
+                FakeResponseHandler *fakeResponseHandler = [FakeResponseHandler new];
+                fakeResponseHandler.shouldHandle = NO;
+
+                EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
+                                                                                  headers:@{}
+                                                                                     body:nil
+                                                                             requestModel:[EMSRequestModel mock]
+                                                                        timestampProvider:timestampProvider];
+                [fakeResponseHandler processResponse:response];
+
+                [[fakeResponseHandler.handledResponseModel should] beNil];
+            });
+
         });
-
-    });
 
 SPEC_END
