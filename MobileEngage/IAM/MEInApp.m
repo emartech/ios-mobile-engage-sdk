@@ -15,6 +15,7 @@
 @property(nonatomic, weak) NSString *currentCampaignId;
 @property(nonatomic, strong) UIWindow *iamWindow;
 @property(nonatomic, weak, nullable) id <MEInAppTrackingProtocol> inAppTracker;
+@property(nonatomic, strong) MELogRepository *logRepository;
 
 @end
 

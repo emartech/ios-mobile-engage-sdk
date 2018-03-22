@@ -35,9 +35,7 @@
 
 @implementation MobileEngageInternal
 
-- (void) setupWithConfig:(nonnull MEConfig *)config
-           launchOptions:(NSDictionary *)launchOptions
-requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory {
+- (void)setupWithConfig:(nonnull MEConfig *)config launchOptions:(NSDictionary *)launchOptions requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory logRepository:(MELogRepository *)logRepository {
     NSParameterAssert(requestRepositoryFactory);
     [MEExperimental enableFeatures:config.experimentalFeatures];
     __weak typeof(self) weakSelf = self;

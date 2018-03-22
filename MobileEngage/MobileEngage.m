@@ -33,11 +33,19 @@ static EMSSQLiteHelper *_dbHelper;
 
     _mobileEngageInternal = mobileEngageInternal;
     _inbox = [[MEInbox alloc] initWithConfig:config];
+
+    MELogRepository *logRepository = [MELogRepository new];
+
     _iam = [MEInApp new];
+    _iam.logRepository = logRepository;
     _mobileEngageInternal.notificationCenterManager = [MENotificationCenterManager new];
+
+
     [_mobileEngageInternal setupWithConfig:config
                              launchOptions:launchOptions
-                  requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:_iam]];
+                  requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:_iam]
+                             logRepository:logRepository];
+
     _iam.inAppTracker = _mobileEngageInternal;
 }
 
