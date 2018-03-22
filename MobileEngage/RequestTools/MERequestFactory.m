@@ -7,10 +7,10 @@
 #import "MobileEngageVersion.h"
 #import <CoreSDK/EMSDeviceInfo.h>
 #import <CoreSDK/EMSAuthentication.h>
+#import <CoreSDK/NSDate+EMSCore.h>
 #import "NSData+MobileEngine.h"
 #import "MENotification.h"
 #import "MEExperimental.h"
-#import "../../../ios-core-sdk/Core/Categories/NSDate+EMSCore.h"
 
 @implementation MERequestFactory
 
