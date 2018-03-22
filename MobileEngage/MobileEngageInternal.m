@@ -112,13 +112,7 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
             if (sourceHandler) {
                 sourceHandler(webPageURL);
             }
-            EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setUrl:@"https://deep-link.eservice.emarsys.net/api/clicks"];
-                [builder setPayload:@{queryNameDeepLink: queryItem.value ? queryItem.value : @""}];
-
-                [builder setMethod:HTTPMethodPOST];
-            }];
-            [self.requestManager submit:requestModel];
+            [self.requestManager submit:[MERequestFactory createTrackDeepLinkRequestWithTrackingId:queryItem.value ? queryItem.value : @""]];
         }
     }
     return result;

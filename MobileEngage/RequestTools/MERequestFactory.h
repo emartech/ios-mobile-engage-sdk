@@ -6,7 +6,7 @@
 
 @class MERequestContext;
 @class MENotification;
-
+@class EMSRequestModel;
 
 @interface MERequestFactory : NSObject
 
@@ -29,5 +29,7 @@
                                          eventAttributes:(NSDictionary<NSString *, NSString *> *)eventAttributes
                                                     type:(NSString *)type
                                           requestContext:(MERequestContext *)requestContext;
+
++ (EMSRequestModel *)createTrackDeepLinkRequestWithTrackingId:(NSString *)trackingId;
 
 @end

@@ -1,13 +1,13 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
+#import <CoreSDK/EMSDeviceInfo.h>
 #import <CoreSDK/EMSRequestModel.h>
+#import <CoreSDK/EMSAuthentication.h>
+#import <CoreSDK/NSDate+EMSCore.h>
 #import "MERequestFactory.h"
 #import "MERequestContext.h"
 #import "MobileEngageVersion.h"
-#import <CoreSDK/EMSDeviceInfo.h>
-#import <CoreSDK/EMSAuthentication.h>
-#import <CoreSDK/NSDate+EMSCore.h>
 #import "NSData+MobileEngine.h"
 #import "MENotification.h"
 #import "MEExperimental.h"
@@ -64,8 +64,8 @@
                               payload[@"source"] = @"inbox";
                           } requestContext:requestContext];
 }
-
 + (EMSRequestModel *)createTrackMessageOpenRequestWithMessageId:(NSString *)messageId
+
                                                  requestContext:(MERequestContext *)requestContext {
     EMSRequestModel *requestModel;
     if (messageId) {
@@ -135,6 +135,16 @@
         [builder setHeaders:mutableHeaders];
 
         [builder setPayload:payload];
+    }];
+}
+
++ (EMSRequestModel *)createTrackDeepLinkRequestWithTrackingId:(NSString *)trackingId {
+    NSString *userAgent = [NSString stringWithFormat:@"Mobile Engage SDK %@ %@ %@", MOBILEENGAGE_SDK_VERSION, [EMSDeviceInfo deviceType], [EMSDeviceInfo osVersion]];
+    return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+        [builder setMethod:HTTPMethodPOST];
+        [builder setUrl:@"https://deep-link.eservice.emarsys.net/api/clicks"];
+        [builder setHeaders:@{@"User-Agent": userAgent}];
+        [builder setPayload:@{@"ems_dl": trackingId}];
     }];
 }
 
