@@ -35,8 +35,8 @@
 
 @implementation MobileEngageInternal
 
-- (void)setupWithConfig:(nonnull MEConfig *)config
-          launchOptions:(NSDictionary *)launchOptions
+- (void) setupWithConfig:(nonnull MEConfig *)config
+           launchOptions:(NSDictionary *)launchOptions
 requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory {
     NSParameterAssert(requestRepositoryFactory);
     [MEExperimental enableFeatures:config.experimentalFeatures];
@@ -79,10 +79,10 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
     if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
         _responseHandlers = @[
-                [[MEIdResponseHandler alloc] initWithRequestContext:_requestContext],
-                [MEIAMResponseHandler new],
-                [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
-                                                              displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]
+            [[MEIdResponseHandler alloc] initWithRequestContext:_requestContext],
+            [MEIAMResponseHandler new],
+            [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
+                                                          displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]
         ];
     } else {
         _responseHandlers = @[];
@@ -91,7 +91,10 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
     __weak typeof(self) weakSelf = self;
     [_notificationCenterManager addHandlerBlock:^{
         if (self.requestContext.meId != nil) {
-            [weakSelf.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"app:start" eventAttributes:nil type:@"internal" requestContext:self.requestContext]];
+            [weakSelf.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"app:start"
+                                                                                  eventAttributes:nil
+                                                                                             type:@"internal"
+                                                                                   requestContext:self.requestContext]];
         }
     }                           forNotification:UIApplicationDidBecomeActiveNotification];
 }
@@ -112,6 +115,7 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
             EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"https://deep-link.eservice.emarsys.net/api/clicks"];
                 [builder setPayload:@{queryNameDeepLink: queryItem.value ? queryItem.value : @""}];
+
                 [builder setMethod:HTTPMethodPOST];
             }];
             [self.requestManager submit:requestModel];
@@ -134,11 +138,20 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
 
 
 - (void)trackInAppDisplay:(NSString *)campaignId {
-    [self.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"inapp:viewed" eventAttributes:@{@"message_id": campaignId} type:@"internal" requestContext:self.requestContext]];
+    [self.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"inapp:viewed"
+                                                                      eventAttributes:@{@"message_id": campaignId}
+                                                                                 type:@"internal"
+                                                                       requestContext:self.requestContext]];
 }
 
 - (void)trackInAppClick:(NSString *)campaignId buttonId:(NSString *)buttonId {
-    [self.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"inapp:click" eventAttributes:@{@"message_id": campaignId, @"button_id": buttonId} type:@"internal" requestContext:self.requestContext]];
+    [self.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"inapp:click"
+                                                                      eventAttributes:@{
+                                                                          @"message_id": campaignId,
+                                                                          @"button_id": buttonId
+                                                                      }
+                                                                                 type:@"internal"
+                                                                       requestContext:self.requestContext]];
 }
 
 - (void)handleResponse:(EMSResponseModel *)model {
