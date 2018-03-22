@@ -9,7 +9,6 @@
 #import "EMSAuthentication.h"
 #import "EMSDeviceInfo.h"
 #import "MobileEngageVersion.h"
-#import "KiwiMacros.h"
 #import "MERequestContext.h"
 #import "FakeRequestManager.h"
 #import "EMSResponseModel.h"
@@ -20,7 +19,6 @@
 #import "MERequestRepositoryProxy.h"
 #import "MEIAMCleanupResponseHandler.h"
 #import "MENotificationCenterManager.h"
-#import "KWNilMatcher.h"
 #import "MEInApp.h"
 #import "MERequestModelRepositoryFactory.h"
 #import <CoreSDK/NSDate+EMSCore.h>
@@ -287,7 +285,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 NSNumber *meId = @123456789;
                 NSString *meIdSignature = @"signature";
                 NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature} options:0 error:nil];
-                fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:data timestampProvider:[EMSTimestampProvider new]]] mutableCopy];
+                fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:data requestModel:[EMSRequestModel mock] timestampProvider:[EMSTimestampProvider new]]] mutableCopy];
 
                 [internal appLogin];
 
