@@ -35,9 +35,7 @@
 
 @implementation MobileEngageInternal
 
-- (void)setupWithConfig:(nonnull MEConfig *)config
-          launchOptions:(NSDictionary *)launchOptions
-requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory {
+- (void)setupWithConfig:(nonnull MEConfig *)config launchOptions:(NSDictionary *)launchOptions requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory logRepository:(MELogRepository *)logRepository {
     NSParameterAssert(requestRepositoryFactory);
     [MEExperimental enableFeatures:config.experimentalFeatures];
     __weak typeof(self) weakSelf = self;
@@ -63,7 +61,7 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
     EMSRequestManager *manager = [EMSRequestManager managerWithSuccessBlock:self.successBlock
                                                                  errorBlock:self.errorBlock
                                                           requestRepository:requestRepository
-                                                              logRepository:[MELogRepository new]];
+                                                              logRepository:logRepository];
     [self setupWithRequestManager:manager
                            config:config
                     launchOptions:launchOptions];

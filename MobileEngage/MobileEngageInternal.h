@@ -15,6 +15,7 @@
 @class MERequestContext;
 @class MEInApp;
 @class MERequestModelRepositoryFactory;
+@class MELogRepository;
 
 typedef void (^MESuccessBlock)(NSString *requestId, EMSResponseModel *);
 typedef void (^MEErrorBlock)(NSString *requestId, NSError *error);
@@ -36,9 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)trackDeepLinkWith:(NSUserActivity *)userActivity
             sourceHandler:(nullable MESourceHandler)sourceHandler;
 
-- (void)setupWithConfig:(nonnull MEConfig *)config
-          launchOptions:(NSDictionary *)launchOptions
-requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory;
+- (void)setupWithConfig:(nonnull MEConfig *)config launchOptions:(NSDictionary *)launchOptions requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory logRepository:(MELogRepository *)logRepository;
 
 - (NSString *)appLogin;
 

@@ -8,10 +8,12 @@
 #import <UIKit/UIKit.h>
 #import "MEInAppMessage.h"
 #import "MEInAppTrackingProtocol.h"
+#import "MELogRepository.h"
 
 @interface MEInApp (Private)
 
 @property(nonatomic, weak, nullable) id <MEInAppTrackingProtocol> inAppTracker;
+@property(nonatomic, strong) MELogRepository *logRepository;
 
 - (UIWindow *)iamWindow;
 

@@ -47,7 +47,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
             }];
             [_mobileEngage setupWithConfig:config
                              launchOptions:nil
-                  requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                  requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                             logRepository:nil];
 
             [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
                                                        error:nil];
@@ -102,7 +103,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
             }];
         };
 
-        describe(@"setupWithConfig:launchOptions:requestRepositoryFactory:", ^{
+        describe(@"setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:", ^{
             it(@"should setup the RequestManager with base64 auth header", ^{
                 requestManagerMock();
             });
@@ -154,11 +155,9 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         [builder setExperimentalFeatures:@[INAPP_MESSAGING]];
                     }];
                     MobileEngageInternal *internal = [MobileEngageInternal new];
-                    [internal setupWithConfig:config
-                                launchOptions:nil
-                     requestRepositoryFactory:nil];
+                    [internal setupWithConfig:config launchOptions:nil requestRepositoryFactory:nil logRepository:nil];
                     fail(@"Expected Exception when requestRepositoryFactory is nil!");
-                } @catch(NSException *exception) {
+                } @catch (NSException *exception) {
                     [[exception.reason should] equal:@"Invalid parameter not satisfying: requestRepositoryFactory"];
                     [[theValue(exception) shouldNot] beNil];
                 }
@@ -173,7 +172,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 MobileEngageInternal *internal = [MobileEngageInternal new];
                 KWCaptureSpy *spy = [internal captureArgument:@selector(setupWithRequestManager:config:launchOptions:)
                                                       atIndex:0];
-                [internal setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [internal setupWithConfig:config
+                            launchOptions:nil
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                            logRepository:nil];
                 EMSRequestManager *manager = spy.argument;
                 [[[manager.repository class] should] equal:[MERequestRepositoryProxy class]];
             });
@@ -187,7 +189,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                       withCount:1
                                       arguments:nil, nil, nil];
 
-                _mobileEngage.requestContext.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:nil contactFieldValue:nil];
+                _mobileEngage.requestContext.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:nil
+                                                                                                       contactFieldValue:nil];
                 [_mobileEngage setPushToken:deviceToken];
             });
 
@@ -197,24 +200,25 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                       withCount:1
                                       arguments:@12, @"23", nil];
 
-                _mobileEngage.requestContext.lastAppLoginParameters  = [MEAppLoginParameters parametersWithContactFieldId:@12 contactFieldValue:@"23"];
+                _mobileEngage.requestContext.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@12
+                                                                                                       contactFieldValue:@"23"];
                 [_mobileEngage setPushToken:deviceToken];
             });
 
             it(@"appLogin should save last anonymous AppLogin parameters", ^{
                 [[requestManagerMock() should] receive:@selector(submit:)];
                 [_mobileEngage appLogin];
-                [[_mobileEngage.requestContext.lastAppLoginParameters  shouldNot] beNil];
-                [[_mobileEngage.requestContext.lastAppLoginParameters .contactFieldId should] beNil];
-                [[_mobileEngage.requestContext.lastAppLoginParameters .contactFieldValue should] beNil];
+                [[_mobileEngage.requestContext.lastAppLoginParameters shouldNot] beNil];
+                [[_mobileEngage.requestContext.lastAppLoginParameters.contactFieldId should] beNil];
+                [[_mobileEngage.requestContext.lastAppLoginParameters.contactFieldValue should] beNil];
             });
 
             it(@"appLogin should save last AppLogin parameters", ^{
                 [[requestManagerMock() should] receive:@selector(submit:)];
                 [_mobileEngage appLoginWithContactFieldId:@42 contactFieldValue:@"99"];
-                [[_mobileEngage.requestContext.lastAppLoginParameters  shouldNot] beNil];
-                [[_mobileEngage.requestContext.lastAppLoginParameters .contactFieldId should] equal:@42];
-                [[_mobileEngage.requestContext.lastAppLoginParameters .contactFieldValue should] equal:@"99"];
+                [[_mobileEngage.requestContext.lastAppLoginParameters shouldNot] beNil];
+                [[_mobileEngage.requestContext.lastAppLoginParameters.contactFieldId should] equal:@42];
+                [[_mobileEngage.requestContext.lastAppLoginParameters.contactFieldValue should] equal:@"99"];
             });
 
             it(@"should not call appLogin with setPushToken when there was no previous appLogin call", ^{
@@ -277,7 +281,11 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                            applicationPassword:kAppSecret];
                 }];
                 MobileEngageInternal *internal = [MobileEngageInternal new];
-                [internal setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [internal setupWithConfig:config
+                            launchOptions:nil
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                            logRepository:nil];
+
                 FakeRequestManager *fakeRequestManager = [FakeRequestManager managerWithSuccessBlock:internal.successBlock
                                                                                           errorBlock:internal.errorBlock];
                 internal.requestManager = fakeRequestManager;
@@ -285,7 +293,11 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 NSNumber *meId = @123456789;
                 NSString *meIdSignature = @"signature";
                 NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature} options:0 error:nil];
-                fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200 headers:@{} body:data requestModel:[EMSRequestModel mock] timestampProvider:[EMSTimestampProvider new]]] mutableCopy];
+                fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200
+                                                                                            headers:@{}
+                                                                                               body:data
+                                                                                       requestModel:[EMSRequestModel mock]
+                                                                                  timestampProvider:[EMSTimestampProvider new]]] mutableCopy];
 
                 [internal appLogin];
 
@@ -609,7 +621,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                             atIndex:0];
 
                 [_mobileEngage.requestContext setLastAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
-                                                                                          contactFieldValue:@"contactFieldValue"]];
+                                                                                                         contactFieldValue:@"contactFieldValue"]];
                 [_mobileEngage appLogout];
 
                 EMSRequestModel *actualModel = spy.argument;
@@ -621,7 +633,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [[requestManager should] receive:@selector(submit:)];
 
                 [_mobileEngage.requestContext setLastAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
-                                                                                          contactFieldValue:@"contactFieldValue"]];
+                                                                                                         contactFieldValue:@"contactFieldValue"]];
                 [_mobileEngage appLogout];
                 [[_mobileEngage.requestContext.lastAppLoginParameters should] beNil];
             });
@@ -684,7 +696,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                                                             contactFieldValue:@"contactFieldValue"];
 
                 [_mobileEngage.requestContext stub:@selector(lastAppLoginParameters)
-                          andReturn:appLoginParameters];
+                                         andReturn:appLoginParameters];
 
                 EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
                         @"application_id": kAppId,
@@ -746,7 +758,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                                                             contactFieldValue:@"contactFieldValue"];
 
                 [_mobileEngage.requestContext stub:@selector(lastAppLoginParameters)
-                          andReturn:appLoginParameters];
+                                         andReturn:appLoginParameters];
 
                 EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
                         @"application_id": kAppId,
@@ -980,7 +992,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                                                             contactFieldValue:@"contactFieldValue"];
 
                 [_mobileEngage.requestContext stub:@selector(lastAppLoginParameters)
-                          andReturn:appLoginParameters];
+                                         andReturn:appLoginParameters];
 
                 NSString *eventName = @"testEventName";
                 NSDictionary *eventAttributes = @{@"someKey": @"someValue"};
@@ -1044,7 +1056,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                                                             contactFieldValue:@"contactFieldValue"];
 
                 [_mobileEngage.requestContext stub:@selector(lastAppLoginParameters)
-                          andReturn:appLoginParameters];
+                                         andReturn:appLoginParameters];
 
                 NSString *eventName = @"testEventName";
 
@@ -1081,7 +1093,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                            applicationPassword:kAppSecret];
                     [builder setExperimentalFeatures:@[INAPP_MESSAGING]];
                 }];
-                [_mobileEngage setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [_mobileEngage setupWithConfig:config
+                                 launchOptions:nil
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                                 logRepository:nil];
 
                 _mobileEngage.requestContext.meId = kMEID;
                 _mobileEngage.requestContext.meIdSignature = kMEID_SIGNATURE;
@@ -1178,7 +1193,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                            applicationPassword:kAppSecret];
                     [builder setExperimentalFeatures:@[INAPP_MESSAGING]];
                 }];
-                [_mobileEngage setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [_mobileEngage setupWithConfig:config
+                                 launchOptions:nil
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                                 logRepository:nil];
 
                 _mobileEngage.requestContext.meId = kMEID;
                 _mobileEngage.requestContext.meIdSignature = kMEID_SIGNATURE;
@@ -1211,7 +1229,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                  forKey:kMEID];
                 [userDefaults synchronize];
 
-                [_mobileEngage setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [_mobileEngage setupWithConfig:config
+                                 launchOptions:nil
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                                 logRepository:nil];
 
                 [[_mobileEngage.requestContext.meId should] equal:meID];
             });
@@ -1225,7 +1246,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     [builder setCredentialsWithApplicationCode:applicationCode
                                            applicationPassword:applicationPassword];
                 }];
-                [_mobileEngage setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [_mobileEngage setupWithConfig:config
+                                 launchOptions:nil
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                                 logRepository:nil];
 
                 NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
                 [userDefaults setObject:meID
@@ -1248,7 +1272,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                            applicationPassword:kAppSecret];
                     [builder setExperimentalFeatures:@[INAPP_MESSAGING]];
                 }];
-                [_mobileEngage setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [_mobileEngage setupWithConfig:config
+                                 launchOptions:nil
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                                 logRepository:nil];
 
                 _mobileEngage.requestContext.meId = kMEID;
                 _mobileEngage.requestContext.meIdSignature = kMEID_SIGNATURE;
@@ -1281,7 +1308,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                  forKey:kMEID_SIGNATURE];
                 [userDefaults synchronize];
 
-                [_mobileEngage setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [_mobileEngage setupWithConfig:config
+                                 launchOptions:nil
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                                 logRepository:nil];
 
                 [[_mobileEngage.requestContext.meIdSignature should] equal:meIDSignature];
             });
@@ -1300,7 +1330,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [userDefaults setObject:meIdSignature
                                  forKey:kMEID_SIGNATURE];
                 [userDefaults synchronize];
-                [_mobileEngage setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [_mobileEngage setupWithConfig:config
+                                 launchOptions:nil
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                                 logRepository:nil];
 
 
                 [_mobileEngage appLogout];
@@ -1319,7 +1352,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                            applicationPassword:applicationPassword];
                     [builder setExperimentalFeatures:features];
                 }];
-                [_mobileEngage setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [_mobileEngage setupWithConfig:config
+                                 launchOptions:nil
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                                 logRepository:nil];
 
                 for (MEFlipperFeature feature in features) {
                     [[theValue([MEExperimental isFeatureEnabled:feature]) should] beYes];
@@ -1424,7 +1460,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                            applicationPassword:kAppSecret];
                     [builder setExperimentalFeatures:@[INAPP_MESSAGING]];
                 }];
-                [_mobileEngage setupWithConfig:config launchOptions:nil requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]];
+                [_mobileEngage setupWithConfig:config
+                                 launchOptions:nil
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                                 logRepository:nil];
                 [[_mobileEngage.requestContext shouldNot] beNil];
             });
         });
