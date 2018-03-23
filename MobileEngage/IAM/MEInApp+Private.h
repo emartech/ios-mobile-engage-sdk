@@ -10,15 +10,19 @@
 #import "MEInAppTrackingProtocol.h"
 #import "MELogRepository.h"
 
+typedef void (^MECompletionHandler)();
+
 @interface MEInApp (Private)
 
 @property(nonatomic, weak, nullable) id <MEInAppTrackingProtocol> inAppTracker;
 @property(nonatomic, strong) MELogRepository *logRepository;
+@property(nonatomic, strong) EMSTimestampProvider *timestampProvider;
 
 - (UIWindow *)iamWindow;
 
 - (void)setIamWindow:(UIWindow *)window;
 
-- (void)showMessage:(MEInAppMessage *)message;
+- (void)showMessage:(MEInAppMessage *)message
+  completionHandler:(MECompletionHandler)completionHandler;
 
 @end

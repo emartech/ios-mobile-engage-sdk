@@ -2,6 +2,8 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
+#import <CoreSDK/NSDate+EMSCore.h>
+#import <CoreSDK/EMSTimestampProvider.h>
 #import "MEInApp.h"
 #import "MEInApp+Private.h"
 #import "MEIAMViewController.h"
@@ -16,6 +18,7 @@
 @property(nonatomic, strong) UIWindow *iamWindow;
 @property(nonatomic, weak, nullable) id <MEInAppTrackingProtocol> inAppTracker;
 @property(nonatomic, strong) MELogRepository *logRepository;
+@property(nonatomic, strong) EMSTimestampProvider *timestampProvider;
 
 @end
 
@@ -23,7 +26,8 @@
 
 #pragma mark - Public methods
 
-- (void)showMessage:(MEInAppMessage *)message {
+- (void)showMessage:(MEInAppMessage *)message
+  completionHandler:(MECompletionHandler)completionHandler {
     self.currentCampaignId = message.campaignId;
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -35,8 +39,15 @@
             __weak typeof(self) weakSelf = self;
             [meiamViewController loadMessage:message.html
                            completionHandler:^{
+                               NSDictionary *const loadingMetric = @{
+                                   @"loading_time": [[weakSelf.timestampProvider provideTimestamp] numberValueInMillisFromDate:message.response.timestamp],
+                                   @"id": message.campaignId};
+                               [weakSelf.logRepository add:loadingMetric];
                                [weakSelf displayInAppViewController:message
                                                      viewController:meiamViewController];
+                               if (completionHandler) {
+                                   completionHandler();
+                               }
                            }];
         }
     });

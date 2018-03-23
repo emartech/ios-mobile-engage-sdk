@@ -20,15 +20,15 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
 
             it(@"should return YES when the response contains meId and meIdSignature", ^{
                 NSData *body = [NSJSONSerialization dataWithJSONObject:@{
-                                @"api_me_id": @123456789,
-                                @"me_id_signature": @"TheValueOfTheMeIdSignature!"}
+                        @"api_me_id": @123456789,
+                        @"me_id_signature": @"TheValueOfTheMeIdSignature!"}
                                                                options:0
                                                                  error:nil];
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
                 MEIdResponseHandler *handler = [MEIdResponseHandler new];
 
                 [[theValue([handler shouldHandleResponse:response]) should] beYes];
@@ -42,7 +42,7 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
                 MEIdResponseHandler *handler = [MEIdResponseHandler new];
 
                 [[theValue([handler shouldHandleResponse:response]) should] beNo];
@@ -56,7 +56,7 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
                 MEIdResponseHandler *handler = [MEIdResponseHandler new];
 
                 [[theValue([handler shouldHandleResponse:response]) should] beNo];
@@ -76,7 +76,7 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
                 MERequestContext *requestContext = [MERequestContext mock];
                 [[requestContext should] receive:@selector(setMeId:) withArguments:[meId stringValue]];
                 [[requestContext should] receive:@selector(setMeIdSignature:) withArguments:meIdSignature];
@@ -95,7 +95,7 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
                 MERequestContext *requestContext = [MERequestContext mock];
                 [[requestContext should] receive:@selector(setMeId:) withArguments:meId];
                 [[requestContext should] receive:@selector(setMeIdSignature:) withArguments:meIdSignature];

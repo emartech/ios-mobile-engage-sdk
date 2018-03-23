@@ -6,10 +6,12 @@
 
 @implementation MEInAppMessage
 
-- (instancetype)initWithResponseParsedBody:(NSDictionary *)parsedBody; {
+- (instancetype)initWithResponse:(EMSResponseModel *)responseModel {
     if (self = [super init]) {
+        id parsedBody = responseModel.parsedBody;
         _html = parsedBody[@"message"][@"html"];
         _campaignId = parsedBody[@"message"][@"id"];
+        _response = responseModel;
     }
     return self;
 }

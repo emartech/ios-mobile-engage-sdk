@@ -8,12 +8,12 @@
 #import "MEIAMResponseHandler.h"
 #import "AbstractResponseHandler+Private.h"
 #import "MEInApp.h"
+#import "MEInApp+Private.h"
 #import "MobileEngage+Test.h"
 #import "MEDisplayedIAMRepository.h"
 #import "MobileEngage+Private.h"
 #import "MEConfigBuilder.h"
 #import "MEConfig.h"
-#import "MEInAppMessage.h"
 #import "FakeDbHelper.h"
 
 SPEC_BEGIN(MEIAMResponseHandlerTests)
@@ -32,7 +32,7 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMResponseHandler *handler = [MEIAMResponseHandler new];
 
@@ -45,7 +45,7 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMResponseHandler *handler = [MEIAMResponseHandler new];
 
@@ -58,7 +58,7 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMResponseHandler *handler = [MEIAMResponseHandler new];
 
@@ -70,7 +70,7 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:nil
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMResponseHandler *handler = [MEIAMResponseHandler new];
 
@@ -83,7 +83,7 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMResponseHandler *handler = [MEIAMResponseHandler new];
 
@@ -101,10 +101,10 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 id iamMock = [MEInApp mock];
-                [[iamMock should] receive:@selector(showMessage:) withArguments:[[MEInAppMessage alloc] initWithResponseParsedBody:@{@"message": @{@"id": @"campaignId", @"html": html}}]];
+                [[iamMock should] receive:@selector(showMessage:completionHandler:) withArguments:[[MEInAppMessage alloc] initWithResponse:response], kw_any()];
                 MobileEngage.inApp = iamMock;
 
                 MEIAMResponseHandler *handler = [MEIAMResponseHandler new];
@@ -120,6 +120,7 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
                 [MobileEngage setupWithConfig:config launchOptions:nil];
                 FakeDbHelper *dbHelper = [FakeDbHelper new];
                 [MobileEngage setDbHelper:dbHelper];
+                MobileEngage.inApp.timestampProvider = timestampProvider;
 
                 NSString *html = @"<html><body style=\"background-color:red\"></body></html>";
                 NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id": @"12345678", @"html": html}} options:0 error:nil];
@@ -127,7 +128,7 @@ SPEC_BEGIN(MEIAMResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 [[MEIAMResponseHandler new] handleResponse:response];
 

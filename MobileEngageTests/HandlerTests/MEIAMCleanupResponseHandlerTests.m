@@ -28,7 +28,7 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [MEIAMCleanupResponseHandler new];
 
@@ -41,7 +41,7 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [MEIAMCleanupResponseHandler new];
 
@@ -54,7 +54,7 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [MEIAMCleanupResponseHandler new];
 
@@ -67,7 +67,7 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [MEIAMCleanupResponseHandler new];
 
@@ -105,7 +105,7 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:repository displayIamRepository:nil];
                 [handler handleResponse:response];
@@ -131,7 +131,7 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:nil displayIamRepository:repository];
                 [handler handleResponse:response];

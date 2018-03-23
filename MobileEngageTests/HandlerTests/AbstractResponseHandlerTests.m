@@ -24,7 +24,7 @@ SPEC_BEGIN(AbstractResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:nil
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
 
                 [fakeResponseHandler processResponse:response];
 
@@ -39,7 +39,7 @@ SPEC_BEGIN(AbstractResponseHandlerTests)
                                                                                   headers:@{}
                                                                                      body:nil
                                                                              requestModel:[EMSRequestModel mock]
-                                                                        timestampProvider:timestampProvider];
+                                                                                timestamp:[NSDate date]];
                 [fakeResponseHandler processResponse:response];
 
                 [[fakeResponseHandler.handledResponseModel should] beNil];

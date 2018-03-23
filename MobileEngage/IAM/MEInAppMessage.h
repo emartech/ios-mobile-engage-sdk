@@ -9,8 +9,9 @@
 
 @property (nonatomic, readonly) NSString *campaignId;
 @property (nonatomic, readonly) NSString *html;
+@property (nonatomic, readonly) EMSResponseModel *response;
 
-- (instancetype)initWithResponseParsedBody:(NSDictionary *)parsedBody;
+- (instancetype)initWithResponse:(EMSResponseModel *)responseModel;
 
 - (BOOL)isEqual:(id)other;
 

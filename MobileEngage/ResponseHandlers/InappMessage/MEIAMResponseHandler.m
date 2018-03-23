@@ -15,7 +15,8 @@
 }
 
 - (void)handleResponse:(EMSResponseModel *)response {
-    [[MobileEngage inApp] showMessage:[[MEInAppMessage alloc] initWithResponseParsedBody:response.parsedBody]];
+    [[MobileEngage inApp] showMessage:[[MEInAppMessage alloc] initWithResponse:response]
+                    completionHandler:nil];
 }
 
 @end
