@@ -38,6 +38,8 @@ static EMSSQLiteHelper *_dbHelper;
 
     _iam = [MEInApp new];
     _iam.logRepository = logRepository;
+    _iam.timestampProvider = [EMSTimestampProvider new];
+
     _mobileEngageInternal.notificationCenterManager = [MENotificationCenterManager new];
 
 

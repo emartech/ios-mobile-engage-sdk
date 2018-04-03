@@ -101,7 +101,6 @@ SPEC_BEGIN(MobileEngageTests)
                 [[spy.argument shouldNot] beNil];
             });
 
-
             it(@"should set logRepository on MEInApp instance", ^{
                 id mobileEngageInternalMock = [MobileEngageInternal nullMock];
                 [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:)];
@@ -120,6 +119,22 @@ SPEC_BEGIN(MobileEngageTests)
                                               launchOptions:nil];
 
                 [[MobileEngage.inApp.logRepository should] equal:spy.argument];
+            });
+
+            it(@"should set timestampProvider on MEInApp instance", ^{
+                NSString *applicationCode = kAppId;
+                NSString *applicationPassword = @"appSecret";
+
+                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                    [builder setCredentialsWithApplicationCode:applicationCode
+                                           applicationPassword:applicationPassword];
+                }];
+
+                [MobileEngage setupWithMobileEngageInternal:[MobileEngageInternal nullMock]
+                                                     config:config
+                                              launchOptions:nil];
+
+                [[MobileEngage.inApp.timestampProvider shouldNot] beNil];
             });
         });
 
