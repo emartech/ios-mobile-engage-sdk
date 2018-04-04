@@ -5,4 +5,7 @@
 #import <CoreSDK/EMSLogHandlerProtocol.h>
 
 @interface MEIAMMetricsLogHandler : NSObject<EMSLogHandlerProtocol>
+
+- (instancetype)initWithMetricsBuffer:(NSMutableDictionary<NSString *, NSDictionary<NSString *, NSObject *> *> *)metricsBuffer;
+
 @end
