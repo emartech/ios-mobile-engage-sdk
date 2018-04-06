@@ -1,7 +1,7 @@
 platform :ios, '9.0'
 
 source 'https://github.com/CocoaPods/Specs.git'
-source 'git@github.com:emartech/ios-mobile-engage-sdk.git'
+source 'git@github.com:emartech/ios-core-sdk.git'
 
 target "MobileEngage" do
   if ENV["DEV"] then
