@@ -5,7 +5,7 @@
 #import <Foundation/Foundation.h>
 
 
-typedef void (^MEHandlerBlock)();
+typedef void (^MEHandlerBlock)(void);
 
 @interface MENotificationCenterManager : NSObject
 

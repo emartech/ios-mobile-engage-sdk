@@ -28,7 +28,7 @@
                                                       success:[application openURL:url]]);
             } else {
                 [application openURL:url
-                             options:nil
+                             options:@{}
                    completionHandler:^(BOOL success) {
                        resultBlock([self createResultWithJSCommandId:eventId
                                                              success:success]);

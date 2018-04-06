@@ -106,7 +106,7 @@ SPEC_BEGIN(MEIAMOpenExternalLinkTests)
                 [[UIApplication should] receive:@selector(sharedApplication) andReturn:_applicationMock];
 
                 [[_applicationMock should] receive:@selector(canOpenURL:) andReturn:theValue(YES)];
-                [[_applicationMock should] receive:@selector(openURL:options:completionHandler:) withArguments:[NSURL URLWithString:link], nil, kw_any()];
+                [[_applicationMock should] receive:@selector(openURL:options:completionHandler:) withArguments:[NSURL URLWithString:link], @{}, kw_any()];
 
                 [_command handleMessage:@{@"url": link, @"id": @1}
                             resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {

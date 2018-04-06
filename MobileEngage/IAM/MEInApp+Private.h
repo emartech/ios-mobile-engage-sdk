@@ -10,7 +10,7 @@
 #import "MEInAppTrackingProtocol.h"
 #import "MELogRepository.h"
 
-typedef void (^MECompletionHandler)();
+typedef void (^MECompletionHandler)(void);
 
 @interface MEInApp (Private)
 

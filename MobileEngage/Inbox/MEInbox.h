@@ -9,7 +9,7 @@
 @class MEConfig;
 @class MEAppLoginParameters;
 
-typedef void (^MEInboxSuccessBlock)();
+typedef void (^MEInboxSuccessBlock)(void);
 typedef void (^MEInboxResultBlock)(MENotificationInboxStatus *inboxStatus);
 typedef void (^MEInboxResultErrorBlock)(NSError *error);
 

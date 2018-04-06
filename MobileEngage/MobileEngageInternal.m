@@ -95,7 +95,7 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
             [weakSelf.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"app:start"
                                                                                   eventAttributes:nil
                                                                                              type:@"internal"
-                                                                                   requestContext:self.requestContext]];
+                                                                                   requestContext:weakSelf.requestContext]];
         }
     }                           forNotification:UIApplicationDidBecomeActiveNotification];
 }

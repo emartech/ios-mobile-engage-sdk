@@ -8,7 +8,7 @@
 
 @class MEJSBridge;
 
-typedef void (^MECompletionHandler)();
+typedef void (^MECompletionHandler)(void);
 
 @interface MEIAMViewController : UIViewController
 

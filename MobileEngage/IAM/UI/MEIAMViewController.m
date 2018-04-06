@@ -4,7 +4,6 @@
 
 #import "MEIAMViewController.h"
 #import "MEJSBridge.h"
-#import "MEOsVersionUtils.h"
 
 @interface MEIAMViewController () <WKNavigationDelegate>
 
@@ -41,9 +40,10 @@
 - (void)loadMessage:(NSString *)message
   completionHandler:(MECompletionHandler)completionHandler {
     _completionHandler = completionHandler;
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.webView) {
-            _webView = [self createWebView];
+            weakSelf.webView = [self createWebView];
             [self addFullscreenView:self.webView];
         }
         [self.webView loadHTMLString:message
@@ -80,8 +80,8 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     [webView.scrollView setBounces:NO];
     [webView.scrollView setBouncesZoom:NO];
 
-    if (!SYSTEM_VERSION_LESS_THAN(@"11.0")) {
-         webView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    if (@available(iOS 11.0, *)) {
+        webView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
     return webView;
 }

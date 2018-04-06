@@ -25,7 +25,7 @@
 
 - (void)add:(MEButtonClick *)item {
     [self.sqliteHelper insertModel:item
-                         withQuery:SQL_INSERT
+                         withQuery:SQL_INSERT_BUTTON_CLICK
                             mapper:self.mapper];
 }
 
@@ -37,7 +37,7 @@
 }
 
 - (NSArray<MEButtonClick *> *)query:(id <EMSSQLSpecificationProtocol>)sqlSpecification {
-    return [self.sqliteHelper executeQuery:SQL_SELECT(sqlSpecification.sql)
+    return [self.sqliteHelper executeQuery:SQL_SELECT_BUTTON_CLICK(sqlSpecification.sql)
                                     mapper:self.mapper];
 }
 
