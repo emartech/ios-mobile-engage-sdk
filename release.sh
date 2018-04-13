@@ -1,8 +1,9 @@
 #!/bin/bash
 
 function askForSure {
+  read -p "What is the required CoreSDK version? " CORE_VERSION
   while true; do
-      read -p "Did you mean to release '$1' ? " yn
+      read -p "Did you mean to release MobileEngageSDK '$1' with CoreSDK '$CORE_VERSION'? " yn
       case $yn in
           [Yy]* ) release $1 ; break;;
           [Nn]* ) exit;;
@@ -25,6 +26,8 @@ function release {
 
   TEMPLATE="`cat MobileEngageSDK.podspec.template`"
   PODSPEC="${TEMPLATE/<VERSION_NUMBER>/$VERSION_NUMBER}"
+  PODSPEC="${PODSPEC/<COMMIT_REF>/:tag => spec.version}"
+  PODSPEC="${PODSPEC/spec.dependency \'CoreSDK\'/spec.dependency \'CoreSDK\', \'$CORE_VERSION\'}"
   printf "$PODSPEC" > MobileEngageSDK.podspec
 
   git add MobileEngage/MobileEngageVersion.h

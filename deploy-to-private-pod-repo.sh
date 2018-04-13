@@ -1,26 +1,14 @@
 #!/bin/bash
 
-function deploy {
-  VERSION_NUMBER=$(git describe --tags --abbrev=0 | perl -pe 's/^((\d+\.)*)(\d+)(.*)$/$1.($3+1).$4/e;')
-  if GIT_DIR=.git git rev-parse $VERSION_NUMBER >/dev/null 2>&1
-  then
-      printf "Version tag already exist, exiting...\n"
-      exit
-  fi
+VERSION_NUMBER=$1
+printf "Deploying version $VERSION_NUMBER to private cocoapods...\n";
 
-  printf "Deploying version $VERSION_NUMBER to private cocoapods...\n";
+TEMPLATE="`cat MobileEngageSDK.podspec.template`"
+PODSPEC="${TEMPLATE/<VERSION_NUMBER>/$VERSION_NUMBER}"
+COMMIT_HASH=$(git rev-parse HEAD)
+PODSPEC="${PODSPEC/<COMMIT_REF>/:commit => '$COMMIT_HASH'}"
+printf "$PODSPEC" > MobileEngageSDK.podspec
 
-  TEMPLATE="`cat MobileEngageSDK.podspec.template`"
-  PODSPEC="${TEMPLATE/<VERSION_NUMBER>/$VERSION_NUMBER}"
-  printf "$PODSPEC" > MobileEngageSDK.podspec
+pod repo push emapod MobileEngageSDK.podspec --allow-warnings
 
-  git tag -a "$VERSION_NUMBER" -m "$VERSION_NUMBER"
-
-  git push --tags
-
-  pod repo push emapod MobileEngageSDK.podspec --allow-warnings
-
-  printf "[$VERSION_NUMBER] deployed to private cocoapod."
-}
-
-deploy
+printf "[$VERSION_NUMBER] deployed to private cocoapod."
