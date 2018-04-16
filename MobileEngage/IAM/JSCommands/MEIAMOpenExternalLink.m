@@ -4,8 +4,9 @@
 
 #import "MEIAMOpenExternalLink.h"
 #import <UIKit/UIKit.h>
+#import <CoreSDK/EMSDictionaryValidator.h>
 #import "MEOsVersionUtils.h"
-#import "MEIAMCommamndResultUtils.h"
+#import "MEIAMCommandResultUtils.h"
 
 #define kExternalLink @"url"
 
@@ -18,10 +19,16 @@
 - (void)handleMessage:(NSDictionary *)message
           resultBlock:(MEIAMJSResultBlock)resultBlock {
     UIApplication *application = [UIApplication sharedApplication];
-    NSString *externalLink = message[kExternalLink];
-    NSURL *url = [NSURL URLWithString:externalLink];
     NSString *eventId = message[@"id"];
-    if (url) {
+
+    NSArray<NSString *> *errors = [message validate:^(EMSDictionaryValidator *validate) {
+        [validate keyExists:kExternalLink withType:[NSString class]];
+    }];
+
+    if ([errors count] > 0) {
+        resultBlock([MEIAMCommandResultUtils createErrorResultWith:eventId errorArray:errors]);
+    } else {
+        NSURL *url = [NSURL URLWithString:message[kExternalLink]];
         if ([application canOpenURL:url]) {
             if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
                 resultBlock([self createResultWithJSCommandId:eventId
@@ -35,12 +42,9 @@
                    }];
             }
         } else {
-            resultBlock([MEIAMCommamndResultUtils createErrorResultWith:eventId
-                                                           errorMessage:@"Can't open url!"]);
+            resultBlock([MEIAMCommandResultUtils createErrorResultWith:eventId
+                                                          errorMessage:@"Can't open url!"]);
         }
-    } else {
-        resultBlock([MEIAMCommamndResultUtils createMissingParameterErrorResultWith:eventId
-                                                                   missingParameter:@"url"]);
     }
 }
 
@@ -48,10 +52,10 @@
                                                               success:(BOOL)success {
     NSDictionary<NSString *, NSObject *> *result;
     if (success) {
-        result = [MEIAMCommamndResultUtils createSuccessResultWith:jsCommandId];
+        result = [MEIAMCommandResultUtils createSuccessResultWith:jsCommandId];
     } else {
-        result = [MEIAMCommamndResultUtils createErrorResultWith:jsCommandId
-                                                    errorMessage:@"Opening url failed!"];
+        result = [MEIAMCommandResultUtils createErrorResultWith:jsCommandId
+                                                   errorMessage:@"Opening url failed!"];
     }
     return result;
 }

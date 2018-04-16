@@ -6,7 +6,7 @@
 #import <UIKit/UIKit.h>
 #import <UserNotifications/UserNotifications.h>
 #import "MEOsVersionUtils.h"
-#import "MEIAMCommamndResultUtils.h"
+#import "MEIAMCommandResultUtils.h"
 
 @implementation MEIAMRequestPushPermission
 
@@ -39,9 +39,9 @@
                                                               success:(BOOL)success {
     NSDictionary<NSString *, NSObject *> *result;
     if (success) {
-        result = [MEIAMCommamndResultUtils createSuccessResultWith:jsCommandId];
+        result = [MEIAMCommandResultUtils createSuccessResultWith:jsCommandId];
     } else {
-        result = [MEIAMCommamndResultUtils createErrorResultWith:jsCommandId
+        result = [MEIAMCommandResultUtils createErrorResultWith:jsCommandId
                                                     errorMessage:@"Registering for push notifications failed!"];
     }
     return result;

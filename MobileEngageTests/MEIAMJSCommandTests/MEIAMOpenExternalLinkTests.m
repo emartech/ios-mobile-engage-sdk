@@ -45,7 +45,23 @@ SPEC_BEGIN(MEIAMOpenExternalLinkTests)
                         }];
             [XCTWaiter waitForExpectations:@[exp] timeout:30];
 
-            [[returnedResult should] equal:@{@"success": @NO, @"id": @"999", @"error": @"Missing url!"}];
+            [[returnedResult should] equal:@{@"success": @NO, @"id": @"999", @"errors": @[@"Missing 'url' key with type: NSString."]}];
+
+        });
+
+        it(@"should return false if the url is wrong type", ^{
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+            __block NSDictionary<NSString *, NSObject *> *returnedResult;
+
+            NSArray *urlValue = @[];
+            [_command handleMessage:@{@"id": @"999", @"url": urlValue}
+                        resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+                            returnedResult = result;
+                            [exp fulfill];
+                        }];
+            [XCTWaiter waitForExpectations:@[exp] timeout:30];
+
+            [[returnedResult should] equal:@{@"success": @NO, @"id": @"999", @"errors": @[[NSString stringWithFormat:@"Type mismatch for key 'url', expected type: NSString, but was: %@.", NSStringFromClass([urlValue class])]]}];
 
         });
 

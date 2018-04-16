@@ -2,9 +2,11 @@
 //  Copyright © 2017 Emarsys. All rights reserved.
 //
 
+#import <CoreSDK/EMSDictionaryValidator.h>
 #import "MEIAMTriggerAppEvent.h"
 #import "MEInAppMessageHandler.h"
-#import "MEIAMCommamndResultUtils.h"
+#import "MEIAMCommandResultUtils.h"
+#import "NSDictionary+EMSCore.h"
 
 @interface MEIAMTriggerAppEvent()
 
@@ -28,16 +30,20 @@
 
 - (void)handleMessage:(NSDictionary *)message
           resultBlock:(MEIAMJSResultBlock)resultBlock {
-    NSString *name = message[@"name"];
-    NSDictionary *payload = message[@"payload"];
     NSString *eventId = message[@"id"];
-    if (name) {
+
+    NSArray<NSString *> *errors = [message validate:^(EMSDictionaryValidator *validate) {
+        [validate keyExists:@"name" withType:[NSString class]];
+    }];
+
+    if ([errors count] > 0) {
+        resultBlock([MEIAMCommandResultUtils createErrorResultWith:eventId errorArray:errors]);
+    } else {
+        NSString *name = message[@"name"];
+        NSDictionary *payload = [message dictionaryValueForKey:@"payload"];
         [self.inAppMessageHandler handleApplicationEvent:name
                                                  payload:payload];
-        resultBlock([MEIAMCommamndResultUtils createSuccessResultWith:eventId]);
-    } else {
-        resultBlock([MEIAMCommamndResultUtils createMissingParameterErrorResultWith:eventId
-                                                                   missingParameter:@"name"]);
+        resultBlock([MEIAMCommandResultUtils createSuccessResultWith:eventId]);
     }
 }
 

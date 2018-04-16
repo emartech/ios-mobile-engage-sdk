@@ -1,9 +1,11 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
+#import <CoreSDK/EMSDictionaryValidator.h>
 #import "MEIAMTriggerMEEvent.h"
-#import "MEIAMCommamndResultUtils.h"
+#import "MEIAMCommandResultUtils.h"
 #import "MobileEngage.h"
+#import "NSDictionary+EMSCore.h"
 
 @implementation MEIAMTriggerMEEvent
 
@@ -14,18 +16,22 @@
 - (void)handleMessage:(NSDictionary *)message
           resultBlock:(MEIAMJSResultBlock)resultBlock {
     NSString *eventId = message[@"id"];
-    NSString *name = message[@"name"];
-    NSDictionary *payload = message[@"payload"];
-    if (name) {
+
+    NSArray<NSString *> *errors = [message validate:^(EMSDictionaryValidator *validate) {
+        [validate keyExists:@"name" withType:[NSString class]];
+    }];
+
+    if ([errors count] > 0) {
+        resultBlock([MEIAMCommandResultUtils createErrorResultWith:eventId errorArray:errors]);
+    } else {
+        NSString *name = message[@"name"];
+        NSDictionary *payload = [message dictionaryValueForKey:@"payload"];
         resultBlock(@{
                 @"success": @YES,
                 @"id": eventId,
                 @"meEventId": [MobileEngage trackCustomEvent:name
                                              eventAttributes:payload]
         });
-    } else {
-        resultBlock([MEIAMCommamndResultUtils createMissingParameterErrorResultWith:eventId
-                                                                   missingParameter:@"name"]);
     }
 }
 

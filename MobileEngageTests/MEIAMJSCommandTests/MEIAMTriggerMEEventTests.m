@@ -29,7 +29,26 @@ SPEC_BEGIN(MEIAMTriggerMEEventTests)
                                 [exp fulfill];
                             }];
                 [XCTWaiter waitForExpectations:@[exp] timeout:30];
-                [[returnedResult should] equal:@{@"success": @NO, @"id": @"999", @"error": @"Missing name!"}];
+                [[returnedResult should] equal:@{@"success": @NO, @"id": @"999", @"errors": @[@"Missing 'name' key with type: NSString."]}];
+            });
+
+            it(@"should return false if there name is wrong type", ^{
+                MEIAMTriggerMEEvent *appEvent = [MEIAMTriggerMEEvent new];
+
+                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                __block NSDictionary<NSString *, NSObject *> *returnedResult;
+
+                NSDictionary *nameValue = @{};
+                [appEvent handleMessage:@{@"id": @"999", @"name": nameValue}
+                            resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
+                                returnedResult = result;
+                                [exp fulfill];
+                            }];
+                [XCTWaiter waitForExpectations:@[exp] timeout:30];
+                [[returnedResult should] equal:@{
+                        @"success": @NO,
+                        @"id": @"999",
+                        @"errors": @[[NSString stringWithFormat:@"Type mismatch for key 'name', expected type: NSString, but was: %@.", NSStringFromClass([nameValue class])]]}];
             });
 
             it(@"should call the trackCustomEvent method on the MobileEngage and return with the ME eventId in the resultBlock", ^{

@@ -29,7 +29,7 @@
 		32C6F3AE5A5D9E0D73DC9157 /* MEButtonClickFilterByCampaignIdSpecification.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F7DF0EE16F05A825D00D /* MEButtonClickFilterByCampaignIdSpecification.m */; };
 		32C6F3BE9D9A2E8D54D6BFCD /* MEIAMOpenExternalLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FF13C5E316993EA841D0 /* MEIAMOpenExternalLinkTests.m */; };
 		32C6F3D342001B3C9F6AD5AF /* MERequestRepositoryProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FFC57DD9754C55027A8B /* MERequestRepositoryProxy.m */; };
-		32C6F3FCAB532F7140DE8B9F /* MEIAMCommamndResultUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4A33D32AD63DBCF2C46 /* MEIAMCommamndResultUtils.m */; };
+		32C6F3FCAB532F7140DE8B9F /* MEIAMCommandResultUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4A33D32AD63DBCF2C46 /* MEIAMCommandResultUtils.m */; };
 		32C6F40D32E54F5C608EBB0C /* MEDisplayedIAMFilterNoneSpecification.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F7F0AA7CFD8DBC0A1DC1 /* MEDisplayedIAMFilterNoneSpecification.h */; };
 		32C6F4118B9B8C7D23BDA23C /* MEIAMButtonClickedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F6624E3DEEF55D19A6ED /* MEIAMButtonClickedTests.m */; };
 		32C6F432F6CCE9E8CFDADA43 /* MELogRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F31FBEB1B7374C53C8F8 /* MELogRepository.h */; };
@@ -54,7 +54,7 @@
 		32C6F7B405A85C9E2DCE4CAA /* MEDisplayedIAMMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F1D3BEC7DFFE2FADD1F7 /* MEDisplayedIAMMapper.h */; };
 		32C6F81B504C3170FFA20580 /* InboxIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FDB26B21FB77D0C22429 /* InboxIntegrationTests.m */; };
 		32C6F81E4196B011AFB51586 /* MEConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F22AD8B05632EFE8F29D /* MEConfig.h */; };
-		32C6F83EAE6C35FF7C05D079 /* MEIAMCommamndResultUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F4B23F907ACA4EB5FA48 /* MEIAMCommamndResultUtils.h */; };
+		32C6F83EAE6C35FF7C05D079 /* MEIAMCommandResultUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F4B23F907ACA4EB5FA48 /* MEIAMCommandResultUtils.h */; };
 		32C6F841AFC3F9D8BFD08191 /* NSDictionary+MobileEngageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2B5804BB098F1ADD9B6 /* NSDictionary+MobileEngageTests.m */; };
 		32C6F86BCE2719F7DE61196D /* MEDisplayedIAMRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F3A6CBB6E0E8683EC3C4 /* MEDisplayedIAMRepository.m */; };
 		32C6F870C24C426EDEB306AA /* MEIAMProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FEC1EA29C5F2302CB41B /* MEIAMProtocol.h */; };
@@ -178,11 +178,11 @@
 		37460FD58D2F210F1B6E3A2E /* MEIAMJSCommandProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FD5134834458FE22A792 /* MEIAMJSCommandProtocol.h */; };
 		37460FF61699213058A2187D /* MEIAMResponseHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 374607DB302A1C9B233EE5A1 /* MEIAMResponseHandler.h */; };
 		37460FF89C4DD2695948EEAD /* MERequestModelRepositoryFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 374601960A82BE6A0B71CCB2 /* MERequestModelRepositoryFactoryTests.m */; };
-		4AB10F2CB590713F90D0B52C /* libPods-MobileEngage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DB5A0BBF6C2EED24F0153CF /* libPods-MobileEngage.a */; };
+		3997E98A567FDFBCA929C317 /* libPods-MobileEngage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B1718A78329862B4D6D39512 /* libPods-MobileEngage.a */; };
 		8A4BD7A01EE192FF0056486D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
 		8A9E703C1EEFE134002F2331 /* InboxParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460D9203AFE27B53C80335 /* InboxParserTests.m */; };
 		8AAFD65E1EE196C700ACEB52 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
-		8F1E02BEADC087B09446316E /* libPods-MobileEngageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45329ADC27806EC548F52775 /* libPods-MobileEngageTests.a */; };
+		BE2627A733F5D412C0BAD0D2 /* libPods-MobileEngageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80777DA5D3D9E42FC73B566F /* libPods-MobileEngageTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,7 +216,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0BE812B3DAA8BEF498C79CE3 /* Pods-MobileEngageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.release.xcconfig"; sourceTree = "<group>"; };
 		16ED6B1E1E7FE12600BB9C63 /* MobileEngage Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MobileEngage Host.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16ED6B211E7FE12600BB9C63 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		16ED6B231E7FE12600BB9C63 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -227,7 +226,7 @@
 		16ED6B2C1E7FE12600BB9C63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		16ED6B2F1E7FE12600BB9C63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		16ED6B311E7FE12600BB9C63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1838ECA8E98E61B0F55218F3 /* Pods-MobileEngageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.debug.xcconfig"; sourceTree = "<group>"; };
+		1D2DE82890F6BAB2EBC5629B /* Pods-MobileEngageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		32C6F00FFF707C5A5F62FDED /* MEIAMRequestPushPermission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMRequestPushPermission.m; sourceTree = "<group>"; };
 		32C6F026E9C25D64A1EF4A30 /* MEIAMTriggerMEEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMTriggerMEEventTests.m; sourceTree = "<group>"; };
 		32C6F03FF5308CA45877594A /* UNNotificationAttachment+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UNNotificationAttachment+Private.h"; sourceTree = "<group>"; };
@@ -272,8 +271,8 @@
 		32C6F48B471B160D168FF06E /* InboxTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxTests.m; sourceTree = "<group>"; };
 		32C6F4930DE803436E2B1CDE /* MEIAMDidAppear.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMDidAppear.m; sourceTree = "<group>"; };
 		32C6F49D913F9F20EDD5331E /* MobileEngageInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngageInternal.m; sourceTree = "<group>"; };
-		32C6F4A33D32AD63DBCF2C46 /* MEIAMCommamndResultUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMCommamndResultUtils.m; sourceTree = "<group>"; };
-		32C6F4B23F907ACA4EB5FA48 /* MEIAMCommamndResultUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMCommamndResultUtils.h; sourceTree = "<group>"; };
+		32C6F4A33D32AD63DBCF2C46 /* MEIAMCommandResultUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMCommandResultUtils.m; sourceTree = "<group>"; };
+		32C6F4B23F907ACA4EB5FA48 /* MEIAMCommandResultUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMCommandResultUtils.h; sourceTree = "<group>"; };
 		32C6F4ECB33867A9A7354FA1 /* MEInApp+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEInApp+Private.h"; sourceTree = "<group>"; };
 		32C6F521956A81704A001885 /* MENotificationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MENotificationService.h; sourceTree = "<group>"; };
 		32C6F595ECA8ADEB32C2A088 /* MERequestContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestContext.m; sourceTree = "<group>"; };
@@ -418,11 +417,12 @@
 		37460EA3311E9482B6DB9C81 /* MEInAppMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInAppMessage.m; sourceTree = "<group>"; };
 		37460EBC71A98B939E0E6817 /* MEIdResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIdResponseHandler.h; sourceTree = "<group>"; };
 		37460F6E627F308A7B6FCAB6 /* FakeStatusDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeStatusDelegate.m; sourceTree = "<group>"; };
-		45329ADC27806EC548F52775 /* libPods-MobileEngageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7DB5A0BBF6C2EED24F0153CF /* libPods-MobileEngage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		457F27067A0CDBBB496B5250 /* Pods-MobileEngage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.debug.xcconfig"; sourceTree = "<group>"; };
+		80777DA5D3D9E42FC73B566F /* libPods-MobileEngageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		A2949E93D338E6B3E727FA94 /* Pods-MobileEngage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.release.xcconfig"; sourceTree = "<group>"; };
-		DC6DC0DB8CEE1958B06E2AD5 /* Pods-MobileEngage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.debug.xcconfig"; sourceTree = "<group>"; };
+		990F5997C34CCD652800AB1F /* Pods-MobileEngage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.release.xcconfig"; sourceTree = "<group>"; };
+		B1718A78329862B4D6D39512 /* libPods-MobileEngage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3E0601A883E811850DEF34B /* Pods-MobileEngageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -439,7 +439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AAFD65E1EE196C700ACEB52 /* libsqlite3.tbd in Frameworks */,
-				4AB10F2CB590713F90D0B52C /* libPods-MobileEngage.a in Frameworks */,
+				3997E98A567FDFBCA929C317 /* libPods-MobileEngage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +449,7 @@
 			files = (
 				167609D01EEAD8480029B2E6 /* libsqlite3.tbd in Frameworks */,
 				32C6FE55F469AAF41FE77725 /* MobileEngage.framework in Frameworks */,
-				8F1E02BEADC087B09446316E /* libPods-MobileEngageTests.a in Frameworks */,
+				BE2627A733F5D412C0BAD0D2 /* libPods-MobileEngageTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,8 +484,8 @@
 			isa = PBXGroup;
 			children = (
 				8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */,
-				7DB5A0BBF6C2EED24F0153CF /* libPods-MobileEngage.a */,
-				45329ADC27806EC548F52775 /* libPods-MobileEngageTests.a */,
+				B1718A78329862B4D6D39512 /* libPods-MobileEngage.a */,
+				80777DA5D3D9E42FC73B566F /* libPods-MobileEngageTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -515,8 +515,8 @@
 				32C6FB41E419305BED20F489 /* MEIAMTriggerAppEvent.m */,
 				32C6F3AF5B48C9665150410F /* MEIAMButtonClicked.h */,
 				32C6FFEF2BED88E65A98E1CF /* MEIAMButtonClicked.m */,
-				32C6F4A33D32AD63DBCF2C46 /* MEIAMCommamndResultUtils.m */,
-				32C6F4B23F907ACA4EB5FA48 /* MEIAMCommamndResultUtils.h */,
+				32C6F4A33D32AD63DBCF2C46 /* MEIAMCommandResultUtils.m */,
+				32C6F4B23F907ACA4EB5FA48 /* MEIAMCommandResultUtils.h */,
 				32C6F26A1AE81A9EF86ACF2D /* MEIAMTriggerMEEvent.m */,
 				32C6F84CD0DF18BD17C99EEE /* MEIAMTriggerMEEvent.h */,
 			);
@@ -615,7 +615,7 @@
 				32C6F979B34ACD8FE94CBAD3 /* MobileEngageSDK.podspec */,
 				1751A715D0CE68D830F78796 /* Frameworks */,
 				374605226CE4A4526E63994C /* MobileEngageRichExtension.podspec */,
-				F5E707719B5B3C15E7318ABC /* Pods */,
+				BA8A9A2AE945289A9AB6D551 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -890,13 +890,13 @@
 			path = Flipper;
 			sourceTree = "<group>";
 		};
-		F5E707719B5B3C15E7318ABC /* Pods */ = {
+		BA8A9A2AE945289A9AB6D551 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				DC6DC0DB8CEE1958B06E2AD5 /* Pods-MobileEngage.debug.xcconfig */,
-				A2949E93D338E6B3E727FA94 /* Pods-MobileEngage.release.xcconfig */,
-				1838ECA8E98E61B0F55218F3 /* Pods-MobileEngageTests.debug.xcconfig */,
-				0BE812B3DAA8BEF498C79CE3 /* Pods-MobileEngageTests.release.xcconfig */,
+				457F27067A0CDBBB496B5250 /* Pods-MobileEngage.debug.xcconfig */,
+				990F5997C34CCD652800AB1F /* Pods-MobileEngage.release.xcconfig */,
+				1D2DE82890F6BAB2EBC5629B /* Pods-MobileEngageTests.debug.xcconfig */,
+				D3E0601A883E811850DEF34B /* Pods-MobileEngageTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -958,7 +958,7 @@
 				37460ADCC827746D2810FE5E /* MERequestTools.h in Headers */,
 				37460FF61699213058A2187D /* MEIAMResponseHandler.h in Headers */,
 				37460D84CBC8150F27E2EA4B /* MEIAMCleanupResponseHandler.h in Headers */,
-				32C6F83EAE6C35FF7C05D079 /* MEIAMCommamndResultUtils.h in Headers */,
+				32C6F83EAE6C35FF7C05D079 /* MEIAMCommandResultUtils.h in Headers */,
 				374607D89E8F3F987002E856 /* MEDefaultHeaders.h in Headers */,
 				37460E02219D49D98AA07133 /* MENotificationCenterManager.h in Headers */,
 				3746038D76CEA08597C0FDAE /* MEInAppTrackingProtocol.h in Headers */,
@@ -996,12 +996,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 32C6F9D7A7E9B0205DB5522F /* Build configuration list for PBXNativeTarget "MobileEngage" */;
 			buildPhases = (
-				E33AC9C44374813ABFEDEF4D /* [CP] Check Pods Manifest.lock */,
+				EFF347615E3D36D365C001A6 /* [CP] Check Pods Manifest.lock */,
 				32C6F9DFBC3FBB7D13386EEB /* Sources */,
 				32C6F32B68AAAF0659C14E37 /* Frameworks */,
 				32C6F195EF51CA8006ACC49B /* Headers */,
 				32C6FD576C0FE675D0D1B0B5 /* Resources */,
-				E201F53FB8E37AEAA1EA0D04 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1016,13 +1015,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 32C6F1102A8A4F8E0A6DFCDC /* Build configuration list for PBXNativeTarget "MobileEngageTests" */;
 			buildPhases = (
-				A4996082FC25EBE38DAC5BCC /* [CP] Check Pods Manifest.lock */,
+				433F964D1CDBCA0BFB53FC0C /* [CP] Check Pods Manifest.lock */,
 				32C6FFEB1BBC1FD09F22D2C7 /* Sources */,
 				32C6FD7C120D99840C1701B9 /* Frameworks */,
 				32C6FB56092210A8184BD7F6 /* Resources */,
 				16ED6B381E7FE29F00BB9C63 /* CopyFiles */,
-				C812BD7D1E076B4F327BFE7B /* [CP] Embed Pods Frameworks */,
-				A91FADFF3269FD8E0A0BD829 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1108,7 +1105,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A4996082FC25EBE38DAC5BCC /* [CP] Check Pods Manifest.lock */ = {
+		433F964D1CDBCA0BFB53FC0C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1126,52 +1123,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A91FADFF3269FD8E0A0BD829 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C812BD7D1E076B4F327BFE7B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E201F53FB8E37AEAA1EA0D04 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E33AC9C44374813ABFEDEF4D /* [CP] Check Pods Manifest.lock */ = {
+		EFF347615E3D36D365C001A6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1246,7 +1198,7 @@
 				37460C3AA467BA44AB325DE4 /* MERequestTools.m in Sources */,
 				374602BA2ECBDD6DD87300C2 /* MEIAMResponseHandler.m in Sources */,
 				37460C241F04C795E22EC611 /* MEIAMCleanupResponseHandler.m in Sources */,
-				32C6F3FCAB532F7140DE8B9F /* MEIAMCommamndResultUtils.m in Sources */,
+				32C6F3FCAB532F7140DE8B9F /* MEIAMCommandResultUtils.m in Sources */,
 				37460E5009C7A7B6EC690D77 /* MEDefaultHeaders.m in Sources */,
 				37460F7AB2AB78DB92837FF9 /* MENotificationCenterManager.m in Sources */,
 				32C6FAEFAE0F5C92349FA513 /* MERequestContext.m in Sources */,
@@ -1495,7 +1447,7 @@
 		};
 		32C6F532A52B3BD4432BE6ED /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DC6DC0DB8CEE1958B06E2AD5 /* Pods-MobileEngage.debug.xcconfig */;
+			baseConfigurationReference = 457F27067A0CDBBB496B5250 /* Pods-MobileEngage.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1518,7 +1470,7 @@
 		};
 		32C6FBD3DD57E82510C44A93 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A2949E93D338E6B3E727FA94 /* Pods-MobileEngage.release.xcconfig */;
+			baseConfigurationReference = 990F5997C34CCD652800AB1F /* Pods-MobileEngage.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1541,7 +1493,7 @@
 		};
 		32C6FC4847B3141A577C271E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1838ECA8E98E61B0F55218F3 /* Pods-MobileEngageTests.debug.xcconfig */;
+			baseConfigurationReference = 1D2DE82890F6BAB2EBC5629B /* Pods-MobileEngageTests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 7ZFXXDJH82;
 				INFOPLIST_FILE = MobileEngageTests/Info.plist;
@@ -1556,7 +1508,7 @@
 		};
 		32C6FCD3CB97CD1EFADDE329 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0BE812B3DAA8BEF498C79CE3 /* Pods-MobileEngageTests.release.xcconfig */;
+			baseConfigurationReference = D3E0601A883E811850DEF34B /* Pods-MobileEngageTests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 7ZFXXDJH82;
 				INFOPLIST_FILE = MobileEngageTests/Info.plist;
