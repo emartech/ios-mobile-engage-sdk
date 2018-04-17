@@ -22,7 +22,7 @@
     NSString *eventId = message[@"id"];
 
     NSArray<NSString *> *errors = [message validate:^(EMSDictionaryValidator *validate) {
-        [validate keyExists:kExternalLink withType:[NSString class]];
+        [validate valueExistsForKey:kExternalLink withType:[NSString class]];
     }];
 
     if ([errors count] > 0) {

@@ -29,7 +29,7 @@
 
     NSString *eventId = message[@"id"];
     NSArray<NSDictionary *> *errors = [message validate:^(EMSDictionaryValidator *validate) {
-        [validate keyExists:@"buttonId" withType:[NSString class]];
+        [validate valueExistsForKey:@"buttonId" withType:[NSString class]];
     }];
 
     if ([errors count] > 0) {
