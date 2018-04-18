@@ -42,11 +42,11 @@
     _completionHandler = completionHandler;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.webView) {
-            weakSelf.webView = [self createWebView];
-            [self addFullscreenView:self.webView];
+        if (!weakSelf.webView) {
+            weakSelf.webView = [weakSelf createWebView];
+            [weakSelf addFullscreenView:weakSelf.webView];
         }
-        [self.webView loadHTMLString:message
+        [weakSelf.webView loadHTMLString:message
                              baseURL:nil];
     });
 }
