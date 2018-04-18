@@ -17,7 +17,7 @@
 @property(nonatomic, strong, nullable) NSDictionary *lastAppLoginPayload;
 @property(nonatomic, strong, nullable) NSString *meId;
 @property(nonatomic, strong, nullable) NSString *meIdSignature;
-@property(nonatomic, strong, nullable) MEAppLoginParameters *lastAppLoginParameters;
+@property(nonatomic, strong, nullable) MEAppLoginParameters *appLoginParameters;
 @property(nonatomic, strong, nullable) MEConfig *config;
 @property(nonatomic, strong, nullable) EMSTimestampProvider *timestampProvider;
 

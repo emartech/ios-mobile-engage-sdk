@@ -14,30 +14,13 @@
 
 @implementation MERequestFactory
 
-+ (EMSRequestModel *)createLoginRequestWithPushToken:(NSData *)pushToken
-                                      requestContext:(MERequestContext *)requestContext {
-    EMSRequestModel *requestModel = [self requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login"
-                                                       method:HTTPMethodPOST
-                                       additionalPayloadBlock:^(NSMutableDictionary *payload) {
-                                           payload[@"platform"] = @"ios";
-                                           payload[@"language"] = [EMSDeviceInfo languageCode];
-                                           payload[@"timezone"] = [EMSDeviceInfo timeZone];
-                                           payload[@"device_model"] = [EMSDeviceInfo deviceModel];
-                                           payload[@"os_version"] = [EMSDeviceInfo osVersion];
-                                           payload[@"ems_sdk"] = MOBILEENGAGE_SDK_VERSION;
++ (EMSRequestModel *)createLoginOrLastMobileActivityRequestWithPushToken:(NSData *)pushToken
+                                                          requestContext:(MERequestContext *)requestContext {
+    EMSRequestModel *requestModel = [self createAppLoginRequestWithPushToken:pushToken
+                                                              requestContext:requestContext];
 
-                                           NSString *appVersion = [EMSDeviceInfo applicationVersion];
-                                           if (appVersion) {
-                                               payload[@"application_version"] = appVersion;
-                                           }
-                                           if (pushToken) {
-                                               payload[@"push_token"] = [pushToken deviceTokenString];
-                                           } else {
-                                               payload[@"push_token"] = @NO;
-                                           }
-                                       } requestContext:requestContext];
-
-    if ([requestContext.lastAppLoginPayload isEqual:requestModel.payload]) {
+    if ([self shouldSendLastMobileActivityWithRequestContext:requestContext
+                                      currentAppLoginPayload:requestModel.payload]) {
         requestModel = [self requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/ems_lastMobileActivity"
                                           method:HTTPMethodPOST
                           additionalPayloadBlock:nil requestContext:requestContext];
@@ -45,6 +28,35 @@
         requestContext.lastAppLoginPayload = requestModel.payload;
     }
     return requestModel;
+}
+
++ (BOOL)shouldSendLastMobileActivityWithRequestContext:(MERequestContext *)requestContext currentAppLoginPayload:(NSDictionary *)currentAppLoginPayload {
+    return (![MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload]) ||
+            ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload] && requestContext.meId);
+}
+
++ (EMSRequestModel *)createAppLoginRequestWithPushToken:(NSData *)pushToken requestContext:(MERequestContext *)requestContext {
+    return [self requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login"
+                              method:HTTPMethodPOST
+              additionalPayloadBlock:^(NSMutableDictionary *payload) {
+                  payload[@"platform"] = @"ios";
+                  payload[@"language"] = [EMSDeviceInfo languageCode];
+                  payload[@"timezone"] = [EMSDeviceInfo timeZone];
+                  payload[@"device_model"] = [EMSDeviceInfo deviceModel];
+                  payload[@"os_version"] = [EMSDeviceInfo osVersion];
+                  payload[@"ems_sdk"] = MOBILEENGAGE_SDK_VERSION;
+
+                  NSString *appVersion = [EMSDeviceInfo applicationVersion];
+                  if (appVersion) {
+                      payload[@"application_version"] = appVersion;
+                  }
+                  if (pushToken) {
+                      payload[@"push_token"] = [pushToken deviceTokenString];
+                  } else {
+                      payload[@"push_token"] = @NO;
+                  }
+              }
+                      requestContext:requestContext];
 }
 
 + (EMSRequestModel *)createAppLogoutRequestWithRequestContext:(MERequestContext *)requestContext {
@@ -64,6 +76,7 @@
                               payload[@"source"] = @"inbox";
                           } requestContext:requestContext];
 }
+
 + (EMSRequestModel *)createTrackMessageOpenRequestWithMessageId:(NSString *)messageId
 
                                                  requestContext:(MERequestContext *)requestContext {
@@ -160,9 +173,9 @@
                 @"hardware_id": [EMSDeviceInfo hardwareId]
         } mutableCopy];
 
-        if (requestContext.lastAppLoginParameters.contactFieldId && requestContext.lastAppLoginParameters.contactFieldValue) {
-            payload[@"contact_field_id"] = requestContext.lastAppLoginParameters.contactFieldId;
-            payload[@"contact_field_value"] = requestContext.lastAppLoginParameters.contactFieldValue;
+        if (requestContext.appLoginParameters.contactFieldId && requestContext.appLoginParameters.contactFieldValue) {
+            payload[@"contact_field_id"] = requestContext.appLoginParameters.contactFieldId;
+            payload[@"contact_field_value"] = requestContext.appLoginParameters.contactFieldValue;
         }
 
         if (payloadBlock) {

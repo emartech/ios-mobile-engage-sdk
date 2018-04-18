@@ -3,7 +3,6 @@
 //
 
 #import "MobileEngageInternal.h"
-#import <CoreSDK/EMSRequestModelBuilder.h>
 #import <CoreSDK/EMSResponseModel.h>
 #import "MobileEngageStatusDelegate.h"
 #import "MEConfig.h"
@@ -158,9 +157,9 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
 - (void)setPushToken:(NSData *)pushToken {
     _pushToken = pushToken;
 
-    if (self.requestContext.lastAppLoginParameters != nil) {
-        [self appLoginWithContactFieldId:self.requestContext.lastAppLoginParameters.contactFieldId
-                       contactFieldValue:self.requestContext.lastAppLoginParameters.contactFieldValue];
+    if (self.requestContext.appLoginParameters != nil) {
+        [self appLoginWithContactFieldId:self.requestContext.appLoginParameters.contactFieldId
+                       contactFieldValue:self.requestContext.appLoginParameters.contactFieldValue];
     }
 }
 
@@ -171,11 +170,11 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
 
 - (NSString *)appLoginWithContactFieldId:(NSNumber *)contactFieldId
                        contactFieldValue:(NSString *)contactFieldValue {
-    self.requestContext.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:contactFieldId
+    self.requestContext.appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:contactFieldId
                                                                                   contactFieldValue:contactFieldValue];
 
-    EMSRequestModel *requestModel = [MERequestFactory createLoginRequestWithPushToken:self.pushToken
-                                                                       requestContext:self.requestContext];
+    EMSRequestModel *requestModel = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:self.pushToken
+                                                                                           requestContext:self.requestContext];
     [self.requestManager submit:requestModel];
     return requestModel.requestId;
 }

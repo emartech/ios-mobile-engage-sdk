@@ -21,6 +21,7 @@
 #import "MENotificationCenterManager.h"
 #import "MEInApp.h"
 #import "MERequestModelRepositoryFactory.h"
+#import "MEExperimental+Test.h"
 #import <CoreSDK/NSDate+EMSCore.h>
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
@@ -37,8 +38,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
         registerMatchers(@"EMS");
 
         beforeEach(^{
-            [MEExperimental stub:@selector(isFeatureEnabled:)
-                       andReturn:theValue(YES)];
+            [MEExperimental enableFeature:INAPP_MESSAGING];
             _mobileEngage = [MobileEngageInternal new];
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationCode:kAppId
@@ -189,7 +189,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                       withCount:1
                                       arguments:nil, nil, nil];
 
-                _mobileEngage.requestContext.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:nil
+                _mobileEngage.requestContext.appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:nil
                                                                                                        contactFieldValue:nil];
                 [_mobileEngage setPushToken:deviceToken];
             });
@@ -200,7 +200,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                       withCount:1
                                       arguments:@12, @"23", nil];
 
-                _mobileEngage.requestContext.lastAppLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@12
+                _mobileEngage.requestContext.appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@12
                                                                                                        contactFieldValue:@"23"];
                 [_mobileEngage setPushToken:deviceToken];
             });
@@ -208,17 +208,17 @@ SPEC_BEGIN(MobileEngageInternalTests)
             it(@"appLogin should save last anonymous AppLogin parameters", ^{
                 [[requestManagerMock() should] receive:@selector(submit:)];
                 [_mobileEngage appLogin];
-                [[_mobileEngage.requestContext.lastAppLoginParameters shouldNot] beNil];
-                [[_mobileEngage.requestContext.lastAppLoginParameters.contactFieldId should] beNil];
-                [[_mobileEngage.requestContext.lastAppLoginParameters.contactFieldValue should] beNil];
+                [[_mobileEngage.requestContext.appLoginParameters shouldNot] beNil];
+                [[_mobileEngage.requestContext.appLoginParameters.contactFieldId should] beNil];
+                [[_mobileEngage.requestContext.appLoginParameters.contactFieldValue should] beNil];
             });
 
             it(@"appLogin should save last AppLogin parameters", ^{
                 [[requestManagerMock() should] receive:@selector(submit:)];
                 [_mobileEngage appLoginWithContactFieldId:@42 contactFieldValue:@"99"];
-                [[_mobileEngage.requestContext.lastAppLoginParameters shouldNot] beNil];
-                [[_mobileEngage.requestContext.lastAppLoginParameters.contactFieldId should] equal:@42];
-                [[_mobileEngage.requestContext.lastAppLoginParameters.contactFieldValue should] equal:@"99"];
+                [[_mobileEngage.requestContext.appLoginParameters shouldNot] beNil];
+                [[_mobileEngage.requestContext.appLoginParameters.contactFieldId should] equal:@42];
+                [[_mobileEngage.requestContext.appLoginParameters.contactFieldValue should] equal:@"99"];
             });
 
             it(@"should not call appLogin with setPushToken when there was no previous appLogin call", ^{
@@ -373,6 +373,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [_mobileEngage setupWithRequestManager:requestManager
                                                 config:config
                                          launchOptions:nil];
+                [MEExperimental reset];
 
                 EMSRequestModel *firstModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
                     @"application_id": kAppId,
@@ -397,7 +398,6 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"
                 });
 
-
                 [_mobileEngage appLoginWithContactFieldId:@0
                                         contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
                 [_mobileEngage appLoginWithContactFieldId:@0
@@ -419,6 +419,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [_mobileEngage setupWithRequestManager:requestManager
                                                 config:config
                                          launchOptions:nil];
+                [MEExperimental reset];
 
                 EMSRequestModel *firstModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
                     @"application_id": kAppId,
@@ -473,6 +474,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [_mobileEngage setupWithRequestManager:requestManager
                                                 config:config
                                          launchOptions:nil];
+                [MEExperimental reset];
 
                 EMSRequestModel *firstModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
                     @"application_id": kAppId,
@@ -527,6 +529,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [_mobileEngage setupWithRequestManager:requestManager
                                                 config:config
                                          launchOptions:nil];
+                [MEExperimental reset];
 
                 EMSRequestModel *firstModel = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login", @{
                     @"application_id": kAppId,
@@ -620,22 +623,22 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
                                                             atIndex:0];
 
-                [_mobileEngage.requestContext setLastAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
-                                                                                                         contactFieldValue:@"contactFieldValue"]];
+                [_mobileEngage.requestContext setAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
+                                                                                                     contactFieldValue:@"contactFieldValue"]];
                 [_mobileEngage appLogout];
 
                 EMSRequestModel *actualModel = spy.argument;
                 [[model should] beSimilarWithRequest:actualModel];
             });
 
-            it(@"should clear lastAppLoginParameters", ^{
+            it(@"should clear appLoginParameters", ^{
                 id requestManager = requestManagerMock();
                 [[requestManager should] receive:@selector(submit:)];
 
-                [_mobileEngage.requestContext setLastAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
-                                                                                                         contactFieldValue:@"contactFieldValue"]];
+                [_mobileEngage.requestContext setAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
+                                                                                                     contactFieldValue:@"contactFieldValue"]];
                 [_mobileEngage appLogout];
-                [[_mobileEngage.requestContext.lastAppLoginParameters should] beNil];
+                [[_mobileEngage.requestContext.appLoginParameters should] beNil];
             });
 
             it(@"should clear lastAppLoginPayload", ^{
@@ -695,7 +698,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
                                                                                             contactFieldValue:@"contactFieldValue"];
 
-                [_mobileEngage.requestContext stub:@selector(lastAppLoginParameters)
+                [_mobileEngage.requestContext stub:@selector(appLoginParameters)
                                          andReturn:appLoginParameters];
 
                 EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
@@ -757,7 +760,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
                                                                                             contactFieldValue:@"contactFieldValue"];
 
-                [_mobileEngage.requestContext stub:@selector(lastAppLoginParameters)
+                [_mobileEngage.requestContext stub:@selector(appLoginParameters)
                                          andReturn:appLoginParameters];
 
                 EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
@@ -955,8 +958,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
 
             it(@"should submit a corresponding RequestModel, when eventAttributes are set and there is no saved contactFieldId and contactFieldValue", ^{
-                [MEExperimental stub:@selector(isFeatureEnabled:)
-                           andReturn:theValue(NO)];
+                [MEExperimental reset];
 
                 id requestManager = requestManagerMock();
 
@@ -983,15 +985,14 @@ SPEC_BEGIN(MobileEngageInternalTests)
             });
 
             it(@"should submit a corresponding RequestModel, when eventAttributes are set and there are saved contactFieldId and contactFieldValue", ^{
-                [MEExperimental stub:@selector(isFeatureEnabled:)
-                           andReturn:theValue(NO)];
+                [MEExperimental reset];
 
                 id requestManager = requestManagerMock();
 
                 MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
                                                                                             contactFieldValue:@"contactFieldValue"];
 
-                [_mobileEngage.requestContext stub:@selector(lastAppLoginParameters)
+                [_mobileEngage.requestContext stub:@selector(appLoginParameters)
                                          andReturn:appLoginParameters];
 
                 NSString *eventName = @"testEventName";
@@ -1020,8 +1021,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
 
             it(@"should submit a corresponding RequestModel, when eventAttributes are missing and there is no saved contactFieldId and contactFieldValue", ^{
-                [MEExperimental stub:@selector(isFeatureEnabled:)
-                           andReturn:theValue(NO)];
+                [MEExperimental reset];
 
                 id requestManager = requestManagerMock();
 
@@ -1047,15 +1047,14 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
 
             it(@"should submit a corresponding RequestModel, when eventAttributes are missing and there are saved contactFieldId and contactFieldValue", ^{
-                [MEExperimental stub:@selector(isFeatureEnabled:)
-                           andReturn:theValue(NO)];
+                [MEExperimental reset];
 
                 id requestManager = requestManagerMock();
 
                 MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
                                                                                             contactFieldValue:@"contactFieldValue"];
 
-                [_mobileEngage.requestContext stub:@selector(lastAppLoginParameters)
+                [_mobileEngage.requestContext stub:@selector(appLoginParameters)
                                          andReturn:appLoginParameters];
 
                 NSString *eventName = @"testEventName";

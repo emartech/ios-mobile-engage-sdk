@@ -4,6 +4,7 @@
 #import "MEConfigBuilder.h"
 #import "MEConfig.h"
 #import "MEExperimental.h"
+#import "MEExperimental+Test.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
@@ -16,8 +17,7 @@ SPEC_BEGIN(IntegrationTests)
     };
 
     beforeEach(^{
-        [MEExperimental stub:@selector(isFeatureEnabled:)
-                   andReturn:theValue(YES)];
+        [MEExperimental enableFeature:INAPP_MESSAGING];
         [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
                                                    error:nil];
     });
@@ -122,8 +122,7 @@ SPEC_BEGIN(IntegrationTests)
         });
 
         it(@"should return with eventId, and finish with success for trackCustomEvent without attributes", ^{
-            [MEExperimental stub:@selector(isFeatureEnabled:)
-                       andReturn:theValue(NO)];
+            [MEExperimental reset];
 
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationCode:@"14C19-A121F"
@@ -143,8 +142,7 @@ SPEC_BEGIN(IntegrationTests)
         });
 
         it(@"should return with eventId, and finish with success for trackCustomEvent with attributes", ^{
-            [MEExperimental stub:@selector(isFeatureEnabled:)
-                       andReturn:theValue(NO)];
+            [MEExperimental reset];
 
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationCode:@"14C19-A121F"

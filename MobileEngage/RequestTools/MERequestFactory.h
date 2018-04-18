@@ -10,8 +10,8 @@
 
 @interface MERequestFactory : NSObject
 
-+ (EMSRequestModel *)createLoginRequestWithPushToken:(NSData *)pushToken
-                                      requestContext:(MERequestContext *)requestContext;
++ (EMSRequestModel *)createLoginOrLastMobileActivityRequestWithPushToken:(NSData *)pushToken
+                                                          requestContext:(MERequestContext *)requestContext;
 
 + (EMSRequestModel *)createAppLogoutRequestWithRequestContext:(MERequestContext *)requestContext;
 
