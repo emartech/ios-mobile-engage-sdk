@@ -22,12 +22,6 @@
 
 @property(nonatomic, strong) NSMutableArray *notifications;
 
-- (NSDictionary<NSString *, NSString *> *)createNotificationsFetchingHeaders;
-
-- (MENotificationInboxStatus *)mergedStatusWithStatus:(MENotificationInboxStatus *)status;
-
-- (void)invalidateCachedNotifications:(MENotificationInboxStatus *)status;
-
 @end
 
 @implementation MEInbox
@@ -56,7 +50,7 @@
 - (void)fetchNotificationsWithResultBlock:(MEInboxResultBlock)resultBlock
                                errorBlock:(MEInboxResultErrorBlock)errorBlock {
     NSParameterAssert(resultBlock);
-    if (self.appLoginParameters && self.appLoginParameters.contactFieldId && self.appLoginParameters.contactFieldValue) {
+    if ([self hasLoginParameters]) {
         EMSRequestModel *request = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
             NSDictionary *headers = [self createNotificationsFetchingHeaders];
             [[[builder setMethod:HTTPMethodGET] setHeaders:headers] setUrl:@"https://me-inbox.eservice.emarsys.net/api/notifications"];
@@ -72,19 +66,10 @@
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
-                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                              if (errorBlock) {
-                                                  errorBlock(error);
-                                              }
-                                          });
+                                          [self respondWithError:errorBlock error:error];
                                       }];
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (errorBlock) {
-                errorBlock([NSError errorWithCode:42
-                             localizedDescription:@"Login parameters are not available."]);
-            }
-        });
+        [self handleNoLoginParameters:errorBlock];
     }
 }
 
@@ -94,7 +79,7 @@
 
 - (void)resetBadgeCountWithSuccessBlock:(MEInboxSuccessBlock)successBlock
                              errorBlock:(MEInboxResultErrorBlock)errorBlock {
-    if (self.appLoginParameters && self.appLoginParameters.contactFieldId && self.appLoginParameters.contactFieldValue) {
+    if ([self hasLoginParameters]) {
         EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
             [builder setUrl:@"https://me-inbox.eservice.emarsys.net/api/reset-badge-count"];
             [builder setMethod:HTTPMethodPOST];
@@ -109,22 +94,12 @@
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
-                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                              if (errorBlock) {
-                                                  errorBlock(error);
-                                              }
-                                          });
+                                          [self respondWithError:errorBlock error:error];
                                       }];
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (errorBlock) {
-                errorBlock([NSError errorWithCode:42
-                             localizedDescription:@"Login parameters are not available."]);
-            }
-        });
+        [self handleNoLoginParameters:errorBlock];
     }
 }
-
 
 - (void)addNotification:(MENotification *)notification {
     [self.notifications insertObject:notification
@@ -134,6 +109,7 @@
 - (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage {
     return [MobileEngage trackMessageOpenWithInboxMessage:inboxMessage];
 }
+
 
 #pragma mark - Private methods
 
@@ -172,6 +148,27 @@
             }
         }
     }
+}
+
+- (BOOL)hasLoginParameters {
+    return self.appLoginParameters && self.appLoginParameters.contactFieldId && self.appLoginParameters.contactFieldValue;
+}
+
+- (void)respondWithError:(MEInboxResultErrorBlock)errorBlock error:(NSError *)error {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (errorBlock) {
+            errorBlock(error);
+        }
+    });
+}
+
+- (void)handleNoLoginParameters:(MEInboxResultErrorBlock)errorBlock {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (errorBlock) {
+            errorBlock([NSError errorWithCode:42
+                         localizedDescription:@"Login parameters are not available."]);
+        }
+    });
 }
 
 @end
