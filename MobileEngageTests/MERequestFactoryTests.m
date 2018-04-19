@@ -44,7 +44,8 @@ SPEC_BEGIN(MERequestFactoryTests)
             __block NSString *applicationCode;
             __block NSString *password;
             __block NSMutableDictionary *apploginPayload;
-
+            __block NSNumber *contactFieldId;
+            __block NSString *contactFieldValue;
 
 
             beforeEach(^{
@@ -54,6 +55,8 @@ SPEC_BEGIN(MERequestFactoryTests)
                 }];
                 applicationCode = @"14C19-A121F";
                 password = @"PaNkfOD90AVpYimMBuZopCpm8OWCrREu";
+                contactFieldId = @3;
+                contactFieldValue = @"test@test.com";
 
                 apploginPayload = [NSMutableDictionary new];
                 apploginPayload[@"platform"] = @"ios";
@@ -64,6 +67,8 @@ SPEC_BEGIN(MERequestFactoryTests)
                 apploginPayload[@"ems_sdk"] = MOBILEENGAGE_SDK_VERSION;
                 apploginPayload[@"application_id"] = applicationCode;
                 apploginPayload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
+                apploginPayload[@"contact_field_id"] = contactFieldId;
+                apploginPayload[@"contact_field_value"] = contactFieldValue;
 
                 NSString *appVersion = [EMSDeviceInfo applicationVersion];
                 if (appVersion) {
@@ -82,6 +87,7 @@ SPEC_BEGIN(MERequestFactoryTests)
                     MERequestContext *requestContext = [MERequestContext new];
                     requestContext.config = config;
                     requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:@3 contactFieldValue:@"test@test.com"];
+                    requestContext.meId = nil;
 
 
                     EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
@@ -91,12 +97,9 @@ SPEC_BEGIN(MERequestFactoryTests)
                 it(@"should result in lastMobileActivity request if there was previous applogin with same payload", ^{
                     MERequestContext *requestContext = [MERequestContext new];
                     requestContext.config = config;
-                    NSNumber *contactFieldId = @3;
-                    NSString *contactFieldValue = @"test@test.com";
                     requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.meId = nil;
 
-                    apploginPayload[@"contact_field_id"] = contactFieldId;
-                    apploginPayload[@"contact_field_value"] = contactFieldValue;
                     requestContext.lastAppLoginPayload = apploginPayload;
 
                     EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
@@ -106,12 +109,9 @@ SPEC_BEGIN(MERequestFactoryTests)
                 it(@"should result in applogin request if there was previous applogin with different payload", ^{
                     MERequestContext *requestContext = [MERequestContext new];
                     requestContext.config = config;
-                    NSNumber *contactFieldId = @3;
-                    NSString *contactFieldValue = @"test@test.com";
                     requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.meId = nil;
 
-                    apploginPayload[@"contact_field_id"] = contactFieldId;
-                    apploginPayload[@"contact_field_value"] = contactFieldValue;
                     apploginPayload[@"application_version"] = @"changed";
                     requestContext.lastAppLoginPayload = apploginPayload;
 
@@ -131,26 +131,17 @@ SPEC_BEGIN(MERequestFactoryTests)
                 });
 
                 it(@"should result in applogin request if there was previous applogin with same payload and there is no meid", ^{
-                    NSNumber *contactFieldId = @3;
-                    NSString *contactFieldValue = @"test@test.com";
-                    apploginPayload[@"contact_field_id"] = contactFieldId;
-                    apploginPayload[@"contact_field_value"] = contactFieldValue;
-
                     MERequestContext *requestContext = [MERequestContext new];
                     requestContext.config = config;
                     requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
                     requestContext.lastAppLoginPayload = apploginPayload;
+                    requestContext.meId = nil;
 
                     EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
                     [[[request.url absoluteString] should] equal:kAppLoginURL];
                 });
 
                 it(@"should result in lastMobileActivity request if there was previous applogin with same payload and there is an existing meid", ^{
-                    NSNumber *contactFieldId = @3;
-                    NSString *contactFieldValue = @"test@test.com";
-                    apploginPayload[@"contact_field_id"] = contactFieldId;
-                    apploginPayload[@"contact_field_value"] = contactFieldValue;
-
                     MERequestContext *requestContext = [MERequestContext new];
                     requestContext.config = config;
                     requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
@@ -160,6 +151,32 @@ SPEC_BEGIN(MERequestFactoryTests)
 
                     EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
                     [[[request.url absoluteString] should] equal:kLastMobileActivityURL];
+                });
+
+                it(@"should result in applogin request if there was previous applogin with different payload and there is no meid", ^{
+                    MERequestContext *requestContext = [MERequestContext new];
+                    requestContext.config = config;
+                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.meId = nil;
+
+                    apploginPayload[@"application_version"] = @"changed";
+                    requestContext.lastAppLoginPayload = apploginPayload;
+
+                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
+                    [[[request.url absoluteString] should] equal:kAppLoginURL];
+                });
+
+                it(@"should result in applogin request if there was previous applogin with different payload and there is an existing meid", ^{
+                    MERequestContext *requestContext = [MERequestContext new];
+                    requestContext.config = config;
+                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.meId = @"something";
+
+                    apploginPayload[@"application_version"] = @"changed";
+                    requestContext.lastAppLoginPayload = apploginPayload;
+
+                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
+                    [[[request.url absoluteString] should] equal:kAppLoginURL];
                 });
             });
 
