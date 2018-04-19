@@ -36,7 +36,7 @@ function release {
   git tag -a "$VERSION_NUMBER" -m "$VERSION_NUMBER"
 
   git push
-  git push --tags
+  git push $VERSION_NUMBER
 
   pod spec lint --allow-warnings
   pod trunk push MobileEngageSDK.podspec --allow-warnings
