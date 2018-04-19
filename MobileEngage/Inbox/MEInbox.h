@@ -6,7 +6,6 @@
 #import "MENotificationInboxStatus.h"
 #import "MEInboxProtocol.h"
 
-@class MEConfig;
 @class MEAppLoginParameters;
 
 @interface MEInbox : NSObject <MEInboxProtocol>
