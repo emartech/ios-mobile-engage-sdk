@@ -181,8 +181,8 @@ SPEC_BEGIN(MobileEngageTests)
                 [MobileEngage appLoginWithContactFieldId:@5
                                        contactFieldValue:@"three"];
 
-                [[MobileEngage.inbox.appLoginParameters.contactFieldId should] equal:@5];
-                [[MobileEngage.inbox.appLoginParameters.contactFieldValue should] equal:@"three"];
+                [[((MEInbox*)MobileEngage.inbox).appLoginParameters.contactFieldId should] equal:@5];
+                [[((MEInbox*)MobileEngage.inbox).appLoginParameters.contactFieldValue should] equal:@"three"];
             });
         });
 

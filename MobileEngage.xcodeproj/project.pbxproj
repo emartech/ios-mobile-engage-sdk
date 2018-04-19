@@ -183,6 +183,7 @@
 		8A9E703C1EEFE134002F2331 /* InboxParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460D9203AFE27B53C80335 /* InboxParserTests.m */; };
 		8AAFD65E1EE196C700ACEB52 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
 		BE2627A733F5D412C0BAD0D2 /* libPods-MobileEngageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80777DA5D3D9E42FC73B566F /* libPods-MobileEngageTests.a */; };
+		E65583D86E7FC18442B142D0 /* MEInboxProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -424,6 +425,7 @@
 		990F5997C34CCD652800AB1F /* Pods-MobileEngage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.release.xcconfig"; sourceTree = "<group>"; };
 		B1718A78329862B4D6D39512 /* libPods-MobileEngage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3E0601A883E811850DEF34B /* Pods-MobileEngageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.release.xcconfig"; sourceTree = "<group>"; };
+		E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -761,6 +763,7 @@
 				37460E12B3DD884B04FE9218 /* MENotificationInboxStatus.h */,
 				3746016139C5A75BC00CF6F2 /* MEInbox.m */,
 				3746037DBB3D2CF1327E9CFF /* MEInbox+Notification.h */,
+				E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */,
 			);
 			path = Inbox;
 			sourceTree = "<group>";
@@ -971,6 +974,7 @@
 				32C6F432F6CCE9E8CFDADA43 /* MELogRepository.h in Headers */,
 				32C6FB970F5D23A6C5EF0B43 /* MELogRepositoryProxy.h in Headers */,
 				32C6FB1545463C18D163CF48 /* MEIAMMetricsLogHandler.h in Headers */,
+				E65583D86E7FC18442B142D0 /* MEInboxProtocol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

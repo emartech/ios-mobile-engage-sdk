@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MobileEngage : NSObject
 
 @property(class, nonatomic, weak, nullable) id <MobileEngageStatusDelegate> statusDelegate;
-@property(class, nonatomic, readonly) MEInbox *inbox;
+@property(class, nonatomic, readonly) id<MEInboxProtocol> inbox;
 @property(class, nonatomic, readonly) MEInApp *inApp;
 
 + (void)setupWithConfig:(MEConfig *)config

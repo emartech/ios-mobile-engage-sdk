@@ -3,30 +3,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MENotification.h"
 #import "MENotificationInboxStatus.h"
+#import "MEInboxProtocol.h"
 
 @class MEConfig;
 @class MEAppLoginParameters;
 
-typedef void (^MEInboxSuccessBlock)(void);
-typedef void (^MEInboxResultBlock)(MENotificationInboxStatus *inboxStatus);
-typedef void (^MEInboxResultErrorBlock)(NSError *error);
-
-@interface MEInbox : NSObject
+@interface MEInbox : NSObject <MEInboxProtocol>
 
 @property(nonatomic, strong) MEAppLoginParameters *appLoginParameters;
-
-- (instancetype)initWithConfig:(MEConfig *)config;
-
-- (void)fetchNotificationsWithResultBlock:(MEInboxResultBlock)resultBlock
-                               errorBlock:(MEInboxResultErrorBlock)errorBlock;
-
-- (void)resetBadgeCountWithSuccessBlock:(MEInboxSuccessBlock)successBlock
-                             errorBlock:(MEInboxResultErrorBlock)errorBlock;
-
-- (void)resetBadgeCount;
-
-- (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage;
 
 @end
