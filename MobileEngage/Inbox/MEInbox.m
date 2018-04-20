@@ -51,11 +51,11 @@
                                errorBlock:(MEInboxResultErrorBlock)errorBlock {
     NSParameterAssert(resultBlock);
     if ([self hasLoginParameters]) {
+        __weak typeof(self) weakSelf = self;
         EMSRequestModel *request = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            NSDictionary *headers = [self createNotificationsFetchingHeaders];
+            NSDictionary *headers = [weakSelf createNotificationsFetchingHeaders];
             [[[builder setMethod:HTTPMethodGET] setHeaders:headers] setUrl:@"https://me-inbox.eservice.emarsys.net/api/notifications"];
         }];
-        __weak typeof(self) weakSelf = self;
         [_restClient executeTaskWithRequestModel:request
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
@@ -66,7 +66,7 @@
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
-                                          [self respondWithError:errorBlock error:error];
+                                          [weakSelf respondWithError:errorBlock error:error];
                                       }];
     } else {
         [self handleNoLoginParameters:errorBlock];

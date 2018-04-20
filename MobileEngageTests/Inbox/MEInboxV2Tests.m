@@ -6,6 +6,7 @@
 #import "FakeRestClient.h"
 #import "MEInboxV2+Private.h"
 #import "MEDefaultHeaders.h"
+#import "MEInboxV2+Notification.h"
 
 static NSString *const kAppId = @"kAppId";
 
@@ -32,14 +33,14 @@ SPEC_BEGIN(MEInboxV2Tests)
             }
             return inbox;
         };
-//
-//        id (^inboxNotifications)() = ^id() {
-//            MEInbox *inbox = [[MEInbox alloc] initWithRestClient:[EMSRESTClient mock]
-//                                                          config:config];
-//
-//            return inbox;
-//        };
-//
+
+        id (^inboxNotifications)() = ^id() {
+            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithRestClient:[EMSRESTClient mock]
+                                                              config:config];
+
+            return inbox;
+        };
+
         id (^expectedHeaders)() = ^id() {
             NSDictionary *defaultHeaders = [MEDefaultHeaders additionalHeadersWithConfig:config];
             NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionaryWithDictionary:defaultHeaders];
@@ -210,7 +211,7 @@ SPEC_BEGIN(MEInboxV2Tests)
                         fail(@"resultBlock invoked");
                     }                             errorBlock:^(NSError *error) {
                         if ([NSThread isMainThread]) {
-                                onMainThread = @YES;
+                            onMainThread = @YES;
                         }
                     }];
                 });
@@ -219,6 +220,126 @@ SPEC_BEGIN(MEInboxV2Tests)
             });
 
         });
+
+        describe(@"inbox.addNotification:", ^{
+            it(@"should increase the notifications with the notification", ^{
+                MEInboxV2 *inbox = inboxNotifications();
+                MENotification *notification = [MENotification new];
+
+                [[theValue([inbox.notifications count]) should] equal:theValue(0)];
+                [inbox addNotification:notification];
+                [[theValue([inbox.notifications count]) should] equal:theValue(1)];
+            });
+        });
+
+        describe(@"inbox.fetchNotificationsWithResultBlock include cached notifications", ^{
+            it(@"should return with the added notification", ^{
+                MEInboxV2 *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MENotification *notification = [MENotification new];
+                [inbox addNotification:notification];
+
+                __block MENotificationInboxStatus *status;
+                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                    status = inboxStatus;
+                }                             errorBlock:^(NSError *error) {
+                }];
+
+                [[expectFutureValue(theValue([status.notifications containsObject:notification])) shouldEventually] beYes];
+            });
+
+            it(@"should return with the added notification on top", ^{
+                MEInboxV2 *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MENotification *notification = [MENotification new];
+                notification.expirationTime = @12345678130;
+                [inbox addNotification:notification];
+
+                __block MENotificationInboxStatus *status;
+                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                    status = inboxStatus;
+                }                             errorBlock:^(NSError *error) {
+                }];
+
+                [[expectFutureValue([status.notifications firstObject]) shouldEventually] equal:notification];
+            });
+
+            it(@"should not add the notification if there is a notification already in with the same ID", ^{
+                MEInboxV2 *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MENotification *notification = [MENotification new];
+                notification.title = @"dogsOrCats";
+                notification.id = @"id1";
+                [inbox addNotification:notification];
+
+                __block MENotification *returnedNotification;
+                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                    for (MENotification *noti in inboxStatus.notifications) {
+                        if ([noti.id isEqualToString:notification.id]) {
+                            returnedNotification = noti;
+                            break;
+                        }
+                    }
+                }                             errorBlock:^(NSError *error) {
+                    fail(@"error block invoked");
+                }];
+
+                [[expectFutureValue(returnedNotification.id) shouldEventually] equal:@"id1"];
+                [[expectFutureValue(returnedNotification.title) shouldNotEventually] equal:@"asdfghjk"];
+                [[expectFutureValue(returnedNotification.title) shouldEventually] equal:@"title1"];
+            });
+
+            it(@"should remove notifications from cache when they are already present in the fetched list", ^{
+                MEInboxV2 *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+
+                MENotification *notification1 = [MENotification new];
+                notification1.title = @"helloSunshine";
+                notification1.id = @"id1";
+                [inbox addNotification:notification1];
+
+                MENotification *notification2 = [MENotification new];
+                notification2.title = @"happySkiing";
+                notification2.id = @"id0";
+                [inbox addNotification:notification2];
+
+                __block MENotification *returnedNotification;
+                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                    for (MENotification *noti in inboxStatus.notifications) {
+                        if ([noti.id isEqualToString:notification1.id]) {
+                            returnedNotification = noti;
+                            break;
+                        }
+                    }
+                }                             errorBlock:^(NSError *error) {
+                    fail(@"error block invoked");
+                }];
+
+                [[expectFutureValue(returnedNotification.id) shouldEventually] equal:@"id1"];
+
+                [[expectFutureValue(theValue([[inbox notifications] count])) shouldEventually] equal:@1];
+                [[expectFutureValue([inbox notifications][0]) shouldEventually] equal:notification2];
+            });
+
+            it(@"should be idempotent", ^{
+                MEInboxV2 *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MENotification *notification = [MENotification new];
+                [inbox addNotification:notification];
+
+                __block MENotificationInboxStatus *status1;
+                __block MENotificationInboxStatus *status2;
+                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                    status1 = inboxStatus;
+                }                             errorBlock:^(NSError *error) {
+                }];
+
+                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                    status2 = inboxStatus;
+                }                             errorBlock:^(NSError *error) {
+                }];
+
+                [[expectFutureValue(@([status1.notifications count])) shouldEventually] equal:theValue(8)];
+                [[expectFutureValue(@([status2.notifications count])) shouldEventually] equal:theValue(8)];
+            });
+
+        });
+
 //
 //        describe(@"inbox.resetBadgeCountWithSuccessBlock:errorBlock:", ^{
 //
@@ -380,124 +501,6 @@ SPEC_BEGIN(MEInboxV2Tests)
 //            });
 //        });
 //
-//        describe(@"inbox.addNotification:", ^{
-//            it(@"should increase the notifications with the notification", ^{
-//                MEInbox *inbox = inboxNotifications();
-//                MENotification *notification = [MENotification new];
-//
-//                [[theValue([inbox.notifications count]) should] equal:theValue(0)];
-//                [inbox addNotification:notification];
-//                [[theValue([inbox.notifications count]) should] equal:theValue(1)];
-//            });
-//        });
-//
-//        describe(@"inbox.fetchNotificationsWithResultBlock include cached notifications", ^{
-//            it(@"should return with the added notification", ^{
-//                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
-//                MENotification *notification = [MENotification new];
-//                [inbox addNotification:notification];
-//
-//                __block MENotificationInboxStatus *status;
-//                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-//                    status = inboxStatus;
-//                }                             errorBlock:^(NSError *error) {
-//                }];
-//
-//                [[expectFutureValue(theValue([status.notifications containsObject:notification])) shouldEventually] beYes];
-//            });
-//
-//            it(@"should be idempotent", ^{
-//                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
-//                MENotification *notification = [MENotification new];
-//                [inbox addNotification:notification];
-//
-//                __block MENotificationInboxStatus *status1;
-//                __block MENotificationInboxStatus *status2;
-//                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-//                    status1 = inboxStatus;
-//                }                             errorBlock:^(NSError *error) {
-//                }];
-//
-//                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-//                    status2 = inboxStatus;
-//                }                             errorBlock:^(NSError *error) {
-//                }];
-//
-//                [[expectFutureValue(@([status1.notifications count])) shouldEventually] equal:theValue(8)];
-//                [[expectFutureValue(@([status2.notifications count])) shouldEventually] equal:theValue(8)];
-//            });
-//
-//            it(@"should return with the added notification in good order", ^{
-//                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
-//                MENotification *notification = [MENotification new];
-//                notification.expirationTime = @12345678130;
-//                [inbox addNotification:notification];
-//
-//                __block MENotificationInboxStatus *status;
-//                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-//                    status = inboxStatus;
-//                }                             errorBlock:^(NSError *error) {
-//                }];
-//
-//                [[expectFutureValue([status.notifications firstObject]) shouldEventually] equal:notification];
-//            });
-//
-//            it(@"should not add the notification if there is a notification already in with the same ID", ^{
-//                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
-//                MENotification *notification = [MENotification new];
-//                notification.title = @"asdfghjk";
-//                notification.id = @"id1";
-//                [inbox addNotification:notification];
-//
-//                __block MENotification *returnedNotification;
-//                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-//                    for (MENotification *noti in inboxStatus.notifications) {
-//                        if ([noti.id isEqualToString:notification.id]) {
-//                            returnedNotification = noti;
-//                            break;
-//                        }
-//                    }
-//                }                             errorBlock:^(NSError *error) {
-//                    fail(@"error block invoked");
-//                }];
-//
-//                [[expectFutureValue(returnedNotification.id) shouldEventually] equal:@"id1"];
-//                [[expectFutureValue(returnedNotification.title) shouldNotEventually] equal:@"asdfghjk"];
-//                [[expectFutureValue(returnedNotification.title) shouldEventually] equal:@"title1"];
-//            });
-//
-//            it(@"should remove notifications from cache when they are already present in the fetched list", ^{
-//                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
-//
-//                MENotification *notification1 = [MENotification new];
-//                notification1.title = @"asdfghjk";
-//                notification1.id = @"id1";
-//                [inbox addNotification:notification1];
-//
-//                MENotification *notification2 = [MENotification new];
-//                notification2.title = @"asdfghjk";
-//                notification2.id = @"id0";
-//                [inbox addNotification:notification2];
-//
-//                __block MENotification *returnedNotification;
-//                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-//                    for (MENotification *noti in inboxStatus.notifications) {
-//                        if ([noti.id isEqualToString:notification1.id]) {
-//                            returnedNotification = noti;
-//                            break;
-//                        }
-//                    }
-//                }                             errorBlock:^(NSError *error) {
-//                    fail(@"error block invoked");
-//                }];
-//
-//                [[expectFutureValue(returnedNotification.id) shouldEventually] equal:@"id1"];
-//
-//                [[expectFutureValue(theValue([[inbox notifications] count])) shouldEventually] equal:@1];
-//                [[expectFutureValue([inbox notifications][0]) shouldEventually] equal:notification2];
-//            });
-//
-//        });
 //
 //        describe(@"inbox.trackMessageOpen", ^{
 //

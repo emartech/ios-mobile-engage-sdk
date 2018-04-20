@@ -17,6 +17,7 @@
 
 @property(nonatomic, strong) EMSRESTClient *restClient;
 @property(nonatomic, strong) MEConfig *config;
+@property(nonatomic, strong) NSMutableArray *notifications;
 
 @end
 
@@ -33,6 +34,7 @@
     if (self) {
         _restClient = restClient;
         _config = config;
+        _notifications = [NSMutableArray array];
     }
     return self;
 }
@@ -42,16 +44,18 @@
                                errorBlock:(MEInboxResultErrorBlock)errorBlock {
     NSParameterAssert(resultBlock);
     if (self.meId) {
+        __weak typeof(self) weakSelf = self;
         EMSRequestModel *request = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            NSDictionary *headers = [self createNotificationsFetchingHeaders];
-            [[[builder setMethod:HTTPMethodGET] setHeaders:headers] setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@", self.meId]];
+            NSDictionary *headers = [weakSelf createNotificationsFetchingHeaders];
+            [[[builder setMethod:HTTPMethodGET] setHeaders:headers] setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@", weakSelf.meId]];
         }];
         [_restClient executeTaskWithRequestModel:request
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
                                         MENotificationInboxStatus *status = [[MEInboxParser new] parseNotificationInboxStatus:payload];
+
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            resultBlock(status);
+                                            resultBlock([weakSelf mergedStatusWithStatus:status]);
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
@@ -80,6 +84,11 @@
 
 }
 
+- (void)addNotification:(MENotification *)notification {
+    [self.notifications insertObject:notification
+                             atIndex:0];
+}
+
 - (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage {
     return nil;
 }
@@ -93,6 +102,28 @@
     mutableFetchingHeaders[@"Authorization"] = [EMSAuthentication createBasicAuthWithUsername:self.config.applicationCode
                                                                                      password:self.config.applicationPassword];
     return [NSDictionary dictionaryWithDictionary:mutableFetchingHeaders];
+}
+
+- (MENotificationInboxStatus*)mergedStatusWithStatus:(MENotificationInboxStatus *)status {
+    [self invalidateCachedNotifications:status];
+
+    NSMutableArray *statusNotifications = [NSMutableArray new];
+    [statusNotifications addObjectsFromArray:self.notifications];
+    [statusNotifications addObjectsFromArray:status.notifications];
+    status.notifications = statusNotifications;
+    return status;
+}
+
+- (void)invalidateCachedNotifications:(MENotificationInboxStatus *)status {
+    for (int i = (int) [self.notifications count] - 1; i >= 0; --i) {
+        MENotification *notification = self.notifications[(NSUInteger) i];
+        for (MENotification *currentNotification in status.notifications) {
+            if ([currentNotification.id isEqual:notification.id]) {
+                [self.notifications removeObjectAtIndex:(NSUInteger) i];
+                break;
+            }
+        }
+    }
 }
 
 @end

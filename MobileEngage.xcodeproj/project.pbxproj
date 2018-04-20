@@ -184,6 +184,7 @@
 		E65583D86E7FC18442B142D0 /* MEInboxProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */; };
 		E655852343DD03F5F9D4E0CF /* InboxIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E6558398A1E26EAC50F59B25 /* InboxIntegrationTests.m */; };
 		E65585B14C364FCFCF8D438B /* MEInboxV2.h in Headers */ = {isa = PBXBuildFile; fileRef = E65587B6E86F82209C3026CE /* MEInboxV2.h */; };
+		E65586C51ACB53DD1AB60C11 /* MEInboxV2+Notification.h in Headers */ = {isa = PBXBuildFile; fileRef = E6558DED2E185C37D82B0204 /* MEInboxV2+Notification.h */; };
 		E65586D5C044C8D482C143CC /* MEInboxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E655865EEABB244F1261121B /* MEInboxTests.m */; };
 		E6558B49A08B8F7A185CFDEB /* InboxParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E65581FC853AEB63A979D1D2 /* InboxParserTests.m */; };
 		E6558DF4F3B90DC7FF5DA222 /* MEInboxV2.m in Sources */ = {isa = PBXBuildFile; fileRef = E6558EE1E4F554A6B261D02F /* MEInboxV2.m */; };
@@ -432,6 +433,7 @@
 		E65587E10C55211DEB726913 /* MEInboxV2Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxV2Tests.m; sourceTree = "<group>"; };
 		E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxProtocol.h; sourceTree = "<group>"; };
 		E6558CB345BEF21F0B0A1191 /* MEInboxV2+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEInboxV2+Private.h"; sourceTree = "<group>"; };
+		E6558DED2E185C37D82B0204 /* MEInboxV2+Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEInboxV2+Notification.h"; sourceTree = "<group>"; };
 		E6558EE1E4F554A6B261D02F /* MEInboxV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxV2.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -770,6 +772,7 @@
 				E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */,
 				E6558EE1E4F554A6B261D02F /* MEInboxV2.m */,
 				E65587B6E86F82209C3026CE /* MEInboxV2.h */,
+				E6558DED2E185C37D82B0204 /* MEInboxV2+Notification.h */,
 			);
 			path = Inbox;
 			sourceTree = "<group>";
@@ -995,6 +998,7 @@
 				32C6FB1545463C18D163CF48 /* MEIAMMetricsLogHandler.h in Headers */,
 				E65583D86E7FC18442B142D0 /* MEInboxProtocol.h in Headers */,
 				E65585B14C364FCFCF8D438B /* MEInboxV2.h in Headers */,
+				E65586C51ACB53DD1AB60C11 /* MEInboxV2+Notification.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
