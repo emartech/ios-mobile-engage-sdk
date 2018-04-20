@@ -45,11 +45,12 @@
     NSParameterAssert(resultBlock);
     if (self.meId) {
         __weak typeof(self) weakSelf = self;
-        EMSRequestModel *request = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            NSDictionary *headers = [weakSelf createNotificationsFetchingHeaders];
-            [[[builder setMethod:HTTPMethodGET] setHeaders:headers] setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@", weakSelf.meId]];
+        EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+            [builder setMethod:HTTPMethodGET];
+            [builder setHeaders:[weakSelf createNotificationsFetchingHeaders]];
+            [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@", weakSelf.meId]];
         }];
-        [_restClient executeTaskWithRequestModel:request
+        [_restClient executeTaskWithRequestModel:requestModel
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
                                         MENotificationInboxStatus *status = [[MEInboxParser new] parseNotificationInboxStatus:payload];
@@ -59,29 +60,40 @@
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
-                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                              if (errorBlock) {
-                                                  errorBlock(error);
-                                              }
-                                          });
+                                          [weakSelf respondWithError:errorBlock error:error];
                                       }];
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (errorBlock) {
-                errorBlock([NSError errorWithCode:42
-                             localizedDescription:@"MeId is not available."]);
-            }
-        });
+        [self handleNoMeIdWithErrorBlock:errorBlock];
     }
 }
 
 - (void)resetBadgeCountWithSuccessBlock:(MEInboxSuccessBlock)successBlock
                              errorBlock:(MEInboxResultErrorBlock)errorBlock {
-
+    if (self.meId) {
+        __weak typeof(self) weakSelf = self;
+        EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+            [builder setMethod:HTTPMethodPOST];
+            [builder setHeaders:[weakSelf createNotificationsFetchingHeaders]];
+            [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@/count", weakSelf.meId]];
+        }];
+        [_restClient executeTaskWithRequestModel:requestModel
+                                    successBlock:^(NSString *requestId, EMSResponseModel *response) {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            if (successBlock) {
+                                                successBlock();
+                                            }
+                                        });
+                                    }
+                                      errorBlock:^(NSString *requestId, NSError *error) {
+                                          [weakSelf respondWithError:errorBlock error:error];
+                                      }];
+    } else {
+        [self handleNoMeIdWithErrorBlock:errorBlock];
+    }
 }
 
 - (void)resetBadgeCount {
-
+    [self resetBadgeCountWithSuccessBlock:nil errorBlock:nil];
 }
 
 - (void)addNotification:(MENotification *)notification {
@@ -104,7 +116,7 @@
     return [NSDictionary dictionaryWithDictionary:mutableFetchingHeaders];
 }
 
-- (MENotificationInboxStatus*)mergedStatusWithStatus:(MENotificationInboxStatus *)status {
+- (MENotificationInboxStatus *)mergedStatusWithStatus:(MENotificationInboxStatus *)status {
     [self invalidateCachedNotifications:status];
 
     NSMutableArray *statusNotifications = [NSMutableArray new];
@@ -124,6 +136,22 @@
             }
         }
     }
+}
+
+- (void)respondWithError:(MEInboxResultErrorBlock)errorBlock error:(NSError *)error {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (errorBlock) {
+            errorBlock(error);
+        }
+    });
+}
+
+- (void)handleNoMeIdWithErrorBlock:(MEInboxResultErrorBlock)errorBlock {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (errorBlock) {
+            errorBlock([NSError errorWithCode:42 localizedDescription:@"MeId is not available."]);
+        }
+    });
 }
 
 @end
