@@ -24,7 +24,9 @@
 @implementation MEInboxV2
 
 - (instancetype)initWithConfig:(MEConfig *)config {
-    return nil;
+    EMSRESTClient *restClient = [EMSRESTClient clientWithSession:[NSURLSession sharedSession]];
+    return [self initWithRestClient:restClient
+                             config:config];
 }
 
 

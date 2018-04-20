@@ -7,8 +7,13 @@
 #import "AbstractResponseHandler+Private.h"
 #import "MobileEngageInternal.h"
 #import "MERequestContext.h"
+#import "MEExperimental.h"
+#import "MEInboxV2.h"
+#import "MobileEngage.h"
+#import "MEExperimental+Test.h"
+#import "MEConfigBuilder.h"
 
-SPEC_BEGIN(MEIDResponseHandlerTests)
+SPEC_BEGIN(MEIdResponseHandlerTests)
 
         __block EMSTimestampProvider *timestampProvider;
 
@@ -20,8 +25,8 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
 
             it(@"should return YES when the response contains meId and meIdSignature", ^{
                 NSData *body = [NSJSONSerialization dataWithJSONObject:@{
-                        @"api_me_id": @123456789,
-                        @"me_id_signature": @"TheValueOfTheMeIdSignature!"}
+                                @"api_me_id": @123456789,
+                                @"me_id_signature": @"TheValueOfTheMeIdSignature!"}
                                                                options:0
                                                                  error:nil];
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
@@ -66,6 +71,10 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
 
         describe(@"MEIdResponseHandler.handleResponse", ^{
 
+            beforeEach(^{
+               [MEExperimental reset];
+            });
+
             it(@"should call setMeId, setMeIdSignature on MobileEngageInternal when meId is a number", ^{
                 NSNumber *meId = @123456789;
                 NSString *meIdSignature = @"meidsignature";
@@ -102,6 +111,31 @@ SPEC_BEGIN(MEIDResponseHandlerTests)
                 MEIdResponseHandler *handler = [[MEIdResponseHandler alloc] initWithRequestContext:requestContext];
 
                 [handler handleResponse:response];
+            });
+
+            it(@"should set meId on inbox", ^{
+                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                    [builder setCredentialsWithApplicationCode:@"applicationCode"
+                                           applicationPassword:@"applicationPassword"];
+                    [builder setExperimentalFeatures:@[INBOX_V2]];
+                }];
+                [MobileEngage setupWithConfig:config
+                                launchOptions:nil];
+
+                NSString *meId = @"me123456789";
+                NSString *meIdSignature = @"meIdSignature";
+                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature}
+                                                               options:0
+                                                                 error:nil];
+                EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
+                                                                                  headers:@{}
+                                                                                     body:body
+                                                                             requestModel:[EMSRequestModel mock]
+                                                                                timestamp:[NSDate date]];
+                MEIdResponseHandler *handler = [[MEIdResponseHandler alloc] initWithRequestContext:[MERequestContext new]];
+                [[((MEInboxV2 *) MobileEngage.inbox).meId should] beNil];
+                [handler handleResponse:response];
+                [[((MEInboxV2 *) MobileEngage.inbox).meId should] equal:meId];
             });
 
         });

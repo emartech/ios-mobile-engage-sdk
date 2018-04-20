@@ -39,7 +39,6 @@
 requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory
            logRepository:(MELogRepository *)logRepository {
     NSParameterAssert(requestRepositoryFactory);
-    [MEExperimental enableFeatures:config.experimentalFeatures];
     __weak typeof(self) weakSelf = self;
     _successBlock = ^(NSString *requestId, EMSResponseModel *responseModel) {
         [weakSelf handleResponse:responseModel];

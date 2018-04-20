@@ -12,6 +12,7 @@
 #import "MEInbox+Notification.h"
 #import "FakeStatusDelegate.h"
 #import "EMSAuthentication.h"
+#import "MEExperimental+Test.h"
 
 static NSString *const kAppId = @"kAppId";
 
@@ -57,6 +58,10 @@ SPEC_BEGIN(MEInboxTests)
                                                                                          password:config.applicationPassword];
         return [NSDictionary dictionaryWithDictionary:mutableHeaders];
     };
+
+    beforeEach(^{
+        [MEExperimental reset];
+    });
 
     describe(@"inbox.fetchNotificationsWithResultBlock", ^{
 

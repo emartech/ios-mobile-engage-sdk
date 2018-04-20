@@ -7,10 +7,16 @@
 #import "MobileEngageInternal+Private.h"
 #import "MEInApp+Private.h"
 #import "MEInbox.h"
+#import "MEInboxV2.h"
+#import "MEExperimental+Test.h"
 
 static NSString *const kAppId = @"kAppId";
 
 SPEC_BEGIN(MobileEngageTests)
+
+        beforeEach(^{
+           [MEExperimental reset];
+        });
 
         id (^mobileEngageInternal)() = ^id() {
             id mobileEngageInternalMock = [MobileEngageInternal mock];
@@ -218,6 +224,39 @@ SPEC_BEGIN(MobileEngageTests)
 
                 [MobileEngage trackCustomEvent:@"eventName"
                                eventAttributes:@{}];
+            });
+        });
+
+        describe(@"experimentalFeatures", ^{
+            context(@"Inbox", ^{
+                it(@"should use inbox v1 when INBOX_V2 flipper is turned off", ^{
+                    NSString *applicationCode = kAppId;
+                    NSString *applicationPassword = @"appSecret";
+
+                    MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                        [builder setCredentialsWithApplicationCode:applicationCode
+                                               applicationPassword:applicationPassword];
+                    }];
+                    [MobileEngage setupWithConfig:config
+                                    launchOptions:nil];
+
+                    [[theValue([MobileEngage.inbox isKindOfClass:[MEInbox class]]) should] beYes];
+                });
+
+                it(@"should use inbox V2 when INBOX_V2 flipper is turned on", ^{
+                    NSString *applicationCode = kAppId;
+                    NSString *applicationPassword = @"appSecret";
+
+                    MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                        [builder setCredentialsWithApplicationCode:applicationCode
+                                               applicationPassword:applicationPassword];
+                        [builder setExperimentalFeatures:@[INBOX_V2]];
+                    }];
+                    [MobileEngage setupWithConfig:config
+                                    launchOptions:nil];
+
+                    [[theValue([MobileEngage.inbox isKindOfClass:[MEInboxV2 class]]) should] beYes];
+                });
             });
         });
 
