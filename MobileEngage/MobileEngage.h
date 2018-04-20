@@ -3,7 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MEInbox.h"
+#import "MEInboxProtocol.h"
 #import "MEInApp.h"
 
 @class MEConfig;

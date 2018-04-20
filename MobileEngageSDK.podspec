@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
 		'MobileEngage/MEConfigBuilder.h',
 	    'MobileEngage/MEConfig.h',
 	   	'MobileEngage/Flipper/MEFlipperFeatures.h',
-	    'MobileEngage/Inbox/MEInbox.h',
+	    'MobileEngage/Inbox/MEInboxProtocol.h',
 	    'MobileEngage/Inbox/MENotification.h',
 	    'MobileEngage/Inbox/MENotificationInboxStatus.h',
         'MobileEngage/IAM/MEInApp.h',
