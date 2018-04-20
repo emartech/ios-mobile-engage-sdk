@@ -180,10 +180,13 @@
 		8A4BD7A01EE192FF0056486D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
 		8AAFD65E1EE196C700ACEB52 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
 		BE2627A733F5D412C0BAD0D2 /* libPods-MobileEngageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80777DA5D3D9E42FC73B566F /* libPods-MobileEngageTests.a */; };
+		E655817A7BD6BD2489ED8321 /* MEInboxV2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E65587E10C55211DEB726913 /* MEInboxV2Tests.m */; };
 		E65583D86E7FC18442B142D0 /* MEInboxProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */; };
 		E655852343DD03F5F9D4E0CF /* InboxIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E6558398A1E26EAC50F59B25 /* InboxIntegrationTests.m */; };
+		E65585B14C364FCFCF8D438B /* MEInboxV2.h in Headers */ = {isa = PBXBuildFile; fileRef = E65587B6E86F82209C3026CE /* MEInboxV2.h */; };
 		E65586D5C044C8D482C143CC /* MEInboxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E655865EEABB244F1261121B /* MEInboxTests.m */; };
 		E6558B49A08B8F7A185CFDEB /* InboxParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E65581FC853AEB63A979D1D2 /* InboxParserTests.m */; };
+		E6558DF4F3B90DC7FF5DA222 /* MEInboxV2.m in Sources */ = {isa = PBXBuildFile; fileRef = E6558EE1E4F554A6B261D02F /* MEInboxV2.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -425,7 +428,11 @@
 		E6558398A1E26EAC50F59B25 /* InboxIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxIntegrationTests.m; sourceTree = "<group>"; };
 		E65585F1412D63D1CFDA119B /* MEInbox+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEInbox+Private.h"; sourceTree = "<group>"; };
 		E655865EEABB244F1261121B /* MEInboxTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxTests.m; sourceTree = "<group>"; };
+		E65587B6E86F82209C3026CE /* MEInboxV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxV2.h; sourceTree = "<group>"; };
+		E65587E10C55211DEB726913 /* MEInboxV2Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxV2Tests.m; sourceTree = "<group>"; };
 		E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxProtocol.h; sourceTree = "<group>"; };
+		E6558CB345BEF21F0B0A1191 /* MEInboxV2+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEInboxV2+Private.h"; sourceTree = "<group>"; };
+		E6558EE1E4F554A6B261D02F /* MEInboxV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxV2.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -761,6 +768,8 @@
 				3746016139C5A75BC00CF6F2 /* MEInbox.m */,
 				3746037DBB3D2CF1327E9CFF /* MEInbox+Notification.h */,
 				E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */,
+				E6558EE1E4F554A6B261D02F /* MEInboxV2.m */,
+				E65587B6E86F82209C3026CE /* MEInboxV2.h */,
 			);
 			path = Inbox;
 			sourceTree = "<group>";
@@ -910,6 +919,8 @@
 				E65581FC853AEB63A979D1D2 /* InboxParserTests.m */,
 				E655865EEABB244F1261121B /* MEInboxTests.m */,
 				E6558398A1E26EAC50F59B25 /* InboxIntegrationTests.m */,
+				E65587E10C55211DEB726913 /* MEInboxV2Tests.m */,
+				E6558CB345BEF21F0B0A1191 /* MEInboxV2+Private.h */,
 			);
 			path = Inbox;
 			sourceTree = "<group>";
@@ -983,6 +994,7 @@
 				32C6FB970F5D23A6C5EF0B43 /* MELogRepositoryProxy.h in Headers */,
 				32C6FB1545463C18D163CF48 /* MEIAMMetricsLogHandler.h in Headers */,
 				E65583D86E7FC18442B142D0 /* MEInboxProtocol.h in Headers */,
+				E65585B14C364FCFCF8D438B /* MEInboxV2.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1222,6 +1234,7 @@
 				32C6FDA21145B1C645757DD8 /* MELogRepository.m in Sources */,
 				32C6FF5192A9FCFB7429ABD9 /* MELogRepositoryProxy.m in Sources */,
 				32C6F61A4B55546E0E0E7990 /* MEIAMMetricsLogHandler.m in Sources */,
+				E6558DF4F3B90DC7FF5DA222 /* MEInboxV2.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1280,6 +1293,7 @@
 				E6558B49A08B8F7A185CFDEB /* InboxParserTests.m in Sources */,
 				E65586D5C044C8D482C143CC /* MEInboxTests.m in Sources */,
 				E655852343DD03F5F9D4E0CF /* InboxIntegrationTests.m in Sources */,
+				E655817A7BD6BD2489ED8321 /* MEInboxV2Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
