@@ -2,6 +2,7 @@
 #import "MobileEngage.h"
 #import "MEConfigBuilder.h"
 #import "MEConfig.h"
+#import "MENotificationInboxStatus.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 

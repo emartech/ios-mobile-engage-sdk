@@ -6,6 +6,7 @@
 #import "MobileEngage+Private.h"
 #import "MobileEngageInternal+Private.h"
 #import "MEInApp+Private.h"
+#import "MEInbox.h"
 
 static NSString *const kAppId = @"kAppId";
 
