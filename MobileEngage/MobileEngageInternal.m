@@ -34,7 +34,7 @@
 
 @implementation MobileEngageInternal
 
-- (void) setupWithConfig:(nonnull MEConfig *)config
+- (void)setupWithConfig:(nonnull MEConfig *)config
            launchOptions:(NSDictionary *)launchOptions
 requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory
            logRepository:(MELogRepository *)logRepository

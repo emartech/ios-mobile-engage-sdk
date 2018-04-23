@@ -21,8 +21,7 @@
 }
 
 - (void)handleResponse:(EMSResponseModel *)response {
-    NSString *meId = [self getMeId:response];
-    _requestContext.meId = meId;
+    _requestContext.meId = [self getMeId:response];
     _requestContext.meIdSignature = [self getMeIdSignature:response];
 }
 
