@@ -35,6 +35,14 @@ function release {
   git commit -m "chore(release): version set to $VERSION_NUMBER"
   git tag -a "$VERSION_NUMBER" -m "$VERSION_NUMBER"
 
+  TEMPLATE="`cat MobileEngageSDK.podspec.template`"
+  PODSPEC="${TEMPLATE/<VERSION_NUMBER>/$VERSION_NUMBER}"
+  PODSPEC="${PODSPEC/<COMMIT_REF>/:tag => spec.version}"
+  printf "$PODSPEC" > MobileEngageSDK.podspec
+
+  git add MobileEngageSDK.podspec
+  git commit -m "chore(podspec): specific core version removed"
+
   git push
   git push origin $VERSION_NUMBER
 
