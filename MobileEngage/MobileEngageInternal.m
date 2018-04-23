@@ -37,7 +37,8 @@
 - (void) setupWithConfig:(nonnull MEConfig *)config
            launchOptions:(NSDictionary *)launchOptions
 requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory
-           logRepository:(MELogRepository *)logRepository {
+           logRepository:(MELogRepository *)logRepository
+          requestContext:(MERequestContext *)requestContext {
     NSParameterAssert(requestRepositoryFactory);
     __weak typeof(self) weakSelf = self;
     _successBlock = ^(NSString *requestId, EMSResponseModel *responseModel) {
@@ -65,23 +66,25 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
                                                               logRepository:[MELogRepository new]];
     [self setupWithRequestManager:manager
                            config:config
-                    launchOptions:launchOptions];
+                    launchOptions:launchOptions
+                   requestContext:requestContext];
 }
 
 
-- (void)setupWithRequestManager:(nonnull EMSRequestManager *)requestManager
+- (void)setupWithRequestManager:(EMSRequestManager *)requestManager
                          config:(nonnull MEConfig *)config
-                  launchOptions:(NSDictionary *)launchOptions {
-    _requestContext = [[MERequestContext alloc] initWithConfig:config];
+                  launchOptions:(NSDictionary *)launchOptions
+                 requestContext:(MERequestContext *)requestContext {
+    _requestContext = requestContext;
     _requestManager = requestManager;
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
     if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
         _responseHandlers = @[
-            [[MEIdResponseHandler alloc] initWithRequestContext:_requestContext],
-            [MEIAMResponseHandler new],
-            [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
-                                                          displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]
+                [[MEIdResponseHandler alloc] initWithRequestContext:_requestContext],
+                [MEIAMResponseHandler new],
+                [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
+                                                              displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]
         ];
     } else {
         _responseHandlers = @[];
@@ -140,8 +143,8 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
 - (void)trackInAppClick:(NSString *)campaignId buttonId:(NSString *)buttonId {
     [self.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"inapp:click"
                                                                       eventAttributes:@{
-                                                                          @"message_id": campaignId,
-                                                                          @"button_id": buttonId
+                                                                              @"message_id": campaignId,
+                                                                              @"button_id": buttonId
                                                                       }
                                                                                  type:@"internal"
                                                                        requestContext:self.requestContext]];
@@ -170,7 +173,7 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
 - (NSString *)appLoginWithContactFieldId:(NSNumber *)contactFieldId
                        contactFieldValue:(NSString *)contactFieldValue {
     self.requestContext.appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:contactFieldId
-                                                                                  contactFieldValue:contactFieldValue];
+                                                                              contactFieldValue:contactFieldValue];
 
     EMSRequestModel *requestModel = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:self.pushToken
                                                                                            requestContext:self.requestContext];

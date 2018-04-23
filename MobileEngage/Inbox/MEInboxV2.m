@@ -11,6 +11,7 @@
 #import "MEDefaultHeaders.h"
 #import "MEConfig.h"
 #import "NSError+EMSCore.h"
+#import "MERequestContext.h"
 
 
 @interface MEInboxV2 ()
@@ -18,25 +19,30 @@
 @property(nonatomic, strong) EMSRESTClient *restClient;
 @property(nonatomic, strong) MEConfig *config;
 @property(nonatomic, strong) NSMutableArray *notifications;
+@property (nonatomic, strong) MERequestContext *requestContext;
 
 @end
 
 @implementation MEInboxV2
 
-- (instancetype)initWithConfig:(MEConfig *)config {
+- (instancetype)initWithConfig:(MEConfig *)config
+                requestContext:(MERequestContext *)requestContext {
     EMSRESTClient *restClient = [EMSRESTClient clientWithSession:[NSURLSession sharedSession]];
     return [self initWithRestClient:restClient
-                             config:config];
+                             config:config
+                     requestContext:requestContext];
 }
 
 
 - (instancetype)initWithRestClient:(EMSRESTClient *)restClient
-                            config:(MEConfig *)config {
+                            config:(MEConfig *)config
+                    requestContext:(MERequestContext *)requestContext {
     self = [super init];
     if (self) {
         _restClient = restClient;
         _config = config;
         _notifications = [NSMutableArray array];
+        _requestContext = requestContext;
     }
     return self;
 }
@@ -45,12 +51,12 @@
 - (void)fetchNotificationsWithResultBlock:(MEInboxResultBlock)resultBlock
                                errorBlock:(MEInboxResultErrorBlock)errorBlock {
     NSParameterAssert(resultBlock);
-    if (self.meId) {
+    if (self.requestContext.meId) {
         __weak typeof(self) weakSelf = self;
         EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
             [builder setMethod:HTTPMethodGET];
             [builder setHeaders:[weakSelf createNotificationsFetchingHeaders]];
-            [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@", weakSelf.meId]];
+            [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@", weakSelf.requestContext.meId]];
         }];
         [_restClient executeTaskWithRequestModel:requestModel
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
@@ -71,12 +77,12 @@
 
 - (void)resetBadgeCountWithSuccessBlock:(MEInboxSuccessBlock)successBlock
                              errorBlock:(MEInboxResultErrorBlock)errorBlock {
-    if (self.meId) {
+    if (self.requestContext.meId) {
         __weak typeof(self) weakSelf = self;
         EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            [builder setMethod:HTTPMethodPOST];
+            [builder setMethod:HTTPMethodDELETE];
             [builder setHeaders:[weakSelf createNotificationsFetchingHeaders]];
-            [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@/count", weakSelf.meId]];
+            [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@/count", weakSelf.requestContext.meId]];
         }];
         [_restClient executeTaskWithRequestModel:requestModel
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {

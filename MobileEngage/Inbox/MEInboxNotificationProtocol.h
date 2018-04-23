@@ -3,9 +3,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MEInbox.h"
+#import "MEInboxProtocol.h"
 
-@interface MEInbox (Notification)
+@protocol MEInboxNotificationProtocol <MEInboxProtocol>
 
 - (void)addNotification:(MENotification *)notification;
 

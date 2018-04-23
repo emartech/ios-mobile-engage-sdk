@@ -14,8 +14,6 @@ typedef void (^MEInboxResultErrorBlock)(NSError *error);
 
 @protocol MEInboxProtocol <NSObject>
 
-- (instancetype)initWithConfig:(MEConfig *)config;
-
 - (void)fetchNotificationsWithResultBlock:(MEInboxResultBlock)resultBlock
                                errorBlock:(MEInboxResultErrorBlock)errorBlock;
 

@@ -7,7 +7,6 @@
 #import "FakeRestClient.h"
 #import "MEInboxV2+Private.h"
 #import "MEDefaultHeaders.h"
-#import "MEInboxV2+Notification.h"
 #import "EMSRequestModelMatcher.h"
 
 static NSString *const kAppId = @"kAppId";
@@ -19,6 +18,7 @@ SPEC_BEGIN(MEInboxV2Tests)
         NSString *applicationCode = kAppId;
         NSString *applicationPassword = @"appSecret";
         NSString *meId = @"ordinaryMeId";
+        __block MERequestContext *requestContext;
 
         MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
             [builder setCredentialsWithApplicationCode:applicationCode
@@ -26,17 +26,22 @@ SPEC_BEGIN(MEInboxV2Tests)
         }];
 
         id (^inboxWithParameters)(EMSRESTClient *restClient, BOOL withMeId) = ^id(EMSRESTClient *restClient, BOOL withMeId) {
-            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithRestClient:restClient
-                                                              config:config];
+            requestContext = [[MERequestContext alloc] initWithConfig:config];
             if (withMeId) {
-                [inbox setMeId:meId];
+                requestContext.meId = meId;
+            } else {
+                requestContext.meId = nil;
             }
+            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithRestClient:restClient
+                                                              config:config
+                                                      requestContext:requestContext];
             return inbox;
         };
 
         id (^inboxNotifications)() = ^id() {
             MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithRestClient:[EMSRESTClient mock]
-                                                              config:config];
+                                                              config:config
+                                                      requestContext:nil];
 
             return inbox;
         };
@@ -365,7 +370,7 @@ SPEC_BEGIN(MEInboxV2Tests)
 
             it(@"should invoke restClient with the correct requestModel", ^{
                 EMSRequestModel *expectedRequestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                    [builder setMethod:HTTPMethodPOST];
+                    [builder setMethod:HTTPMethodDELETE];
                     [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@/count", meId]];
                     [builder setHeaders:expectedHeaders()];
                 }];

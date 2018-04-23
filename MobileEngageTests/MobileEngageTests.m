@@ -6,9 +6,11 @@
 #import "MobileEngage+Private.h"
 #import "MobileEngageInternal+Private.h"
 #import "MEInApp+Private.h"
+#import "MEExperimental+Test.h"
 #import "MEInbox.h"
 #import "MEInboxV2.h"
-#import "MEExperimental+Test.h"
+#import "MEInbox+Private.h"
+
 
 static NSString *const kAppId = @"kAppId";
 
@@ -21,7 +23,7 @@ SPEC_BEGIN(MobileEngageTests)
         id (^mobileEngageInternal)() = ^id() {
             id mobileEngageInternalMock = [MobileEngageInternal mock];
 
-            [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:)];
+            [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:requestContext:)];
             [[mobileEngageInternalMock should] receive:@selector(setNotificationCenterManager:) withArguments:kw_any()];
 
             NSString *applicationCode = kAppId;
@@ -50,10 +52,10 @@ SPEC_BEGIN(MobileEngageTests)
 
             it(@"should create one inbox instance", ^{
                 mobileEngageInternal();
-                MEInbox *inbox1 = MobileEngage.inbox;
-                MEInbox *inbox2 = MobileEngage.inbox;
+                id<MEInboxProtocol> inbox1 = MobileEngage.inbox;
+                id<MEInboxProtocol> inbox2 = MobileEngage.inbox;
 
-                [[inbox1 should] equal:inbox2];
+                [[(NSObject *)inbox1 should] equal:inbox2];
             });
 
             it(@"should create inApp instance", ^{
@@ -64,7 +66,7 @@ SPEC_BEGIN(MobileEngageTests)
 
             it(@"should create MENotificationCenterManager instance", ^{
                 id mobileEngageInternalMock = [MobileEngageInternal mock];
-                [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:)];
+                [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:requestContext:)];
                 [[mobileEngageInternalMock should] receive:@selector(setNotificationCenterManager:) withArguments:kw_any()];
                 KWCaptureSpy *spy = [mobileEngageInternalMock captureArgument:@selector(setNotificationCenterManager:) atIndex:0];
 
@@ -90,8 +92,8 @@ SPEC_BEGIN(MobileEngageTests)
 
             it(@"should call internal's setup with non-null logRepository", ^{
                 id mobileEngageInternalMock = [MobileEngageInternal nullMock];
-                [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:)];
-                KWCaptureSpy *spy = [mobileEngageInternalMock captureArgument:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:) atIndex:3];
+                [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:requestContext:)];
+                KWCaptureSpy *spy = [mobileEngageInternalMock captureArgument:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:requestContext:) atIndex:3];
 
                 NSString *applicationCode = kAppId;
                 NSString *applicationPassword = @"appSecret";
@@ -110,8 +112,8 @@ SPEC_BEGIN(MobileEngageTests)
 
             it(@"should set logRepository on MEInApp instance", ^{
                 id mobileEngageInternalMock = [MobileEngageInternal nullMock];
-                [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:)];
-                KWCaptureSpy *spy = [mobileEngageInternalMock captureArgument:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:) atIndex:3];
+                [[mobileEngageInternalMock should] receive:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:requestContext:)];
+                KWCaptureSpy *spy = [mobileEngageInternalMock captureArgument:@selector(setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:requestContext:) atIndex:3];
 
                 NSString *applicationCode = kAppId;
                 NSString *applicationPassword = @"appSecret";
@@ -184,12 +186,20 @@ SPEC_BEGIN(MobileEngageTests)
             });
 
             it(@"should set the contactFieldId and contactFieldValue in inbox", ^{
-                [MobileEngage setupWithMobileEngageInternal:[MobileEngageInternal nullMock] config:[MEConfig nullMock] launchOptions:nil];
+                NSString *applicationCode = kAppId;
+                NSString *applicationPassword = @"appSecret";
+
+                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                    [builder setCredentialsWithApplicationCode:applicationCode
+                                           applicationPassword:applicationPassword];
+                }];
+                [MobileEngage setupWithConfig:config
+                                launchOptions:nil];
                 [MobileEngage appLoginWithContactFieldId:@5
                                        contactFieldValue:@"three"];
 
-                [[((MEInbox*)MobileEngage.inbox).appLoginParameters.contactFieldId should] equal:@5];
-                [[((MEInbox*)MobileEngage.inbox).appLoginParameters.contactFieldValue should] equal:@"three"];
+                [[((MEInbox*)MobileEngage.inbox).requestContext.appLoginParameters.contactFieldId should] equal:@5];
+                [[((MEInbox*)MobileEngage.inbox).requestContext.appLoginParameters.contactFieldValue should] equal:@"three"];
             });
         });
 

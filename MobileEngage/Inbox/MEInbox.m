@@ -9,17 +9,18 @@
 #import "MEDefaultHeaders.h"
 #import "MEConfig.h"
 #import <CoreSDK/EMSDeviceInfo.h>
-#import "MEAppLoginParameters.h"
 #import "MEInboxParser.h"
+#import "MERequestContext.h"
 #import <CoreSDK/EMSRESTClient.h>
 #import "MobileEngage+Private.h"
+#import "MERequestContext.h"
 #import <CoreSDK/EMSAuthentication.h>
 
 @interface MEInbox ()
 
 @property(nonatomic, strong) EMSRESTClient *restClient;
 @property(nonatomic, strong) MEConfig *config;
-
+@property(nonatomic, strong) MERequestContext *requestContext;
 @property(nonatomic, strong) NSMutableArray *notifications;
 
 @end
@@ -28,19 +29,23 @@
 
 #pragma mark - Init
 
-- (instancetype)initWithConfig:(MEConfig *)config {
+- (instancetype)initWithConfig:(MEConfig *)config
+                requestContext:(MERequestContext *)requestContext {
     EMSRESTClient *restClient = [EMSRESTClient clientWithSession:[NSURLSession sharedSession]];
     return [self initWithRestClient:restClient
-                             config:config];
+                             config:config
+                     requestContext:requestContext];
 }
 
 - (instancetype)initWithRestClient:(EMSRESTClient *)restClient
-                            config:(MEConfig *)config {
+                            config:(MEConfig *)config
+                    requestContext:(MERequestContext *)requestContext {
     self = [super init];
     if (self) {
         _restClient = restClient;
         _config = config;
         _notifications = [NSMutableArray new];
+        _requestContext = requestContext;
     }
     return self;
 }
@@ -118,8 +123,8 @@
     NSMutableDictionary *mutableFetchingHeaders = [NSMutableDictionary dictionaryWithDictionary:defaultHeaders];
     mutableFetchingHeaders[@"x-ems-me-hardware-id"] = [EMSDeviceInfo hardwareId];
     mutableFetchingHeaders[@"x-ems-me-application-code"] = self.config.applicationCode;
-    mutableFetchingHeaders[@"x-ems-me-contact-field-id"] = [NSString stringWithFormat:@"%@", self.appLoginParameters.contactFieldId];
-    mutableFetchingHeaders[@"x-ems-me-contact-field-value"] = self.appLoginParameters.contactFieldValue;
+    mutableFetchingHeaders[@"x-ems-me-contact-field-id"] = [NSString stringWithFormat:@"%@", self.requestContext.appLoginParameters.contactFieldId];
+    mutableFetchingHeaders[@"x-ems-me-contact-field-value"] = self.requestContext.appLoginParameters.contactFieldValue;
     mutableFetchingHeaders[@"Authorization"] = [EMSAuthentication createBasicAuthWithUsername:self.config.applicationCode
                                                                                      password:self.config.applicationPassword];
     return [NSDictionary dictionaryWithDictionary:mutableFetchingHeaders];
@@ -151,7 +156,7 @@
 }
 
 - (BOOL)hasLoginParameters {
-    return self.appLoginParameters && self.appLoginParameters.contactFieldId && self.appLoginParameters.contactFieldValue;
+    return self.requestContext.appLoginParameters && self.requestContext.appLoginParameters.contactFieldId && self.requestContext.appLoginParameters.contactFieldValue;
 }
 
 - (void)respondWithError:(MEInboxResultErrorBlock)errorBlock error:(NSError *)error {

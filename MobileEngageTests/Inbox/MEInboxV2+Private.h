@@ -10,8 +10,11 @@
 @interface MEInboxV2 (Private)
 
 - (instancetype)initWithRestClient:(EMSRESTClient *)restClient
-                            config:(MEConfig *)config;
+                            config:(MEConfig *)config
+                    requestContext:(MERequestContext *)requestContext;
 
 - (NSMutableArray *)notifications;
+
+- (MERequestContext *)requestContext;
 
 @end

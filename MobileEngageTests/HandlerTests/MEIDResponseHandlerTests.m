@@ -8,10 +8,7 @@
 #import "MobileEngageInternal.h"
 #import "MERequestContext.h"
 #import "MEExperimental.h"
-#import "MEInboxV2.h"
-#import "MobileEngage.h"
 #import "MEExperimental+Test.h"
-#import "MEConfigBuilder.h"
 
 SPEC_BEGIN(MEIdResponseHandlerTests)
 
@@ -111,31 +108,6 @@ SPEC_BEGIN(MEIdResponseHandlerTests)
                 MEIdResponseHandler *handler = [[MEIdResponseHandler alloc] initWithRequestContext:requestContext];
 
                 [handler handleResponse:response];
-            });
-
-            it(@"should set meId on inbox", ^{
-                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                    [builder setCredentialsWithApplicationCode:@"applicationCode"
-                                           applicationPassword:@"applicationPassword"];
-                    [builder setExperimentalFeatures:@[INBOX_V2]];
-                }];
-                [MobileEngage setupWithConfig:config
-                                launchOptions:nil];
-
-                NSString *meId = @"me123456789";
-                NSString *meIdSignature = @"meIdSignature";
-                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature}
-                                                               options:0
-                                                                 error:nil];
-                EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
-                                                                                  headers:@{}
-                                                                                     body:body
-                                                                             requestModel:[EMSRequestModel mock]
-                                                                                timestamp:[NSDate date]];
-                MEIdResponseHandler *handler = [[MEIdResponseHandler alloc] initWithRequestContext:[MERequestContext new]];
-                [[((MEInboxV2 *) MobileEngage.inbox).meId should] beNil];
-                [handler handleResponse:response];
-                [[((MEInboxV2 *) MobileEngage.inbox).meId should] equal:meId];
             });
 
         });

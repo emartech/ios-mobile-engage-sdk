@@ -5,11 +5,13 @@
 #import <Foundation/Foundation.h>
 #import "MENotificationInboxStatus.h"
 #import "MEInboxProtocol.h"
+#import "MEInboxNotificationProtocol.h"
 
-@class MEAppLoginParameters;
+@class MERequestContext;
 
-@interface MEInbox : NSObject <MEInboxProtocol>
+@interface MEInbox : NSObject <MEInboxNotificationProtocol>
 
-@property(nonatomic, strong) MEAppLoginParameters *appLoginParameters;
+- (instancetype)initWithConfig:(MEConfig *)config
+                requestContext:(MERequestContext *)requestContext;
 
 @end

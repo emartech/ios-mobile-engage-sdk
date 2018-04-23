@@ -5,21 +5,23 @@
 #import "MobileEngage.h"
 #import "MEConfig.h"
 #import "MobileEngageInternal.h"
-#import "MEInbox+Notification.h"
-#import "MEInboxV2+Notification.h"
+#import "MEInboxNotificationProtocol.h"
 #import <CoreSDK/EMSSQLiteHelper.h>
 #import "MESchemaDelegate.h"
 #import "MENotificationCenterManager.h"
 #import "MEInApp+Private.h"
 #import "MERequestModelRepositoryFactory.h"
 #import "MEExperimental.h"
+#import "MobileEngage+Private.h"
+#import "MEInboxV2.h"
+#import "MEInbox.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"MEDB.db"]
 
 @implementation MobileEngage
 
 static MobileEngageInternal *_mobileEngageInternal;
-static id<MEInboxProtocol> _inbox;
+static id <MEInboxNotificationProtocol> _inbox;
 static MEInApp *_iam;
 static EMSSQLiteHelper *_dbHelper;
 
@@ -36,10 +38,11 @@ static EMSSQLiteHelper *_dbHelper;
 
     _mobileEngageInternal = mobileEngageInternal;
 
+    MERequestContext *requestContext = [[MERequestContext alloc] initWithConfig:config];
     if ([MEExperimental isFeatureEnabled:INBOX_V2]) {
-        _inbox = [[MEInboxV2 alloc] initWithConfig:config];
+        _inbox = [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext];
     } else {
-        _inbox = [[MEInbox alloc] initWithConfig:config];
+        _inbox = [[MEInbox alloc] initWithConfig:config requestContext:requestContext];
     }
 
     MELogRepository *logRepository = [MELogRepository new];
@@ -54,7 +57,8 @@ static EMSSQLiteHelper *_dbHelper;
     [_mobileEngageInternal setupWithConfig:config
                              launchOptions:launchOptions
                   requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:_iam]
-                             logRepository:logRepository];
+                             logRepository:logRepository
+                            requestContext:requestContext];
 
     _iam.inAppTracker = _mobileEngageInternal;
 }
@@ -77,26 +81,16 @@ static EMSSQLiteHelper *_dbHelper;
 }
 
 + (NSString *)appLogin {
-    if (![MEExperimental isFeatureEnabled:INBOX_V2]) {
-        [((MEInbox *)_inbox) setAppLoginParameters:[MEAppLoginParameters new]];
-    }
     return [_mobileEngageInternal appLogin];
 }
 
 + (NSString *)appLoginWithContactFieldId:(NSNumber *)contactFieldId
                        contactFieldValue:(NSString *)contactFieldValue {
-    if (![MEExperimental isFeatureEnabled:INBOX_V2]) {
-        [((MEInbox *)_inbox) setAppLoginParameters:[[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId
-                                                                                      contactFieldValue:contactFieldValue]];
-    }
     return [_mobileEngageInternal appLoginWithContactFieldId:contactFieldId
                                            contactFieldValue:contactFieldValue];
 }
 
 + (NSString *)appLogout {
-    if (![MEExperimental isFeatureEnabled:INBOX_V2]) {
-        [((MEInbox *)_inbox) setAppLoginParameters:nil];
-    }
     return [_mobileEngageInternal appLogout];
 }
 
@@ -104,11 +98,7 @@ static EMSSQLiteHelper *_dbHelper;
     NSNumber *inbox = userInfo[@"inbox"];
     if (inbox && [inbox boolValue]) {
         MENotification *notification = [[MENotification alloc] initWithUserinfo:userInfo];
-        if ([MEExperimental isFeatureEnabled:INBOX_V2]) {
-            [((MEInboxV2 *)_inbox) addNotification:notification];
-        } else {
-            [((MEInbox *)_inbox) addNotification:notification];
-        }
+        [_inbox addNotification:notification];
 
     }
     return [_mobileEngageInternal trackMessageOpenWithUserInfo:userInfo];
@@ -132,7 +122,7 @@ static EMSSQLiteHelper *_dbHelper;
     return [_mobileEngageInternal statusDelegate];
 }
 
-+ (id<MEInboxProtocol>)inbox {
++ (id <MEInboxProtocol>)inbox {
     return _inbox;
 }
 

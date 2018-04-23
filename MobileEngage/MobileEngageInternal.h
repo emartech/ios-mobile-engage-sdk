@@ -37,7 +37,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)trackDeepLinkWith:(NSUserActivity *)userActivity
             sourceHandler:(nullable MESourceHandler)sourceHandler;
 
-- (void)setupWithConfig:(nonnull MEConfig *)config launchOptions:(NSDictionary *)launchOptions requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory logRepository:(MELogRepository *)logRepository;
+- (void) setupWithConfig:(nonnull MEConfig *)config
+           launchOptions:(NSDictionary *)launchOptions
+requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory
+           logRepository:(MELogRepository *)logRepository
+          requestContext:(MERequestContext *)requestContext;
 
 - (NSString *)appLogin;
 
