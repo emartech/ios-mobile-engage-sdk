@@ -239,7 +239,7 @@ SPEC_BEGIN(MobileEngageTests)
 
         describe(@"experimentalFeatures", ^{
             context(@"Inbox", ^{
-                it(@"should use inbox v1 when INBOX_V2 flipper is turned off", ^{
+                it(@"should use inbox v1 when USER_CENTRIC_INBOX flipper is turned off", ^{
                     NSString *applicationCode = kAppId;
                     NSString *applicationPassword = @"appSecret";
 
@@ -253,14 +253,14 @@ SPEC_BEGIN(MobileEngageTests)
                     [[theValue([MobileEngage.inbox isKindOfClass:[MEInbox class]]) should] beYes];
                 });
 
-                it(@"should use inbox V2 when INBOX_V2 flipper is turned on", ^{
+                it(@"should use inbox V2 when USER_CENTRIC_INBOX flipper is turned on", ^{
                     NSString *applicationCode = kAppId;
                     NSString *applicationPassword = @"appSecret";
 
                     MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                         [builder setCredentialsWithApplicationCode:applicationCode
                                                applicationPassword:applicationPassword];
-                        [builder setExperimentalFeatures:@[INBOX_V2]];
+                        [builder setExperimentalFeatures:@[USER_CENTRIC_INBOX]];
                     }];
                     [MobileEngage setupWithConfig:config
                                     launchOptions:nil];

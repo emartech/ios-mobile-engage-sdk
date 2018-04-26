@@ -34,7 +34,7 @@
 
 @implementation MobileEngageInternal
 
-- (void)setupWithConfig:(nonnull MEConfig *)config
+- (void) setupWithConfig:(nonnull MEConfig *)config
            launchOptions:(NSDictionary *)launchOptions
 requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFactory
            logRepository:(MELogRepository *)logRepository
@@ -190,24 +190,38 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
 }
 
 - (NSString *)trackMessageOpenWithUserInfo:(NSDictionary *)userInfo {
-    NSString *requestId;
     NSString *messageId = [userInfo messageId];
     EMSRequestModel *requestModel = [MERequestFactory createTrackMessageOpenRequestWithMessageId:messageId
                                                                                   requestContext:self.requestContext];
     if (messageId) {
         [self.requestManager submit:requestModel];
     } else {
-        self.errorBlock(requestId, [NSError errorWithCode:1
-                                     localizedDescription:@"Missing messageId"]);
+        self.errorBlock(requestModel.requestId, [NSError errorWithCode:1
+                                                  localizedDescription:@"Missing messageId"]);
     }
     return requestModel.requestId;
 }
 
 - (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage {
     NSParameterAssert(inboxMessage);
-    EMSRequestModel *requestModel = [MERequestFactory createTrackMessageOpenRequestWithNotification:inboxMessage
-                                                                                     requestContext:self.requestContext];
-    [self.requestManager submit:requestModel];
+    EMSRequestModel *requestModel;
+    if ([MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX]) {
+        requestModel = [MERequestFactory createTrackMessageOpenRequestWithNotification:inboxMessage
+                                                                        requestContext:self.requestContext];
+        if (!inboxMessage.id) {
+            self.errorBlock(requestModel.requestId, [NSError errorWithCode:1
+                                                      localizedDescription:@"Missing messageId"]);
+        } else if (!inboxMessage.sid) {
+            self.errorBlock(requestModel.requestId, [NSError errorWithCode:1
+                                                      localizedDescription:@"Missing sid"]);
+        } else {
+            [self.requestManager submit:requestModel];
+        }
+    } else {
+        requestModel = [MERequestFactory createTrackMessageOpenRequestWithNotification:inboxMessage
+                                                                        requestContext:self.requestContext];
+        [self.requestManager submit:requestModel];
+    }
     return [requestModel requestId];
 }
 

@@ -12,7 +12,6 @@
 #import "MEInApp+Private.h"
 #import "MERequestModelRepositoryFactory.h"
 #import "MEExperimental.h"
-#import "MobileEngage+Private.h"
 #import "MEInboxV2.h"
 #import "MEInbox.h"
 
@@ -39,7 +38,7 @@ static EMSSQLiteHelper *_dbHelper;
     _mobileEngageInternal = mobileEngageInternal;
 
     MERequestContext *requestContext = [[MERequestContext alloc] initWithConfig:config];
-    if ([MEExperimental isFeatureEnabled:INBOX_V2]) {
+    if ([MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX]) {
         _inbox = [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext];
     } else {
         _inbox = [[MEInbox alloc] initWithConfig:config requestContext:requestContext];

@@ -1,4 +1,5 @@
 #import <CoreSDK/EMSDeviceInfo.h>
+#import <CoreSDK/EMSAuthentication.h>
 #import "Kiwi.h"
 #import "MERequestFactory.h"
 #import "EMSRequestModel.h"
@@ -7,6 +8,8 @@
 #import "MERequestContext.h"
 #import "MEConfigBuilder.h"
 #import "MEExperimental+Test.h"
+#import "MENotification.h"
+#import "NSDate+EMSCore.h"
 
 SPEC_BEGIN(MERequestFactoryTests)
 
@@ -180,6 +183,103 @@ SPEC_BEGIN(MERequestFactoryTests)
                 });
             });
 
+        });
+
+        describe(@"createTrackMessageOpenRequestWithNotification:requestContext:", ^{
+
+            typedef MENotification *(^NotificationBlock)();
+            typedef MERequestContext *(^RequestContextBlock)(NSDate *timeStamp);
+
+            NotificationBlock notificationBlock = ^MENotification * {
+                MENotification *notification = [MENotification new];
+                notification.id = @"notificationId";
+                notification.sid = @"notificationSid";
+                notification.title = @"notificationTitle";
+                notification.body = @"notificationBody";
+                notification.customData = @{@"notificationCustomDataKey": @"notificationCustomDataValue"};
+                notification.rootParams = @{
+                    @"notificationRootParamsKey1": @{@"subKey1": @"subValue1"},
+                    @"notificationRootParamsKey2": @"notificationRootParamsValue2"
+                };
+                notification.expirationTime = @7200;
+                notification.receivedAtTimestamp = @12345678123;
+                return notification;
+            };
+
+            RequestContextBlock requestContextBlock = ^MERequestContext *(NSDate *timeStamp) {
+                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                    [builder setCredentialsWithApplicationCode:@"14C19-A121F"
+                                           applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
+                }];
+                EMSTimestampProvider *timestampProvider = [EMSTimestampProvider mock];
+                [timestampProvider stub:@selector(provideTimestamp) andReturn:timeStamp];
+                MERequestContext *requestContext = [[MERequestContext alloc] initWithConfig:config];
+                requestContext.meId = @"requestContextMeId";
+                requestContext.meIdSignature = @"requestContextMeIdSignature";
+                requestContext.timestampProvider = timestampProvider;
+                return requestContext;
+            };
+
+            context(@"USER_CENTRIC_INBOX TURNED OFF", ^{
+
+                beforeEach(^{
+                    [MEExperimental reset];
+                });
+
+                it(@"should create v2 request when USER_CENTRIC_INBOX feature is turned off", ^{
+                    MENotification *notification = notificationBlock();
+                    MERequestContext *requestContext = requestContextBlock([NSDate date]);
+
+                    EMSRequestModel *requestModel = [MERequestFactory createTrackMessageOpenRequestWithNotification:notification
+                                                                                                     requestContext:requestContext];
+
+                    [[requestModel.url.absoluteString should] equal:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
+                    [[requestModel.method should] equal:@"POST"];
+                    [[requestModel.payload[@"sid"] should] equal:@"notificationSid"];
+                    [[requestModel.payload[@"application_id"] should] equal:@"14C19-A121F"];
+                    [[requestModel.payload[@"hardware_id"] should] equal:[EMSDeviceInfo hardwareId]];
+                    [[requestModel.headers should] equal:@{@"Authorization": [EMSAuthentication createBasicAuthWithUsername:requestContext.config.applicationCode
+                                                                                                                   password:requestContext.config.applicationPassword]}];
+                });
+            });
+            context(@"USER_CENTRIC_INBOX TURNED ON", ^{
+
+                beforeEach(^{
+                    [MEExperimental enableFeature:USER_CENTRIC_INBOX];
+                });
+
+                afterEach(^{
+                    [MEExperimental reset];
+                });
+
+
+
+                it(@"should create v3 request when USER_CENTRIC_INBOX feature is turned on", ^{
+                    MENotification *notification = notificationBlock();
+                    NSDate *timeStamp = [NSDate date];
+                    MERequestContext *requestContext = requestContextBlock(timeStamp);
+
+                    EMSRequestModel *requestModel = [MERequestFactory createTrackMessageOpenRequestWithNotification:notification
+                                                                                                     requestContext:requestContext];
+
+                    [[requestModel.url.absoluteString should] equal:@"https://mobile-events.eservice.emarsys.net/v3/devices/requestContextMeId/events"];
+                    [[requestModel.method should] equal:@"POST"];
+
+                    [[requestModel.headers[@"X-ME-ID"] should] equal:@"requestContextMeId"];
+                    [[requestModel.headers[@"X-ME-ID-SIGNATURE"] should] equal:@"requestContextMeIdSignature"];
+                    [[requestModel.headers[@"X-ME-APPLICATIONCODE"] should] equal:@"14C19-A121F"];
+
+                    [[requestModel.payload[@"events"][0][@"name"] should] equal:@"inbox:open"];
+                    [[requestModel.payload[@"events"][0][@"type"] should] equal:@"internal"];
+                    [[requestModel.payload[@"events"][0][@"timestamp"] should] equal:[timeStamp stringValueInUTC]];
+                    [[requestModel.payload[@"events"][0][@"attributes"][@"message_id"] should] equal:@"notificationId"];
+                    [[requestModel.payload[@"events"][0][@"attributes"][@"sid"] should] equal:@"notificationSid"];
+                    [[requestModel.payload[@"clicks"] should] equal:@[]];
+                    [[requestModel.payload[@"viewed_messages"] should] equal:@[]];
+                    [[requestModel.payload[@"hardware_id"] should] equal:[EMSDeviceInfo hardwareId]];
+                });
+
+            });
         });
 
 SPEC_END

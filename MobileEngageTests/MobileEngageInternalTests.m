@@ -668,71 +668,208 @@ SPEC_BEGIN(MobileEngageInternalTests)
         });
 
         describe(@"trackMessageOpenWithUserInfo:", ^{
-            it(@"must not return with nil", ^{
-                id requestManager = requestManagerMock();
-                [[requestManager should] receive:@selector(submit:)
-                                   withArguments:kw_any(), kw_any(), kw_any()];
-                NSString *uuid = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
-                [[uuid shouldNot] beNil];
-            });
+            context(@"device centric inbox", ^{
 
-            it(@"should return with requestModel's requestId", ^{
-                id requestManager = requestManagerMock();
-                [[requestManager should] receive:@selector(submit:)
-                                   withArguments:kw_any(), kw_any(), kw_any()];
-                KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
-                                                            atIndex:0];
-                NSString *uuid = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
-
-                EMSRequestModel *actualModel = spy.argument;
-                [[uuid should] equal:actualModel.requestId];
-            });
-
-            it(@"should submit a corresponding RequestModel when there is no contact_field_id and contact_field_value", ^{
-                id requestManager = requestManagerMock();
-
-                EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
-                        @"application_id": kAppId,
-                        @"hardware_id": [EMSDeviceInfo hardwareId],
-                        @"sid": @"123456789"
+                beforeEach(^{
+                    [MEExperimental reset];
                 });
 
-                [[requestManager should] receive:@selector(submit:)
-                                   withArguments:kw_any(), kw_any(), kw_any()];
-
-                KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
-                                                            atIndex:0];
-                [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
-
-                EMSRequestModel *actualModel = spy.argument;
-                [[model should] beSimilarWithRequest:actualModel];
-            });
-
-            it(@"should submit a corresponding RequestModel when there are contact_field_id and contact_field_value", ^{
-                id requestManager = requestManagerMock();
-                MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
-                                                                                            contactFieldValue:@"contactFieldValue"];
-
-                [_mobileEngage.requestContext stub:@selector(appLoginParameters)
-                                         andReturn:appLoginParameters];
-
-                EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
-                        @"application_id": kAppId,
-                        @"hardware_id": [EMSDeviceInfo hardwareId],
-                        @"contact_field_id": @3,
-                        @"contact_field_value": @"contactFieldValue",
-                        @"sid": @"123456789"
+                it(@"must not return with nil", ^{
+                    id requestManager = requestManagerMock();
+                    [[requestManager should] receive:@selector(submit:)
+                                       withArguments:kw_any(), kw_any(), kw_any()];
+                    NSString *uuid = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+                    [[uuid shouldNot] beNil];
                 });
 
-                [[requestManager should] receive:@selector(submit:)
-                                   withArguments:kw_any(), kw_any(), kw_any()];
+                it(@"should return with requestModel's requestId", ^{
+                    id requestManager = requestManagerMock();
+                    [[requestManager should] receive:@selector(submit:)
+                                       withArguments:kw_any(), kw_any(), kw_any()];
+                    KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                                atIndex:0];
+                    NSString *uuid = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
 
-                KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
-                                                            atIndex:0];
-                [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+                    EMSRequestModel *actualModel = spy.argument;
+                    [[uuid should] equal:actualModel.requestId];
+                });
 
-                EMSRequestModel *actualModel = spy.argument;
-                [[model should] beSimilarWithRequest:actualModel];
+
+                it(@"should submit a corresponding RequestModel when there is no contact_field_id and contact_field_value", ^{
+                    id requestManager = requestManagerMock();
+
+                    EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
+                            @"application_id": kAppId,
+                            @"hardware_id": [EMSDeviceInfo hardwareId],
+                            @"sid": @"123456789"
+                    });
+
+                    [[requestManager should] receive:@selector(submit:)
+                                       withArguments:kw_any(), kw_any(), kw_any()];
+
+                    KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                                atIndex:0];
+                    [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+
+                    EMSRequestModel *actualModel = spy.argument;
+                    [[model should] beSimilarWithRequest:actualModel];
+                });
+
+                it(@"should submit a corresponding RequestModel when there are contact_field_id and contact_field_value", ^{
+                    id requestManager = requestManagerMock();
+                    MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
+                                                                                                contactFieldValue:@"contactFieldValue"];
+
+                    [_mobileEngage.requestContext stub:@selector(appLoginParameters)
+                                             andReturn:appLoginParameters];
+
+                    EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open", @{
+                            @"application_id": kAppId,
+                            @"hardware_id": [EMSDeviceInfo hardwareId],
+                            @"contact_field_id": @3,
+                            @"contact_field_value": @"contactFieldValue",
+                            @"sid": @"123456789"
+                    });
+
+                    [[requestManager should] receive:@selector(submit:)
+                                       withArguments:kw_any(), kw_any(), kw_any()];
+
+                    KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
+                                                                atIndex:0];
+                    [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @"{\"sid\":\"123456789\"}"}];
+
+                    EMSRequestModel *actualModel = spy.argument;
+                    [[model should] beSimilarWithRequest:actualModel];
+                });
+
+                it(@"should return with requestModel's non-nil requestId reported in the error when there is no sid", ^{
+                    FakeRequestManager *requestManager = [FakeRequestManager managerWithSuccessBlock:nil errorBlock:nil];
+                    _mobileEngage = [MobileEngageInternal new];
+
+                    __block NSError *reportedError;
+                    __block NSString *requestIdForReportedError;
+
+                    _mobileEngage.errorBlock = ^(NSString *requestId, NSError *error) {
+                        requestIdForReportedError = requestId;
+                        reportedError = error;
+                    };
+
+                    MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                        [builder setCredentialsWithApplicationCode:kAppId
+                                               applicationPassword:kAppSecret];
+                    }];
+
+                    requestContext = [[MERequestContext alloc] initWithConfig:config];
+                    requestContext.timestampProvider = [EMSTimestampProvider new];
+                    requestContext.meId = @"meId";
+                    requestContext.meIdSignature = @"meIdSignature";
+
+                    [_mobileEngage setupWithRequestManager:requestManager config:config launchOptions:nil requestContext:requestContext];
+
+                    NSString *uuid = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @{}}];
+
+                    EMSRequestModel *actualModel = [requestManager.submittedModels firstObject];
+                    [[uuid shouldNot] beNil];
+                    [[uuid should] equal:requestIdForReportedError];
+                });
+            });
+
+            context(@"user centric inbox", ^{
+
+                __block FakeRequestManager *requestManager;
+                __block NSError *reportedError;
+                __block NSString *requestIdForReportedError;
+
+                beforeEach(^{
+                    [MEExperimental enableFeature:USER_CENTRIC_INBOX];
+
+                    requestManager = [FakeRequestManager managerWithSuccessBlock:nil errorBlock:nil];
+                    _mobileEngage = [MobileEngageInternal new];
+
+                    _mobileEngage.errorBlock = ^(NSString *requestId, NSError *error) {
+                        requestIdForReportedError = requestId;
+                        reportedError = error;
+                    };
+
+                    MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                        [builder setCredentialsWithApplicationCode:kAppId
+                                               applicationPassword:kAppSecret];
+                    }];
+
+                    requestContext = [[MERequestContext alloc] initWithConfig:config];
+                    requestContext.timestampProvider = [EMSTimestampProvider new];
+                    requestContext.meId = @"meId";
+                    requestContext.meIdSignature = @"meIdSignature";
+
+                    [_mobileEngage setupWithRequestManager:requestManager config:config launchOptions:nil requestContext:requestContext];
+                });
+
+                afterEach(^{
+                    [MEExperimental reset];
+                });
+
+                it(@"must not return with nil", ^{
+                    MENotification *message = [MENotification new];
+                    message.sid = @"sid";
+                    message.id = @"messageId";
+
+                    NSString *uuid = [_mobileEngage trackMessageOpenWithInboxMessage:message];
+                    [[uuid shouldNot] beNil];
+                });
+
+                it(@"should return with requestModel's non-nil requestId reported in the error when there is no messageId", ^{
+                    MENotification *message = [MENotification new];
+                    message.sid = @"sid";
+
+                    NSString *uuid = [_mobileEngage trackMessageOpenWithInboxMessage:message];
+
+                    EMSRequestModel *actualModel = [requestManager.submittedModels firstObject];
+                    [[uuid shouldNot] beNil];
+                    [[uuid should] equal:requestIdForReportedError];
+                });
+
+                it(@"should return with requestModel's non-nil requestId reported in the error when there is no sid", ^{
+                    MENotification *message = [MENotification new];
+                    message.id = @"messageId";
+
+                    NSString *uuid = [_mobileEngage trackMessageOpenWithInboxMessage:message];
+
+                    EMSRequestModel *actualModel = [requestManager.submittedModels firstObject];
+                    [[uuid shouldNot] beNil];
+                    [[uuid should] equal:requestIdForReportedError];
+                });
+
+                it(@"should return an error on errorhandler instead of submitting an invalid request without messageId", ^{
+                    MENotification *message = [MENotification new];
+                    message.sid = @"testID";
+                    message.title = @"title";
+                    message.body = @"body";
+                    message.customData = @{};
+                    message.rootParams = @{};
+                    message.expirationTime = @100;
+                    message.receivedAtTimestamp = @50;
+
+                    [_mobileEngage trackMessageOpenWithInboxMessage:message];
+
+                    [[requestManager.submittedModels should] beEmpty];
+                    [[reportedError.localizedDescription should] equal:@"Missing messageId"];
+                });
+
+                it(@"should return an error on errorhandler instead of submitting an invalid request without sid", ^{
+                    MENotification *message = [MENotification new];
+                    message.id = @"testID";
+                    message.title = @"title";
+                    message.body = @"body";
+                    message.customData = @{};
+                    message.rootParams = @{};
+                    message.expirationTime = @100;
+                    message.receivedAtTimestamp = @50;
+
+                    [_mobileEngage trackMessageOpenWithInboxMessage:message];
+
+                    [[requestManager.submittedModels should] beEmpty];
+                    [[reportedError.localizedDescription should] equal:@"Missing sid"];
+                });
             });
         });
 

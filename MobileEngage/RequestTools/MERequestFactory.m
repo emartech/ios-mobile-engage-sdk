@@ -32,7 +32,7 @@
 
 + (BOOL)shouldSendLastMobileActivityWithRequestContext:(MERequestContext *)requestContext currentAppLoginPayload:(NSDictionary *)currentAppLoginPayload {
     return (![MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload]) ||
-            ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload] && requestContext.meId);
+        ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload] && requestContext.meId);
 }
 
 + (EMSRequestModel *)createAppLoginRequestWithPushToken:(NSData *)pushToken requestContext:(MERequestContext *)requestContext {
@@ -69,16 +69,35 @@
 
 + (EMSRequestModel *)createTrackMessageOpenRequestWithNotification:(MENotification *)inboxMessage
                                                     requestContext:(MERequestContext *)requestContext {
-    return [MERequestFactory requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"
-                                          method:HTTPMethodPOST
-                          additionalPayloadBlock:^(NSMutableDictionary *payload) {
-                              payload[@"sid"] = inboxMessage.sid;
-                              payload[@"source"] = @"inbox";
-                          } requestContext:requestContext];
+    EMSRequestModel *requestModel;
+    if ([MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX]) {
+        NSMutableDictionary *attributes = [NSMutableDictionary new];
+
+        if (inboxMessage.id) {
+            attributes[@"message_id"] = inboxMessage.id;
+        }
+
+        if (inboxMessage.sid) {
+            attributes[@"sid"] = inboxMessage.sid;
+        }
+
+        requestModel = [MERequestFactory createCustomEventModelWithEventName:@"inbox:open"
+                                                             eventAttributes:attributes
+                                                                        type:@"internal"
+                                                              requestContext:requestContext];
+    } else {
+        requestModel = [MERequestFactory requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"
+                                                      method:HTTPMethodPOST
+                                      additionalPayloadBlock:^(NSMutableDictionary *payload) {
+                                          payload[@"sid"] = inboxMessage.sid;
+                                          payload[@"source"] = @"inbox";
+                                      }
+                                              requestContext:requestContext];
+    }
+    return requestModel;
 }
 
 + (EMSRequestModel *)createTrackMessageOpenRequestWithMessageId:(NSString *)messageId
-
                                                  requestContext:(MERequestContext *)requestContext {
     EMSRequestModel *requestModel;
     if (messageId) {
@@ -86,7 +105,8 @@
                                                       method:HTTPMethodPOST
                                       additionalPayloadBlock:^(NSMutableDictionary *payload) {
                                           payload[@"sid"] = messageId;
-                                      } requestContext:requestContext];
+                                      }
+                                              requestContext:requestContext];
     } else {
         requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
             [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
@@ -128,9 +148,9 @@
         payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
 
         NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
-                @"type": type,
-                @"name": eventName,
-                @"timestamp": [[requestContext.timestampProvider provideTimestamp] stringValueInUTC]}];
+            @"type": type,
+            @"name": eventName,
+            @"timestamp": [[requestContext.timestampProvider provideTimestamp] stringValueInUTC]}];
 
         if (eventAttributes) {
             event[@"attributes"] = eventAttributes;
@@ -169,8 +189,8 @@
         [builder setUrl:url];
         [builder setMethod:method];
         NSMutableDictionary *payload = [@{
-                @"application_id": requestContext.config.applicationCode,
-                @"hardware_id": [EMSDeviceInfo hardwareId]
+            @"application_id": requestContext.config.applicationCode,
+            @"hardware_id": [EMSDeviceInfo hardwareId]
         } mutableCopy];
 
         if (requestContext.appLoginParameters.contactFieldId && requestContext.appLoginParameters.contactFieldValue) {

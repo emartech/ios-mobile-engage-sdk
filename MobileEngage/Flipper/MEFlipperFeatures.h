@@ -7,4 +7,4 @@
 #define MEFlipperFeature const NSString *
 
 static MEFlipperFeature INAPP_MESSAGING = @"INAPP_MESSAGING";
-static MEFlipperFeature INBOX_V2 = @"INBOX_V2";
+static MEFlipperFeature USER_CENTRIC_INBOX = @"USER_CENTRIC_INBOX";

@@ -4,12 +4,19 @@
 
 #import "MENotification.h"
 #import "NSDictionary+MobileEngage.h"
+#import "MEExperimental.h"
 
 @implementation MENotification
 
 - (instancetype)initWithUserinfo:(NSDictionary *)dictionary {
     if (self = [super init]) {
-        _id = dictionary[@"id"];
+
+        if ([MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX]) {
+            _id = dictionary[@"message_id"];
+        } else {
+            _id = dictionary[@"id"];
+        }
+
         _sid = [dictionary messageId];
 
         NSObject *alert = dictionary[@"aps"][@"alert"];

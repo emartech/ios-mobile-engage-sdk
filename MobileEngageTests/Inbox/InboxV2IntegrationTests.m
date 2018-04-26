@@ -26,7 +26,7 @@ SPEC_BEGIN(InboxV2IntegrationTests)
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationCode:@"14C19-A121F"
                                        applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
-                [builder setExperimentalFeatures:@[INBOX_V2, INAPP_MESSAGING]];
+                [builder setExperimentalFeatures:@[USER_CENTRIC_INBOX, INAPP_MESSAGING]];
             }];
             [MobileEngage setupWithConfig:config
                             launchOptions:nil];
