@@ -79,16 +79,19 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
     _requestManager = requestManager;
     _config = config;
     [requestManager setAdditionalHeaders:[MEDefaultHeaders additionalHeadersWithConfig:self.config]];
+
+    NSMutableArray *responseHandlers = [NSMutableArray array];
+    if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] || [MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX]) {
+        [responseHandlers addObject:[[MEIdResponseHandler alloc] initWithRequestContext:_requestContext]];
+    }
     if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
-        _responseHandlers = @[
-                [[MEIdResponseHandler alloc] initWithRequestContext:_requestContext],
+        [responseHandlers addObjectsFromArray:@[
                 [MEIAMResponseHandler new],
                 [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
-                                                              displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]
+                                                              displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]]
         ];
-    } else {
-        _responseHandlers = @[];
     }
+    _responseHandlers = [NSArray arrayWithArray:responseHandlers];
 
     __weak typeof(self) weakSelf = self;
     [_notificationCenterManager addHandlerBlock:^{
