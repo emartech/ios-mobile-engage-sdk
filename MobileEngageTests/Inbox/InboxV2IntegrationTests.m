@@ -84,6 +84,34 @@ SPEC_BEGIN(InboxV2IntegrationTests)
                 [[theValue(_success) should] beYes];
             });
 
+            it(@"trackMessageOpenWithInboxMessage", ^{
+                __block MENotificationInboxStatus *_inboxStatus;
+
+                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+
+                [MobileEngage.inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                            _inboxStatus = inboxStatus;
+                            [exp fulfill];
+                        }
+                                                           errorBlock:^(NSError *error) {
+                                                               fail(@"Unexpected error");
+                                                           }];
+
+                [XCTWaiter waitForExpectations:@[exp] timeout:30];
+
+                [[_inboxStatus.notifications shouldNot] beEmpty];
+
+                FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
+                [MobileEngage setStatusDelegate:statusDelegate];
+
+                [MobileEngage.inbox trackMessageOpenWithInboxMessage:_inboxStatus.notifications.firstObject];
+
+                [statusDelegate waitForNextSuccess];
+
+                [[theValue(statusDelegate.successCount) should] equal:@1];
+                [[theValue(statusDelegate.errorCount) should] equal:@0];
+            });
+
         });
 
 SPEC_END
