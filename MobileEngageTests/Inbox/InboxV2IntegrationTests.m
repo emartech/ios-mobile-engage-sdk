@@ -86,6 +86,7 @@ SPEC_BEGIN(InboxV2IntegrationTests)
 
             it(@"trackMessageOpenWithInboxMessage", ^{
                 __block MENotificationInboxStatus *_inboxStatus;
+                __block NSError *_error;
 
                 XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
 
@@ -94,6 +95,7 @@ SPEC_BEGIN(InboxV2IntegrationTests)
                             [exp fulfill];
                         }
                                                            errorBlock:^(NSError *error) {
+                                                               _error = error;
                                                                fail(@"Unexpected error");
                                                            }];
 
@@ -108,6 +110,7 @@ SPEC_BEGIN(InboxV2IntegrationTests)
 
                 [statusDelegate waitForNextSuccess];
 
+                [[_error should] beNil];
                 [[theValue(statusDelegate.successCount) should] equal:@1];
                 [[theValue(statusDelegate.errorCount) should] equal:@0];
             });
