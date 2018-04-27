@@ -9,9 +9,8 @@
 #import "MEInboxParser.h"
 #import "EMSResponseModel.h"
 #import "MEDefaultHeaders.h"
-#import "MEConfig.h"
+#import "MobileEngage+Private.h"
 #import "NSError+EMSCore.h"
-#import "MERequestContext.h"
 
 
 @interface MEInboxV2 ()
@@ -110,7 +109,7 @@
 }
 
 - (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage {
-    return nil;
+    return [MobileEngage trackMessageOpenWithInboxMessage:inboxMessage];
 }
 
 #pragma mark - Private methods
