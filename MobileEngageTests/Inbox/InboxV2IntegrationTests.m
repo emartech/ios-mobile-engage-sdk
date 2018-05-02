@@ -11,13 +11,19 @@
 #import "FakeStatusDelegate.h"
 #import "MERequestContext.h"
 
+#define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestMEDB.db"]
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
+#define ME_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"MEDB.db"]
 
 SPEC_BEGIN(InboxV2IntegrationTests)
 
 
         beforeEach(^{
             [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
+                                                       error:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH
+                                                       error:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:ME_DB_PATH
                                                        error:nil];
             NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
             [userDefaults removeObjectForKey:kMEID];
