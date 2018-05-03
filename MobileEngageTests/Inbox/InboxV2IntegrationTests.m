@@ -27,12 +27,14 @@ SPEC_BEGIN(InboxV2IntegrationTests)
                                                        error:nil];
             NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
             [userDefaults removeObjectForKey:kMEID];
+            [userDefaults removeObjectForKey:kMEID_SIGNATURE];
+            [userDefaults removeObjectForKey:kLastAppLoginPayload];
             [userDefaults synchronize];
 
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationCode:@"14C19-A121F"
                                        applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
-                [builder setExperimentalFeatures:@[USER_CENTRIC_INBOX, INAPP_MESSAGING]];
+                [builder setExperimentalFeatures:@[USER_CENTRIC_INBOX]];
             }];
             [MobileEngage setupWithConfig:config
                             launchOptions:nil];

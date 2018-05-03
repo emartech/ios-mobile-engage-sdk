@@ -59,7 +59,8 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
         });
     };
 
-    const id <EMSRequestModelRepositoryProtocol> requestRepository = [requestRepositoryFactory createWithBatchCustomEventProcessing:[MEExperimental isFeatureEnabled:INAPP_MESSAGING]];
+    const BOOL shouldBatch = [MEExperimental isFeatureEnabled:INAPP_MESSAGING] || [MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX];
+    const id <EMSRequestModelRepositoryProtocol> requestRepository = [requestRepositoryFactory createWithBatchCustomEventProcessing:shouldBatch];
     EMSRequestManager *manager = [EMSRequestManager managerWithSuccessBlock:self.successBlock
                                                                  errorBlock:self.errorBlock
                                                           requestRepository:requestRepository

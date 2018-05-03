@@ -116,11 +116,11 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 requestManagerMock();
             });
 
-            context(@"ResponseHandlers", ^{
+            beforeEach(^{
+                [MEExperimental reset];
+            });
 
-                beforeEach(^{
-                    [MEExperimental reset];
-                });
+            context(@"ResponseHandlers", ^{
 
                 it(@"should register MEIDResponseHandler if INAPP is turned on", ^{
                     [MEExperimental enableFeature:INAPP_MESSAGING];
@@ -211,10 +211,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
             });
 
             it(@"should call setupWithRequestManager:config:launchOptions: with MERequestRepositoryProxy when INAPP feature turned on", ^{
+                [MEExperimental enableFeature:INAPP_MESSAGING];
                 MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                     [builder setCredentialsWithApplicationCode:kAppId
                                            applicationPassword:kAppSecret];
-                    [builder setExperimentalFeatures:@[INAPP_MESSAGING]];
                 }];
                 MobileEngageInternal *internal = [MobileEngageInternal new];
                 KWCaptureSpy *spy = [internal captureArgument:@selector(setupWithRequestManager:config:launchOptions:requestContext:)
@@ -225,7 +225,61 @@ SPEC_BEGIN(MobileEngageInternalTests)
                             logRepository:nil
                            requestContext:requestContext];
                 EMSRequestManager *manager = spy.argument;
-                [[[manager.repository class] should] equal:[MERequestRepositoryProxy class]];
+                [[NSStringFromClass([manager.repository class]) should] equal:NSStringFromClass([MERequestRepositoryProxy class])];
+            });
+
+            it(@"should call setupWithRequestManager:config:launchOptions: with EMSRequestModelRepository when INAPP and INBOX is turned off", ^{
+                [MEExperimental reset];
+                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                    [builder setCredentialsWithApplicationCode:kAppId
+                                           applicationPassword:kAppSecret];
+                }];
+                MobileEngageInternal *internal = [MobileEngageInternal new];
+                KWCaptureSpy *spy = [internal captureArgument:@selector(setupWithRequestManager:config:launchOptions:requestContext:)
+                                                      atIndex:0];
+                [internal setupWithConfig:config
+                            launchOptions:nil
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                            logRepository:nil
+                           requestContext:requestContext];
+                EMSRequestManager *manager = spy.argument;
+                [[NSStringFromClass([manager.repository class]) should] equal:NSStringFromClass([EMSRequestModelRepository class])];
+            });
+
+            it(@"should call setupWithRequestManager:config:launchOptions: with MERequestRepositoryProxy when INBOX feature turned on", ^{
+                [MEExperimental enableFeature:USER_CENTRIC_INBOX];
+                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                    [builder setCredentialsWithApplicationCode:kAppId
+                                           applicationPassword:kAppSecret];
+                }];
+                MobileEngageInternal *internal = [MobileEngageInternal new];
+                KWCaptureSpy *spy = [internal captureArgument:@selector(setupWithRequestManager:config:launchOptions:requestContext:)
+                                                      atIndex:0];
+                [internal setupWithConfig:config
+                            launchOptions:nil
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                            logRepository:nil
+                           requestContext:requestContext];
+                EMSRequestManager *manager = spy.argument;
+                [[NSStringFromClass([manager.repository class]) should] equal:NSStringFromClass([MERequestRepositoryProxy class])];
+            });
+
+            it(@"should call setupWithRequestManager:config:launchOptions: with MERequestRepositoryProxy when INAPP and INBOX feature turned on", ^{
+                [MEExperimental enableFeatures:@[INAPP_MESSAGING, USER_CENTRIC_INBOX]];
+                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                    [builder setCredentialsWithApplicationCode:kAppId
+                                           applicationPassword:kAppSecret];
+                }];
+                MobileEngageInternal *internal = [MobileEngageInternal new];
+                KWCaptureSpy *spy = [internal captureArgument:@selector(setupWithRequestManager:config:launchOptions:requestContext:)
+                                                      atIndex:0];
+                [internal setupWithConfig:config
+                            launchOptions:nil
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                            logRepository:nil
+                           requestContext:requestContext];
+                EMSRequestManager *manager = spy.argument;
+                [[NSStringFromClass([manager.repository class]) should] equal:NSStringFromClass([MERequestRepositoryProxy class])];
             });
 
         });
