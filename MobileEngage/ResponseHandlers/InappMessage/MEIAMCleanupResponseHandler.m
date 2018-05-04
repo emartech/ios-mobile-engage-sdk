@@ -5,6 +5,7 @@
 #import "MEIAMCleanupResponseHandler.h"
 #import "MEButtonClickFilterByCampaignIdSpecification.h"
 #import "MEDisplayedIAMFilterByCampaignIdSpecification.h"
+#import "MERequestMatcher.h"
 
 @interface MEIAMCleanupResponseHandler()
 
@@ -26,6 +27,10 @@
 }
 
 - (BOOL)shouldHandleResponse:(EMSResponseModel *)response {
+    if (![MERequestMatcher isV3CustomEventUrl:[response.requestModel.url absoluteString]]) {
+        return NO;
+    }
+
     id messages = response.parsedBody[@"old_messages"];
     return [messages isKindOfClass:[NSArray class]] && [messages count] > 0;
 }

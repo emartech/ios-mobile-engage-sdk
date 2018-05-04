@@ -32,7 +32,7 @@
 
 + (BOOL)shouldSendLastMobileActivityWithRequestContext:(MERequestContext *)requestContext currentAppLoginPayload:(NSDictionary *)currentAppLoginPayload {
     return (![MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload]) ||
-        ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload] && requestContext.meId);
+            ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload] && requestContext.meId);
 }
 
 + (EMSRequestModel *)createAppLoginRequestWithPushToken:(NSData *)pushToken requestContext:(MERequestContext *)requestContext {
@@ -148,9 +148,9 @@
         payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
 
         NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
-            @"type": type,
-            @"name": eventName,
-            @"timestamp": [[requestContext.timestampProvider provideTimestamp] stringValueInUTC]}];
+                @"type": type,
+                @"name": eventName,
+                @"timestamp": [[requestContext.timestampProvider provideTimestamp] stringValueInUTC]}];
 
         if (eventAttributes) {
             event[@"attributes"] = eventAttributes;
@@ -189,8 +189,8 @@
         [builder setUrl:url];
         [builder setMethod:method];
         NSMutableDictionary *payload = [@{
-            @"application_id": requestContext.config.applicationCode,
-            @"hardware_id": [EMSDeviceInfo hardwareId]
+                @"application_id": requestContext.config.applicationCode,
+                @"hardware_id": [EMSDeviceInfo hardwareId]
         } mutableCopy];
 
         if (requestContext.appLoginParameters.contactFieldId && requestContext.appLoginParameters.contactFieldValue) {

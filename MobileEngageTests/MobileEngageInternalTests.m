@@ -396,10 +396,13 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 NSNumber *meId = @123456789;
                 NSString *meIdSignature = @"signature";
                 NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature} options:0 error:nil];
+                EMSRequestModel *request = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                                                                                                       [builder setUrl:@"https://www.somethi.ng"];
+                                                                                                   }];
                 fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200
                                                                                             headers:@{}
                                                                                                body:data
-                                                                                       requestModel:[EMSRequestModel mock]
+                                                                                       requestModel:request
                                                                                           timestamp:[NSDate date]]] mutableCopy];
 
                 [internal appLogin];
