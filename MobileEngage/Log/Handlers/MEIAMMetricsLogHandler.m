@@ -2,6 +2,7 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 #import "MEIAMMetricsLogHandler.h"
+#import "MERequestMatcher.h"
 
 static NSString *kRequestId = @"request_id";
 static NSString *kInDatabaseTime = @"in_database_time";
@@ -10,9 +11,9 @@ static NSString *kLoadingTime = @"loading_time";
 static NSString *kCampaignId = @"campaign_id";
 static NSString *kUrl = @"url";
 
-@interface MEIAMMetricsLogHandler()
+@interface MEIAMMetricsLogHandler ()
 
-@property (nonatomic, strong) NSMutableDictionary<NSString*, NSDictionary<NSString *, NSObject *> *> *metricsBuffer;
+@property(nonatomic, strong) NSMutableDictionary<NSString *, NSDictionary<NSString *, NSObject *> *> *metricsBuffer;
 
 @end
 
@@ -31,7 +32,7 @@ static NSString *kUrl = @"url";
     NSDictionary<NSString *, NSObject *> *result = nil;
     if ([self hasValidRequestId:item] && ([self isInDatabaseMetric:item] || [self isNetworkingMetric:item] || [self isLoadingMetric:item])) {
         NSString *requestId = (NSString *) item[kRequestId];
-        NSMutableDictionary<NSString *, NSObject *> *metricsForRequest = self.metricsBuffer[requestId] ? [self.metricsBuffer[requestId] mutableCopy]: [NSMutableDictionary dictionary];
+        NSMutableDictionary<NSString *, NSObject *> *metricsForRequest = self.metricsBuffer[requestId] ? [self.metricsBuffer[requestId] mutableCopy] : [NSMutableDictionary dictionary];
         [metricsForRequest addEntriesFromDictionary:item];
         result = [self finalizeMetric:[NSDictionary dictionaryWithDictionary:metricsForRequest]];
     }
@@ -59,19 +60,9 @@ static NSString *kUrl = @"url";
     return requestId && [requestId isKindOfClass:[NSString class]];
 }
 
-- (BOOL)isV3CustomEventUrl:(NSString *)url {
-    NSError *error = nil;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"^https://mobile-events.eservice.emarsys.net/v3/devices/\\w+/events$"]
-                                                                           options:NSRegularExpressionCaseInsensitive
-                                                                             error:&error];
-    return [regex numberOfMatchesInString:url
-                                  options:0
-                                    range:NSMakeRange(0, [url length])] > 0;
-}
-
 - (BOOL)hasValidCustomEventUrl:(NSDictionary<NSString *, NSObject *> *)item {
     id url = item[kUrl];
-    return url && [url isKindOfClass:[NSString class]] && [self isV3CustomEventUrl:url];
+    return url && [url isKindOfClass:[NSString class]] && [MERequestMatcher isV3CustomEventUrl:url];
 }
 
 - (BOOL)isInDatabaseMetric:(NSDictionary<NSString *, NSObject *> *)item {

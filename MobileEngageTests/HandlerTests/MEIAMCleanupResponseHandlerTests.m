@@ -3,6 +3,7 @@
 //
 
 #import <CoreSDK/EMSTimestampProvider.h>
+#import <CoreSDK/EMSRequestModelBuilder.h>
 #import "Kiwi.h"
 #import "MEIAMCleanupResponseHandler.h"
 #import "AbstractResponseHandler+Private.h"
@@ -15,9 +16,13 @@
 SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
 
         __block EMSTimestampProvider *timestampProvider;
+        __block EMSRequestModel *requestModel;
 
         beforeEach(^{
             timestampProvider = [EMSTimestampProvider new];
+            requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://mobile-events.eservice.emarsys.net/v3/devices/meid/events"];
+            }];
         });
 
         describe(@"MEIAMCleanupResponseHandler.shouldHandleResponse", ^{
@@ -27,7 +32,7 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
-                                                                             requestModel:[EMSRequestModel mock]
+                                                                             requestModel:requestModel
                                                                                 timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [MEIAMCleanupResponseHandler new];
@@ -35,12 +40,29 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                 [[theValue([handler shouldHandleResponse:response]) should] beYes];
             });
 
+            it(@"should return NO when the request URL is not the V3 event service endpoint URL", ^{
+                EMSRequestModel *nonV3EventRequestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                    [builder setUrl:@"https://www.emarsys.com"];
+                }];
+
+                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[@"asdad", @"34g433t"]} options:0 error:nil];
+                EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
+                                                                                  headers:@{}
+                                                                                     body:body
+                                                                             requestModel:nonV3EventRequestModel
+                                                                                timestamp:[NSDate date]];
+
+                MEIAMCleanupResponseHandler *handler = [MEIAMCleanupResponseHandler new];
+
+                [[theValue([handler shouldHandleResponse:response]) should] beNo];
+            });
+
             it(@"should return NO when the response contains old_messages and the array is empty", ^{
                 NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[]} options:0 error:nil];
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
-                                                                             requestModel:[EMSRequestModel mock]
+                                                                             requestModel:requestModel
                                                                                 timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [MEIAMCleanupResponseHandler new];
@@ -53,7 +75,7 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
-                                                                             requestModel:[EMSRequestModel mock]
+                                                                             requestModel:requestModel
                                                                                 timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [MEIAMCleanupResponseHandler new];
@@ -66,7 +88,7 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
-                                                                             requestModel:[EMSRequestModel mock]
+                                                                             requestModel:requestModel
                                                                                 timestamp:[NSDate date]];
 
                 MEIAMCleanupResponseHandler *handler = [MEIAMCleanupResponseHandler new];
