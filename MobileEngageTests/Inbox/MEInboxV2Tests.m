@@ -3,11 +3,10 @@
 #import "Kiwi.h"
 #import "MEInboxV2.h"
 #import "MEConfigBuilder.h"
-#import "MEConfig.h"
 #import "FakeRestClient.h"
-#import "MEInboxV2+Private.h"
 #import "MEDefaultHeaders.h"
 #import "EMSRequestModelMatcher.h"
+#import "MENotificationInboxStatus.h"
 
 static NSString *const kAppId = @"kAppId";
 
@@ -19,6 +18,7 @@ SPEC_BEGIN(MEInboxV2Tests)
         NSString *applicationPassword = @"appSecret";
         NSString *meId = @"ordinaryMeId";
         __block MERequestContext *requestContext;
+        __block NSMutableArray *notifications;
 
         MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
             [builder setCredentialsWithApplicationCode:applicationCode
@@ -26,22 +26,25 @@ SPEC_BEGIN(MEInboxV2Tests)
         }];
 
         id (^inboxWithParameters)(EMSRESTClient *restClient, BOOL withMeId) = ^id(EMSRESTClient *restClient, BOOL withMeId) {
+            notifications = [NSMutableArray array];
             requestContext = [[MERequestContext alloc] initWithConfig:config];
             if (withMeId) {
                 requestContext.meId = meId;
             } else {
                 requestContext.meId = nil;
             }
-            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithRestClient:restClient
-                                                              config:config
-                                                      requestContext:requestContext];
+            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithConfig:config
+                                                  requestContext:requestContext
+                                                      restClient:restClient
+                                                   notifications:notifications];
             return inbox;
         };
 
         id (^inboxNotifications)() = ^id() {
-            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithRestClient:[EMSRESTClient mock]
-                                                              config:config
-                                                      requestContext:nil];
+            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithConfig:config
+                                                  requestContext:nil
+                                                      restClient:[EMSRESTClient mock]
+                                                   notifications:notifications];
 
             return inbox;
         };
@@ -101,12 +104,12 @@ SPEC_BEGIN(MEInboxV2Tests)
                         @{@"id": @"id7", @"title": @"title7", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678123)},
                 ]};
 
-                NSMutableArray<MENotification *> *notifications = [NSMutableArray array];
+                NSMutableArray<MENotification *> *nots = [NSMutableArray array];
                 for (NSDictionary *notificationDict in jsonResponse[@"notifications"]) {
-                    [notifications addObject:[[MENotification alloc] initWithNotificationDictionary:notificationDict]];
+                    [nots addObject:[[MENotification alloc] initWithNotificationDictionary:notificationDict]];
                 }
 
-                [[expectFutureValue(_notifications) shouldEventually] equal:notifications];
+                [[expectFutureValue(_notifications) shouldEventually] equal:nots];
             });
 
             it(@"should call EMSRestClient's executeTaskWithRequestModel: with correct RequestModel", ^{
@@ -231,9 +234,9 @@ SPEC_BEGIN(MEInboxV2Tests)
                 MEInboxV2 *inbox = inboxNotifications();
                 MENotification *notification = [MENotification new];
 
-                [[theValue([inbox.notifications count]) should] equal:theValue(0)];
+                [[theValue([notifications count]) should] equal:theValue(0)];
                 [inbox addNotification:notification];
-                [[theValue([inbox.notifications count]) should] equal:theValue(1)];
+                [[theValue([notifications count]) should] equal:theValue(1)];
             });
         });
 
@@ -318,8 +321,8 @@ SPEC_BEGIN(MEInboxV2Tests)
 
                 [[expectFutureValue(returnedNotification.id) shouldEventually] equal:@"id1"];
 
-                [[expectFutureValue(theValue([[inbox notifications] count])) shouldEventually] equal:@1];
-                [[expectFutureValue([inbox notifications][0]) shouldEventually] equal:notification2];
+                [[expectFutureValue(theValue([notifications count])) shouldEventually] equal:@1];
+                [[expectFutureValue(notifications[0]) shouldEventually] equal:notification2];
             });
 
             it(@"should be idempotent", ^{

@@ -432,7 +432,6 @@
 		E65587B6E86F82209C3026CE /* MEInboxV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxV2.h; sourceTree = "<group>"; };
 		E65587E10C55211DEB726913 /* MEInboxV2Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxV2Tests.m; sourceTree = "<group>"; };
 		E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxProtocol.h; sourceTree = "<group>"; };
-		E6558CB345BEF21F0B0A1191 /* MEInboxV2+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEInboxV2+Private.h"; sourceTree = "<group>"; };
 		E6558D3653247D3EE636B7FF /* InboxV2IntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxV2IntegrationTests.m; sourceTree = "<group>"; };
 		E6558EE1E4F554A6B261D02F /* MEInboxV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxV2.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -922,7 +921,6 @@
 				E655865EEABB244F1261121B /* MEInboxTests.m */,
 				E6558398A1E26EAC50F59B25 /* InboxIntegrationTests.m */,
 				E65587E10C55211DEB726913 /* MEInboxV2Tests.m */,
-				E6558CB345BEF21F0B0A1191 /* MEInboxV2+Private.h */,
 				E6558D3653247D3EE636B7FF /* InboxV2IntegrationTests.m */,
 			);
 			path = Inbox;

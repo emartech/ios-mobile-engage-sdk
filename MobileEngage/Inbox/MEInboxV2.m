@@ -4,43 +4,34 @@
 
 #import <CoreSDK/EMSAuthentication.h>
 #import "MEInboxV2.h"
-#import "EMSRESTClient.h"
 #import "EMSRequestContract.h"
 #import "MEInboxParser.h"
 #import "EMSResponseModel.h"
 #import "MEDefaultHeaders.h"
 #import "MobileEngage+Private.h"
 #import "NSError+EMSCore.h"
-
+#import "MENotificationInboxStatus.h"
 
 @interface MEInboxV2 ()
 
 @property(nonatomic, strong) EMSRESTClient *restClient;
 @property(nonatomic, strong) MEConfig *config;
 @property(nonatomic, strong) NSMutableArray *notifications;
-@property (nonatomic, strong) MERequestContext *requestContext;
+@property(nonatomic, strong) MERequestContext *requestContext;
 
 @end
 
 @implementation MEInboxV2
 
 - (instancetype)initWithConfig:(MEConfig *)config
-                requestContext:(MERequestContext *)requestContext {
-    EMSRESTClient *restClient = [EMSRESTClient clientWithSession:[NSURLSession sharedSession]];
-    return [self initWithRestClient:restClient
-                             config:config
-                     requestContext:requestContext];
-}
-
-
-- (instancetype)initWithRestClient:(EMSRESTClient *)restClient
-                            config:(MEConfig *)config
-                    requestContext:(MERequestContext *)requestContext {
+                requestContext:(MERequestContext *)requestContext
+                    restClient:(EMSRESTClient *)restClient
+                 notifications:(NSMutableArray *)notifications {
     self = [super init];
     if (self) {
         _restClient = restClient;
         _config = config;
-        _notifications = [NSMutableArray array];
+        _notifications = notifications;
         _requestContext = requestContext;
     }
     return self;

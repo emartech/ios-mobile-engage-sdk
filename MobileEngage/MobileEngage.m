@@ -39,7 +39,7 @@ static EMSSQLiteHelper *_dbHelper;
 
     MERequestContext *requestContext = [[MERequestContext alloc] initWithConfig:config];
     if ([MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX]) {
-        _inbox = [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext];
+        _inbox = [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext restClient:[EMSRESTClient clientWithSession:[NSURLSession sharedSession]] notifications:0];
     } else {
         _inbox = [[MEInbox alloc] initWithConfig:config requestContext:requestContext];
     }
