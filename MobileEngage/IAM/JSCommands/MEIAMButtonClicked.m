@@ -28,7 +28,7 @@
           resultBlock:(MEIAMJSResultBlock)resultBlock {
 
     NSString *eventId = message[@"id"];
-    NSArray<NSDictionary *> *errors = [message validate:^(EMSDictionaryValidator *validate) {
+    NSArray<NSString *> *errors = [message validate:^(EMSDictionaryValidator *validate) {
         [validate valueExistsForKey:@"buttonId" withType:[NSString class]];
     }];
 
