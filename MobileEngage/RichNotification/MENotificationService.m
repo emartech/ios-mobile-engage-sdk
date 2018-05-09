@@ -2,9 +2,9 @@
 //  Copyright © 2017. Emarsys. All rights reserved.
 //
 
+#import <CoreSDK/EMSDictionaryValidator.h>
 #import "MENotificationService.h"
 #import "UNNotificationAttachment+MobileEngage.h"
-#import "EMSDictionaryValidator.h"
 
 #define IMAGE_URL @"image_url"
 
