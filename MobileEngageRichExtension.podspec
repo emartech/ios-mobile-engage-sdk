@@ -12,5 +12,6 @@ Pod::Spec.new do |spec|
     'MobileEngage/RichNotification/MENotificationService.h',
     'MobileEngage/RichNotification/UNNotificationAttachment+MobileEngage.h'
 	]
+	spec.dependency 'CoreSDK'
 	spec.libraries = 'z', 'c++'
 end
