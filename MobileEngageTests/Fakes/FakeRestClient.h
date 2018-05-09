@@ -12,6 +12,8 @@ typedef enum {
 
 @interface FakeRestClient : EMSRESTClient
 
+@property (nonatomic, strong) NSMutableArray *submittedRequests;
+
 - (instancetype)initWithResultType:(ResultType)resultType;
 
 @end

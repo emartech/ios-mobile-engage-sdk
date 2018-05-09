@@ -136,6 +136,7 @@
 		37460580C4F1D671CF020965 /* MEInbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746016139C5A75BC00CF6F2 /* MEInbox.m */; };
 		3746066263B837B526649D24 /* MEButtonClickTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746062A85DCDF87C0A294A0 /* MEButtonClickTests.m */; };
 		374606A0C9ECC0801C4EE42A /* FakeDbHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460AC3C83E5E0D4A653881 /* FakeDbHelper.m */; };
+		374606B8CC1A4AABE43D0E86 /* FakeTimestampProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746028D981AB142C96B6095 /* FakeTimestampProvider.m */; };
 		374607869D0DFA6BDB70CE03 /* MEIAMCleanupResponseHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460019FFC25B064B334586 /* MEIAMCleanupResponseHandlerTests.m */; };
 		374607D89E8F3F987002E856 /* MEDefaultHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 374606679A509711A7AAF52E /* MEDefaultHeaders.h */; };
 		374607DBF8CB52FD015B63B5 /* MEIdResponseHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 37460EBC71A98B939E0E6817 /* MEIdResponseHandler.h */; };
@@ -366,6 +367,7 @@
 		3746019DA9F186F22D444A89 /* AbstractResponseHandlerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractResponseHandlerTests.m; sourceTree = "<group>"; };
 		37460276DDD5CF249B1467E7 /* FakeJSBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeJSBridge.h; sourceTree = "<group>"; };
 		3746028B86F56916D4CDFC09 /* FakeDbHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeDbHelper.h; sourceTree = "<group>"; };
+		3746028D981AB142C96B6095 /* FakeTimestampProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeTimestampProvider.m; sourceTree = "<group>"; };
 		37460332D0F051D4A3558019 /* FakeJSBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeJSBridge.m; sourceTree = "<group>"; };
 		3746033EE7A4F10260679059 /* AbstractResponseHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractResponseHandler.m; sourceTree = "<group>"; };
 		3746037DBB3D2CF1327E9CFF /* MEInboxNotificationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxNotificationProtocol.h; sourceTree = "<group>"; };
@@ -424,6 +426,7 @@
 		37460EA3311E9482B6DB9C81 /* MEInAppMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInAppMessage.m; sourceTree = "<group>"; };
 		37460EBC71A98B939E0E6817 /* MEIdResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIdResponseHandler.h; sourceTree = "<group>"; };
 		37460EE0ACDE8C528F03F827 /* MERequestMatcherTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestMatcherTests.m; sourceTree = "<group>"; };
+		37460F0C951E73C1287B1A67 /* FakeTimestampProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeTimestampProvider.h; sourceTree = "<group>"; };
 		37460F6E627F308A7B6FCAB6 /* FakeStatusDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeStatusDelegate.m; sourceTree = "<group>"; };
 		457F27067A0CDBBB496B5250 /* Pods-MobileEngage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.debug.xcconfig"; sourceTree = "<group>"; };
 		80777DA5D3D9E42FC73B566F /* libPods-MobileEngageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -885,6 +888,8 @@
 				37460DFC15F023B61603EEB2 /* FakeRequestRepository.h */,
 				32C6F5FB547ED2CD3900C70A /* FakeSpecification.m */,
 				32C6F228E453F831DA925993 /* FakeSpecification.h */,
+				3746028D981AB142C96B6095 /* FakeTimestampProvider.m */,
+				37460F0C951E73C1287B1A67 /* FakeTimestampProvider.h */,
 			);
 			path = Fakes;
 			sourceTree = "<group>";
@@ -1364,6 +1369,7 @@
 				E65582B92662CA6F5DA6D9D9 /* InboxV2IntegrationTests.m in Sources */,
 				374601223066E11FA8ED1C74 /* MERequestMatcherTests.m in Sources */,
 				32C6FCB31412E9B01A5463BB /* MENotificationServiceTests.m in Sources */,
+				374606B8CC1A4AABE43D0E86 /* FakeTimestampProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

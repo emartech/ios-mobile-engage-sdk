@@ -18,6 +18,7 @@
 - (instancetype)initWithResultType:(ResultType)resultType {
     if (self = [super init]) {
         _resultType = resultType;
+        _submittedRequests = [NSMutableArray new];
     }
     return self;
 }
@@ -25,6 +26,7 @@
 - (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel
                        successBlock:(CoreSuccessBlock)successBlock
                          errorBlock:(CoreErrorBlock)errorBlock {
+    [self.submittedRequests addObject:requestModel];
     NSDictionary *jsonResponse = @{@"notifications": @[
         @{@"id": @"id1", @"title": @"title1", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678129)},
         @{@"id": @"id2", @"title": @"title2", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678128)},

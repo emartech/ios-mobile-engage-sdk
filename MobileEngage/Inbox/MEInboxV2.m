@@ -18,6 +18,10 @@
 @property(nonatomic, strong) MEConfig *config;
 @property(nonatomic, strong) NSMutableArray *notifications;
 @property(nonatomic, strong) MERequestContext *requestContext;
+@property(nonatomic, strong) NSMutableArray *fetchRequestSuccessBlocks;
+@property(nonatomic, strong) NSMutableArray *fetchRequestErrorBlocks;
+@property(nonatomic, strong) EMSTimestampProvider *timestampProvider;
+@property(nonatomic, assign) BOOL fetchRequestInProgress;
 
 @end
 
@@ -26,13 +30,22 @@
 - (instancetype)initWithConfig:(MEConfig *)config
                 requestContext:(MERequestContext *)requestContext
                     restClient:(EMSRESTClient *)restClient
-                 notifications:(NSMutableArray *)notifications {
+                 notifications:(NSMutableArray *)notifications
+             timestampProvider:(EMSTimestampProvider *)timestampProvider {
     self = [super init];
     if (self) {
+        NSParameterAssert(timestampProvider);
+        NSParameterAssert(notifications);
+        NSParameterAssert(config);
+        NSParameterAssert(restClient);
+        NSParameterAssert(requestContext);
         _restClient = restClient;
         _config = config;
         _notifications = notifications;
         _requestContext = requestContext;
+        _timestampProvider = timestampProvider;
+        _fetchRequestSuccessBlocks = [NSMutableArray new];
+        _fetchRequestErrorBlocks = [NSMutableArray new];
     }
     return self;
 }
@@ -41,6 +54,16 @@
 - (void)fetchNotificationsWithResultBlock:(MEInboxResultBlock)resultBlock
                                errorBlock:(MEInboxResultErrorBlock)errorBlock {
     NSParameterAssert(resultBlock);
+
+    if (self.lastNotificationStatus && [[self.timestampProvider provideTimestamp] timeIntervalSinceDate:self.responseTimestamp] < 60) {
+        resultBlock([self mergedStatusWithStatus:self.lastNotificationStatus]);
+        return;
+    } else if (self.fetchRequestInProgress) {
+        [self.fetchRequestSuccessBlocks addObject:[resultBlock copy]];
+        [self.fetchRequestErrorBlocks addObject:[errorBlock copy]];
+        return;
+    }
+
     if (self.requestContext.meId) {
         __weak typeof(self) weakSelf = self;
         EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
@@ -48,17 +71,33 @@
             [builder setHeaders:[weakSelf createNotificationsFetchingHeaders]];
             [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@", weakSelf.requestContext.meId]];
         }];
+        self.fetchRequestInProgress = YES;
         [_restClient executeTaskWithRequestModel:requestModel
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
                                         MENotificationInboxStatus *status = [[MEInboxParser new] parseNotificationInboxStatus:payload];
+                                        weakSelf.lastNotificationStatus = status;
+                                        weakSelf.responseTimestamp = [weakSelf.timestampProvider provideTimestamp];
+                                        weakSelf.fetchRequestInProgress = NO;
 
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            resultBlock([weakSelf mergedStatusWithStatus:status]);
+                                            MENotificationInboxStatus *inboxStatus = [weakSelf mergedStatusWithStatus:status];
+                                            resultBlock(inboxStatus);
+
+                                            for (MEInboxResultBlock successBlock in weakSelf.fetchRequestSuccessBlocks) {
+                                                successBlock(inboxStatus);
+                                            }
+                                            [weakSelf.fetchRequestSuccessBlocks removeAllObjects];
                                         });
                                     }
                                       errorBlock:^(NSString *requestId, NSError *error) {
                                           [weakSelf respondWithError:errorBlock error:error];
+                                          weakSelf.fetchRequestInProgress = NO;
+
+                                          for (MEInboxResultErrorBlock errorsBlock in weakSelf.fetchRequestErrorBlocks) {
+                                              [weakSelf respondWithError:errorsBlock error:error];
+                                          }
+                                          [weakSelf.fetchRequestErrorBlocks removeAllObjects];
                                       }];
     } else {
         [self handleNoMeIdWithErrorBlock:errorBlock];

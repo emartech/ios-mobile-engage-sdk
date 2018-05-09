@@ -10,9 +10,13 @@
 
 @interface MEInboxV2 : NSObject <MEInboxNotificationProtocol>
 
+@property(nonatomic, strong) MENotificationInboxStatus *lastNotificationStatus;
+@property(nonatomic, strong) NSDate *responseTimestamp;
+
 - (instancetype)initWithConfig:(MEConfig *)config
                 requestContext:(MERequestContext *)requestContext
                     restClient:(EMSRESTClient *)restClient
-                 notifications:(NSMutableArray *)notifications;
+                 notifications:(NSMutableArray *)notifications
+             timestampProvider:(EMSTimestampProvider *)timestampProvider;
 
 @end
