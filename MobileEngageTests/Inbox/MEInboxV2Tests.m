@@ -755,6 +755,63 @@ SPEC_BEGIN(MEInboxV2Tests)
 
                 [[expectFutureValue(resetCalled) shouldNotEventually] beNil];
             });
+
+            it(@"should reset the badge count in the lastNotificationStatus too", ^{
+                NSArray<NSArray<NSDictionary *> *> *results = @[@[
+                    @{@"id": @"id1", @"title": @"title1", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678129)},
+                    @{@"id": @"id2", @"title": @"title2", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678128)},
+                    @{@"id": @"id3", @"title": @"title3", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678127)},
+                ], @[
+                    @{@"id": @"id4", @"title": @"title4", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678126)},
+                    @{@"id": @"id5", @"title": @"title5", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678125)},
+                    @{@"id": @"id6", @"title": @"title6", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678124)},
+                ]];
+
+                NSMutableArray<MENotification *> *expectedNotifications1 = [NSMutableArray array];
+                for (NSDictionary *notificationDict in results[0]) {
+                    [expectedNotifications1 addObject:[[MENotification alloc] initWithNotificationDictionary:notificationDict]];
+                }
+                NSMutableArray<MENotification *> *expectedNotifications2 = [NSMutableArray array];
+                for (NSDictionary *notificationDict in results[1]) {
+                    [expectedNotifications2 addObject:[[MENotification alloc] initWithNotificationDictionary:notificationDict]];
+                }
+
+                FakeInboxNotificationRestClient *fakeRestClient = [[FakeInboxNotificationRestClient alloc] initWithSuccessResults:results];
+
+                MEInboxV2 *inbox = inboxWithTimestampProvider(fakeRestClient, [EMSTimestampProvider new]);
+
+                XCTestExpectation *exp1 = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                __block MENotificationInboxStatus *firstInboxStatus;
+                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                    firstInboxStatus = inboxStatus;
+                    [exp1 fulfill];
+                }                             errorBlock:^(NSError *error) {
+                }];
+
+                [XCTWaiter waitForExpectations:@[exp1] timeout:30];
+
+                [[firstInboxStatus.notifications should] equal:expectedNotifications1];
+
+                XCTestExpectation *expectationForReset = [[XCTestExpectation alloc] initWithDescription:@"waitForReset"];
+                [inbox resetBadgeCountWithSuccessBlock:^{
+                        [expectationForReset fulfill];
+                    }
+                                            errorBlock:nil];
+                [XCTWaiter waitForExpectations:@[expectationForReset] timeout:30];
+
+                XCTestExpectation *exp2 = [[XCTestExpectation alloc] initWithDescription:@"waitForResult2"];
+                __block MENotificationInboxStatus *secondInboxStatus;
+                [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
+                    secondInboxStatus = inboxStatus;
+                    [exp2 fulfill];
+                }                             errorBlock:^(NSError *error) {
+                }];
+
+                [XCTWaiter waitForExpectations:@[exp2] timeout:30];
+
+                [[secondInboxStatus.notifications should] equal:expectedNotifications1];
+                [[theValue(secondInboxStatus.badgeCount) should] equal:theValue(0)];
+            });
         });
 
         describe(@"purgeNotificationCache", ^{
@@ -809,8 +866,6 @@ SPEC_BEGIN(MEInboxV2Tests)
 
                 [[secondInboxStatus.notifications should] equal:expectedNotifications2];
             });
-
-
 
             it(@"should not do anything when method has been called already in 60 sec", ^{
                 NSArray<NSArray<NSDictionary *> *> *results = @[@[

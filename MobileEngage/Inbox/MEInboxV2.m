@@ -115,6 +115,7 @@
         }];
         [_restClient executeTaskWithRequestModel:requestModel
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
+                                        weakSelf.lastNotificationStatus.badgeCount = 0;
                                         dispatch_async(dispatch_get_main_queue(), ^{
                                             if (successBlock) {
                                                 successBlock();
