@@ -10,7 +10,7 @@ SPEC_BEGIN(MENotificationServiceTests)
         if (@available(iOS 10.0, *)) {
             describe(@"didReceiveNotificationRequest:withContentHandler:", ^{
                 context(@"with image", ^{
-                    it(@"should invoke contentHandler with nil when there contentInfo is not mutable", ^{
+                    it(@"should invoke contentHandler with nil when the contentInfo is not mutable", ^{
                         MENotificationService *service = [[MENotificationService alloc] init];
                         UNNotificationContent *content = [UNNotificationContent mock];
                         [content stub:@selector(mutableCopy) andReturn:nil];
@@ -58,7 +58,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                         [[returnedContent should] equal:content];
                     });
 
-                    it(@"should invoke contentHandler with the original content when cant create attachment from the imageUrl in the request's userInfo", ^{
+                    it(@"should invoke contentHandler with the original content when can't create attachment from the imageUrl in the request's userInfo", ^{
                         MENotificationService *service = [[MENotificationService alloc] init];
                         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
                         content.userInfo = @{@"image_url": @""};
@@ -108,7 +108,7 @@ SPEC_BEGIN(MENotificationServiceTests)
 
                 context(@"with actions", ^{
 
-                    it(@"should be resilient if category is not expected type: NSDictionary", ^{
+                    it(@"should not set category when actions is not the expected type: NSDictionary", ^{
                         MENotificationService *service = [[MENotificationService alloc] init];
                         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
                         content.userInfo = @{@"actions": @978};
@@ -132,7 +132,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                         [[returnedContent.categoryIdentifier should] equal:@""];
                     });
 
-                    it(@"should set category on content which is already registered on userNotificationCenter", ^{
+                    it(@"should use a registered category on content with actions defined in the userinfo", ^{
                         MENotificationService *service = [[MENotificationService alloc] init];
                         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
                         content.userInfo = @{@"actions": @{
