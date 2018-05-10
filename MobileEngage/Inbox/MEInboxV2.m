@@ -142,6 +142,13 @@
     return [MobileEngage trackMessageOpenWithInboxMessage:inboxMessage];
 }
 
+- (void)purgeNotificationCache {
+    if (!self.purgeTimestamp || [[self.timestampProvider provideTimestamp] timeIntervalSinceDate:self.purgeTimestamp] >= 60) {
+        self.lastNotificationStatus = nil;
+        self.purgeTimestamp = [self.timestampProvider provideTimestamp];
+    }
+}
+
 #pragma mark - Private methods
 
 - (NSDictionary<NSString *, NSString *> *)createNotificationsFetchingHeaders {

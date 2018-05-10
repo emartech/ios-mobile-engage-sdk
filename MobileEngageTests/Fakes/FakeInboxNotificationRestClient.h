@@ -10,10 +10,11 @@ typedef enum {
     ResultTypeFailure
 } ResultType;
 
-@interface FakeRestClient : EMSRESTClient
+@interface FakeInboxNotificationRestClient : EMSRESTClient
 
 @property (nonatomic, strong) NSMutableArray *submittedRequests;
 
 - (instancetype)initWithResultType:(ResultType)resultType;
+- (instancetype)initWithSuccessResults:(NSArray<NSArray<NSDictionary *> *> *)results;
 
 @end

@@ -5,7 +5,7 @@
 #import "EMSDeviceInfo.h"
 #import "MEDefaultHeaders.h"
 #import "MEAppLoginParameters.h"
-#import "FakeRestClient.h"
+#import "FakeInboxNotificationRestClient.h"
 #import "MEInbox+Private.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSRequestModelMatcher.h"
@@ -73,7 +73,7 @@ SPEC_BEGIN(MEInboxTests)
 
             it(@"should not return nil in resultBlock", ^{
                 __block MENotificationInboxStatus *result;
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
 
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
                     result = inboxStatus;
@@ -85,7 +85,7 @@ SPEC_BEGIN(MEInboxTests)
 
             it(@"should run asyncronously", ^{
                 __block MENotificationInboxStatus *result;
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
 
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
                     result = inboxStatus;
@@ -97,7 +97,7 @@ SPEC_BEGIN(MEInboxTests)
             });
 
             it(@"should call EMSRestClient's executeTaskWithRequestModel: and parse the notifications correctly", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
                 __block NSArray<MENotification *> *_notifications;
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
                     _notifications = inboxStatus.notifications;
@@ -154,7 +154,7 @@ SPEC_BEGIN(MEInboxTests)
 
             it(@"should invoke resultBlock on main thread", ^{
                 __block NSNumber *onMainThread = @NO;
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
 
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
                     if ([NSThread isMainThread]) {
@@ -167,7 +167,7 @@ SPEC_BEGIN(MEInboxTests)
             it(@"should invoke errorBlock on main thread", ^{
                 __block NSNumber *onMainThread = @NO;
 
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], YES);
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
                     fail(@"resultblock invoked");
                 }                             errorBlock:^(NSError *error) {
@@ -191,7 +191,7 @@ SPEC_BEGIN(MEInboxTests)
             });
 
             it(@"should not invoke errorBlock when there is no errorBlock with appLoginParameters", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], YES);
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
                             fail(@"resultblock invoked");
                         }
@@ -252,7 +252,7 @@ SPEC_BEGIN(MEInboxTests)
             it(@"should invoke successBlock when success", ^{
                 __block BOOL successBlockInvoked = NO;
 
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
                 [inbox resetBadgeCountWithSuccessBlock:^{
                             successBlockInvoked = YES;
                         }
@@ -265,7 +265,7 @@ SPEC_BEGIN(MEInboxTests)
             it(@"should invoke errorBlock when failure with apploginParameters", ^{
                 __block NSError *_error;
 
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], YES);
                 [inbox resetBadgeCountWithSuccessBlock:^{
                             fail(@"successblock invoked");
                         }
@@ -278,7 +278,7 @@ SPEC_BEGIN(MEInboxTests)
             it(@"should invoke errorBlock when failure without apploginParameters", ^{
                 __block NSError *_error;
 
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], NO);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], NO);
                 [inbox resetBadgeCountWithSuccessBlock:^{
                             fail(@"successblock invoked");
                         }
@@ -289,26 +289,26 @@ SPEC_BEGIN(MEInboxTests)
             });
 
             it(@"should not invoke successBlock when there is no successBlock", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
                 [inbox resetBadgeCountWithSuccessBlock:nil
                                             errorBlock:nil];
             });
 
             it(@"should not invoke errorBlock when there is no errorBlock with apploginParameters", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], YES);
                 [inbox resetBadgeCountWithSuccessBlock:nil
                                             errorBlock:nil];
             });
 
             it(@"should not invoke errorBlock when there is no errorBlock without apploginParameters", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], NO);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], NO);
                 [inbox resetBadgeCountWithSuccessBlock:nil
                                             errorBlock:nil];
             });
 
             it(@"should invoke successBlock on main thread", ^{
                 __block BOOL onMainThread = NO;
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
 
                 [inbox resetBadgeCountWithSuccessBlock:^{
                             if ([NSThread isMainThread]) {
@@ -323,7 +323,7 @@ SPEC_BEGIN(MEInboxTests)
 
             it(@"should invoke errorBlock on main thread", ^{
                 __block BOOL onMainThread = NO;
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], YES);
 
                 [inbox resetBadgeCountWithSuccessBlock:^{
                             fail(@"successblock invoked");
@@ -338,7 +338,7 @@ SPEC_BEGIN(MEInboxTests)
 
             it(@"should invoke errorBlock on main thread when apploginParameters are not set", ^{
                 __block BOOL onMainThread = NO;
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeFailure], NO);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], NO);
 
                 [inbox resetBadgeCountWithSuccessBlock:^{
                             fail(@"successblock invoked");
@@ -380,7 +380,7 @@ SPEC_BEGIN(MEInboxTests)
 
         describe(@"inbox.fetchNotificationsWithResultBlock include cached notifications", ^{
             it(@"should return with the added notification", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
                 MENotification *notification = [MENotification new];
                 [inbox addNotification:notification];
 
@@ -394,7 +394,7 @@ SPEC_BEGIN(MEInboxTests)
             });
 
             it(@"should be idempotent", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
                 MENotification *notification = [MENotification new];
                 [inbox addNotification:notification];
 
@@ -415,7 +415,7 @@ SPEC_BEGIN(MEInboxTests)
             });
 
             it(@"should return with the added notification in good order", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
                 MENotification *notification = [MENotification new];
                 notification.expirationTime = @12345678130;
                 [inbox addNotification:notification];
@@ -430,7 +430,7 @@ SPEC_BEGIN(MEInboxTests)
             });
 
             it(@"should not add the notification if there is a notification already in with the same ID", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
                 MENotification *notification = [MENotification new];
                 notification.title = @"asdfghjk";
                 notification.id = @"id1";
@@ -454,7 +454,7 @@ SPEC_BEGIN(MEInboxTests)
             });
 
             it(@"should remove notifications from cache when they are already present in the fetched list", ^{
-                MEInbox *inbox = inboxWithParameters([[FakeRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
+                MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
 
                 MENotification *notification1 = [MENotification new];
                 notification1.title = @"asdfghjk";

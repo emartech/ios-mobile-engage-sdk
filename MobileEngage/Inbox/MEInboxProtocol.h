@@ -24,4 +24,6 @@ typedef void (^MEInboxResultErrorBlock)(NSError *error);
 
 - (NSString *)trackMessageOpenWithInboxMessage:(MENotification *)inboxMessage;
 
+- (void)purgeNotificationCache;
+
 @end

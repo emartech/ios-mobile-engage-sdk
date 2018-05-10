@@ -164,7 +164,7 @@
 		37460D7D6748B2BCE174C9ED /* AbstractResponseHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746019DA9F186F22D444A89 /* AbstractResponseHandlerTests.m */; };
 		37460D84CBC8150F27E2EA4B /* MEIAMCleanupResponseHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 37460A1A84F228F63F981944 /* MEIAMCleanupResponseHandler.h */; };
 		37460D8A9337F9B6ABBA014F /* MEAppLoginParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 3746074B9FA6B1E3D03E0F05 /* MEAppLoginParameters.h */; };
-		37460DA1AB451C7207B64950 /* FakeRestClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460A4E863E11C13FB1B1BC /* FakeRestClient.m */; };
+		37460DA1AB451C7207B64950 /* FakeInboxNotificationRestClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460A4E863E11C13FB1B1BC /* FakeInboxNotificationRestClient.m */; };
 		37460DAA866D60EE0D0787DD /* MEExperimental.h in Headers */ = {isa = PBXBuildFile; fileRef = 3746047E3D08458D4B7EB1C9 /* MEExperimental.h */; };
 		37460E02219D49D98AA07133 /* MENotificationCenterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 374607BD184EAB0D01365A5F /* MENotificationCenterManager.h */; };
 		37460E1132932DC93D2D6A60 /* MEIAMJSCommandFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FF8415B90121DB6701D8 /* MEIAMJSCommandFactory.h */; };
@@ -404,9 +404,9 @@
 		3746096010FC1204804C68DB /* MEInAppMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInAppMessage.h; sourceTree = "<group>"; };
 		3746097A272AA451E4552CC0 /* MERequestModelRepositoryFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestModelRepositoryFactory.m; sourceTree = "<group>"; };
 		374609D3CAAC809AF382CC5B /* FakeResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeResponseHandler.h; sourceTree = "<group>"; };
-		374609DA4A3B913C107F8FF7 /* FakeRestClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeRestClient.h; sourceTree = "<group>"; };
+		374609DA4A3B913C107F8FF7 /* FakeInboxNotificationRestClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeInboxNotificationRestClient.h; sourceTree = "<group>"; };
 		37460A1A84F228F63F981944 /* MEIAMCleanupResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMCleanupResponseHandler.h; sourceTree = "<group>"; };
-		37460A4E863E11C13FB1B1BC /* FakeRestClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeRestClient.m; sourceTree = "<group>"; };
+		37460A4E863E11C13FB1B1BC /* FakeInboxNotificationRestClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeInboxNotificationRestClient.m; sourceTree = "<group>"; };
 		37460A62CFE918ED5D3EE52F /* EMSRequestModelMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestModelMatcher.h; sourceTree = "<group>"; };
 		37460A6C06AC93C2C6957FF9 /* DisplayedIAMTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayedIAMTests.m; sourceTree = "<group>"; };
 		37460A7C6604381BE785DFBD /* MERequestMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MERequestMatcher.h; sourceTree = "<group>"; };
@@ -871,8 +871,8 @@
 			isa = PBXGroup;
 			children = (
 				3746091C7734CE8170316BEB /* FakeRequestManager.m */,
-				37460A4E863E11C13FB1B1BC /* FakeRestClient.m */,
-				374609DA4A3B913C107F8FF7 /* FakeRestClient.h */,
+				37460A4E863E11C13FB1B1BC /* FakeInboxNotificationRestClient.m */,
+				374609DA4A3B913C107F8FF7 /* FakeInboxNotificationRestClient.h */,
 				37460DC9E60D5046370EF27E /* FakeStatusDelegate.h */,
 				37460F6E627F308A7B6FCAB6 /* FakeStatusDelegate.m */,
 				37460677B4E0A08D46FD4EF2 /* FakeRequestManager.h */,
@@ -1336,7 +1336,7 @@
 				3746001BE1AC8165748A7293 /* MEIDResponseHandlerTests.m in Sources */,
 				37460D7D6748B2BCE174C9ED /* AbstractResponseHandlerTests.m in Sources */,
 				374603ACAD6D953F0B1A48ED /* FakeRequestManager.m in Sources */,
-				37460DA1AB451C7207B64950 /* FakeRestClient.m in Sources */,
+				37460DA1AB451C7207B64950 /* FakeInboxNotificationRestClient.m in Sources */,
 				37460D6FD7E45D678116553A /* FakeStatusDelegate.m in Sources */,
 				374601B858DA91C38BFDD4AD /* FakeJSBridge.m in Sources */,
 				374609A1DE1618E866943786 /* FakeResponseHandler.m in Sources */,

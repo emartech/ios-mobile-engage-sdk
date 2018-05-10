@@ -10,4 +10,6 @@
 
 @property (nonatomic, strong) NSDate *currentDate;
 
+-(instancetype)initWithTimestamps:(NSArray<NSDate *> *) timestamps;
+
 @end
