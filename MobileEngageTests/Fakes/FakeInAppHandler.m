@@ -15,8 +15,8 @@
 }
 
 
-- (void)handleApplicationEvent:(NSString *)eventName
-                       payload:(nullable NSDictionary<NSString *, NSObject *> *)payload {
+- (void)handleEvent:(NSString *)eventName
+            payload:(nullable NSDictionary<NSString *, NSObject *> *)payload {
     NSThread *currentThread = [NSThread currentThread];
     if (self.mainThreadCheckerBlock) {
         _mainThreadCheckerBlock([[NSThread mainThread] isEqual:currentThread]);

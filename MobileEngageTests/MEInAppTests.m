@@ -16,8 +16,8 @@ SPEC_BEGIN(MEInAppTests)
             iam.timestampProvider = mockTimeStampProvider;
         });
 
-        describe(@"messageHandler", ^{
-            it(@"should pass the eventName and payload to the given messageHandler's handleApplicationEvent:payload: method", ^{
+        describe(@"eventHandler", ^{
+            it(@"should pass the eventName and payload to the given eventHandler's handleEvent:payload: method", ^{
                 NSString *expectedName = @"nameOfTheEvent";
                 NSDictionary <NSString *, NSObject *> *expectedPayload = @{
                     @"payloadKey1": @{
@@ -26,7 +26,7 @@ SPEC_BEGIN(MEInAppTests)
                 };
 
                 FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
-                [iam setMessageHandler:inAppHandler];
+                [iam setEventHandler:inAppHandler];
                 NSString *message = @"<!DOCTYPE html>\n"
                     "<html lang=\"en\">\n"
                     "  <head>\n"
@@ -39,7 +39,7 @@ SPEC_BEGIN(MEInAppTests)
                     "  <body style=\"background: transparent;\">\n"
                     "  </body>\n"
                     "</html>";
-                [[inAppHandler shouldEventually] receive:@selector(handleApplicationEvent:payload:)
+                [[inAppHandler shouldEventually] receive:@selector(handleEvent:payload:)
                                            withArguments:expectedName, expectedPayload];
 
                 NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id": @"campaignId", @"html": message}}
@@ -63,7 +63,7 @@ SPEC_BEGIN(MEInAppTests)
                 };
 
                 FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
-                [iam setMessageHandler:inAppHandler];
+                [iam setEventHandler:inAppHandler];
                 NSString *message = @"<!DOCTYPE html>\n"
                     "<html lang=\"en\">\n"
                     "  <head>\n"
@@ -76,7 +76,7 @@ SPEC_BEGIN(MEInAppTests)
                     "  <body style=\"background: transparent;\">\n"
                     "  </body>\n"
                     "</html>";
-                [[inAppHandler shouldEventually] receive:@selector(handleApplicationEvent:payload:) withCountAtMost:1 arguments:expectedName, expectedPayload];
+                [[inAppHandler shouldEventually] receive:@selector(handleEvent:payload:) withCountAtMost:1 arguments:expectedName, expectedPayload];
 
                 NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id": @"campaignId", @"html": message}}
                                                                options:0

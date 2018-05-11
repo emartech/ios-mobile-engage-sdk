@@ -4,19 +4,19 @@
 
 #import <CoreSDK/EMSDictionaryValidator.h>
 #import "MEIAMTriggerAppEvent.h"
-#import "MEInAppMessageHandler.h"
+#import "MEEventHandler.h"
 #import "MEIAMCommandResultUtils.h"
 #import "NSDictionary+EMSCore.h"
 
 @interface MEIAMTriggerAppEvent()
 
-@property(nonatomic, weak, nullable) id <MEInAppMessageHandler> inAppMessageHandler;
+@property(nonatomic, weak, nullable) id <MEEventHandler> inAppMessageHandler;
 
 @end
 
 @implementation MEIAMTriggerAppEvent
 
-- (instancetype)initWithInAppMessageHandler:(id <MEInAppMessageHandler>)inAppMessageHandler {
+- (instancetype)initWithInAppMessageHandler:(id <MEEventHandler>)inAppMessageHandler {
     if (self = [super init]) {
         _inAppMessageHandler = inAppMessageHandler;
     }
@@ -41,8 +41,8 @@
     } else {
         NSString *name = message[@"name"];
         NSDictionary *payload = [message dictionaryValueForKey:@"payload"];
-        [self.inAppMessageHandler handleApplicationEvent:name
-                                                 payload:payload];
+        [self.inAppMessageHandler handleEvent:name
+                                      payload:payload];
         resultBlock([MEIAMCommandResultUtils createSuccessResultWith:eventId]);
     }
 }

@@ -23,7 +23,7 @@ SPEC_BEGIN(MEIAMJSCommandFactoryTests)
         [_meiam stub:@selector(currentCampaignId) andReturn:currentCampaignId];
         [_meiam stub:@selector(meiamViewController) andReturn:[MEIAMViewController mock]];
         [_meiam stub:@selector(inAppTracker) andReturn:[KWMock mockForProtocol:@protocol(MEInAppTrackingProtocol)]];
-        [_meiam stub:@selector(messageHandler) andReturn:[KWMock mockForProtocol:@protocol(MEInAppMessageHandler)]];
+        [_meiam stub:@selector(eventHandler) andReturn:[KWMock mockForProtocol:@protocol(MEEventHandler)]];
         [MobileEngage stub:@selector(dbHelper) andReturn:[EMSSQLiteHelper mock]];
         _factory = [[MEIAMJSCommandFactory alloc] initWithMEIAM:_meiam];
     });

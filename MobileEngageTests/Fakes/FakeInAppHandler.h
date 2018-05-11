@@ -3,11 +3,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MEInAppMessageHandler.h"
+#import "MEEventHandler.h"
 
 typedef void (^MainThreadCheckerBlock)(BOOL mainThread);
 
-@interface FakeInAppHandler : NSObject<MEInAppMessageHandler>
+@interface FakeInAppHandler : NSObject<MEEventHandler>
 
 @property (nonatomic, strong) MainThreadCheckerBlock mainThreadCheckerBlock;
 

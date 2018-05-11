@@ -6,11 +6,11 @@
 #import "MEInAppTrackingProtocol.h"
 
 @class MEIAMViewController;
-@protocol MEInAppMessageHandler;
+@protocol MEEventHandler;
 
 @protocol MEIAMProtocol <NSObject>
 
-- (id <MEInAppMessageHandler>)messageHandler;
+- (id <MEEventHandler>)eventHandler;
 - (id <MEInAppTrackingProtocol>)inAppTracker;
 - (NSString *)currentCampaignId;
 - (void)closeInAppMessage;

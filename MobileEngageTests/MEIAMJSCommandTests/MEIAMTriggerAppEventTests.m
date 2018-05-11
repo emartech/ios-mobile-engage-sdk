@@ -1,6 +1,6 @@
 #import "Kiwi.h"
 #import "MEIAMTriggerAppEvent.h"
-#import "MEInAppMessageHandler.h"
+#import "MEEventHandler.h"
 #import "FakeInAppHandler.h"
 
 SPEC_BEGIN(MEIAMTriggerAppEventTests)
@@ -18,7 +18,7 @@ SPEC_BEGIN(MEIAMTriggerAppEventTests)
 
         describe(@"handleMessage:resultBlock:", ^{
 
-            it(@"should pass the eventName and payload to the given messageHandler's handleApplicationEvent:payload: method", ^{
+            it(@"should pass the eventName and payload to the given eventHandler's handleEvent:payload: method", ^{
                 FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
                 NSString *eventName = @"nameOfTheEvent";
                 NSDictionary <NSString *, NSObject *> *payload = @{
@@ -34,7 +34,7 @@ SPEC_BEGIN(MEIAMTriggerAppEventTests)
 
                 MEIAMTriggerAppEvent *appEvent = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:inAppHandler];
 
-                [[inAppHandler should] receive:@selector(handleApplicationEvent:payload:) withArguments:eventName, payload];
+                [[inAppHandler should] receive:@selector(handleEvent:payload:) withArguments:eventName, payload];
 
                 [appEvent handleMessage:scriptMessage
                             resultBlock:^(NSDictionary<NSString *, NSObject *> *result) {
@@ -107,7 +107,7 @@ SPEC_BEGIN(MEIAMTriggerAppEventTests)
                         @"errors": @[[NSString stringWithFormat:@"Type mismatch for key 'name', expected type: NSString, but was: %@.", NSStringFromClass([nameValue class])]]}];
             });
 
-            it(@"should call the given messageHandler's handleApplicationEvent:payload: method on main thread", ^{
+            it(@"should call the given eventHandler's handleEvent:payload: method on main thread", ^{
                 NSString *eventName = @"nameOfTheEvent";
                 NSDictionary <NSString *, NSObject *> *payload = @{
                         @"payloadKey1": @{

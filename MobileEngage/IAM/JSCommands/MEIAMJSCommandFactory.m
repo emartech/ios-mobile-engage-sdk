@@ -30,7 +30,7 @@
     } else if ([name isEqualToString:MEIAMClose.commandName]) {
         command = [[MEIAMClose alloc] initWithMEIAM:self.meiam];
     } else if ([name isEqualToString:MEIAMTriggerAppEvent.commandName]) {
-        command = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:[self.meiam messageHandler]];
+        command = [[MEIAMTriggerAppEvent alloc] initWithInAppMessageHandler:[self.meiam eventHandler]];
     } else if ([name isEqualToString:MEIAMButtonClicked.commandName]) {
         command = [[MEIAMButtonClicked alloc] initWithCampaignId:[self.meiam currentCampaignId]
                                                       repository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]

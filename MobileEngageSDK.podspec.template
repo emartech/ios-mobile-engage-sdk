@@ -8,7 +8,7 @@ Pod::Spec.new do |spec|
 	spec.platform             = :ios, '9.0'
 	spec.source               = { :git => 'https://github.com/emartech/ios-mobile-engage-sdk.git', <COMMIT_REF> }
 	spec.source_files         = 'MobileEngage/**/*.{h,m}'
-	spec.exclude_files	  = 'MobileEngage/RichNotification/*'
+	spec.exclude_files	  = 'MobileEngage/RichNotificationExtension/*'
 	spec.public_header_files  = [
 		'MobileEngage/MobileEngage.h',
 		'MobileEngage/MobileEngageStatusDelegate.h',
@@ -19,7 +19,7 @@ Pod::Spec.new do |spec|
 	    'MobileEngage/Inbox/MENotification.h',
 	    'MobileEngage/Inbox/MENotificationInboxStatus.h',
         'MobileEngage/IAM/MEInApp.h',
-        'MobileEngage/IAM/MEInAppMessageHandler.h'
+        'MobileEngage/IAM/MEEventHandler.h'
    	]
 	spec.dependency 'CoreSDK'
 	spec.libraries = 'z', 'c++'

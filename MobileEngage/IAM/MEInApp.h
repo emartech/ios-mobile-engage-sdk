@@ -3,13 +3,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MEInAppMessageHandler.h"
+#import "MEEventHandler.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MEInApp : NSObject
 
-@property(nonatomic, weak, nullable) id <MEInAppMessageHandler> messageHandler;
+@property(nonatomic, weak, nullable) id <MEEventHandler> eventHandler;
 @property(nonatomic, assign) BOOL paused;
 
 @end
