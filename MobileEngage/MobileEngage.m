@@ -22,6 +22,7 @@
 static MobileEngageInternal *_mobileEngageInternal;
 static id <MEInboxNotificationProtocol> _inbox;
 static MEInApp *_iam;
+static MEUserNotification *_notification;
 static EMSSQLiteHelper *_dbHelper;
 
 
@@ -49,6 +50,8 @@ static EMSSQLiteHelper *_dbHelper;
     _iam = [MEInApp new];
     _iam.logRepository = logRepository;
     _iam.timestampProvider = [EMSTimestampProvider new];
+
+    _notification = [MEUserNotification new];
 
     _mobileEngageInternal.notificationCenterManager = [MENotificationCenterManager new];
 
@@ -131,6 +134,10 @@ static EMSSQLiteHelper *_dbHelper;
 
 + (void)setInApp:(MEInApp *)inApp {
     _iam = inApp;
+}
+
++ (MEUserNotification *)notification {
+    return _notification;
 }
 
 + (EMSSQLiteHelper *)dbHelper {

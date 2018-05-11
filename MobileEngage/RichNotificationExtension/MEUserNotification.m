@@ -2,6 +2,10 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 #import "MEUserNotification.h"
+#import <UserNotifications/UNNotificationResponse.h>
+#import <UserNotifications/UNNotification.h>
+#import <UserNotifications/UNNotificationContent.h>
+#import <UserNotifications/UNNotificationRequest.h>
 
 @interface MEUserNotification ()
 @end
@@ -27,6 +31,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                didReceiveNotificationResponse:response
                         withCompletionHandler:completionHandler];
     }
+
+    NSDictionary *action = response.notification.request.content.userInfo[@"actions"][response.actionIdentifier];
+    if ([action[@"type"] isEqualToString:@"MEAppEvent"]) {
+        [self.eventHandler handleEvent:action[@"name"] payload:action[@"payload"]];
+    }
+
+    completionHandler();
 }
 
 
