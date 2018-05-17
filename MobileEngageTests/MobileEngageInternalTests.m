@@ -317,10 +317,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
             it(@"appLogin should save last AppLogin parameters", ^{
                 [[requestManagerMock() should] receive:@selector(submit:)];
-                [_mobileEngage appLoginWithContactFieldId:@42 contactFieldValue:@"99"];
+                [_mobileEngage appLoginWithContactFieldId:@3 contactFieldValue:@"test@test.com"];
                 [[_mobileEngage.requestContext.appLoginParameters shouldNot] beNil];
-                [[_mobileEngage.requestContext.appLoginParameters.contactFieldId should] equal:@42];
-                [[_mobileEngage.requestContext.appLoginParameters.contactFieldValue should] equal:@"99"];
+                [[_mobileEngage.requestContext.appLoginParameters.contactFieldId should] equal:@3];
+                [[_mobileEngage.requestContext.appLoginParameters.contactFieldValue should] equal:@"test@test.com"];
             });
 
             it(@"should not call appLogin with setPushToken when there was no previous appLogin call", ^{
@@ -420,8 +420,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [[requestManager should] receive:@selector(submit:)
                                    withArguments:kw_any(), kw_any(), kw_any()];
 
-                NSString *uuid = [_mobileEngage appLoginWithContactFieldId:@0
-                                                         contactFieldValue:@"contactFieldValue"];
+                NSString *uuid = [_mobileEngage appLoginWithContactFieldId:@3
+                                                         contactFieldValue:@"test@test.com"];
                 [[uuid shouldNot] beNil];
             });
 
@@ -431,8 +431,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                    withArguments:kw_any(), kw_any(), kw_any()];
                 KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
                                                             atIndex:0];
-                NSString *uuid = [_mobileEngage appLoginWithContactFieldId:@0
-                                                         contactFieldValue:@"contactFieldValue"];
+                NSString *uuid = [_mobileEngage appLoginWithContactFieldId:@3
+                                                         contactFieldValue:@"test@test.com"];
                 EMSRequestModel *actualModel = spy.argument;
                 [[uuid should] equal:actualModel.requestId];
             });
@@ -447,8 +447,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         @"timezone": [EMSDeviceInfo timeZone],
                         @"device_model": [EMSDeviceInfo deviceModel],
                         @"os_version": [EMSDeviceInfo osVersion],
-                        @"contact_field_id": @0,
-                        @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
+                        @"contact_field_id": @3,
+                        @"contact_field_value": @"test@test.com",
                         @"push_token": @NO,
                         @"application_version": @"1.0",
                         @"ems_sdk": MOBILEENGAGE_SDK_VERSION
@@ -458,8 +458,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                    withArguments:kw_any(), kw_any(), kw_any()];
                 KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
                                                             atIndex:0];
-                [_mobileEngage appLoginWithContactFieldId:@0
-                                        contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
+                [_mobileEngage appLoginWithContactFieldId:@3
+                                        contactFieldValue:@"test@test.com"];
                 EMSRequestModel *actualModel = spy.argument;
                 [[model should] beSimilarWithRequest:actualModel];
             });
@@ -490,8 +490,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         @"timezone": [EMSDeviceInfo timeZone],
                         @"device_model": [EMSDeviceInfo deviceModel],
                         @"os_version": [EMSDeviceInfo osVersion],
-                        @"contact_field_id": @0,
-                        @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
+                        @"contact_field_id": @3,
+                        @"contact_field_value": @"test@test.com",
                         @"push_token": @NO,
                         @"application_version": @"1.0",
                         @"ems_sdk": MOBILEENGAGE_SDK_VERSION
@@ -501,14 +501,14 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 EMSRequestModel *secondModel = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/ems_lastMobileActivity"], @{
                         @"application_id": kAppId,
                         @"hardware_id": [EMSDeviceInfo hardwareId],
-                        @"contact_field_id": @0,
-                        @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"
+                        @"contact_field_id": @3,
+                        @"contact_field_value": @"test@test.com"
                 });
 
-                [_mobileEngage appLoginWithContactFieldId:@0
-                                        contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
-                [_mobileEngage appLoginWithContactFieldId:@0
-                                        contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
+                [_mobileEngage appLoginWithContactFieldId:@3
+                                        contactFieldValue:@"test@test.com"];
+                [_mobileEngage appLoginWithContactFieldId:@3
+                                        contactFieldValue:@"test@test.com"];
 
                 [[requestManager.submittedModels[0] should] beSimilarWithRequest:firstModel];
                 [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
@@ -537,8 +537,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         @"timezone": [EMSDeviceInfo timeZone],
                         @"device_model": [EMSDeviceInfo deviceModel],
                         @"os_version": [EMSDeviceInfo osVersion],
-                        @"contact_field_id": @0,
-                        @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
+                        @"contact_field_id": @4,
+                        @"contact_field_value": @"nottest@test.com",
                         @"push_token": @NO,
                         @"application_version": @"1.0",
                         @"ems_sdk": MOBILEENGAGE_SDK_VERSION
@@ -553,18 +553,18 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         @"timezone": [EMSDeviceInfo timeZone],
                         @"device_model": [EMSDeviceInfo deviceModel],
                         @"os_version": [EMSDeviceInfo osVersion],
-                        @"contact_field_id": @0,
-                        @"contact_field_value": @"something",
+                        @"contact_field_id": @3,
+                        @"contact_field_value": @"test@test.com",
                         @"push_token": @NO,
                         @"application_version": @"1.0",
                         @"ems_sdk": MOBILEENGAGE_SDK_VERSION
                 });
 
 
-                [_mobileEngage appLoginWithContactFieldId:@0
-                                        contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
-                [_mobileEngage appLoginWithContactFieldId:@0
-                                        contactFieldValue:@"something"];
+                [_mobileEngage appLoginWithContactFieldId:@4
+                                        contactFieldValue:@"nottest@test.com"];
+                [_mobileEngage appLoginWithContactFieldId:@3
+                                        contactFieldValue:@"test@test.com"];
 
                 [[requestManager.submittedModels[0] should] beSimilarWithRequest:firstModel];
                 [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
@@ -593,8 +593,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         @"timezone": [EMSDeviceInfo timeZone],
                         @"device_model": [EMSDeviceInfo deviceModel],
                         @"os_version": [EMSDeviceInfo osVersion],
-                        @"contact_field_id": @0,
-                        @"contact_field_value": @"contactFieldValue1",
+                        @"contact_field_id": @3,
+                        @"contact_field_value": @"test@test.com",
                         @"push_token": @NO,
                         @"application_version": @"1.0",
                         @"ems_sdk": MOBILEENGAGE_SDK_VERSION
@@ -609,18 +609,18 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         @"timezone": [EMSDeviceInfo timeZone],
                         @"device_model": [EMSDeviceInfo deviceModel],
                         @"os_version": [EMSDeviceInfo osVersion],
-                        @"contact_field_id": @0,
-                        @"contact_field_value": @"contactFieldValue2",
+                        @"contact_field_id": @4,
+                        @"contact_field_value": @"nottest@test.com",
                         @"push_token": @NO,
                         @"application_version": @"1.0",
                         @"ems_sdk": MOBILEENGAGE_SDK_VERSION
                 });
 
 
-                [_mobileEngage appLoginWithContactFieldId:@0
-                                        contactFieldValue:@"contactFieldValue1"];
-                [_mobileEngage appLoginWithContactFieldId:@0
-                                        contactFieldValue:@"contactFieldValue2"];
+                [_mobileEngage appLoginWithContactFieldId:@3
+                                        contactFieldValue:@"test@test.com"];
+                [_mobileEngage appLoginWithContactFieldId:@4
+                                        contactFieldValue:@"nottest@test.com"];
 
                 [[requestManager.submittedModels[0] should] beSimilarWithRequest:firstModel];
                 [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
@@ -649,8 +649,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         @"timezone": [EMSDeviceInfo timeZone],
                         @"device_model": [EMSDeviceInfo deviceModel],
                         @"os_version": [EMSDeviceInfo osVersion],
-                        @"contact_field_id": @0,
-                        @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek",
+                        @"contact_field_id": @3,
+                        @"contact_field_value": @"test@test.com",
                         @"push_token": @NO,
                         @"application_version": @"1.0",
                         @"ems_sdk": MOBILEENGAGE_SDK_VERSION
@@ -660,13 +660,13 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 EMSRequestModel *secondModel = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/ems_lastMobileActivity"], @{
                         @"application_id": kAppId,
                         @"hardware_id": [EMSDeviceInfo hardwareId],
-                        @"contact_field_id": @0,
-                        @"contact_field_value": @"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"
+                        @"contact_field_id": @3,
+                        @"contact_field_value": @"test@test.com"
                 });
 
 
-                [_mobileEngage appLoginWithContactFieldId:@0
-                                        contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
+                [_mobileEngage appLoginWithContactFieldId:@3
+                                        contactFieldValue:@"test@test.com"];
 
                 _mobileEngage = [MobileEngageInternal new];
                 [_mobileEngage setupWithRequestManager:requestManager
@@ -674,8 +674,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                          launchOptions:nil
                                         requestContext:[[MERequestContext alloc] initWithConfig:config]];
 
-                [_mobileEngage appLoginWithContactFieldId:@0
-                                        contactFieldValue:@"vadaszRepulogepAnyahajoKabinHajtogatoKeziKeszulek"];
+                [_mobileEngage appLoginWithContactFieldId:@3
+                                        contactFieldValue:@"test@test.com"];
 
                 [[requestManager.submittedModels[0] should] beSimilarWithRequest:firstModel];
                 [[requestManager.submittedModels[1] should] beSimilarWithRequest:secondModel];
@@ -725,8 +725,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 EMSRequestModel *model = requestModel(@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/logout", @{
                         @"application_id": kAppId,
                         @"hardware_id": [EMSDeviceInfo hardwareId],
-                        @"contact_field_id": @123456789,
-                        @"contact_field_value": @"contactFieldValue"
+                        @"contact_field_id": @3,
+                        @"contact_field_value": @"test@test.com"
                 });
 
                 [[requestManager should] receive:@selector(submit:)
@@ -734,8 +734,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 KWCaptureSpy *spy = [requestManager captureArgument:@selector(submit:)
                                                             atIndex:0];
 
-                [_mobileEngage.requestContext setAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
-                                                                                                     contactFieldValue:@"contactFieldValue"]];
+                [_mobileEngage.requestContext setAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@3
+                                                                                                     contactFieldValue:@"test@test.com"]];
                 [_mobileEngage appLogout];
 
                 EMSRequestModel *actualModel = spy.argument;
@@ -746,8 +746,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 id requestManager = requestManagerMock();
                 [[requestManager should] receive:@selector(submit:)];
 
-                [_mobileEngage.requestContext setAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@123456789
-                                                                                                     contactFieldValue:@"contactFieldValue"]];
+                [_mobileEngage.requestContext setAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:@3
+                                                                                                     contactFieldValue:@"test@test.com"]];
                 [_mobileEngage appLogout];
                 [[_mobileEngage.requestContext.appLoginParameters should] beNil];
             });
@@ -814,7 +814,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 it(@"should submit a corresponding RequestModel when there are contact_field_id and contact_field_value", ^{
                     id requestManager = requestManagerMock();
                     MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
-                                                                                                contactFieldValue:@"contactFieldValue"];
+                                                                                                contactFieldValue:@"test@test.com"];
 
                     [_mobileEngage.requestContext stub:@selector(appLoginParameters)
                                              andReturn:appLoginParameters];
@@ -823,7 +823,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                             @"application_id": kAppId,
                             @"hardware_id": [EMSDeviceInfo hardwareId],
                             @"contact_field_id": @3,
-                            @"contact_field_value": @"contactFieldValue",
+                            @"contact_field_value": @"test@test.com",
                             @"sid": @"123456789"
                     });
 
@@ -1238,7 +1238,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 id requestManager = requestManagerMock();
 
                 MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
-                                                                                            contactFieldValue:@"contactFieldValue"];
+                                                                                            contactFieldValue:@"test@test.com"];
 
                 [_mobileEngage.requestContext stub:@selector(appLoginParameters)
                                          andReturn:appLoginParameters];
@@ -1251,7 +1251,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         @"hardware_id": [EMSDeviceInfo hardwareId],
                         @"attributes": eventAttributes,
                         @"contact_field_id": @3,
-                        @"contact_field_value": @"contactFieldValue"
+                        @"contact_field_value": @"test@test.com"
                 };
 
                 EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName], payload);
@@ -1300,7 +1300,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 id requestManager = requestManagerMock();
 
                 MEAppLoginParameters *appLoginParameters = [MEAppLoginParameters parametersWithContactFieldId:@3
-                                                                                            contactFieldValue:@"contactFieldValue"];
+                                                                                            contactFieldValue:@"test@test.com"];
 
                 [_mobileEngage.requestContext stub:@selector(appLoginParameters)
                                          andReturn:appLoginParameters];
@@ -1311,7 +1311,7 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         @"application_id": kAppId,
                         @"hardware_id": [EMSDeviceInfo hardwareId],
                         @"contact_field_id": @3,
-                        @"contact_field_value": @"contactFieldValue"
+                        @"contact_field_value": @"test@test.com"
                 };
 
                 EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName], payload);

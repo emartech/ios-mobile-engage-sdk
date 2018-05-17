@@ -50,8 +50,8 @@ SPEC_BEGIN(IntegrationTests)
             FakeStatusDelegate *statusDelegate = createStatusDelegate();
             [MobileEngage setStatusDelegate:statusDelegate];
 
-            NSString *eventId = [MobileEngage appLoginWithContactFieldId:@123456789
-                                                       contactFieldValue:@"contactFieldValue"];
+            NSString *eventId = [MobileEngage appLoginWithContactFieldId:@3
+                                                       contactFieldValue:@"test@test.com"];
 
             [[eventId shouldNot] beNil];
             [[expectFutureValue(@(statusDelegate.errorCount)) shouldEventually] equal:@0];

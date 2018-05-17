@@ -181,8 +181,8 @@ SPEC_BEGIN(MobileEngageTests)
             it(@"should call internal implementation's method", ^{
                 [[mobileEngageInternal() should] receive:@selector(appLoginWithContactFieldId:contactFieldValue:)];
 
-                [MobileEngage appLoginWithContactFieldId:@0
-                                       contactFieldValue:@"contactFieldValue"];
+                [MobileEngage appLoginWithContactFieldId:@3
+                                       contactFieldValue:@"test@test.com"];
             });
 
             it(@"should set the contactFieldId and contactFieldValue in inbox", ^{

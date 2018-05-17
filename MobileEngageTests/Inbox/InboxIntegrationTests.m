@@ -19,8 +19,8 @@ SPEC_BEGIN(InboxIntegrationTests)
         [MobileEngage setupWithConfig:config
                         launchOptions:nil];
 
-        [MobileEngage appLoginWithContactFieldId:@123456789
-                               contactFieldValue:@"contactFieldValue"];
+        [MobileEngage appLoginWithContactFieldId:@3
+                               contactFieldValue:@"test@test.com"];
     });
 
     describe(@"Notification Inbox", ^{
@@ -178,8 +178,8 @@ SPEC_BEGIN(InboxIntegrationTests)
             [MobileEngage setupWithConfig:config
                             launchOptions:nil];
 
-            [MobileEngage appLoginWithContactFieldId:@123456789
-                                   contactFieldValue:@"contactFieldValue"];
+            [MobileEngage appLoginWithContactFieldId:@3
+                                   contactFieldValue:@"test@test.com"];
 
 
             __block BOOL _success = NO;
