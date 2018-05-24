@@ -135,12 +135,14 @@ SPEC_BEGIN(MENotificationServiceTests)
                     it(@"should use a registered category on content with actions defined in the userinfo", ^{
                         MENotificationService *service = [[MENotificationService alloc] init];
                         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"actions": @{
-                            @"UUID1": @{
-                                @"title": @"buttonTitle"
-                            },
-                            @"UUID2": @{
-                                @"title": @"buttonTitle2"
+                        content.userInfo = @{@"ems": @{
+                            @"actions": @{
+                                @"UUID1": @{
+                                    @"title": @"buttonTitle"
+                                },
+                                @"UUID2": @{
+                                    @"title": @"buttonTitle2"
+                                }
                             }
                         }};
 

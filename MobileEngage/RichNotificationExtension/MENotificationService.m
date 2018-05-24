@@ -30,14 +30,11 @@
         return;
     }
 
-    NSArray *validatorErrors = [content.userInfo validate:^(EMSDictionaryValidator *validate) {
-        [validate valueExistsForKey:@"actions"
-                           withType:[NSDictionary class]];
-    }];
-    if ([validatorErrors count] == 0) {
+    NSDictionary *actionsDict = [self extractActionsDictionaryFromContent:content];
+    if (actionsDict) {
         NSMutableArray *actions = [NSMutableArray array];
 
-        [content.userInfo[@"actions"] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *value, BOOL *stop) {
+        [actionsDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *value, BOOL *stop) {
             [actions addObject:[UNNotificationAction actionWithIdentifier:key
                                                                     title:value[@"title"]
                                                                   options:UNNotificationActionOptionNone]];
@@ -80,6 +77,25 @@
         }
     }
     return attachments;
+}
+
+- (NSDictionary *)extractActionsDictionaryFromContent:(UNMutableNotificationContent *)content {
+    NSDictionary *actionsDict;
+    NSArray *emsErrors = [content.userInfo validate:^(EMSDictionaryValidator *validate) {
+        [validate valueExistsForKey:@"ems"
+                           withType:[NSDictionary class]];
+    }];
+    if ([emsErrors count] == 0) {
+        NSDictionary *ems = content.userInfo[@"ems"];
+        NSArray *actionsErrors = [ems validate:^(EMSDictionaryValidator *validate) {
+            [validate valueExistsForKey:@"actions"
+                               withType:[NSDictionary class]];
+        }];
+        if ([actionsErrors count] == 0) {
+            actionsDict = content.userInfo[@"ems"][@"actions"];
+        }
+    }
+    return actionsDict;
 }
 
 @end
