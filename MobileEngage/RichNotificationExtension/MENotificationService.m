@@ -33,13 +33,13 @@
     NSDictionary *actionsDict = [self extractActionsDictionaryFromContent:content];
     if (actionsDict) {
         NSMutableArray *actions = [NSMutableArray array];
-
-        [actionsDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *value, BOOL *stop) {
-            [actions addObject:[UNNotificationAction actionWithIdentifier:key
-                                                                    title:value[@"title"]
-                                                                  options:UNNotificationActionOptionNone]];
+        [actionsDict enumerateKeysAndObjectsUsingBlock:^(NSString *actionId, NSDictionary *actionDict, BOOL *stop) {
+            UNNotificationAction *action = [self createActionFromActionDictionary:actionDict
+                                                                         actionId:actionId];
+            if (action) {
+                [actions addObject:action];
+            }
         }];
-
         NSString *const categoryIdentifier = [NSUUID UUID].UUIDString;
         UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:categoryIdentifier
                                                                                   actions:actions
@@ -77,6 +77,34 @@
         }
     }
     return attachments;
+}
+
+- (UNNotificationAction *)createActionFromActionDictionary:(NSDictionary *)actionDictionary
+                                                  actionId:(NSString *)actionId {
+    UNNotificationAction *result;
+    NSArray *commonKeyErrors = [actionDictionary validate:^(EMSDictionaryValidator *validate) {
+        [validate valueExistsForKey:@"title" withType:[NSString class]];
+        [validate valueExistsForKey:@"type" withType:[NSString class]];
+    }];
+    if ([commonKeyErrors count] == 0) {
+        NSArray *typeSpecificErrors;
+        NSString *type = actionDictionary[@"type"];
+        if ([type isEqualToString:@"MEAppEvent"]) {
+            typeSpecificErrors = [actionDictionary validate:^(EMSDictionaryValidator *validate) {
+                [validate valueExistsForKey:@"name" withType:[NSString class]];
+            }];
+        } else if ([type isEqualToString:@"OpenExternalUrl"]) {
+            typeSpecificErrors = [actionDictionary validate:^(EMSDictionaryValidator *validate) {
+                [validate valueExistsForKey:@"url" withType:[NSString class]];
+            }];
+        }
+        if (typeSpecificErrors && [typeSpecificErrors count] == 0) {
+            result = [UNNotificationAction actionWithIdentifier:actionId
+                                                          title:actionDictionary[@"title"]
+                                                        options:UNNotificationActionOptionNone];
+        }
+    }
+    return result;
 }
 
 - (NSDictionary *)extractActionsDictionaryFromContent:(UNMutableNotificationContent *)content {

@@ -8,9 +8,22 @@
 #import <UserNotifications/UNNotificationRequest.h>
 
 @interface MEUserNotification ()
+
+@property(nonatomic, strong) UIApplication *application;
+
 @end
 
 @implementation MEUserNotification
+
+@synthesize delegate = _delegate;
+@synthesize eventHandler = _eventHandler;
+
+- (instancetype)initWithApplication:(UIApplication *)application {
+    if (self = [super init]) {
+        _application = application;
+    }
+    return self;
+}
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
        willPresentNotification:(UNNotification *)notification
@@ -32,11 +45,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                         withCompletionHandler:completionHandler];
     }
 
-    NSDictionary *action = response.notification.request.content.userInfo[@"actions"][response.actionIdentifier];
-    if ([action[@"type"] isEqualToString:@"MEAppEvent"]) {
+    NSDictionary *action = response.notification.request.content.userInfo[@"ems"][@"actions"][response.actionIdentifier];
+    NSString *type = action[@"type"];
+    if ([type isEqualToString:@"MEAppEvent"]) {
         [self.eventHandler handleEvent:action[@"name"] payload:action[@"payload"]];
+    } else if ([type isEqualToString:@"OpenExternalUrl"]) {
+            [self.application openURL:[NSURL URLWithString:action[@"url"]]
+                              options:@{}
+                    completionHandler:nil];
     }
-
     completionHandler();
 }
 

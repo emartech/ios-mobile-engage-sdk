@@ -4,8 +4,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MEInboxProtocol.h"
+#import "MEUserNotificationCenterDelegate.h"
 #import "MEInApp.h"
-#import "MEUserNotification.h"
 
 @class MEConfig;
 @protocol MobileEngageStatusDelegate;
@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(class, nonatomic, weak, nullable) id <MobileEngageStatusDelegate> statusDelegate;
 @property(class, nonatomic, readonly) id<MEInboxProtocol> inbox;
 @property(class, nonatomic, readonly) MEInApp *inApp;
-@property(class, nonatomic, readonly) MEUserNotification *notification;
+@property(class, nonatomic, readonly) id<MEUserNotificationCenterDelegate> notification;
 
 + (void)setupWithConfig:(MEConfig *)config
           launchOptions:(nullable NSDictionary *)launchOptions;

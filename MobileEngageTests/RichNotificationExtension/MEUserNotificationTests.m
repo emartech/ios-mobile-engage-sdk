@@ -4,6 +4,7 @@
 #import <UserNotifications/UNNotificationResponse.h>
 #import <UserNotifications/UNNotificationRequest.h>
 #import <UserNotifications/UNNotificationContent.h>
+#import "MEUserNotification.h"
 
 SPEC_BEGIN(MEUserNotificationTests)
         if (@available(iOS 10.0, *)) {
@@ -88,7 +89,6 @@ SPEC_BEGIN(MEUserNotificationTests)
                     [[theValue(result) should] equal:theValue(XCTWaiterResultCompleted)];
                 });
 
-
                 it(@"should call MobileEngage.notification.eventHandler with the defined eventName and payload if the action is type of MEAppEvent", ^{
                     id eventHandlerMock = [KWMock mockForProtocol:@protocol(MEEventHandler)];
                     NSString *eventName = @"testEventName";
@@ -98,14 +98,15 @@ SPEC_BEGIN(MEUserNotificationTests)
                     MEUserNotification *userNotification = [MEUserNotification new];
                     userNotification.eventHandler = eventHandlerMock;
 
-                    NSDictionary *userInfo = @{@"actions": @{
+                    NSDictionary *userInfo = @{@"ems": @{
+                        @"actions": @{
                             @"uniqueId": @{
-                                    @"title": @"actionTitle",
-                                    @"type": @"MEAppEvent",
-                                    @"name": eventName,
-                                    @"payload": payload
+                                @"title": @"actionTitle",
+                                @"type": @"MEAppEvent",
+                                @"name": eventName,
+                                @"payload": payload
                             }
-                    }};
+                        }}};
 
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                     [userNotification userNotificationCenter:nil
@@ -114,7 +115,6 @@ SPEC_BEGIN(MEUserNotificationTests)
                                            [exp fulfill];
                                        }];
                     [XCTWaiter waitForExpectations:@[exp] timeout:5];
-
                 });
 
                 it(@"should not call MobileEngage.notification.eventHandler with the defined eventName and payload if the action is not MEAppEvent type", ^{
@@ -124,14 +124,15 @@ SPEC_BEGIN(MEUserNotificationTests)
                     MEUserNotification *userNotification = [MEUserNotification new];
                     userNotification.eventHandler = eventHandlerMock;
 
-                    NSDictionary *userInfo = @{@"actions": @{
+                    NSDictionary *userInfo = @{@"ems": @{
+                        @"actions": @{
                             @"uniqueId": @{
-                                    @"title": @"actionTitle",
-                                    @"type": @"someStuff",
-                                    @"name": @"testEventName",
-                                    @"payload": @{@"key1": @"value1", @"key2": @"value2", @"key3": @"value3"}
+                                @"title": @"actionTitle",
+                                @"type": @"someStuff",
+                                @"name": @"testEventName",
+                                @"payload": @{@"key1": @"value1", @"key2": @"value2", @"key3": @"value3"}
                             }
-                    }};
+                        }}};
 
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                     [userNotification userNotificationCenter:nil
@@ -140,8 +141,32 @@ SPEC_BEGIN(MEUserNotificationTests)
                                            [exp fulfill];
                                        }];
                     [XCTWaiter waitForExpectations:@[exp] timeout:5];
-
                 });
+
+                if (@available(iOS 10.0, *)) {
+                    it(@"should call openURL:options:completionHandler: with the defined url if the action is type of OpenExternalUrl", ^{
+                        UIApplication *application = [UIApplication mock];
+                        [[application should] receive:@selector(openURL:options:completionHandler:) withArguments:[NSURL URLWithString:@"https://www.emarsys.com"], @{}, kw_any()];
+
+                        MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:application];
+                        NSDictionary *userInfo = @{@"ems": @{@"actions": @{
+                            @"uniqueId": @{
+                                @"title": @"actionTitle",
+                                @"type": @"OpenExternalUrl",
+                                @"url": @"https://www.emarsys.com"
+                            }
+                        }}};
+
+                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                        [userNotification userNotificationCenter:nil
+                                  didReceiveNotificationResponse:notificationResponseWithUserInfo(userInfo)
+                                           withCompletionHandler:^{
+                                               [exp fulfill];
+                                           }];
+                        [XCTWaiter waitForExpectations:@[exp] timeout:5];
+                    });
+                }
+
             });
         }
 

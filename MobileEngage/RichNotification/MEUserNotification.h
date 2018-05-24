@@ -1,13 +1,12 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <UserNotifications/UNUserNotificationCenter.h>
-#import "MEEventHandler.h"
+#import "MEUserNotificationCenterDelegate.h"
 
-@interface MEUserNotification: NSObject <UNUserNotificationCenterDelegate>
+@interface MEUserNotification: NSObject <MEUserNotificationCenterDelegate>
 
-@property(nonatomic, weak) id <UNUserNotificationCenterDelegate> delegate;
-@property(nonatomic, weak) id <MEEventHandler> eventHandler;
+- (instancetype)initWithApplication:(UIApplication *)application;
 
 @end

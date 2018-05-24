@@ -109,7 +109,7 @@ SPEC_BEGIN(InboxV2IntegrationTests)
 
                 [XCTWaiter waitForExpectations:@[exp] timeout:30];
 
-                [[_inboxStatus.notifications shouldNot] beEmpty];
+                [[theValue([_inboxStatus.notifications count]) should] beGreaterThan:theValue(0)];
 
                 FakeStatusDelegate *statusDelegate = [FakeStatusDelegate new];
                 [MobileEngage setStatusDelegate:statusDelegate];

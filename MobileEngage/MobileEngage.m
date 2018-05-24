@@ -14,6 +14,9 @@
 #import "MEExperimental.h"
 #import "MEInboxV2.h"
 #import "MEInbox.h"
+#import "MEUserNotificationCenterDelegate.h"
+#import "MEUserNotification.h"
+#import <UIKit/UIKit.h>
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"MEDB.db"]
 
@@ -22,7 +25,7 @@
 static MobileEngageInternal *_mobileEngageInternal;
 static id <MEInboxNotificationProtocol> _inbox;
 static MEInApp *_iam;
-static MEUserNotification *_notification;
+static id <MEUserNotificationCenterDelegate> _notification;
 static EMSSQLiteHelper *_dbHelper;
 
 
@@ -30,19 +33,28 @@ static EMSSQLiteHelper *_dbHelper;
                                config:(MEConfig *)config
                         launchOptions:(NSDictionary *)launchOptions {
     [MEExperimental enableFeatures:config.experimentalFeatures];
-    _dbHelper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH schemaDelegate:[MESchemaDelegate new]];
+    _dbHelper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
+                                               schemaDelegate:[MESchemaDelegate new]];
     [_dbHelper open];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        [_dbHelper close];
-    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [_dbHelper close];
+                                                  }];
 
     _mobileEngageInternal = mobileEngageInternal;
 
     MERequestContext *requestContext = [[MERequestContext alloc] initWithConfig:config];
     if ([MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX]) {
-        _inbox = [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext restClient:[EMSRESTClient clientWithSession:[NSURLSession sharedSession]] notifications:[NSMutableArray new] timestampProvider:[EMSTimestampProvider new]];
+        _inbox = [[MEInboxV2 alloc] initWithConfig:config
+                                    requestContext:requestContext
+                                        restClient:[EMSRESTClient clientWithSession:[NSURLSession sharedSession]]
+                                     notifications:[NSMutableArray new]
+                                 timestampProvider:[EMSTimestampProvider new]];
     } else {
-        _inbox = [[MEInbox alloc] initWithConfig:config requestContext:requestContext];
+        _inbox = [[MEInbox alloc] initWithConfig:config
+                                  requestContext:requestContext];
     }
 
     MELogRepository *logRepository = [MELogRepository new];
@@ -51,7 +63,7 @@ static EMSSQLiteHelper *_dbHelper;
     _iam.logRepository = logRepository;
     _iam.timestampProvider = [EMSTimestampProvider new];
 
-    _notification = [MEUserNotification new];
+    _notification = [[MEUserNotification alloc] initWithApplication:[UIApplication sharedApplication]];
 
     _mobileEngageInternal.notificationCenterManager = [MENotificationCenterManager new];
 
@@ -136,7 +148,7 @@ static EMSSQLiteHelper *_dbHelper;
     _iam = inApp;
 }
 
-+ (MEUserNotification *)notification {
++ (id <MEUserNotificationCenterDelegate>)notification {
     return _notification;
 }
 

@@ -108,10 +108,34 @@ SPEC_BEGIN(MENotificationServiceTests)
 
                 context(@"with actions", ^{
 
+                    it(@"should not set category when ems is not the expected type: NSDictionary", ^{
+                        MENotificationService *service = [[MENotificationService alloc] init];
+                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                        content.userInfo = @{@"ems": @978};
+
+                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
+                                                                                              content:content
+                                                                                              trigger:nil];
+
+                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
+
+                        __block UNNotificationContent *returnedContent;
+                        [service didReceiveNotificationRequest:request
+                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
+                                                returnedContent = contentToDeliver;
+                                                [exp fulfill];
+                                            }];
+
+                        [XCTWaiter waitForExpectations:@[exp]
+                                               timeout:30];
+
+                        [[returnedContent.categoryIdentifier should] equal:@""];
+                    });
+
                     it(@"should not set category when actions is not the expected type: NSDictionary", ^{
                         MENotificationService *service = [[MENotificationService alloc] init];
                         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"actions": @978};
+                        content.userInfo = @{@"ems": @{@"actions": @978}};
 
                         UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
                                                                                               content:content
@@ -138,10 +162,14 @@ SPEC_BEGIN(MENotificationServiceTests)
                         content.userInfo = @{@"ems": @{
                             @"actions": @{
                                 @"UUID1": @{
-                                    @"title": @"buttonTitle"
+                                    @"title": @"buttonTitle",
+                                    @"type": @"MEAppEvent",
+                                    @"name": @"nameOfTheEvent"
                                 },
                                 @"UUID2": @{
-                                    @"title": @"buttonTitle2"
+                                    @"title": @"buttonTitle2",
+                                    @"type": @"OpenExternalUrl",
+                                    @"url": @"https://www.emarsys.com"
                                 }
                             }
                         }};
