@@ -20,7 +20,8 @@ Pod::Spec.new do |spec|
 	    'MobileEngage/Inbox/MENotificationInboxStatus.h',
         'MobileEngage/IAM/MEInApp.h',
         'MobileEngage/IAM/MEEventHandler.h',
-        'MobileEngage/RichNotification/MEUserNotification.h'
+        'MobileEngage/RichNotification/MEUserNotification.h',
+        'MobileEngage/RichNotification/MEUserNotificationCenterDelegate.h'
    	]
 	spec.dependency 'CoreSDK'
 	spec.libraries = 'z', 'c++'
