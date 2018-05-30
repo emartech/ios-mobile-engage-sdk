@@ -99,14 +99,15 @@ SPEC_BEGIN(MEUserNotificationTests)
                     userNotification.eventHandler = eventHandlerMock;
 
                     NSDictionary *userInfo = @{@"ems": @{
-                        @"actions": @{
-                            @"uniqueId": @{
+                        @"actions": @[
+                            @{
+                                @"id": @"uniqueId",
                                 @"title": @"actionTitle",
                                 @"type": @"MEAppEvent",
                                 @"name": eventName,
                                 @"payload": payload
                             }
-                        }}};
+                        ]}};
 
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                     [userNotification userNotificationCenter:nil
@@ -125,14 +126,15 @@ SPEC_BEGIN(MEUserNotificationTests)
                     userNotification.eventHandler = eventHandlerMock;
 
                     NSDictionary *userInfo = @{@"ems": @{
-                        @"actions": @{
-                            @"uniqueId": @{
+                        @"actions": @[
+                            @{
+                                @"id": @"uniqueId",
                                 @"title": @"actionTitle",
                                 @"type": @"someStuff",
                                 @"name": @"testEventName",
                                 @"payload": @{@"key1": @"value1", @"key2": @"value2", @"key3": @"value3"}
                             }
-                        }}};
+                        ]}};
 
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                     [userNotification userNotificationCenter:nil
@@ -149,13 +151,14 @@ SPEC_BEGIN(MEUserNotificationTests)
                         [[application should] receive:@selector(openURL:options:completionHandler:) withArguments:[NSURL URLWithString:@"https://www.emarsys.com"], @{}, kw_any()];
 
                         MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:application];
-                        NSDictionary *userInfo = @{@"ems": @{@"actions": @{
-                            @"uniqueId": @{
+                        NSDictionary *userInfo = @{@"ems": @{@"actions": @[
+                            @{
+                                @"id": @"uniqueId",
                                 @"title": @"actionTitle",
                                 @"type": @"OpenExternalUrl",
                                 @"url": @"https://www.emarsys.com"
                             }
-                        }}};
+                        ]}};
 
                         XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                         [userNotification userNotificationCenter:nil

@@ -44,8 +44,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                didReceiveNotificationResponse:response
                         withCompletionHandler:completionHandler];
     }
-
-    NSDictionary *action = response.notification.request.content.userInfo[@"ems"][@"actions"][response.actionIdentifier];
+    NSDictionary *action = [self actionFromResponse:response];
     NSString *type = action[@"type"];
     if ([type isEqualToString:@"MEAppEvent"]) {
         [self.eventHandler handleEvent:action[@"name"] payload:action[@"payload"]];
@@ -57,5 +56,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     completionHandler();
 }
 
+- (NSDictionary *)actionFromResponse:(UNNotificationResponse *)response {
+    NSDictionary *action;
+    for (NSDictionary *actionDict in response.notification.request.content.userInfo[@"ems"][@"actions"]) {
+        if (actionDict[@"id"]) {
+            action = actionDict;
+            break;
+        }
+    }
+    return action;
+}
 
 @end
