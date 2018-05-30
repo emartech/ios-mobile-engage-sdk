@@ -2,6 +2,7 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 #import "MEUserNotification.h"
+#import "MobileEngageInternal.h"
 #import <UserNotifications/UNNotificationResponse.h>
 #import <UserNotifications/UNNotification.h>
 #import <UserNotifications/UNNotificationContent.h>
@@ -10,6 +11,7 @@
 @interface MEUserNotification ()
 
 @property(nonatomic, strong) UIApplication *application;
+@property(nonatomic, strong) MobileEngageInternal *mobileEngage;
 
 @end
 
@@ -18,9 +20,13 @@
 @synthesize delegate = _delegate;
 @synthesize eventHandler = _eventHandler;
 
-- (instancetype)initWithApplication:(UIApplication *)application {
+- (instancetype)initWithApplication:(UIApplication *)application
+               mobileEngageInternal:(MobileEngageInternal *)mobileEngage {
+    NSParameterAssert(application);
+    NSParameterAssert(mobileEngage);
     if (self = [super init]) {
         _application = application;
+        _mobileEngage = mobileEngage;
     }
     return self;
 }
@@ -47,11 +53,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     NSDictionary *action = [self actionFromResponse:response];
     NSString *type = action[@"type"];
     if ([type isEqualToString:@"MEAppEvent"]) {
-        [self.eventHandler handleEvent:action[@"name"] payload:action[@"payload"]];
+        [self.eventHandler handleEvent:action[@"name"]
+                               payload:action[@"payload"]];
     } else if ([type isEqualToString:@"OpenExternalUrl"]) {
-            [self.application openURL:[NSURL URLWithString:action[@"url"]]
-                              options:@{}
-                    completionHandler:nil];
+        [self.application openURL:[NSURL URLWithString:action[@"url"]]
+                          options:@{}
+                completionHandler:nil];
+    } else if ([type isEqualToString:@"MECustomEvent"]) {
+        [self.mobileEngage trackCustomEvent:action[@"name"]
+                            eventAttributes:action[@"payload"]];
     }
     completionHandler();
 }

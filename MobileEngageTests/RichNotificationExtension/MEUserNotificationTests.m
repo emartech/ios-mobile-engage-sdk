@@ -1,5 +1,6 @@
 #import "Kiwi.h"
 #import "MobileEngage.h"
+#import "MobileEngageInternal.h"
 #import <UserNotifications/UNNotification.h>
 #import <UserNotifications/UNNotificationResponse.h>
 #import <UserNotifications/UNNotificationRequest.h>
@@ -21,6 +22,30 @@ SPEC_BEGIN(MEUserNotificationTests)
                 [content stub:@selector(userInfo) andReturn:userInfo];
                 return response;
             };
+
+            describe(@"init", ^{
+                it(@"should throw an exception when there is no application", ^{
+                    @try {
+                        [[MEUserNotification alloc] initWithApplication:nil
+                                                   mobileEngageInternal:[MobileEngageInternal mock]];
+                        fail(@"Expected Exception when application is nil!");
+                    } @catch (NSException *exception) {
+                        [[exception.reason should] equal:@"Invalid parameter not satisfying: application"];
+                        [[theValue(exception) shouldNot] beNil];
+                    }
+                });
+
+                it(@"should throw an exception when there is no mobileEngageInternal", ^{
+                    @try {
+                        [[MEUserNotification alloc] initWithApplication:[UIApplication mock]
+                                                   mobileEngageInternal:nil];
+                        fail(@"Expected Exception when mobileEngage is nil!");
+                    } @catch (NSException *exception) {
+                        [[exception.reason should] equal:@"Invalid parameter not satisfying: mobileEngage"];
+                        [[theValue(exception) shouldNot] beNil];
+                    }
+                });
+            });
 
             describe(@"userNotificationCenter:willPresentNotification:withCompletionHandler:", ^{
 
@@ -145,12 +170,42 @@ SPEC_BEGIN(MEUserNotificationTests)
                     [XCTWaiter waitForExpectations:@[exp] timeout:5];
                 });
 
+                it(@"should call trackCustomEvent on MobileEngage with the defined eventName and payload if the action is type of MECustomEvent", ^{
+                    NSString *eventName = @"testEventName";
+                    NSDictionary *payload = @{@"key1": @"value1", @"key2": @"value2", @"key3": @"value3"};
+                    MobileEngageInternal *mobileEngage = [MobileEngageInternal mock];
+
+                    MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:[UIApplication mock]
+                                                                                      mobileEngageInternal:mobileEngage];
+                    NSDictionary *userInfo = @{@"ems": @{
+                        @"actions": @[
+                            @{
+                                @"id": @"uniqueId",
+                                @"title": @"actionTitle",
+                                @"type": @"MECustomEvent",
+                                @"name": eventName,
+                                @"payload": payload
+                            }
+                        ]}};
+                    [[mobileEngage should] receive:@selector(trackCustomEvent:eventAttributes:) withArguments:eventName, payload];
+
+                    XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                    [userNotification userNotificationCenter:nil
+                              didReceiveNotificationResponse:notificationResponseWithUserInfo(userInfo)
+                                       withCompletionHandler:^{
+                                           [exp fulfill];
+                                       }];
+                    [XCTWaiter waitForExpectations:@[exp] timeout:5];
+
+                });
+
                 if (@available(iOS 10.0, *)) {
                     it(@"should call openURL:options:completionHandler: with the defined url if the action is type of OpenExternalUrl", ^{
                         UIApplication *application = [UIApplication mock];
                         [[application should] receive:@selector(openURL:options:completionHandler:) withArguments:[NSURL URLWithString:@"https://www.emarsys.com"], @{}, kw_any()];
 
-                        MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:application];
+                        MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:application
+                                                                                          mobileEngageInternal:[MobileEngageInternal mock]];
                         NSDictionary *userInfo = @{@"ems": @{@"actions": @[
                             @{
                                 @"id": @"uniqueId",

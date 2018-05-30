@@ -14,9 +14,7 @@
 #import "MEExperimental.h"
 #import "MEInboxV2.h"
 #import "MEInbox.h"
-#import "MEUserNotificationCenterDelegate.h"
 #import "MEUserNotification.h"
-#import <UIKit/UIKit.h>
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"MEDB.db"]
 
@@ -63,8 +61,6 @@ static EMSSQLiteHelper *_dbHelper;
     _iam.logRepository = logRepository;
     _iam.timestampProvider = [EMSTimestampProvider new];
 
-    _notification = [[MEUserNotification alloc] initWithApplication:[UIApplication sharedApplication]];
-
     _mobileEngageInternal.notificationCenterManager = [MENotificationCenterManager new];
 
 
@@ -75,6 +71,9 @@ static EMSSQLiteHelper *_dbHelper;
                             requestContext:requestContext];
 
     _iam.inAppTracker = _mobileEngageInternal;
+
+    _notification = [[MEUserNotification alloc] initWithApplication:[UIApplication sharedApplication]
+                                               mobileEngageInternal:_mobileEngageInternal];
 }
 
 + (void)setupWithConfig:(MEConfig *)config

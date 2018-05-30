@@ -96,6 +96,10 @@
             typeSpecificErrors = [actionDictionary validate:^(EMSDictionaryValidator *validate) {
                 [validate valueExistsForKey:@"url" withType:[NSString class]];
             }];
+        } else if ([type isEqualToString:@"MECustomEvent"]) {
+            typeSpecificErrors = [actionDictionary validate:^(EMSDictionaryValidator *validate) {
+                [validate valueExistsForKey:@"name" withType:[NSString class]];
+            }];
         }
         if (typeSpecificErrors && [typeSpecificErrors count] == 0) {
             result = [UNNotificationAction actionWithIdentifier:actionDictionary[@"id"]

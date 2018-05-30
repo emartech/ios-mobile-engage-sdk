@@ -399,8 +399,8 @@ SPEC_BEGIN(MENotificationServiceTests)
                                 @{
                                     @"id": @"UUID2",
                                     @"title": @"buttonTitle2",
-                                    @"type": @"OpenExternalUrl",
-                                    @"url": @"https://www.emarsys.com"
+                                    @"type": @"MEAppEvent",
+                                    @"name": @"nameOfTheEvent"
                                 }
                             ]
                         }};
@@ -458,6 +458,63 @@ SPEC_BEGIN(MENotificationServiceTests)
                                     @"title": @"buttonTitle2",
                                     @"type": @"OpenExternalUrl",
                                     @"url": @"https://www.emarsys.com"
+                                }
+                            ]
+                        }};
+
+                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
+                                                                                              content:content
+                                                                                              trigger:nil];
+
+                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
+
+                        __block UNNotificationContent *returnedContent;
+                        [service didReceiveNotificationRequest:request
+                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
+                                                returnedContent = contentToDeliver;
+                                                [exp fulfill];
+                                            }];
+
+                        [XCTWaiter waitForExpectations:@[exp]
+                                               timeout:30];
+
+                        [[returnedContent.categoryIdentifier shouldNot] beNil];
+
+                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
+
+                        __block UNNotificationCategory *returnedCategory;
+                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
+                            for (UNNotificationCategory *category in categories) {
+                                if ([category.identifier isEqualToString:returnedContent.categoryIdentifier]) {
+                                    returnedCategory = category;
+                                    break;
+                                }
+                            }
+                            [expectation fulfill];
+                        }];
+
+                        [XCTWaiter waitForExpectations:@[expectation]
+                                               timeout:30];
+
+                        [[theValue([returnedCategory.actions count]) should] equal:theValue(1)];
+                        [[returnedCategory.actions[0].title should] equal:@"buttonTitle2"];
+                    });
+
+                    it(@"should not create the action when type is MECustomEvent and name is missing", ^{
+                        MENotificationService *service = [[MENotificationService alloc] init];
+                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                        content.userInfo = @{@"ems": @{
+                            @"actions": @[
+                                @{
+                                    @"id": @"UUID",
+                                    @"title": @"buttonTitle",
+                                    @"type": @"MECustomEvent"
+                                },
+                                @{
+                                    @"id": @"UUID2",
+                                    @"title": @"buttonTitle2",
+                                    @"type": @"MECustomEvent",
+                                    @"name": @"nameOfTheEvent"
                                 }
                             ]
                         }};
