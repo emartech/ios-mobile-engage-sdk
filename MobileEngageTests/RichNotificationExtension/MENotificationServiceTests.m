@@ -132,7 +132,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                         [[returnedContent.categoryIdentifier should] equal:@""];
                     });
 
-                    it(@"should not set category when actions is not the expected type: NSDictionary", ^{
+                    it(@"should not set category when actions is not the expected type: NSArray", ^{
                         MENotificationService *service = [[MENotificationService alloc] init];
                         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
                         content.userInfo = @{@"ems": @{@"actions": @978}};
@@ -160,18 +160,20 @@ SPEC_BEGIN(MENotificationServiceTests)
                         MENotificationService *service = [[MENotificationService alloc] init];
                         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
                         content.userInfo = @{@"ems": @{
-                            @"actions": @{
-                                @"UUID1": @{
+                            @"actions": @[
+                                @{
+                                    @"id": @"UUID1",
                                     @"title": @"buttonTitle",
                                     @"type": @"MEAppEvent",
                                     @"name": @"nameOfTheEvent"
                                 },
-                                @"UUID2": @{
+                                @{
+                                    @"id": @"UUID2",
                                     @"title": @"buttonTitle2",
                                     @"type": @"OpenExternalUrl",
                                     @"url": @"https://www.emarsys.com"
                                 }
-                            }
+                            ]
                         }};
 
                         UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"

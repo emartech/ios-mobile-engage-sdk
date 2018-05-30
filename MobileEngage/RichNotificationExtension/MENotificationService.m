@@ -30,16 +30,15 @@
         return;
     }
 
-    NSDictionary *actionsDict = [self extractActionsDictionaryFromContent:content];
-    if (actionsDict) {
+    NSArray *actionArray = [self extractActionsFromContent:content];
+    if (actionArray) {
         NSMutableArray *actions = [NSMutableArray array];
-        [actionsDict enumerateKeysAndObjectsUsingBlock:^(NSString *actionId, NSDictionary *actionDict, BOOL *stop) {
-            UNNotificationAction *action = [self createActionFromActionDictionary:actionDict
-                                                                         actionId:actionId];
+        for (NSDictionary *actionDict in actionArray) {
+            UNNotificationAction *action = [self createActionFromActionDictionary:actionDict];
             if (action) {
                 [actions addObject:action];
             }
-        }];
+        }
         NSString *const categoryIdentifier = [NSUUID UUID].UUIDString;
         UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:categoryIdentifier
                                                                                   actions:actions
@@ -79,10 +78,10 @@
     return attachments;
 }
 
-- (UNNotificationAction *)createActionFromActionDictionary:(NSDictionary *)actionDictionary
-                                                  actionId:(NSString *)actionId {
+- (UNNotificationAction *)createActionFromActionDictionary:(NSDictionary *)actionDictionary {
     UNNotificationAction *result;
     NSArray *commonKeyErrors = [actionDictionary validate:^(EMSDictionaryValidator *validate) {
+        [validate valueExistsForKey:@"id" withType:[NSString class]];
         [validate valueExistsForKey:@"title" withType:[NSString class]];
         [validate valueExistsForKey:@"type" withType:[NSString class]];
     }];
@@ -99,7 +98,7 @@
             }];
         }
         if (typeSpecificErrors && [typeSpecificErrors count] == 0) {
-            result = [UNNotificationAction actionWithIdentifier:actionId
+            result = [UNNotificationAction actionWithIdentifier:actionDictionary[@"id"]
                                                           title:actionDictionary[@"title"]
                                                         options:UNNotificationActionOptionNone];
         }
@@ -107,8 +106,8 @@
     return result;
 }
 
-- (NSDictionary *)extractActionsDictionaryFromContent:(UNMutableNotificationContent *)content {
-    NSDictionary *actionsDict;
+- (NSArray *)extractActionsFromContent:(UNMutableNotificationContent *)content {
+    NSArray *actions;
     NSArray *emsErrors = [content.userInfo validate:^(EMSDictionaryValidator *validate) {
         [validate valueExistsForKey:@"ems"
                            withType:[NSDictionary class]];
@@ -117,13 +116,13 @@
         NSDictionary *ems = content.userInfo[@"ems"];
         NSArray *actionsErrors = [ems validate:^(EMSDictionaryValidator *validate) {
             [validate valueExistsForKey:@"actions"
-                               withType:[NSDictionary class]];
+                               withType:[NSArray class]];
         }];
         if ([actionsErrors count] == 0) {
-            actionsDict = content.userInfo[@"ems"][@"actions"];
+            actions = content.userInfo[@"ems"][@"actions"];
         }
     }
-    return actionsDict;
+    return actions;
 }
 
 @end
