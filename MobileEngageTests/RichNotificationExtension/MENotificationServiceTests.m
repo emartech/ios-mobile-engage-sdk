@@ -215,6 +215,68 @@ SPEC_BEGIN(MENotificationServiceTests)
                         [[returnedCategory.actions[1].title should] equal:@"buttonTitle2"];
                     });
 
+                    it(@"should use pre registered category and also registered category on content with actions defined in the userinfo", ^{
+                        MENotificationService *service = [[MENotificationService alloc] init];
+                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                        content.userInfo = @{@"ems": @{
+                            @"actions": @[
+                                @{
+                                    @"id": @"UUID1",
+                                    @"title": @"buttonTitle",
+                                    @"type": @"MEAppEvent",
+                                    @"name": @"nameOfTheEvent"
+                                },
+                                @{
+                                    @"id": @"UUID2",
+                                    @"title": @"buttonTitle2",
+                                    @"type": @"OpenExternalUrl",
+                                    @"url": @"https://www.emarsys.com"
+                                }
+                            ]
+                        }};
+                        UNNotificationAction *action = [UNNotificationAction actionWithIdentifier:@"id"
+                                                                                            title:@"title"
+                                                                                          options:UNNotificationActionOptionNone];
+
+                        UNNotificationCategory *expectedCategory = [UNNotificationCategory categoryWithIdentifier:@"categoryIdentifier"
+                                                                                                          actions:@[action]
+                                                                                                intentIdentifiers:@[]
+                                                                                                          options:0];
+                        [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithArray:@[expectedCategory]]];
+
+                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
+                                                                                              content:content
+                                                                                              trigger:nil];
+
+                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
+
+                        __block UNNotificationContent *returnedContent;
+                        [service didReceiveNotificationRequest:request
+                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
+                                                returnedContent = contentToDeliver;
+                                                [exp fulfill];
+                                            }];
+
+                        [XCTWaiter waitForExpectations:@[exp]
+                                               timeout:30];
+
+                        [[returnedContent.categoryIdentifier shouldNot] beNil];
+
+                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
+
+                        __block NSSet<UNNotificationCategory *> *returnedCategories;
+                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
+                            returnedCategories = categories;
+                            [expectation fulfill];
+                        }];
+
+                        [XCTWaiter waitForExpectations:@[expectation]
+                                               timeout:30];
+
+                        [[theValue([returnedCategories count]) should] equal:theValue(2)];
+                        [[returnedCategories should] contain:expectedCategory];
+                    });
+
                     it(@"should not create the action when id is missing", ^{
                         MENotificationService *service = [[MENotificationService alloc] init];
                         UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];

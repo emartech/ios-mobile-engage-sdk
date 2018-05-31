@@ -46,15 +46,24 @@
                                                                                   options:0];
         content.categoryIdentifier = categoryIdentifier;
 
-        [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithArray:@[category]]];
+        [[UNUserNotificationCenter currentNotificationCenter] getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
+            [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[categories setByAddingObjectsFromArray:@[category]]];
+            [self setAttachmentsWithRequest:request
+                                    content:content];
+            contentHandler(content.copy);
+        }];
+    } else {
+        [self setAttachmentsWithRequest:request
+                                content:content];
+        contentHandler(content.copy);
     }
+}
 
+- (void)setAttachmentsWithRequest:(UNNotificationRequest *)request content:(UNMutableNotificationContent *)content {
     NSArray<UNNotificationAttachment *> *attachments = [self attachmentsForContent:request.content];
     if (attachments) {
         content.attachments = attachments;
     }
-
-    contentHandler(content.copy);
 }
 
 - (void)serviceExtensionTimeWillExpire {
