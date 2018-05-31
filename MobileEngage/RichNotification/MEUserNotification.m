@@ -69,7 +69,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (NSDictionary *)actionFromResponse:(UNNotificationResponse *)response {
     NSDictionary *action;
     for (NSDictionary *actionDict in response.notification.request.content.userInfo[@"ems"][@"actions"]) {
-        if (actionDict[@"id"]) {
+        if ([response.actionIdentifier isEqualToString:actionDict[@"id"]]) {
             action = actionDict;
             break;
         }

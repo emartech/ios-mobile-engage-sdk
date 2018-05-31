@@ -9,18 +9,21 @@
 
 SPEC_BEGIN(MEUserNotificationTests)
         if (@available(iOS 10.0, *)) {
-
-            id (^notificationResponseWithUserInfo)(NSDictionary *userInfo) = ^id(NSDictionary *userInfo) {
+            id (^notificationResponseWithUserInfoWithActionId)(NSDictionary *userInfo, NSString *actionId) = ^id(NSDictionary *userInfo, NSString *actionId) {
                 UNNotificationResponse *response = [UNNotificationResponse mock];
                 UNNotification *notification = [UNNotification mock];
                 UNNotificationRequest *request = [UNNotificationRequest mock];
                 UNNotificationContent *content = [UNNotificationContent mock];
                 [response stub:@selector(notification) andReturn:notification];
-                [response stub:@selector(actionIdentifier) andReturn:@"uniqueId"];
+                [response stub:@selector(actionIdentifier) andReturn:actionId];
                 [notification stub:@selector(request) andReturn:request];
                 [request stub:@selector(content) andReturn:content];
                 [content stub:@selector(userInfo) andReturn:userInfo];
                 return response;
+            };
+
+            id (^notificationResponseWithUserInfo)(NSDictionary *userInfo) = ^id(NSDictionary *userInfo) {
+                return notificationResponseWithUserInfoWithActionId(userInfo, @"uniqueId");
             };
 
             describe(@"init", ^{
@@ -192,6 +195,40 @@ SPEC_BEGIN(MEUserNotificationTests)
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                     [userNotification userNotificationCenter:nil
                               didReceiveNotificationResponse:notificationResponseWithUserInfo(userInfo)
+                                       withCompletionHandler:^{
+                                           [exp fulfill];
+                                       }];
+                    [XCTWaiter waitForExpectations:@[exp] timeout:5];
+
+                });
+
+                it(@"should call mobileEngange with the correct action", ^{
+                    MobileEngageInternal *mockMEInternal = [MobileEngageInternal nullMock];
+                    MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:[UIApplication mock]
+                                                                                      mobileEngageInternal:mockMEInternal];
+
+                    NSDictionary *payload = @{@"key1": @"value1", @"key2": @"value2", @"key3": @"value3"};
+                    NSString *eventName = @"eventName";
+                    NSDictionary *userInfo = @{@"ems": @{@"actions": @[
+                        @{
+                            @"id": @"uniqueId",
+                            @"title": @"actionTitle",
+                            @"type": @"OpenExternalUrl",
+                            @"url": @"https://www.emarsys.com"
+                        }, @{
+                            @"id": @"uniqueId2",
+                            @"title": @"actionTitle",
+                            @"type": @"MECustomEvent",
+                            @"name": eventName,
+                            @"payload": payload
+                        }
+                    ]}};
+
+                    [[mockMEInternal should] receive:@selector(trackCustomEvent:eventAttributes:) withArguments:eventName, payload];
+
+                    XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                    [userNotification userNotificationCenter:nil
+                              didReceiveNotificationResponse:notificationResponseWithUserInfoWithActionId(userInfo, @"uniqueId2")
                                        withCompletionHandler:^{
                                            [exp fulfill];
                                        }];
