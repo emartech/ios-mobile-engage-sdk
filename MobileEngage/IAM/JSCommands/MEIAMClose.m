@@ -26,7 +26,7 @@
 
 - (void)handleMessage:(NSDictionary *)message
           resultBlock:(MEIAMJSResultBlock)resultBlock {
-    [self.meiam closeInAppMessage];
+    [self.meiam closeInAppMessageWithCompletionBlock:nil];
 }
 
 @end

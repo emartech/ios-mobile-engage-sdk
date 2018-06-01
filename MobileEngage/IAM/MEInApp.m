@@ -19,6 +19,7 @@
 @property(nonatomic, weak, nullable) id <MEInAppTrackingProtocol> inAppTracker;
 @property(nonatomic, strong) MELogRepository *logRepository;
 @property(nonatomic, strong) EMSTimestampProvider *timestampProvider;
+@property(nonatomic, strong) NSDate *onScreenShowTimestamp;
 
 @end
 
@@ -68,6 +69,7 @@
     [rootViewController presentViewController:meiamViewController
                                      animated:YES
                                    completion:^{
+                                       weakSelf.onScreenShowTimestamp = [weakSelf.timestampProvider provideTimestamp];
                                        [weakSelf trackIAMDisplay:message];
                                    }];
 }
@@ -79,12 +81,22 @@
     [self.inAppTracker trackInAppDisplay:message.campaignId];
 }
 
-- (void)closeInAppMessage {
+- (void)closeInAppMessageWithCompletionBlock:(MECompletionHandler)completionHandler {
     __weak typeof(self) weakSelf = self;
     [self.iamWindow.rootViewController dismissViewControllerAnimated:YES
                                                           completion:^{
+                                                              if (weakSelf.currentCampaignId && weakSelf.onScreenShowTimestamp) {
+                                                                  NSDictionary *const onScreenMetrics = @{
+                                                                      @"on_screen_time": [[weakSelf.timestampProvider provideTimestamp] numberValueInMillisFromDate:weakSelf.onScreenShowTimestamp],
+                                                                      @"id": weakSelf.currentCampaignId};
+                                                                  [weakSelf.logRepository add:onScreenMetrics];
+
+                                                              }
                                                               [[[[UIApplication sharedApplication] delegate] window] makeKeyAndVisible];
                                                               weakSelf.iamWindow = nil;
+                                                              if (completionHandler) {
+                                                                  completionHandler();
+                                                              }
                                                           }];
 }
 

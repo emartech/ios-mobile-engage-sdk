@@ -9,10 +9,11 @@
 #import "MEInAppMessage.h"
 #import "MEInAppTrackingProtocol.h"
 #import "MELogRepository.h"
+#import "MEIAMProtocol.h"
 
 typedef void (^MECompletionHandler)(void);
 
-@interface MEInApp (Private)
+@interface MEInApp (Private) <MEIAMProtocol>
 
 @property(nonatomic, weak, nullable) id <MEInAppTrackingProtocol> inAppTracker;
 @property(nonatomic, strong) MELogRepository *logRepository;

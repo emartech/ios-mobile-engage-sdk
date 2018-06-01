@@ -22,8 +22,8 @@ SPEC_BEGIN(MEIAMCloseTests)
     });
 
     describe(@"handleMessage:resultBlock:", ^{
-        it(@"should invoke closeInAppMessage on meInApp", ^{
-            [[meInApp should] receive:@selector(closeInAppMessage)];
+        it(@"should invoke closeInAppMessageWithCompletionBlock: on meInApp", ^{
+            [[meInApp should] receive:@selector(closeInAppMessageWithCompletionBlock:)];
             [meiamClose handleMessage:@{} resultBlock:nil];
         });
     });

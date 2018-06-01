@@ -5,6 +5,8 @@
 #import <Foundation/Foundation.h>
 #import "MEInAppTrackingProtocol.h"
 
+typedef void (^MECompletionHandler)(void);
+
 @class MEIAMViewController;
 @protocol MEEventHandler;
 
@@ -13,6 +15,6 @@
 - (id <MEEventHandler>)eventHandler;
 - (id <MEInAppTrackingProtocol>)inAppTracker;
 - (NSString *)currentCampaignId;
-- (void)closeInAppMessage;
+- (void)closeInAppMessageWithCompletionBlock:(MECompletionHandler)completionHandler;
 
 @end

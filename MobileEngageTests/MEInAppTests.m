@@ -4,6 +4,7 @@
 #import "FakeInAppHandler.h"
 #import "MEIAMProtocol.h"
 #import "EMSTimestampProvider.h"
+#import "FakeTimestampProvider.h"
 
 SPEC_BEGIN(MEInAppTests)
         __block MEInApp *iam;
@@ -28,17 +29,17 @@ SPEC_BEGIN(MEInAppTests)
                 FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
                 [iam setEventHandler:inAppHandler];
                 NSString *message = @"<!DOCTYPE html>\n"
-                    "<html lang=\"en\">\n"
-                    "  <head>\n"
-                    "    <script>\n"
-                    "      window.onload = function() {\n"
-                    "        window.webkit.messageHandlers.triggerAppEvent.postMessage({id: '1', name: 'nameOfTheEvent', payload:{payloadKey1:{payloadKey2: 'payloadValue'}}});\n"
-                    "      };\n"
-                    "    </script>\n"
-                    "  </head>\n"
-                    "  <body style=\"background: transparent;\">\n"
-                    "  </body>\n"
-                    "</html>";
+                                    "<html lang=\"en\">\n"
+                                    "  <head>\n"
+                                    "    <script>\n"
+                                    "      window.onload = function() {\n"
+                                    "        window.webkit.messageHandlers.triggerAppEvent.postMessage({id: '1', name: 'nameOfTheEvent', payload:{payloadKey1:{payloadKey2: 'payloadValue'}}});\n"
+                                    "      };\n"
+                                    "    </script>\n"
+                                    "  </head>\n"
+                                    "  <body style=\"background: transparent;\">\n"
+                                    "  </body>\n"
+                                    "</html>";
                 [[inAppHandler shouldEventually] receive:@selector(handleEvent:payload:)
                                            withArguments:expectedName, expectedPayload];
 
@@ -65,17 +66,17 @@ SPEC_BEGIN(MEInAppTests)
                 FakeInAppHandler *inAppHandler = [FakeInAppHandler mock];
                 [iam setEventHandler:inAppHandler];
                 NSString *message = @"<!DOCTYPE html>\n"
-                    "<html lang=\"en\">\n"
-                    "  <head>\n"
-                    "    <script>\n"
-                    "      window.onload = function() {\n"
-                    "        window.webkit.messageHandlers.triggerAppEvent.postMessage({id: '1', name: 'nameOfTheEvent', payload:{payloadKey1:{payloadKey2: 'payloadValue'}}});\n"
-                    "      };\n"
-                    "    </script>\n"
-                    "  </head>\n"
-                    "  <body style=\"background: transparent;\">\n"
-                    "  </body>\n"
-                    "</html>";
+                                    "<html lang=\"en\">\n"
+                                    "  <head>\n"
+                                    "    <script>\n"
+                                    "      window.onload = function() {\n"
+                                    "        window.webkit.messageHandlers.triggerAppEvent.postMessage({id: '1', name: 'nameOfTheEvent', payload:{payloadKey1:{payloadKey2: 'payloadValue'}}});\n"
+                                    "      };\n"
+                                    "    </script>\n"
+                                    "  </head>\n"
+                                    "  <body style=\"background: transparent;\">\n"
+                                    "  </body>\n"
+                                    "</html>";
                 [[inAppHandler shouldEventually] receive:@selector(handleEvent:payload:) withCountAtMost:1 arguments:expectedName, expectedPayload];
 
                 NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id": @"campaignId", @"html": message}}
@@ -165,7 +166,44 @@ SPEC_BEGIN(MEInAppTests)
             });
         });
 
-        describe(@"closeInAppMessage", ^{
+        describe(@"MEIAMViewController", ^{
+            it(@"should log the on screen time", ^{
+                iam = [[MEInApp alloc] init];
+                NSDate *firstTimestamp = [NSDate date];
+                iam.timestampProvider = [[FakeTimestampProvider alloc] initWithTimestamps:@[firstTimestamp, [firstTimestamp dateByAddingTimeInterval:6], [firstTimestamp dateByAddingTimeInterval:12]]];
+
+                NSString *const campaignId = @"testIdForOnScreenMetric";
+
+                NSDictionary *loadingTimeMetric = @{@"on_screen_time": @6000, @"id": campaignId};
+                MELogRepository *mockRepository = [MELogRepository nullMock];
+                iam.logRepository = mockRepository;
+                [[mockRepository should] receive:@selector(add:) withArguments:loadingTimeMetric];
+
+                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"message": @{@"id": campaignId, @"html": @"<html></html>"}}
+                                                               options:0
+                                                                 error:nil];
+                EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
+                                                                                  headers:@{}
+                                                                                     body:body
+                                                                             requestModel:[EMSRequestModel mock]
+                                                                                timestamp:[NSDate dateWithTimeIntervalSince1970:100]];
+
+                XCTestExpectation *expForRendering = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                [iam showMessage:[[MEInAppMessage alloc] initWithResponse:response]
+               completionHandler:^{
+                   [expForRendering fulfill];
+               }];
+                [XCTWaiter waitForExpectations:@[expForRendering] timeout:30];
+
+                XCTestExpectation *expForClosing = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                [iam closeInAppMessageWithCompletionBlock:^{
+                    [expForClosing fulfill];
+                }];
+                [XCTWaiter waitForExpectations:@[expForClosing] timeout:30];
+            });
+        });
+
+        describe(@"closeInAppMessageWithCompletionBlock:", ^{
 
             it(@"should close the inapp message", ^{
                 UIViewController *rootViewControllerMock = [UIViewController nullMock];
@@ -177,7 +215,7 @@ SPEC_BEGIN(MEInAppTests)
 
                 iam.iamWindow = window;
 
-                [((id <MEIAMProtocol>) iam) closeInAppMessage];
+                [((id <MEIAMProtocol>) iam) closeInAppMessageWithCompletionBlock:nil];
 
                 void (^completionBlock)(void) = spy.argument;
                 completionBlock();
