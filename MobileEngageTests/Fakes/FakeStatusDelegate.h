@@ -9,6 +9,8 @@
 
 @property(nonatomic, assign) int successCount;
 @property(nonatomic, assign) int errorCount;
+@property(nonatomic, strong) NSMutableArray<NSString *> *successLogs;
+@property(nonatomic, strong) NSMutableArray<NSError *> *errors;
 @property(nonatomic, assign) BOOL printErrors;
 
 - (void)waitForNextSuccess;

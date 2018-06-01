@@ -9,10 +9,20 @@
     XCTestExpectation *_nextExpectation;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        _errors = [NSMutableArray array];
+        _successLogs = [NSMutableArray array];
+    }
+    return self;
+}
+
+
 - (void)mobileEngageErrorHappenedWithEventId:(NSString *)eventId
                                        error:(NSError *)error {
     if ([NSThread isMainThread]) {
         self.errorCount++;
+        [self.errors addObject:error];
     }
 
     if (self.printErrors) {
@@ -24,6 +34,8 @@
                                        log:(NSString *)log {
     if ([NSThread isMainThread]) {
         self.successCount++;
+        [self.successLogs addObject:log];
+
         [_nextExpectation fulfill];
     }
 }
