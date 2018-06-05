@@ -105,6 +105,10 @@
             typeSpecificErrors = [actionDictionary validate:^(EMSDictionaryValidator *validate) {
                 [validate valueExistsForKey:@"url" withType:[NSString class]];
             }];
+            NSString *const urlString = actionDictionary[@"url"];
+            if([typeSpecificErrors count] == 0 && [[NSURL alloc] initWithString:urlString] == nil) {
+                typeSpecificErrors = @[[NSString stringWithFormat:@"Invalid URL: %@", urlString]];
+            }
         } else if ([type isEqualToString:@"MECustomEvent"]) {
             typeSpecificErrors = [actionDictionary validate:^(EMSDictionaryValidator *validate) {
                 [validate valueExistsForKey:@"name" withType:[NSString class]];
