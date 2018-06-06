@@ -98,7 +98,8 @@ SPEC_BEGIN(MEUserNotificationTests)
 
                     [[userNotificationCenterDelegate should] receive:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:) withArguments:center, notificationResponse, completionHandler];
 
-                    MEUserNotification *userNotification = [MEUserNotification new];
+                    MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:[UIApplication mock]
+                                                                                      mobileEngageInternal:[MobileEngageInternal nullMock]];
                     userNotification.delegate = userNotificationCenterDelegate;
 
                     [userNotification userNotificationCenter:center
@@ -176,7 +177,7 @@ SPEC_BEGIN(MEUserNotificationTests)
                 it(@"should call trackCustomEvent on MobileEngage with the defined eventName and payload if the action is type of MECustomEvent", ^{
                     NSString *eventName = @"testEventName";
                     NSDictionary *payload = @{@"key1": @"value1", @"key2": @"value2", @"key3": @"value3"};
-                    MobileEngageInternal *mobileEngage = [MobileEngageInternal mock];
+                    MobileEngageInternal *mobileEngage = [MobileEngageInternal nullMock];
 
                     MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:[UIApplication mock]
                                                                                       mobileEngageInternal:mobileEngage];
@@ -191,6 +192,33 @@ SPEC_BEGIN(MEUserNotificationTests)
                             }
                         ]}};
                     [[mobileEngage should] receive:@selector(trackCustomEvent:eventAttributes:) withArguments:eventName, payload];
+
+                    XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                    [userNotification userNotificationCenter:nil
+                              didReceiveNotificationResponse:notificationResponseWithUserInfo(userInfo)
+                                       withCompletionHandler:^{
+                                           [exp fulfill];
+                                       }];
+                    [XCTWaiter waitForExpectations:@[exp] timeout:5];
+
+                });
+
+                it(@"should call trackInternalCustomEvent on MobileEngage with richNotification:actionClicked eventName and title and action id in the payload", ^{
+                    MobileEngageInternal *mobileEngage = [MobileEngageInternal mock];
+                    MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:[UIApplication mock]
+                                                                                      mobileEngageInternal:mobileEngage];
+                    NSDictionary *userInfo = @{@"ems": @{
+                        @"actions": @[
+                            @{
+                                @"id": @"uniqueId",
+                                @"title": @"actionTitle",
+                                @"key": @"value"
+                            }
+                        ]}};
+                    [[mobileEngage should] receive:@selector(trackInternalCustomEvent:eventAttributes:) withArguments:@"richNotification:actionClicked", @{
+                        @"button_id": @"uniqueId",
+                        @"title": @"actionTitle"
+                    }];
 
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                     [userNotification userNotificationCenter:nil
@@ -242,7 +270,7 @@ SPEC_BEGIN(MEUserNotificationTests)
                         [[application should] receive:@selector(openURL:options:completionHandler:) withArguments:[NSURL URLWithString:@"https://www.emarsys.com"], @{}, kw_any()];
 
                         MEUserNotification *userNotification = [[MEUserNotification alloc] initWithApplication:application
-                                                                                          mobileEngageInternal:[MobileEngageInternal mock]];
+                                                                                          mobileEngageInternal:[MobileEngageInternal nullMock]];
                         NSDictionary *userInfo = @{@"ems": @{@"actions": @[
                             @{
                                 @"id": @"uniqueId",

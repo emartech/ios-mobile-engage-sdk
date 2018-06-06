@@ -55,6 +55,9 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
 - (NSString *)trackCustomEvent:(NSString *)eventName
                eventAttributes:(nullable NSDictionary<NSString *, NSString *> *)eventAttributes;
 
+- (NSString *)trackInternalCustomEvent:(NSString *)eventName
+                       eventAttributes:(nullable NSDictionary<NSString *, NSString *> *)eventAttributes;
+
 - (NSString *)appLogout;
 
 @end

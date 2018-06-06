@@ -51,17 +51,24 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                         withCompletionHandler:completionHandler];
     }
     NSDictionary *action = [self actionFromResponse:response];
-    NSString *type = action[@"type"];
-    if ([type isEqualToString:@"MEAppEvent"]) {
-        [self.eventHandler handleEvent:action[@"name"]
-                               payload:action[@"payload"]];
-    } else if ([type isEqualToString:@"OpenExternalUrl"]) {
-        [self.application openURL:[NSURL URLWithString:action[@"url"]]
-                          options:@{}
-                completionHandler:nil];
-    } else if ([type isEqualToString:@"MECustomEvent"]) {
-        [self.mobileEngage trackCustomEvent:action[@"name"]
-                            eventAttributes:action[@"payload"]];
+    if (action) {
+        NSString *type = action[@"type"];
+        if ([type isEqualToString:@"MEAppEvent"]) {
+            [self.eventHandler handleEvent:action[@"name"]
+                                   payload:action[@"payload"]];
+        } else if ([type isEqualToString:@"OpenExternalUrl"]) {
+            [self.application openURL:[NSURL URLWithString:action[@"url"]]
+                              options:@{}
+                    completionHandler:nil];
+        } else if ([type isEqualToString:@"MECustomEvent"]) {
+            [self.mobileEngage trackCustomEvent:action[@"name"]
+                                eventAttributes:action[@"payload"]];
+        }
+        [self.mobileEngage trackInternalCustomEvent:@"richNotification:actionClicked"
+                                    eventAttributes:@{
+                                        @"button_id": action[@"id"],
+                                        @"title": action[@"title"]
+                                    }];
     }
     completionHandler();
 }

@@ -87,9 +87,9 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
     }
     if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
         [responseHandlers addObjectsFromArray:@[
-                [MEIAMResponseHandler new],
-                [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
-                                                              displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]]
+            [MEIAMResponseHandler new],
+            [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
+                                                          displayIamRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]]]
         ];
     }
     _responseHandlers = [NSArray arrayWithArray:responseHandlers];
@@ -147,8 +147,8 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
 - (void)trackInAppClick:(NSString *)campaignId buttonId:(NSString *)buttonId {
     [self.requestManager submit:[MERequestFactory createCustomEventModelWithEventName:@"inapp:click"
                                                                       eventAttributes:@{
-                                                                              @"message_id": campaignId,
-                                                                              @"button_id": buttonId
+                                                                          @"message_id": campaignId,
+                                                                          @"button_id": buttonId
                                                                       }
                                                                                  type:@"internal"
                                                                        requestContext:self.requestContext]];
@@ -239,5 +239,17 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
     [self.requestManager submit:requestModel];
     return requestModel.requestId;
 }
+
+- (NSString *)trackInternalCustomEvent:(NSString *)eventName
+                       eventAttributes:(nullable NSDictionary<NSString *, NSString *> *)eventAttributes {
+    NSParameterAssert(eventName);
+    EMSRequestModel *requestModel = [MERequestFactory createCustomEventModelWithEventName:eventName
+                                                                          eventAttributes:eventAttributes
+                                                                                     type:@"internal"
+                                                                           requestContext:self.requestContext];
+    [self.requestManager submit:requestModel];
+    return requestModel.requestId;
+}
+
 
 @end
