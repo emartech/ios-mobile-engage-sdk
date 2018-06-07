@@ -7,7 +7,7 @@
 #import <UserNotifications/UNNotificationContent.h>
 #import "MEUserNotificationDelegate.h"
 
-SPEC_BEGIN(MEUserNotificationTests)
+SPEC_BEGIN(MEUserNotificationDelegateTests)
         if (@available(iOS 10.0, *)) {
             id (^notificationResponseWithUserInfoWithActionId)(NSDictionary *userInfo, NSString *actionId) = ^id(NSDictionary *userInfo, NSString *actionId) {
                 UNNotificationResponse *response = [UNNotificationResponse mock];

@@ -157,7 +157,7 @@
 		37460A34DA26AF8C3595E4D6 /* EMSRequestToolsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460451BF7B82C1446E0207 /* EMSRequestToolsTests.m */; };
 		37460A62F83EEBC27D4EEC21 /* MESchemaDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3746094A69CB6880DADC463D /* MESchemaDelegate.h */; };
 		37460A79B9C8DBBFFBF4E29E /* MEInboxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460DB8C2DE5DC85E245CAF /* MEInboxParser.m */; };
-		37460ADC1CDAA2EAF5DCEE4D /* MEUserNotificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460EC20968433EC524A4F3 /* MEUserNotificationTests.m */; };
+		37460ADC1CDAA2EAF5DCEE4D /* MEUserNotificationDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460EC20968433EC524A4F3 /* MEUserNotificationDelegateTests.m */; };
 		37460ADCC827746D2810FE5E /* MERequestTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 37460521AE06A500186FD321 /* MERequestTools.h */; };
 		37460B627B47C45ED702816B /* FakeRequestRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746019BA94173DFA3E2EE6E /* FakeRequestRepository.m */; };
 		37460BA6202F9827C47F7D94 /* MEIAMJSCommandFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F3D371E49D815D949BFA /* MEIAMJSCommandFactory.m */; };
@@ -432,7 +432,7 @@
 		37460E9CDD5A9F2C2AF20894 /* MEInAppTrackingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInAppTrackingProtocol.h; sourceTree = "<group>"; };
 		37460EA3311E9482B6DB9C81 /* MEInAppMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInAppMessage.m; sourceTree = "<group>"; };
 		37460EBC71A98B939E0E6817 /* MEIdResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIdResponseHandler.h; sourceTree = "<group>"; };
-		37460EC20968433EC524A4F3 /* MEUserNotificationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MEUserNotificationTests.m; path = MobileEngageTests/RichNotificationExtension/MEUserNotificationTests.m; sourceTree = SOURCE_ROOT; };
+		37460EC20968433EC524A4F3 /* MEUserNotificationDelegateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MEUserNotificationDelegateTests.m; path = MobileEngageTests/RichNotificationExtension/MEUserNotificationDelegateTests.m; sourceTree = SOURCE_ROOT; };
 		37460EE0ACDE8C528F03F827 /* MERequestMatcherTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestMatcherTests.m; sourceTree = "<group>"; };
 		37460F0C951E73C1287B1A67 /* FakeTimestampProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeTimestampProvider.h; sourceTree = "<group>"; };
 		37460F6E627F308A7B6FCAB6 /* FakeStatusDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeStatusDelegate.m; sourceTree = "<group>"; };
@@ -863,7 +863,7 @@
 		37460515FF847C239BC6330E /* RichNotification */ = {
 			isa = PBXGroup;
 			children = (
-				37460EC20968433EC524A4F3 /* MEUserNotificationTests.m */,
+				37460EC20968433EC524A4F3 /* MEUserNotificationDelegateTests.m */,
 			);
 			path = RichNotification;
 			sourceTree = "<group>";
@@ -1401,7 +1401,7 @@
 				374601223066E11FA8ED1C74 /* MERequestMatcherTests.m in Sources */,
 				32C6FCB31412E9B01A5463BB /* MENotificationServiceTests.m in Sources */,
 				374606B8CC1A4AABE43D0E86 /* FakeTimestampProvider.m in Sources */,
-				37460ADC1CDAA2EAF5DCEE4D /* MEUserNotificationTests.m in Sources */,
+				37460ADC1CDAA2EAF5DCEE4D /* MEUserNotificationDelegateTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
