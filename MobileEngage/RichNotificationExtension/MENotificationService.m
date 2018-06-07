@@ -117,7 +117,7 @@
         if (typeSpecificErrors && [typeSpecificErrors count] == 0) {
             result = [UNNotificationAction actionWithIdentifier:actionDictionary[@"id"]
                                                           title:actionDictionary[@"title"]
-                                                        options:UNNotificationActionOptionNone];
+                                                        options:UNNotificationActionOptionForeground];
         }
     }
     return result;
