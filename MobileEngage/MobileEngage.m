@@ -147,7 +147,7 @@ static EMSSQLiteHelper *_dbHelper;
     _iam = inApp;
 }
 
-+ (id <MEUserNotificationCenterDelegate>)notification {
++ (id <MEUserNotificationCenterDelegate>)notificationCenterDelegate {
     return _notification;
 }
 
