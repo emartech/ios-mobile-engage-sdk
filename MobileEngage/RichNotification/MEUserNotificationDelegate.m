@@ -50,8 +50,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                didReceiveNotificationResponse:response
                         withCompletionHandler:completionHandler];
     }
+    [self.mobileEngage trackMessageOpenWithUserInfo:response.notification.request.content.userInfo];
     NSDictionary *action = [self actionFromResponse:response];
     if (action) {
+        [self.mobileEngage trackInternalCustomEvent:@"richNotification:actionClicked"
+                                    eventAttributes:@{
+                                            @"button_id": action[@"id"],
+                                            @"title": action[@"title"]
+                                    }];
         NSString *type = action[@"type"];
         if ([type isEqualToString:@"MEAppEvent"]) {
             [self.eventHandler handleEvent:action[@"name"]
@@ -64,11 +70,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             [self.mobileEngage trackCustomEvent:action[@"name"]
                                 eventAttributes:action[@"payload"]];
         }
-        [self.mobileEngage trackInternalCustomEvent:@"richNotification:actionClicked"
-                                    eventAttributes:@{
-                                        @"button_id": action[@"id"],
-                                        @"title": action[@"title"]
-                                    }];
     }
     completionHandler();
 }
