@@ -14,7 +14,7 @@
 #import "MEExperimental.h"
 #import "MEInboxV2.h"
 #import "MEInbox.h"
-#import "MEUserNotification.h"
+#import "MEUserNotificationDelegate.h"
 
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"MEDB.db"]
 
@@ -72,7 +72,7 @@ static EMSSQLiteHelper *_dbHelper;
 
     _iam.inAppTracker = _mobileEngageInternal;
 
-    _notification = [[MEUserNotification alloc] initWithApplication:[UIApplication sharedApplication]
+    _notification = [[MEUserNotificationDelegate alloc] initWithApplication:[UIApplication sharedApplication]
                                                mobileEngageInternal:_mobileEngageInternal];
 }
 

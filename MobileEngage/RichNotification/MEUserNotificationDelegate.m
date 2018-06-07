@@ -1,21 +1,21 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
-#import "MEUserNotification.h"
+#import "MEUserNotificationDelegate.h"
 #import "MobileEngageInternal.h"
 #import <UserNotifications/UNNotificationResponse.h>
 #import <UserNotifications/UNNotification.h>
 #import <UserNotifications/UNNotificationContent.h>
 #import <UserNotifications/UNNotificationRequest.h>
 
-@interface MEUserNotification ()
+@interface MEUserNotificationDelegate ()
 
 @property(nonatomic, strong) UIApplication *application;
 @property(nonatomic, strong) MobileEngageInternal *mobileEngage;
 
 @end
 
-@implementation MEUserNotification
+@implementation MEUserNotificationDelegate
 
 @synthesize delegate = _delegate;
 @synthesize eventHandler = _eventHandler;

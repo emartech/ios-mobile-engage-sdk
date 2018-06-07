@@ -7,7 +7,7 @@
 
 @class MobileEngageInternal;
 
-@interface MEUserNotification: NSObject <MEUserNotificationCenterDelegate>
+@interface MEUserNotificationDelegate: NSObject <MEUserNotificationCenterDelegate>
 
 - (instancetype)initWithApplication:(UIApplication *)application
                mobileEngageInternal:(MobileEngageInternal *)mobileEngage;

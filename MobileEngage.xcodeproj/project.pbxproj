@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		167609D01EEAD8480029B2E6 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
-		1689A60F20A5D19700E5D91F /* MEUserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 1689A60D20A5D19600E5D91F /* MEUserNotification.h */; };
-		1689A61020A5D19700E5D91F /* MEUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 1689A60E20A5D19600E5D91F /* MEUserNotification.m */; };
+		1689A60F20A5D19700E5D91F /* MEUserNotificationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1689A60D20A5D19600E5D91F /* MEUserNotificationDelegate.h */; };
+		1689A61020A5D19700E5D91F /* MEUserNotificationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1689A60E20A5D19600E5D91F /* MEUserNotificationDelegate.m */; };
 		16ED6B221E7FE12600BB9C63 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ED6B211E7FE12600BB9C63 /* main.m */; };
 		16ED6B251E7FE12600BB9C63 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ED6B241E7FE12600BB9C63 /* AppDelegate.m */; };
 		16ED6B281E7FE12600BB9C63 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ED6B271E7FE12600BB9C63 /* ViewController.m */; };
@@ -229,8 +229,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1689A60D20A5D19600E5D91F /* MEUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEUserNotification.h; sourceTree = "<group>"; };
-		1689A60E20A5D19600E5D91F /* MEUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEUserNotification.m; sourceTree = "<group>"; };
+		1689A60D20A5D19600E5D91F /* MEUserNotificationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEUserNotificationDelegate.h; sourceTree = "<group>"; };
+		1689A60E20A5D19600E5D91F /* MEUserNotificationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEUserNotificationDelegate.m; sourceTree = "<group>"; };
 		16ED6B1E1E7FE12600BB9C63 /* MobileEngage Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MobileEngage Host.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16ED6B211E7FE12600BB9C63 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		16ED6B231E7FE12600BB9C63 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -487,8 +487,8 @@
 		1689A60C20A5D19600E5D91F /* RichNotification */ = {
 			isa = PBXGroup;
 			children = (
-				1689A60D20A5D19600E5D91F /* MEUserNotification.h */,
-				1689A60E20A5D19600E5D91F /* MEUserNotification.m */,
+				1689A60D20A5D19600E5D91F /* MEUserNotificationDelegate.h */,
+				1689A60E20A5D19600E5D91F /* MEUserNotificationDelegate.m */,
 				32C6F6C3F084722A0E74DE12 /* MEUserNotificationCenterDelegate.h */,
 			);
 			path = RichNotification;
@@ -1033,7 +1033,7 @@
 				37460ADCC827746D2810FE5E /* MERequestTools.h in Headers */,
 				37460FF61699213058A2187D /* MEIAMResponseHandler.h in Headers */,
 				37460D84CBC8150F27E2EA4B /* MEIAMCleanupResponseHandler.h in Headers */,
-				1689A60F20A5D19700E5D91F /* MEUserNotification.h in Headers */,
+				1689A60F20A5D19700E5D91F /* MEUserNotificationDelegate.h in Headers */,
 				32C6F83EAE6C35FF7C05D079 /* MEIAMCommandResultUtils.h in Headers */,
 				374607D89E8F3F987002E856 /* MEDefaultHeaders.h in Headers */,
 				37460E02219D49D98AA07133 /* MENotificationCenterManager.h in Headers */,
@@ -1328,7 +1328,7 @@
 				37460C241F04C795E22EC611 /* MEIAMCleanupResponseHandler.m in Sources */,
 				32C6F3FCAB532F7140DE8B9F /* MEIAMCommandResultUtils.m in Sources */,
 				37460E5009C7A7B6EC690D77 /* MEDefaultHeaders.m in Sources */,
-				1689A61020A5D19700E5D91F /* MEUserNotification.m in Sources */,
+				1689A61020A5D19700E5D91F /* MEUserNotificationDelegate.m in Sources */,
 				37460F7AB2AB78DB92837FF9 /* MENotificationCenterManager.m in Sources */,
 				32C6FAEFAE0F5C92349FA513 /* MERequestContext.m in Sources */,
 				32C6FA39386C4943A9D8F6B2 /* MERequestFactory.m in Sources */,
