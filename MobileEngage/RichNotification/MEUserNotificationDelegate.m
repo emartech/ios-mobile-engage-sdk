@@ -7,6 +7,7 @@
 #import <UserNotifications/UNNotification.h>
 #import <UserNotifications/UNNotificationContent.h>
 #import <UserNotifications/UNNotificationRequest.h>
+#import "MEExperimental.h"
 
 @interface MEUserNotificationDelegate ()
 
@@ -53,11 +54,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [self.mobileEngage trackMessageOpenWithUserInfo:response.notification.request.content.userInfo];
     NSDictionary *action = [self actionFromResponse:response];
     if (action) {
-        [self.mobileEngage trackInternalCustomEvent:@"richNotification:actionClicked"
-                                    eventAttributes:@{
-                                            @"button_id": action[@"id"],
-                                            @"title": action[@"title"]
-                                    }];
+        if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] || [MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX]) {
+            [self.mobileEngage trackInternalCustomEvent:@"richNotification:actionClicked"
+                                        eventAttributes:@{
+                                                @"button_id": action[@"id"],
+                                                @"title": action[@"title"]
+                                        }];
+        }
         NSString *type = action[@"type"];
         if ([type isEqualToString:@"MEAppEvent"]) {
             [self.eventHandler handleEvent:action[@"name"]

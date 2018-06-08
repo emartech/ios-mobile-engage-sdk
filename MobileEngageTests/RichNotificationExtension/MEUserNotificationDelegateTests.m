@@ -6,6 +6,8 @@
 #import <UserNotifications/UNNotificationRequest.h>
 #import <UserNotifications/UNNotificationContent.h>
 #import "MEUserNotificationDelegate.h"
+#import "MEExperimental.h"
+#import "MEExperimental+Test.h"
 
 SPEC_BEGIN(MEUserNotificationDelegateTests)
         if (@available(iOS 10.0, *)) {
@@ -203,7 +205,40 @@ SPEC_BEGIN(MEUserNotificationDelegateTests)
 
                 });
 
+                it(@"should NOT call trackInternalCustomEvent on MobileEngage when V3 is not turned on", ^{
+                    NSString *eventName = @"testEventName";
+                    NSDictionary *payload = @{@"key1": @"value1", @"key2": @"value2", @"key3": @"value3"};
+                    [MEExperimental reset];
+                    MobileEngageInternal *mobileEngage = [MobileEngageInternal mock];
+
+                    MEUserNotificationDelegate *userNotification = [[MEUserNotificationDelegate alloc] initWithApplication:[UIApplication mock]
+                                                                                                      mobileEngageInternal:mobileEngage];
+                    NSDictionary *userInfo = @{@"ems": @{
+                            @"actions": @[
+                                    @{
+                                            @"id": @"uniqueId",
+                                            @"title": @"actionTitle",
+                                            @"type": @"MECustomEvent",
+                                            @"name": eventName,
+                                            @"payload": payload
+                                    }
+                            ]}};
+                    [[mobileEngage should] receive:@selector(trackMessageOpenWithUserInfo:)];
+                    [[mobileEngage should] receive:@selector(trackCustomEvent:eventAttributes:)];
+                    [[mobileEngage shouldNot] receive:@selector(trackInternalCustomEvent:eventAttributes:) withArguments:eventName, payload];
+
+                    XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                    [userNotification userNotificationCenter:nil
+                              didReceiveNotificationResponse:notificationResponseWithUserInfo(userInfo)
+                                       withCompletionHandler:^{
+                                           [exp fulfill];
+                                       }];
+                    [XCTWaiter waitForExpectations:@[exp] timeout:5];
+
+                });
+
                 it(@"should call trackInternalCustomEvent on MobileEngage with richNotification:actionClicked eventName and title and action id in the payload", ^{
+                    [MEExperimental enableFeature:INAPP_MESSAGING];
                     MobileEngageInternal *mobileEngage = [MobileEngageInternal nullMock];
                     MEUserNotificationDelegate *userNotification = [[MEUserNotificationDelegate alloc] initWithApplication:[UIApplication mock]
                                                                                                       mobileEngageInternal:mobileEngage];
