@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'MobileEngageRichExtension'
-	spec.version              = '1.0.0'
+	spec.version              = '1.1.0'
 	spec.homepage             = 'https://help.emarsys.com/hc/en-us/articles/115002410625'
 	spec.license              = 'Mozilla Public License 2.0'
     spec.author               = { 'Emarsys Technologies' => 'mobile-team@emarsys.com' }
@@ -12,6 +12,6 @@ Pod::Spec.new do |spec|
     'MobileEngage/RichNotificationExtension/MENotificationService.h',
     'MobileEngage/RichNotificationExtension/UNNotificationAttachment+MobileEngage.h'
 	]
-	spec.dependency 'CoreSDK'
+	spec.dependency 'CoreSDK', '1.7.0'
 	spec.libraries = 'z', 'c++'
 end
