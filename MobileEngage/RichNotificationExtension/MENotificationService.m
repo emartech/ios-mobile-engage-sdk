@@ -4,9 +4,10 @@
 
 #import <CoreSDK/EMSDictionaryValidator.h>
 #import "MENotificationService.h"
-#import "UNNotificationAttachment+MobileEngage.h"
 
 #define IMAGE_URL @"image_url"
+
+typedef void(^AttachmentsBlock)(NSArray<UNNotificationAttachment *> *);
 
 @interface MENotificationService ()
 
@@ -46,23 +47,21 @@
                                                                                   options:0];
         content.categoryIdentifier = categoryIdentifier;
 
+        __weak typeof(self) weakSelf = self;
         [[UNUserNotificationCenter currentNotificationCenter] getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
             [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[categories setByAddingObjectsFromArray:@[category]]];
-            [self setAttachmentsWithRequest:request
-                                    content:content];
-            contentHandler(content.copy);
+            [weakSelf attachmentsForContent:request.content
+                           attachmentsBlock:^(NSArray<UNNotificationAttachment *> *attachments) {
+                               content.attachments = attachments;
+                               contentHandler(content.copy);
+                           }];
         }];
     } else {
-        [self setAttachmentsWithRequest:request
-                                content:content];
-        contentHandler(content.copy);
-    }
-}
-
-- (void)setAttachmentsWithRequest:(UNNotificationRequest *)request content:(UNMutableNotificationContent *)content {
-    NSArray<UNNotificationAttachment *> *attachments = [self attachmentsForContent:request.content];
-    if (attachments) {
-        content.attachments = attachments;
+        [self attachmentsForContent:request.content
+                   attachmentsBlock:^(NSArray<UNNotificationAttachment *> *attachments) {
+                       content.attachments = attachments;
+                       contentHandler(content.copy);
+                   }];
     }
 }
 
@@ -74,17 +73,57 @@
     return (UNMutableNotificationContent *) [request.content mutableCopy];
 }
 
-- (NSArray<UNNotificationAttachment *> *)attachmentsForContent:(UNNotificationContent *)content {
+- (void)attachmentsForContent:(UNNotificationContent *)content
+             attachmentsBlock:(AttachmentsBlock)attachmentsBlock {
     NSURL *mediaUrl = [NSURL URLWithString:content.userInfo[IMAGE_URL]];
-    NSArray<UNNotificationAttachment *> *attachments;
     if (mediaUrl) {
-        UNNotificationAttachment *attachment = [UNNotificationAttachment attachmentWithMediaUrl:mediaUrl
-                                                                                        options:nil];
-        if (attachment) {
-            attachments = @[attachment];
-        }
+        __weak typeof(self) weakSelf = self;
+        NSURLSessionDownloadTask *task = [[NSURLSession sharedSession] downloadTaskWithURL:mediaUrl
+                                                                         completionHandler:^(NSURL *_Nullable location, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+                                                                             NSError *moveError;
+                                                                             NSURL *mediaFileUrl = [weakSelf createLocalTempUrlFromRemoteUrl:mediaUrl];
+                                                                             if (location && mediaFileUrl) {
+                                                                                 BOOL moveSuccess = [[NSFileManager defaultManager] moveItemAtURL:location
+                                                                                                                                            toURL:mediaFileUrl
+                                                                                                                                            error:&moveError];
+                                                                                 if (moveSuccess && !moveError) {
+                                                                                     NSError *attachmentCreationError;
+                                                                                     UNNotificationAttachment *attachment = [UNNotificationAttachment attachmentWithIdentifier:mediaFileUrl.lastPathComponent
+                                                                                                                                                                           URL:mediaFileUrl
+                                                                                                                                                                       options:nil
+                                                                                                                                                                         error:&attachmentCreationError];
+                                                                                     if (attachment && !attachmentCreationError) {
+                                                                                         attachmentsBlock(@[attachment]);
+                                                                                     } else {
+                                                                                         attachmentsBlock(nil);
+                                                                                     }
+                                                                                 } else {
+                                                                                     attachmentsBlock(nil);
+                                                                                 }
+                                                                             } else {
+                                                                                 attachmentsBlock(nil);
+                                                                             }
+                                                                         }];
+        [task resume];
+    } else {
+        attachmentsBlock(nil);
     }
-    return attachments;
+}
+
+- (NSURL *)createLocalTempUrlFromRemoteUrl:(NSURL *)remoteUrl {
+    NSURL *mediaFileUrl;
+    NSString *mediaFileName = remoteUrl.lastPathComponent;
+    NSString *tmpSubFolderName = [[NSProcessInfo processInfo] globallyUniqueString];
+    NSURL *tmpSubFolderUrl = [[NSURL fileURLWithPath:NSTemporaryDirectory()] URLByAppendingPathComponent:tmpSubFolderName];
+    NSError *directoryCreationError;
+    [[NSFileManager defaultManager] createDirectoryAtURL:tmpSubFolderUrl
+                             withIntermediateDirectories:YES
+                                              attributes:nil
+                                                   error:&directoryCreationError];
+    if (!directoryCreationError && tmpSubFolderName && mediaFileName) {
+        mediaFileUrl = [tmpSubFolderUrl URLByAppendingPathComponent:mediaFileName];
+    }
+    return mediaFileUrl;
 }
 
 - (UNNotificationAction *)createActionFromActionDictionary:(NSDictionary *)actionDictionary {
@@ -106,7 +145,7 @@
                 [validate valueExistsForKey:@"url" withType:[NSString class]];
             }];
             NSString *const urlString = actionDictionary[@"url"];
-            if([typeSpecificErrors count] == 0 && [[NSURL alloc] initWithString:urlString] == nil) {
+            if ([typeSpecificErrors count] == 0 && [[NSURL alloc] initWithString:urlString] == nil) {
                 typeSpecificErrors = @[[NSString stringWithFormat:@"Invalid URL: %@", urlString]];
             }
         } else if ([type isEqualToString:@"MECustomEvent"]) {
