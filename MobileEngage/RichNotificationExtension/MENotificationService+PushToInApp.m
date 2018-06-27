@@ -18,13 +18,24 @@
                     NSData *pushToInAppData = [NSData dataWithContentsOfURL:destinationUrl
                                                                     options:NSDataReadingMappedIfSafe
                                                                       error:&dataCreatingError];
-                    NSMutableDictionary *contentDict = [content.userInfo mutableCopy];
-                    contentDict[@"ems"][@"inapp"][@"inAppData"] = pushToInAppData;
-                    completionHandler([NSDictionary dictionaryWithDictionary:contentDict]);
+
+                    NSDictionary *contentDict = [self extendDictionary:content.userInfo withInAppData:pushToInAppData];
+
+                    completionHandler(contentDict);
                 }];
     } else {
         completionHandler(nil);
     }
+}
+
+- (NSDictionary *)extendDictionary:(NSDictionary *)userInfo withInAppData:(NSData *)pushToInAppData {
+    NSMutableDictionary *contentDict = [userInfo mutableCopy];
+    NSMutableDictionary *emsDict = [contentDict[@"ems"] mutableCopy];
+    NSMutableDictionary *inappDict = [emsDict[@"inapp"] mutableCopy];
+    inappDict[@"inAppData"] = pushToInAppData;
+    emsDict[@"inapp"] = inappDict;
+    contentDict[@"ems"] = emsDict;
+    return [NSDictionary dictionaryWithDictionary:contentDict];
 }
 
 - (NSDictionary *)extractPushToInAppFromContent:(UNMutableNotificationContent *)content {

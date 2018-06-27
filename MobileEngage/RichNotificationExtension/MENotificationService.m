@@ -62,7 +62,6 @@ typedef void(^ContentHandler)(UNNotificationContent *contentToDeliver);
                    }];
 
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
-
     contentHandler(self.bestAttemptContent);
 }
 
