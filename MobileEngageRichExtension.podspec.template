@@ -9,8 +9,7 @@ Pod::Spec.new do |spec|
 	spec.source               = { :git => 'https://github.com/emartech/ios-mobile-engage-sdk.git', <COMMIT_REF> }
 	spec.source_files         = 'MobileEngage/RichNotificationExtension/**/*.{h,m}'
 	spec.public_header_files  = [
-    'MobileEngage/RichNotificationExtension/MENotificationService.h',
-    'MobileEngage/RichNotificationExtension/UNNotificationAttachment+MobileEngage.h'
+    'MobileEngage/RichNotificationExtension/MENotificationService.h'
 	]
 	spec.dependency 'CoreSDK', '1.7.0'
 	spec.libraries = 'z', 'c++'

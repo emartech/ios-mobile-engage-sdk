@@ -77,21 +77,26 @@
 		32C6FAF9037DE4E4327040BF /* FakeSpecification.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F5FB547ED2CD3900C70A /* FakeSpecification.m */; };
 		32C6FB1545463C18D163CF48 /* MEIAMMetricsLogHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F80BB0BF741BD5266118 /* MEIAMMetricsLogHandler.h */; };
 		32C6FB50BD6632C33C148F33 /* MEDisplayedIAMRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F295F8BD32E1A130E5AC /* MEDisplayedIAMRepository.h */; };
+		32C6FB75CD23AAD686E17AFB /* MENotificationService+PushToInApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FD9F2C6252C129FB6A99 /* MENotificationService+PushToInApp.m */; };
 		32C6FB970F5D23A6C5EF0B43 /* MELogRepositoryProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FE9889F6A36EBE36E6E6 /* MELogRepositoryProxy.h */; };
 		32C6FBAF1E746EEF55EE3746 /* MEIAMDidAppear.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4930DE803436E2B1CDE /* MEIAMDidAppear.m */; };
+		32C6FBBEE821AFB652F822DE /* MENotificationService+Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F32993464BC23A2BB392 /* MENotificationService+Attachment.m */; };
 		32C6FBEF5C55126F7FF0B07A /* MERequestModelSelectEventsSpecification.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F3432166DDF94429FA90 /* MERequestModelSelectEventsSpecification.m */; };
 		32C6FC21EE1A04450F62F39A /* MobileEngageInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F49D913F9F20EDD5331E /* MobileEngageInternal.m */; };
 		32C6FC391E1427340ACD1CBD /* MEIAMTriggerMEEventTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F026E9C25D64A1EF4A30 /* MEIAMTriggerMEEventTests.m */; };
 		32C6FC46F37A8FADE546F0B7 /* MEButtonClickMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F101FEB4BA2BDDF0F7F6 /* MEButtonClickMapper.h */; };
 		32C6FC7B66907E8E4242A9A3 /* MEUserNotificationCenterDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F6C3F084722A0E74DE12 /* MEUserNotificationCenterDelegate.h */; };
 		32C6FC9F53ECB121BF53EA03 /* NSDictionary+MobileEngage.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */; };
+		32C6FCAA22A2B3492B90C3DD /* MENotificationService+Actions.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F507C56E0E848F8A39EB /* MENotificationService+Actions.m */; };
 		32C6FCB12CC606D1633CC14E /* MEIAMTriggerAppEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB41E419305BED20F489 /* MEIAMTriggerAppEvent.m */; };
 		32C6FCB31412E9B01A5463BB /* MENotificationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F85EC681F0EE61514438 /* MENotificationServiceTests.m */; };
 		32C6FCF5DE2B130DCD04794A /* MEConfigBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FB15634CAA89F68990D1 /* MEConfigBuilder.h */; };
 		32C6FD0B7F3B7647DA9C43EC /* NSDictionary+MobileEngage.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6F901EAA453C0FE99E056 /* NSDictionary+MobileEngage.h */; };
 		32C6FD3B97B9D1FF2953905F /* MEInAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F112AE2A53AAEDCE0876 /* MEInAppTests.m */; };
 		32C6FD7EEB7E3941D941080F /* MEInbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FA2A7418AC9AED782AEC /* MEInbox.h */; };
+		32C6FD9456E652D53456FEFA /* DownloadUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FCFF00FA47DE97BE96EA /* DownloadUtils.h */; };
 		32C6FDA21145B1C645757DD8 /* MELogRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F84DE1DD1E23527A07C4 /* MELogRepository.m */; };
+		32C6FDB74824239950F18F20 /* DownloadUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F808C69DC36C35C318C9 /* DownloadUtils.m */; };
 		32C6FDBD2FC3DD9E7B80C096 /* IntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FE99B9488237B00942D3 /* IntegrationTests.m */; };
 		32C6FDCFDBABF9F1D23592BD /* MEButtonClickFilterNoneSpecification.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F1B014E02B19CF98027D /* MEButtonClickFilterNoneSpecification.m */; };
 		32C6FDE8E8AC1858D72BC5A8 /* MEIAMTriggerMEEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F26A1AE81A9EF86ACF2D /* MEIAMTriggerMEEvent.m */; };
@@ -242,6 +247,7 @@
 		1D2DE82890F6BAB2EBC5629B /* Pods-MobileEngageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		32C6F00FFF707C5A5F62FDED /* MEIAMRequestPushPermission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMRequestPushPermission.m; sourceTree = "<group>"; };
 		32C6F026E9C25D64A1EF4A30 /* MEIAMTriggerMEEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMTriggerMEEventTests.m; sourceTree = "<group>"; };
+		32C6F02AE6EF360D684F1079 /* MENotificationService+PushToInApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MENotificationService+PushToInApp.h"; sourceTree = "<group>"; };
 		32C6F06563A379D888ACBE3C /* MERequestRepositoryProxyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestRepositoryProxyTests.m; sourceTree = "<group>"; };
 		32C6F0AE4DC9A27CE49FA06C /* MEEventHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEEventHandler.h; sourceTree = "<group>"; };
 		32C6F0CED986657DA32E7525 /* MEConfigBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEConfigBuilder.m; sourceTree = "<group>"; };
@@ -270,6 +276,7 @@
 		32C6F2D86CE207643F9DE547 /* MEIAMCloseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMCloseTests.m; sourceTree = "<group>"; };
 		32C6F2F7B517867CF069B590 /* MobileEngageInternalTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileEngageInternalTests.m; sourceTree = "<group>"; };
 		32C6F31FBEB1B7374C53C8F8 /* MELogRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MELogRepository.h; sourceTree = "<group>"; };
+		32C6F32993464BC23A2BB392 /* MENotificationService+Attachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MENotificationService+Attachment.m"; sourceTree = "<group>"; };
 		32C6F33510388FD99D6138EB /* MEIAMViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMViewControllerTests.m; sourceTree = "<group>"; };
 		32C6F3432166DDF94429FA90 /* MERequestModelSelectEventsSpecification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestModelSelectEventsSpecification.m; sourceTree = "<group>"; };
 		32C6F347F1A25755538F5591 /* MobileEngageStatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileEngageStatusDelegate.h; sourceTree = "<group>"; };
@@ -282,6 +289,7 @@
 		32C6F4A33D32AD63DBCF2C46 /* MEIAMCommandResultUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMCommandResultUtils.m; sourceTree = "<group>"; };
 		32C6F4B23F907ACA4EB5FA48 /* MEIAMCommandResultUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMCommandResultUtils.h; sourceTree = "<group>"; };
 		32C6F4ECB33867A9A7354FA1 /* MEInApp+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEInApp+Private.h"; sourceTree = "<group>"; };
+		32C6F507C56E0E848F8A39EB /* MENotificationService+Actions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MENotificationService+Actions.m"; sourceTree = "<group>"; };
 		32C6F521956A81704A001885 /* MENotificationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MENotificationService.h; sourceTree = "<group>"; };
 		32C6F595ECA8ADEB32C2A088 /* MERequestContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestContext.m; sourceTree = "<group>"; };
 		32C6F5FB547ED2CD3900C70A /* FakeSpecification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeSpecification.m; sourceTree = "<group>"; };
@@ -293,6 +301,7 @@
 		32C6F68C59D362926D33BB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32C6F6C3F084722A0E74DE12 /* MEUserNotificationCenterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEUserNotificationCenterDelegate.h; sourceTree = "<group>"; };
 		32C6F722D778C7D3C06A56C7 /* MENotificationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MENotificationService.m; sourceTree = "<group>"; };
+		32C6F72B02B208784AC046BC /* MENotificationService+Attachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MENotificationService+Attachment.h"; sourceTree = "<group>"; };
 		32C6F75C6B275FB5F0669AF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32C6F76EE73D949B25B611E5 /* MEJSBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEJSBridge.h; sourceTree = "<group>"; };
 		32C6F7B56247B8B1FFADA371 /* MERequestFactoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestFactoryTests.m; sourceTree = "<group>"; };
@@ -300,6 +309,7 @@
 		32C6F7E0D58A00BDB8F7FEAE /* MEIAMOpenExternalLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMOpenExternalLink.h; sourceTree = "<group>"; };
 		32C6F7F0AA7CFD8DBC0A1DC1 /* MEDisplayedIAMFilterNoneSpecification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEDisplayedIAMFilterNoneSpecification.h; sourceTree = "<group>"; };
 		32C6F7F2639D4CE7D8F85072 /* MobileEngage+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MobileEngage+Private.h"; sourceTree = "<group>"; };
+		32C6F808C69DC36C35C318C9 /* DownloadUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadUtils.m; sourceTree = "<group>"; };
 		32C6F80BB0BF741BD5266118 /* MEIAMMetricsLogHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMMetricsLogHandler.h; sourceTree = "<group>"; };
 		32C6F84CD0DF18BD17C99EEE /* MEIAMTriggerMEEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMTriggerMEEvent.h; sourceTree = "<group>"; };
 		32C6F84DE1DD1E23527A07C4 /* MELogRepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MELogRepository.m; sourceTree = "<group>"; };
@@ -326,6 +336,7 @@
 		32C6FA8EEE0782675EA8D0A6 /* MEIAMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMViewController.m; sourceTree = "<group>"; };
 		32C6FABF95A1FF48DA893779 /* MEIAMRequestPushPermissionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMRequestPushPermissionTests.m; sourceTree = "<group>"; };
 		32C6FAC86542F14D460A8C9B /* MEButtonClickFilterByCampaignIdSpecification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEButtonClickFilterByCampaignIdSpecification.h; sourceTree = "<group>"; };
+		32C6FAD1D5A57946AA3FD8D2 /* MENotificationService+Actions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MENotificationService+Actions.h"; sourceTree = "<group>"; };
 		32C6FB15634CAA89F68990D1 /* MEConfigBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEConfigBuilder.h; sourceTree = "<group>"; };
 		32C6FB1ABA70C84E60D9C2B0 /* NSDictionary+MobileEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MobileEngage.m"; sourceTree = "<group>"; };
 		32C6FB41E419305BED20F489 /* MEIAMTriggerAppEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMTriggerAppEvent.m; sourceTree = "<group>"; };
@@ -333,10 +344,12 @@
 		32C6FC6DA1CC8BA2CDD14A35 /* MEIAMJSCommandFactoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMJSCommandFactoryTests.m; sourceTree = "<group>"; };
 		32C6FC8ECC1C42B192A88B57 /* MEButtonClickFilterNoneSpecification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEButtonClickFilterNoneSpecification.h; sourceTree = "<group>"; };
 		32C6FCCD33A9BBF6346D8341 /* MEIAMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMViewController.h; sourceTree = "<group>"; };
+		32C6FCFF00FA47DE97BE96EA /* DownloadUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadUtils.h; sourceTree = "<group>"; };
 		32C6FD2227CE808305774D26 /* MobileEngage+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MobileEngage+Test.h"; sourceTree = "<group>"; };
 		32C6FD2E947184BE9657A4DD /* MEButtonClickRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEButtonClickRepository.h; sourceTree = "<group>"; };
 		32C6FD5134834458FE22A792 /* MEIAMJSCommandProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEIAMJSCommandProtocol.h; sourceTree = "<group>"; };
 		32C6FD84EBD32BA42F184C29 /* MEButtonClickMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEButtonClickMapper.m; sourceTree = "<group>"; };
+		32C6FD9F2C6252C129FB6A99 /* MENotificationService+PushToInApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MENotificationService+PushToInApp.m"; sourceTree = "<group>"; };
 		32C6FDC043434C1F30EC7F5E /* MEDisplayedIAMContract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEDisplayedIAMContract.h; sourceTree = "<group>"; };
 		32C6FDD4DA2BF6226CA9F854 /* MERequestFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MERequestFactory.m; sourceTree = "<group>"; };
 		32C6FE096549E45D05F7069D /* MEIAMTriggerAppEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMTriggerAppEventTests.m; sourceTree = "<group>"; };
@@ -772,6 +785,14 @@
 			children = (
 				32C6F722D778C7D3C06A56C7 /* MENotificationService.m */,
 				32C6F521956A81704A001885 /* MENotificationService.h */,
+				32C6F507C56E0E848F8A39EB /* MENotificationService+Actions.m */,
+				32C6FAD1D5A57946AA3FD8D2 /* MENotificationService+Actions.h */,
+				32C6FD9F2C6252C129FB6A99 /* MENotificationService+PushToInApp.m */,
+				32C6F02AE6EF360D684F1079 /* MENotificationService+PushToInApp.h */,
+				32C6F32993464BC23A2BB392 /* MENotificationService+Attachment.m */,
+				32C6F72B02B208784AC046BC /* MENotificationService+Attachment.h */,
+				32C6F808C69DC36C35C318C9 /* DownloadUtils.m */,
+				32C6FCFF00FA47DE97BE96EA /* DownloadUtils.h */,
 			);
 			path = RichNotificationExtension;
 			sourceTree = "<group>";
@@ -1039,6 +1060,7 @@
 				E65585B14C364FCFCF8D438B /* MEInboxV2.h in Headers */,
 				37460EF86805BA5858932253 /* MERequestMatcher.h in Headers */,
 				32C6FC7B66907E8E4242A9A3 /* MEUserNotificationCenterDelegate.h in Headers */,
+				32C6FD9456E652D53456FEFA /* DownloadUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1329,6 +1351,7 @@
 				32C6F61A4B55546E0E0E7990 /* MEIAMMetricsLogHandler.m in Sources */,
 				E6558DF4F3B90DC7FF5DA222 /* MEInboxV2.m in Sources */,
 				37460116DF39091727C1532F /* MERequestMatcher.m in Sources */,
+				32C6FDB74824239950F18F20 /* DownloadUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1390,6 +1413,9 @@
 				32C6FCB31412E9B01A5463BB /* MENotificationServiceTests.m in Sources */,
 				374606B8CC1A4AABE43D0E86 /* FakeTimestampProvider.m in Sources */,
 				37460ADC1CDAA2EAF5DCEE4D /* MEUserNotificationDelegateTests.m in Sources */,
+				32C6FCAA22A2B3492B90C3DD /* MENotificationService+Actions.m in Sources */,
+				32C6FB75CD23AAD686E17AFB /* MENotificationService+PushToInApp.m in Sources */,
+				32C6FBBEE821AFB652F822DE /* MENotificationService+Attachment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

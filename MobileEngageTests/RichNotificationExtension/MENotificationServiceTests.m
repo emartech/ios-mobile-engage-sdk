@@ -35,51 +35,6 @@ SPEC_BEGIN(MENotificationServiceTests)
                         [[returnedContent should] beNil];
                     });
 
-                    it(@"should invoke contentHandler with the original content when there is no imageUrl in the request's userInfo", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{};
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"id"
-                                                                                              content:content
-                                                                                              trigger:nil];
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent should] equal:content];
-                    });
-
-                    it(@"should invoke contentHandler with the original content when can't create attachment from the imageUrl in the request's userInfo", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"image_url": @""};
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"id"
-                                                                                              content:content
-                                                                                              trigger:nil];
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent should] equal:content];
-                    });
 
                     it(@"should invoke contentHandler with modified content when attachment is available", ^{
                         MENotificationService *service = [[MENotificationService alloc] init];
