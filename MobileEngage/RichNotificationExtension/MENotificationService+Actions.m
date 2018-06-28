@@ -18,14 +18,24 @@
                 [actions addObject:action];
             }
         }
-        NSString *const categoryIdentifier = [NSUUID UUID].UUIDString;
-        UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:categoryIdentifier
-                                                                                  actions:actions
-                                                                        intentIdentifiers:@[]
-                                                                                  options:0];
-        completionHandler(category);
+        if (actions && [actions count] > 0) {
+            NSString *const categoryIdentifier = [NSUUID UUID].UUIDString;
+            UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:categoryIdentifier
+                                                                                      actions:actions
+                                                                            intentIdentifiers:@[]
+                                                                                      options:0];
+            if (completionHandler) {
+                completionHandler(category);
+            }
+        } else {
+            if (completionHandler) {
+                completionHandler(nil);
+            }
+        }
     } else {
-        completionHandler(nil);
+        if (completionHandler) {
+            completionHandler(nil);
+        }
     }
 }
 

@@ -5,589 +5,21 @@
 #import "Kiwi.h"
 #import "MENotificationService.h"
 #import "MENotificationService+Attachment.h"
+#import "MENotificationService+Actions.h"
+#import "KWNilMatcher.h"
 
 SPEC_BEGIN(MENotificationServiceTests)
 
         if (@available(iOS 10.0, *)) {
             describe(@"didReceiveNotificationRequest:withContentHandler:", ^{
 
-                context(@"with actions", ^{
 
-                    it(@"should not set category when ems is not the expected type: NSDictionary", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @978};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier should] equal:@""];
-                    });
-
-                    it(@"should not set category when actions is not the expected type: NSArray", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{@"actions": @978}};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier should] equal:@""];
-                    });
-
-                    it(@"should use a registered category on content with actions defined in the userinfo", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{
-                            @"actions": @[
-                                @{
-                                    @"id": @"UUID1",
-                                    @"title": @"buttonTitle",
-                                    @"type": @"MEAppEvent",
-                                    @"name": @"nameOfTheEvent"
-                                },
-                                @{
-                                    @"id": @"UUID2",
-                                    @"title": @"buttonTitle2",
-                                    @"type": @"OpenExternalUrl",
-                                    @"url": @"https://www.emarsys.com"
-                                }
-                            ]
-                        }};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier shouldNot] beNil];
-
-                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
-
-                        __block UNNotificationCategory *returnedCategory;
-                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
-                            for (UNNotificationCategory *category in categories) {
-                                if ([category.identifier isEqualToString:returnedContent.categoryIdentifier]) {
-                                    returnedCategory = category;
-                                    break;
-                                }
-                            }
-                            [expectation fulfill];
-                        }];
-
-                        [XCTWaiter waitForExpectations:@[expectation]
-                                               timeout:30];
-
-                        [[theValue([returnedCategory.actions count]) should] equal:theValue(2)];
-                        [[returnedCategory.actions[0].title should] equal:@"buttonTitle"];
-                        [[returnedCategory.actions[1].title should] equal:@"buttonTitle2"];
-                    });
-
-                    it(@"should use pre registered category and also registered category on content with actions defined in the userinfo", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{
-                            @"actions": @[
-                                @{
-                                    @"id": @"UUID1",
-                                    @"title": @"buttonTitle",
-                                    @"type": @"MEAppEvent",
-                                    @"name": @"nameOfTheEvent"
-                                },
-                                @{
-                                    @"id": @"UUID2",
-                                    @"title": @"buttonTitle2",
-                                    @"type": @"OpenExternalUrl",
-                                    @"url": @"https://www.emarsys.com"
-                                }
-                            ]
-                        }};
-                        UNNotificationAction *action = [UNNotificationAction actionWithIdentifier:@"id"
-                                                                                            title:@"title"
-                                                                                          options:UNNotificationActionOptionNone];
-
-                        UNNotificationCategory *expectedCategory = [UNNotificationCategory categoryWithIdentifier:@"categoryIdentifier"
-                                                                                                          actions:@[action]
-                                                                                                intentIdentifiers:@[]
-                                                                                                          options:0];
-                        [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithArray:@[expectedCategory]]];
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier shouldNot] beNil];
-
-                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
-
-                        __block NSSet<UNNotificationCategory *> *returnedCategories;
-                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
-                            returnedCategories = categories;
-                            [expectation fulfill];
-                        }];
-
-                        [XCTWaiter waitForExpectations:@[expectation]
-                                               timeout:30];
-
-                        [[theValue([returnedCategories count]) should] equal:theValue(2)];
-                        [[returnedCategories should] contain:expectedCategory];
-                    });
-
-                    it(@"should not create the action when id is missing", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{
-                            @"actions": @[
-                                @{
-                                    @"title": @"buttonTitle",
-                                    @"type": @"MEAppEvent",
-                                    @"name": @"nameOfTheEvent"
-                                },
-                                @{
-                                    @"id": @"UUID2",
-                                    @"title": @"buttonTitle2",
-                                    @"type": @"OpenExternalUrl",
-                                    @"url": @"https://www.emarsys.com"
-                                }
-                            ]
-                        }};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier shouldNot] beNil];
-
-                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
-
-                        __block UNNotificationCategory *returnedCategory;
-                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
-                            for (UNNotificationCategory *category in categories) {
-                                if ([category.identifier isEqualToString:returnedContent.categoryIdentifier]) {
-                                    returnedCategory = category;
-                                    break;
-                                }
-                            }
-                            [expectation fulfill];
-                        }];
-
-                        [XCTWaiter waitForExpectations:@[expectation]
-                                               timeout:30];
-
-                        [[theValue([returnedCategory.actions count]) should] equal:theValue(1)];
-                        [[returnedCategory.actions[0].title should] equal:@"buttonTitle2"];
-                    });
-
-                    it(@"should not create the action when title is missing", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{
-                            @"actions": @[
-                                @{
-                                    @"id": @"UUID",
-                                    @"type": @"MEAppEvent",
-                                    @"name": @"nameOfTheEvent"
-                                },
-                                @{
-                                    @"id": @"UUID2",
-                                    @"title": @"buttonTitle2",
-                                    @"type": @"OpenExternalUrl",
-                                    @"url": @"https://www.emarsys.com"
-                                }
-                            ]
-                        }};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier shouldNot] beNil];
-
-                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
-
-                        __block UNNotificationCategory *returnedCategory;
-                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
-                            for (UNNotificationCategory *category in categories) {
-                                if ([category.identifier isEqualToString:returnedContent.categoryIdentifier]) {
-                                    returnedCategory = category;
-                                    break;
-                                }
-                            }
-                            [expectation fulfill];
-                        }];
-
-                        [XCTWaiter waitForExpectations:@[expectation]
-                                               timeout:30];
-
-                        [[theValue([returnedCategory.actions count]) should] equal:theValue(1)];
-                        [[returnedCategory.actions[0].title should] equal:@"buttonTitle2"];
-                    });
-
-                    it(@"should not create the action when type is missing", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{
-                            @"actions": @[
-                                @{
-                                    @"id": @"UUID",
-                                    @"title": @"buttonTitle",
-                                    @"name": @"nameOfTheEvent"
-                                },
-                                @{
-                                    @"id": @"UUID2",
-                                    @"title": @"buttonTitle2",
-                                    @"type": @"OpenExternalUrl",
-                                    @"url": @"https://www.emarsys.com"
-                                }
-                            ]
-                        }};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier shouldNot] beNil];
-
-                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
-
-                        __block UNNotificationCategory *returnedCategory;
-                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
-                            for (UNNotificationCategory *category in categories) {
-                                if ([category.identifier isEqualToString:returnedContent.categoryIdentifier]) {
-                                    returnedCategory = category;
-                                    break;
-                                }
-                            }
-                            [expectation fulfill];
-                        }];
-
-                        [XCTWaiter waitForExpectations:@[expectation]
-                                               timeout:30];
-
-                        [[theValue([returnedCategory.actions count]) should] equal:theValue(1)];
-                        [[returnedCategory.actions[0].title should] equal:@"buttonTitle2"];
-                    });
-
-                    it(@"should not create the action when type is MEAppEvent and name is missing", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{
-                            @"actions": @[
-                                @{
-                                    @"id": @"UUID",
-                                    @"title": @"buttonTitle",
-                                    @"type": @"MEAppEvent"
-                                },
-                                @{
-                                    @"id": @"UUID2",
-                                    @"title": @"buttonTitle2",
-                                    @"type": @"MEAppEvent",
-                                    @"name": @"nameOfTheEvent"
-                                }
-                            ]
-                        }};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier shouldNot] beNil];
-
-                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
-
-                        __block UNNotificationCategory *returnedCategory;
-                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
-                            for (UNNotificationCategory *category in categories) {
-                                if ([category.identifier isEqualToString:returnedContent.categoryIdentifier]) {
-                                    returnedCategory = category;
-                                    break;
-                                }
-                            }
-                            [expectation fulfill];
-                        }];
-
-                        [XCTWaiter waitForExpectations:@[expectation]
-                                               timeout:30];
-
-                        [[theValue([returnedCategory.actions count]) should] equal:theValue(1)];
-                        [[returnedCategory.actions[0].title should] equal:@"buttonTitle2"];
-                    });
-
-                    it(@"should not create the action when type is OpenExternalUrl and url is missing", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{
-                            @"actions": @[
-                                @{
-                                    @"id": @"UUID",
-                                    @"title": @"buttonTitle",
-                                    @"type": @"OpenExternalUrl"
-                                },
-                                @{
-                                    @"id": @"UUID2",
-                                    @"title": @"buttonTitle2",
-                                    @"type": @"OpenExternalUrl",
-                                    @"url": @"https://www.emarsys.com"
-                                }
-                            ]
-                        }};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier shouldNot] beNil];
-
-                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
-
-                        __block UNNotificationCategory *returnedCategory;
-                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
-                            for (UNNotificationCategory *category in categories) {
-                                if ([category.identifier isEqualToString:returnedContent.categoryIdentifier]) {
-                                    returnedCategory = category;
-                                    break;
-                                }
-                            }
-                            [expectation fulfill];
-                        }];
-
-                        [XCTWaiter waitForExpectations:@[expectation]
-                                               timeout:30];
-
-                        [[theValue([returnedCategory.actions count]) should] equal:theValue(1)];
-                        [[returnedCategory.actions[0].title should] equal:@"buttonTitle2"];
-                    });
-
-                    it(@"should not create the action when type is OpenExternalUrl and url is invalid", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{
-                            @"actions": @[
-                                @{
-                                    @"id": @"UUID",
-                                    @"title": @"buttonTitle",
-                                    @"type": @"OpenExternalUrl",
-                                    @"url": @"invalid url"
-                                },
-                                @{
-                                    @"id": @"UUID2",
-                                    @"title": @"buttonTitle2",
-                                    @"type": @"OpenExternalUrl",
-                                    @"url": @"https://www.emarsys.com"
-                                }
-                            ]
-                        }};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier shouldNot] beNil];
-
-                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
-
-                        __block UNNotificationCategory *returnedCategory;
-                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
-                            for (UNNotificationCategory *category in categories) {
-                                if ([category.identifier isEqualToString:returnedContent.categoryIdentifier]) {
-                                    returnedCategory = category;
-                                    break;
-                                }
-                            }
-                            [expectation fulfill];
-                        }];
-
-                        [XCTWaiter waitForExpectations:@[expectation]
-                                               timeout:30];
-
-                        [[theValue([returnedCategory.actions count]) should] equal:theValue(1)];
-                        [[returnedCategory.actions[0].title should] equal:@"buttonTitle2"];
-                    });
-
-                    it(@"should not create the action when type is MECustomEvent and name is missing", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"ems": @{
-                            @"actions": @[
-                                @{
-                                    @"id": @"UUID",
-                                    @"title": @"buttonTitle",
-                                    @"type": @"MECustomEvent"
-                                },
-                                @{
-                                    @"id": @"UUID2",
-                                    @"title": @"buttonTitle2",
-                                    @"type": @"MECustomEvent",
-                                    @"name": @"nameOfTheEvent"
-                                }
-                            ]
-                        }};
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
-                                                                                              content:content
-                                                                                              trigger:nil];
-
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForNotificationContent"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.categoryIdentifier shouldNot] beNil];
-
-                        XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"waitForCategories"];
-
-                        __block UNNotificationCategory *returnedCategory;
-                        [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *categories) {
-                            for (UNNotificationCategory *category in categories) {
-                                if ([category.identifier isEqualToString:returnedContent.categoryIdentifier]) {
-                                    returnedCategory = category;
-                                    break;
-                                }
-                            }
-                            [expectation fulfill];
-                        }];
-
-                        [XCTWaiter waitForExpectations:@[expectation]
-                                               timeout:30];
-
-                        [[theValue([returnedCategory.actions count]) should] equal:theValue(1)];
-                        [[returnedCategory.actions[0].title should] equal:@"buttonTitle2"];
-                    });
-                });
             });
         }
 
         describe(@"createAttachmentForContent:completionHandler:", ^{
 
-            void (^waitUntilNextResult)(MENotificationService *service, UNMutableNotificationContent *content) = ^(MENotificationService *service, UNMutableNotificationContent *content){
+            void (^waitUntilNextResult)(MENotificationService *service, UNMutableNotificationContent *content) = ^(MENotificationService *service, UNMutableNotificationContent *content) {
                 XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                 [service createAttachmentForContent:content
                                   completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
@@ -608,7 +40,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                 XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                 [service createAttachmentForContent:content
                                   completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
-                    result = attachments;
+                                      result = attachments;
                                       [exp fulfill];
                                   }];
                 [XCTWaiter waitForExpectations:@[exp]
@@ -660,6 +92,201 @@ SPEC_BEGIN(MENotificationServiceTests)
                                   completionHandler:nil];
 
                 waitUntilNextResult(service, content);
+            });
+        });
+
+        describe(@"createCategoryForContent:completionHandler:", ^{
+
+            UNNotificationCategory *(^waitUntilNextResult)(MENotificationService *service, UNMutableNotificationContent *content) = (UNNotificationCategory *(^)(MENotificationService *, UNMutableNotificationContent *)) (UNNotificationCategory *) ^(MENotificationService *service, UNMutableNotificationContent *content) {
+                __block UNNotificationCategory *result = [UNNotificationCategory new];
+
+                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                [service createCategoryForContent:content
+                                completionHandler:^(UNNotificationCategory *category) {
+                                    result = category;
+                                    [exp fulfill];
+                                }];
+                [XCTWaiter waitForExpectations:@[exp]
+                                       timeout:30];
+
+                return result;
+            };
+
+            it(@"should return with nil when there is no actions in the content", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{}};
+
+                UNNotificationCategory *result = waitUntilNextResult(service, content);
+
+                [[result should] beNil];
+            });
+
+            it(@"should not crash when there is no actions in the content and completionHandler is nil", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{}};
+
+                [service createCategoryForContent:content
+                                completionHandler:nil];
+
+                waitUntilNextResult(service, content);
+            });
+
+            it(@"should return with category that contains MEAppEvent, when the content contains MEAppEvent action", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"actions": @[
+                        @{
+                            @"id": @"UUID1",
+                            @"title": @"buttonTitle",
+                            @"type": @"MEAppEvent",
+                            @"name": @"nameOfTheEvent"
+                        }
+                    ]
+                }};
+
+                UNNotificationCategory *result = waitUntilNextResult(service, content);
+
+                UNNotificationAction *action = [[result actions] firstObject];
+                [[[action identifier] should] equal:@"UUID1"];
+                [[[action title] should] equal:@"buttonTitle"];
+            });
+
+            it(@"should not crash when category that contains MEAppEvent, when the content contains MEAppEvent action but completionHandler is nil", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"actions": @[
+                        @{
+                            @"id": @"UUID1",
+                            @"title": @"buttonTitle",
+                            @"type": @"MEAppEvent",
+                            @"name": @"nameOfTheEvent"
+                        }
+                    ]
+                }};
+
+                [service createCategoryForContent:content
+                                completionHandler:nil];
+
+                waitUntilNextResult(service, content);
+            });
+
+            it(@"should return with nil when the content contains MEAppEvent action type but there are missing parameters", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"actions": @[
+                        @{
+                            @"id": @"UUID1",
+                            @"title": @"buttonTitle",
+                            @"type": @"MEAppEvent"
+                        }
+                    ]
+                }};
+
+                UNNotificationCategory *result = waitUntilNextResult(service, content);
+
+                [[result should] beNil];
+            });
+
+            it(@"should not crash when when the content contains MEAppEvent action type but there are missing parameters and completionHandler is nil", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"actions": @[
+                        @{
+                            @"id": @"UUID1",
+                            @"title": @"buttonTitle",
+                            @"type": @"MEAppEvent"
+                        }
+                    ]
+                }};
+
+                [service createCategoryForContent:content
+                                completionHandler:nil];
+
+                waitUntilNextResult(service, content);
+            });
+
+            it(@"should return with category that contains OpenExternalUrl, when the content contains OpenExternalUrl action", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"actions": @[
+                        @{
+                            @"id": @"UUID2",
+                            @"title": @"buttonTitleForOpenUrl",
+                            @"type": @"OpenExternalUrl",
+                            @"url": @"https://www.emarsys.com"
+                        }
+                    ]
+                }};
+
+                UNNotificationCategory *result = waitUntilNextResult(service, content);
+
+                UNNotificationAction *action = [[result actions] firstObject];
+                [[[action identifier] should] equal:@"UUID2"];
+                [[[action title] should] equal:@"buttonTitleForOpenUrl"];
+            });
+
+            it(@"should return with nil when the content contains OpenExternalUrl action type but there are missing parameters", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"actions": @[
+                        @{
+                            @"id": @"UUID2",
+                            @"title": @"buttonTitleForOpenUrl",
+                            @"type": @"OpenExternalUrl"
+                        }
+                    ]
+                }};
+
+                UNNotificationCategory *result = waitUntilNextResult(service, content);
+
+                [[result should] beNil];
+            });
+
+            it(@"should return with category that contains MECustomEvent, when the content contains MECustomEvent action", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"actions": @[
+                        @{
+                            @"id": @"UUID3",
+                            @"title": @"buttonTitleForCustomEvent",
+                            @"type": @"MECustomEvent",
+                            @"name": @"CustomEventName"
+                        }
+                    ]
+                }};
+
+                UNNotificationCategory *result = waitUntilNextResult(service, content);
+
+                UNNotificationAction *action = [[result actions] firstObject];
+                [[[action identifier] should] equal:@"UUID3"];
+                [[[action title] should] equal:@"buttonTitleForCustomEvent"];
+            });
+
+            it(@"should return with nil when the content contains OpenExternalUrl action type but there are missing parameters", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"actions": @[
+                        @{
+                            @"id": @"UUID3",
+                            @"title": @"buttonTitleForCustomEvent",
+                            @"type": @"MECustomEvent"
+                        }
+                    ]
+                }};
+
+                UNNotificationCategory *result = waitUntilNextResult(service, content);
+
+                [[result should] beNil];
             });
         });
 
