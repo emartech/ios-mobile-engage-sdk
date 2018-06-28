@@ -21,12 +21,18 @@
                                                                                                       options:nil
                                                                                                         error:&attachmentCreationError];
                     if (attachment && !attachmentCreationError) {
-                        completionHandler(@[attachment]);
+                        if (completionHandler) {
+                            completionHandler(@[attachment]);
+                        }
                     } else {
-                        completionHandler(nil);
+                        if (completionHandler) {
+                            completionHandler(nil);
+                        }
                     }
                 } else {
-                    completionHandler(nil);
+                    if (completionHandler) {
+                        completionHandler(nil);
+                    }
                 }
             }];
 }

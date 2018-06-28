@@ -4,62 +4,12 @@
 
 #import "Kiwi.h"
 #import "MENotificationService.h"
+#import "MENotificationService+Attachment.h"
 
 SPEC_BEGIN(MENotificationServiceTests)
 
         if (@available(iOS 10.0, *)) {
             describe(@"didReceiveNotificationRequest:withContentHandler:", ^{
-                context(@"with image", ^{
-                    it(@"should invoke contentHandler with nil when the contentInfo is not mutable", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNNotificationContent *content = [UNNotificationContent mock];
-                        [content stub:@selector(mutableCopy) andReturn:nil];
-                        [content stub:@selector(copyWithZone:) andReturn:nil];
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"id"
-                                                                                              content:content
-                                                                                              trigger:nil];
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent should] beNil];
-                    });
-
-
-                    it(@"should invoke contentHandler with modified content when attachment is available", ^{
-                        MENotificationService *service = [[MENotificationService alloc] init];
-                        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-                        content.userInfo = @{@"image_url": @"https://cinesnark.files.wordpress.com/2015/05/widow_mace.gif"};
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"id"
-                                                                                              content:content
-                                                                                              trigger:nil];
-                        XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"wait"];
-
-                        __block UNNotificationContent *returnedContent;
-                        [service didReceiveNotificationRequest:request
-                                            withContentHandler:^(UNNotificationContent *contentToDeliver) {
-                                                returnedContent = contentToDeliver;
-                                                [exp fulfill];
-
-                                            }];
-
-                        [XCTWaiter waitForExpectations:@[exp]
-                                               timeout:30];
-
-                        [[returnedContent.attachments shouldNot] beNil];
-                        [[returnedContent.attachments[0] should] beKindOfClass:[UNNotificationAttachment class]];
-                    });
-                });
 
                 context(@"with actions", ^{
 
@@ -526,7 +476,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                                     @"id": @"UUID",
                                     @"title": @"buttonTitle",
                                     @"type": @"OpenExternalUrl",
-                                     @"url": @"invalid url"
+                                    @"url": @"invalid url"
                                 },
                                 @{
                                     @"id": @"UUID2",
@@ -634,5 +584,83 @@ SPEC_BEGIN(MENotificationServiceTests)
                 });
             });
         }
+
+        describe(@"createAttachmentForContent:completionHandler:", ^{
+
+            void (^waitUntilNextResult)(MENotificationService *service, UNMutableNotificationContent *content) = ^(MENotificationService *service, UNMutableNotificationContent *content){
+                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                [service createAttachmentForContent:content
+                                  completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
+                                      [exp fulfill];
+                                  }];
+                [XCTWaiter waitForExpectations:@[exp]
+                                       timeout:30];
+            };
+
+            it(@"should return with nil when content doesnt contain image url", ^{
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{};
+
+                MENotificationService *service = [[MENotificationService alloc] init];
+
+                __block NSArray<UNNotificationAttachment *> *result = [NSArray array];
+
+                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                [service createAttachmentForContent:content
+                                  completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
+                    result = attachments;
+                                      [exp fulfill];
+                                  }];
+                [XCTWaiter waitForExpectations:@[exp]
+                                       timeout:30];
+
+                [[result should] beNil];
+            });
+
+            it(@"should not crash when content doesnt contain image url and completionHandler is nil", ^{
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{};
+
+                MENotificationService *service = [[MENotificationService alloc] init];
+
+                [service createAttachmentForContent:content
+                                  completionHandler:nil];
+
+                waitUntilNextResult(service, content);
+            });
+
+            it(@"should return with array of attachments when content contains image url", ^{
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"image_url": @"https://ems-denna.herokuapp.com/images/Emarsys.png"};
+
+                MENotificationService *service = [[MENotificationService alloc] init];
+
+                __block NSArray<UNNotificationAttachment *> *result = [NSArray array];
+
+                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                [service createAttachmentForContent:content
+                                  completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
+                                      result = attachments;
+                                      [exp fulfill];
+                                  }];
+                [XCTWaiter waitForExpectations:@[exp]
+                                       timeout:30];
+
+                [[result shouldNot] beNil];
+                [[[[result firstObject] identifier] should] equal:@"Emarsys.png"];
+            });
+
+            it(@"should not crash when content contains image url and completionHandler is nil", ^{
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"image_url": @"https://ems-denna.herokuapp.com/images/Emarsys.png"};
+
+                MENotificationService *service = [[MENotificationService alloc] init];
+
+                [service createAttachmentForContent:content
+                                  completionHandler:nil];
+
+                waitUntilNextResult(service, content);
+            });
+        });
 
 SPEC_END
