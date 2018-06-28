@@ -5,7 +5,7 @@
 
 typedef void(^DownloadTaskCompletionHandler)(NSURL *destinationUrl, NSError *error);
 
-@interface DownloadUtils : NSObject
+@interface MEDownloadUtils : NSObject
 
 + (void)downloadFileFromUrl:(NSURL *)sourceUrl
           completionHandler:(DownloadTaskCompletionHandler)completionHandler;

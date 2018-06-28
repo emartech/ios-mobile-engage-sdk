@@ -3,7 +3,7 @@
 //
 #import "MENotificationService.h"
 #import "MENotificationService+Attachment.h"
-#import "DownloadUtils.h"
+#import "MEDownloadUtils.h"
 
 #define IMAGE_URL @"image_url"
 
@@ -12,7 +12,7 @@
 - (void)createAttachmentForContent:(UNNotificationContent *)content
                  completionHandler:(AttachmentsCompletionHandler)completionHandler {
     NSURL *mediaUrl = [NSURL URLWithString:content.userInfo[IMAGE_URL]];
-    [DownloadUtils downloadFileFromUrl:mediaUrl
+    [MEDownloadUtils downloadFileFromUrl:mediaUrl
             completionHandler:^(NSURL *destinationUrl, NSError *error) {
                 if (!error) {
                     NSError *attachmentCreationError;

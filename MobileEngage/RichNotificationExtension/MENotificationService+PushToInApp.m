@@ -4,7 +4,7 @@
 #import "MENotificationService.h"
 #import <CoreSDK/EMSDictionaryValidator.h>
 #import "MENotificationService+PushToInApp.h"
-#import "DownloadUtils.h"
+#import "MEDownloadUtils.h"
 
 @implementation MENotificationService (PushToInApp)
 
@@ -12,7 +12,7 @@
                         completionHandler:(PushToInAppCompletionHandler)completionHandler {
     NSDictionary *pushToInAppDict = [self extractPushToInAppFromContent:content];
     if (pushToInAppDict) {
-        [DownloadUtils downloadFileFromUrl:[NSURL URLWithString:pushToInAppDict[@"url"]]
+        [MEDownloadUtils downloadFileFromUrl:[NSURL URLWithString:pushToInAppDict[@"url"]]
                 completionHandler:^(NSURL *destinationUrl, NSError *error) {
                     NSError *dataCreatingError;
                     NSData *pushToInAppData = [NSData dataWithContentsOfURL:destinationUrl
