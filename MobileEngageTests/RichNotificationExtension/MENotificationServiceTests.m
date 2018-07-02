@@ -6,7 +6,7 @@
 #import "MENotificationService.h"
 #import "MENotificationService+Attachment.h"
 #import "MENotificationService+Actions.h"
-#import "KWNilMatcher.h"
+#import "MENotificationService+PushToInApp.h"
 
 SPEC_BEGIN(MENotificationServiceTests)
 
@@ -288,6 +288,148 @@ SPEC_BEGIN(MENotificationServiceTests)
 
                 [[result should] beNil];
             });
+        });
+
+        describe(@"createUserInfoWithInAppForContent:completionHandler:", ^{
+
+            NSDictionary *(^waitUntilNextResult)(MENotificationService *service, UNMutableNotificationContent *content) = (NSDictionary *(^)(MENotificationService *, UNMutableNotificationContent *)) (UNNotificationCategory *) ^(MENotificationService *service, UNMutableNotificationContent *content) {
+                __block NSDictionary *result = [NSDictionary dictionary];
+
+                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+
+                [service createUserInfoWithInAppForContent:content
+                                         completionHandler:^(NSDictionary *userInfo) {
+                                             result = userInfo;
+                                             [exp fulfill];
+                                         }];
+                [XCTWaiter waitForExpectations:@[exp]
+                                       timeout:30];
+                return result;
+            };
+
+            it(@"should return nil when content doesnt contain inApp", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{}};
+
+                NSDictionary *result = waitUntilNextResult(service, content);
+
+                [[result should] beNil];
+            });
+
+            it(@"should return nil when content contains inApp but inapp is not dictionary", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"inapp": @""
+                }};
+
+                NSDictionary *result = waitUntilNextResult(service, content);
+
+                [[result should] beNil];
+            });
+
+            it(@"should return nil when content contains inApp but campaignId is missing", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"inapp": @{
+                        @"url": @"https://www.emarysy.com"
+                    }
+                }};
+
+                NSDictionary *result = waitUntilNextResult(service, content);
+
+                [[result should] beNil];
+            });
+
+            it(@"should return nil when content contains inApp but url is missing", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"inapp": @{
+                        @"campaignId": @"CampaignId"
+                    }
+                }};
+
+                NSDictionary *result = waitUntilNextResult(service, content);
+
+                [[result should] beNil];
+            });
+
+            it(@"should not crash when content doesnt contains inapp or contains inapp but invalid", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{}};
+
+                [service createUserInfoWithInAppForContent:content
+                                         completionHandler:nil];
+
+                waitUntilNextResult(service, content);
+            });
+
+            it(@"should return nil when content contains inapp and the url is emptyString", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"inapp": @{
+                        @"url": @"",
+                        @"campaignId": @"CampaignId"
+                    }
+                }};
+
+                NSDictionary *result = waitUntilNextResult(service, content);
+
+                [[result should] beNil];
+            });
+
+            it(@"should not crash, when content contains inapp and the url is emptyString and completionHandler is nil", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"inapp": @{
+                        @"url": @"",
+                        @"campaignId": @"CampaignId"
+                    }
+                }};
+
+                [service createUserInfoWithInAppForContent:content
+                                         completionHandler:nil];
+
+                waitUntilNextResult(service, content);
+            });
+
+            it(@"should return userInfo extended with inAppData when everything is correct", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"inapp": @{
+                        @"url": @"https://ems-denna.herokuapp.com/images/Emarsys.png",
+                        @"campaignId": @"CampaignId"
+                    }
+                }};
+
+                NSDictionary *result = waitUntilNextResult(service, content);
+
+                [[result[@"ems"][@"inapp"][@"inAppData"] shouldNot] beNil];
+            });
+
+            it(@"should not crash when everything is correct but completionHandler is nil", ^{
+                MENotificationService *service = [[MENotificationService alloc] init];
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = @{@"ems": @{
+                    @"inapp": @{
+                        @"url": @"https://ems-denna.herokuapp.com/images/Emarsys.png",
+                        @"campaignId": @"CampaignId"
+                    }
+                }};
+
+                [service createUserInfoWithInAppForContent:content
+                                         completionHandler:nil];
+
+                waitUntilNextResult(service, content);
+            });
+
         });
 
 SPEC_END

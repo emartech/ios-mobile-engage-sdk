@@ -13,18 +13,33 @@
     NSDictionary *pushToInAppDict = [self extractPushToInAppFromContent:content];
     if (pushToInAppDict) {
         [MEDownloadUtils downloadFileFromUrl:[NSURL URLWithString:pushToInAppDict[@"url"]]
-                completionHandler:^(NSURL *destinationUrl, NSError *error) {
-                    NSError *dataCreatingError;
-                    NSData *pushToInAppData = [NSData dataWithContentsOfURL:destinationUrl
-                                                                    options:NSDataReadingMappedIfSafe
-                                                                      error:&dataCreatingError];
-
-                    NSDictionary *contentDict = [self extendDictionary:content.userInfo withInAppData:pushToInAppData];
-
-                    completionHandler(contentDict);
-                }];
+                           completionHandler:^(NSURL *destinationUrl, NSError *error) {
+                               if (!error) {
+                                   NSError *dataCreatingError;
+                                   NSData *pushToInAppData = [NSData dataWithContentsOfURL:destinationUrl
+                                                                                   options:NSDataReadingMappedIfSafe
+                                                                                     error:&dataCreatingError];
+                                   NSDictionary *contentDict = [self extendDictionary:content.userInfo
+                                                                        withInAppData:pushToInAppData];
+                                   if (!dataCreatingError) {
+                                       if (completionHandler) {
+                                           completionHandler(contentDict);
+                                       }
+                                   } else {
+                                       if (completionHandler) {
+                                           completionHandler(nil);
+                                       }
+                                   }
+                               } else {
+                                   if (completionHandler) {
+                                       completionHandler(nil);
+                                   }
+                               }
+                           }];
     } else {
-        completionHandler(nil);
+        if (completionHandler) {
+            completionHandler(nil);
+        }
     }
 }
 
