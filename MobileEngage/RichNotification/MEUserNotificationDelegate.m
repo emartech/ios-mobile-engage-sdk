@@ -8,11 +8,14 @@
 #import <UserNotifications/UNNotificationContent.h>
 #import <UserNotifications/UNNotificationRequest.h>
 #import "MEExperimental.h"
+#import "EMSDictionaryValidator.h"
+#import "MEInApp+Private.h"
 
 @interface MEUserNotificationDelegate ()
 
 @property(nonatomic, strong) UIApplication *application;
 @property(nonatomic, strong) MobileEngageInternal *mobileEngage;
+@property(nonatomic, strong) MEInApp *inApp;
 
 @end
 
@@ -22,12 +25,15 @@
 @synthesize eventHandler = _eventHandler;
 
 - (instancetype)initWithApplication:(UIApplication *)application
-               mobileEngageInternal:(MobileEngageInternal *)mobileEngage {
+               mobileEngageInternal:(MobileEngageInternal *)mobileEngage
+                              inApp:(id <MEIAMProtocol>)inApp {
     NSParameterAssert(application);
     NSParameterAssert(mobileEngage);
+    NSParameterAssert(inApp);
     if (self = [super init]) {
         _application = application;
         _mobileEngage = mobileEngage;
+        _inApp = inApp;
     }
     return self;
 }
@@ -51,14 +57,30 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                didReceiveNotificationResponse:response
                         withCompletionHandler:completionHandler];
     }
-    [self.mobileEngage trackMessageOpenWithUserInfo:response.notification.request.content.userInfo];
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
+    NSDictionary *inApp = userInfo[@"ems"][@"inapp"];
+    if (inApp) {
+        NSArray *errors = [inApp validate:^(EMSDictionaryValidator *validate) {
+            [validate valueExistsForKey:@"inAppData" withType:[NSData class]];
+            [validate valueExistsForKey:@"campaign_id" withType:[NSString class]];
+        }];
+        if ([errors count] == 0) {
+            NSString *html = [[NSString alloc] initWithData:inApp[@"inAppData"]
+                                                   encoding:NSUTF8StringEncoding];
+            [self.inApp showMessage:[[MEInAppMessage alloc] initWithCampaignId:inApp[@"campaign_id"]
+                                                                          html:html]
+                  completionHandler:nil];
+        }
+    }
+
+    [self.mobileEngage trackMessageOpenWithUserInfo:userInfo];
     NSDictionary *action = [self actionFromResponse:response];
     if (action) {
         if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] || [MEExperimental isFeatureEnabled:USER_CENTRIC_INBOX]) {
             [self.mobileEngage trackInternalCustomEvent:@"richNotification:actionClicked"
                                         eventAttributes:@{
-                                                @"button_id": action[@"id"],
-                                                @"title": action[@"title"]
+                                            @"button_id": action[@"id"],
+                                            @"title": action[@"title"]
                                         }];
         }
         NSString *type = action[@"type"];

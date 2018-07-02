@@ -16,6 +16,16 @@
     return self;
 }
 
+- (instancetype)initWithCampaignId:(NSString *)campaignId html:(NSString *)html {
+    self = [super init];
+    if (self) {
+        _campaignId = campaignId;
+        _html = html;
+    }
+
+    return self;
+}
+
 - (BOOL)isEqual:(id)other {
     if (other == self)
         return YES;

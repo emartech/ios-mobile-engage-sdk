@@ -329,7 +329,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                 [[result should] beNil];
             });
 
-            it(@"should return nil when content contains inApp but campaignId is missing", ^{
+            it(@"should return nil when content contains inApp but campaign_id is missing", ^{
                 MENotificationService *service = [[MENotificationService alloc] init];
                 UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
                 content.userInfo = @{@"ems": @{
@@ -348,7 +348,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                 UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
                 content.userInfo = @{@"ems": @{
                     @"inapp": @{
-                        @"campaignId": @"CampaignId"
+                        @"campaign_id": @"campaign_id"
                     }
                 }};
 
@@ -374,7 +374,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                 content.userInfo = @{@"ems": @{
                     @"inapp": @{
                         @"url": @"",
-                        @"campaignId": @"CampaignId"
+                        @"campaign_id": @"campaign_id"
                     }
                 }};
 
@@ -389,7 +389,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                 content.userInfo = @{@"ems": @{
                     @"inapp": @{
                         @"url": @"",
-                        @"campaignId": @"CampaignId"
+                        @"campaign_id": @"campaign_id"
                     }
                 }};
 
@@ -405,7 +405,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                 content.userInfo = @{@"ems": @{
                     @"inapp": @{
                         @"url": @"https://ems-denna.herokuapp.com/images/Emarsys.png",
-                        @"campaignId": @"CampaignId"
+                        @"campaign_id": @"campaign_id"
                     }
                 }};
 
@@ -420,7 +420,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                 content.userInfo = @{@"ems": @{
                     @"inapp": @{
                         @"url": @"https://ems-denna.herokuapp.com/images/Emarsys.png",
-                        @"campaignId": @"CampaignId"
+                        @"campaign_id": @"campaign_id"
                     }
                 }};
 
@@ -480,7 +480,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                 UNNotificationRequest *request = requestWithUserInfo(@{@"ems": @{
                     @"inapp": @{
                         @"url": @"https://ems-denna.herokuapp.com/images/Emarsys.png",
-                        @"campaignId": @"CampaignId"
+                        @"campaign_id": @"campaign_id"
                     }
                 }});
 

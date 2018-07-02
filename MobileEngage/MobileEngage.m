@@ -72,8 +72,7 @@ static EMSSQLiteHelper *_dbHelper;
 
     _iam.inAppTracker = _mobileEngageInternal;
 
-    _notification = [[MEUserNotificationDelegate alloc] initWithApplication:[UIApplication sharedApplication]
-                                               mobileEngageInternal:_mobileEngageInternal];
+    _notification = [[MEUserNotificationDelegate alloc] initWithApplication:[UIApplication sharedApplication] mobileEngageInternal:_mobileEngageInternal inApp:_iam];
 }
 
 + (void)setupWithConfig:(MEConfig *)config

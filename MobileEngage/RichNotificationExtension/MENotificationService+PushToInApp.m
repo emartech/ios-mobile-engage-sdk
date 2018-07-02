@@ -65,7 +65,7 @@
         if ([pushToInAppErrors count] == 0) {
             NSDictionary *inApp = ems[@"inapp"];
             NSArray *inAppErrors = [inApp validate:^(EMSDictionaryValidator *validate) {
-                [validate valueExistsForKey:@"campaignId"
+                [validate valueExistsForKey:@"campaign_id"
                                    withType:[NSString class]];
                 [validate valueExistsForKey:@"url"
                                    withType:[NSString class]];

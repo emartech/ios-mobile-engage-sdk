@@ -13,6 +13,8 @@
 
 - (instancetype)initWithResponse:(EMSResponseModel *)responseModel;
 
+- (instancetype)initWithCampaignId:(NSString *)campaignId html:(NSString *)html;
+
 - (BOOL)isEqual:(id)other;
 
 - (BOOL)isEqualToMessage:(MEInAppMessage *)message;
