@@ -164,6 +164,23 @@ SPEC_BEGIN(MEInAppTests)
                }];
                 [XCTWaiter waitForExpectations:@[exp] timeout:30];
             });
+
+            it(@"should not log the rendering time when responseModel is nil", ^{
+                NSString *const campaignId = @"testIdForRenderingMetric";
+
+                MELogRepository *mockRepository = [MELogRepository mock];
+                iam.logRepository = mockRepository;
+                [[mockRepository shouldNot] receive:@selector(add:)];
+
+                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+                [iam showMessage:[[MEInAppMessage alloc] initWithCampaignId:campaignId
+                                                                       html:@"<html></html>"]
+               completionHandler:^{
+                   [exp fulfill];
+               }];
+                [XCTWaiter waitForExpectations:@[exp]
+                                       timeout:30];
+            });
         });
 
         describe(@"MEIAMViewController", ^{

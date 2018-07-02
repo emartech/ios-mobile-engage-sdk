@@ -40,10 +40,13 @@
             __weak typeof(self) weakSelf = self;
             [meiamViewController loadMessage:message.html
                            completionHandler:^{
-                               NSDictionary *const loadingMetric = @{
-                                   @"loading_time": [[weakSelf.timestampProvider provideTimestamp] numberValueInMillisFromDate:message.response.timestamp],
-                                   @"id": message.campaignId};
-                               [weakSelf.logRepository add:loadingMetric];
+                               if (message.response) {
+                                   NSDictionary *const loadingMetric = @{
+                                       @"loading_time": [[weakSelf.timestampProvider provideTimestamp] numberValueInMillisFromDate:message.response.timestamp],
+                                       @"id": message.campaignId};
+                                   [weakSelf.logRepository add:loadingMetric];
+
+                               }
                                [weakSelf displayInAppViewController:message
                                                      viewController:meiamViewController];
                                if (completionHandler) {
