@@ -13,31 +13,25 @@
         NSURLSessionDownloadTask *task = [[self urlSession] downloadTaskWithURL:sourceUrl
                                                               completionHandler:^(NSURL *_Nullable location, NSURLResponse *_Nullable response, NSError *_Nullable error) {
                                                                   NSURL *mediaFileUrl = [self createLocalTempUrlFromRemoteUrl:sourceUrl];
+
                                                                   if (!error) {
                                                                       if (location && mediaFileUrl) {
-                                                                          NSError *moveError;
-                                                                          BOOL moveSuccess = [[NSFileManager defaultManager] moveItemAtURL:location
-                                                                                                                                     toURL:mediaFileUrl
-                                                                                                                                     error:&moveError];
-                                                                          if (moveSuccess && !moveError) {
-                                                                              if (completionHandler) {
-                                                                                  completionHandler(mediaFileUrl, nil);
-                                                                              }
-                                                                          } else {
-                                                                              if (completionHandler) {
-                                                                                  completionHandler(nil, moveError);
-                                                                              }
+                                                                          [[NSFileManager defaultManager] moveItemAtURL:location
+                                                                                                                  toURL:mediaFileUrl
+                                                                                                                  error:&error];
+                                                                          if (!error && completionHandler) {
+                                                                              completionHandler(mediaFileUrl, nil);
+                                                                              return;
                                                                           }
+
                                                                       } else {
-                                                                          if (completionHandler) {
-                                                                              completionHandler(nil, [NSError errorWithCode:1415
-                                                                                                       localizedDescription:@"Unsupported file url."]);
-                                                                          }
+                                                                          error = [NSError errorWithCode:1415
+                                                                                            localizedDescription:@"Unsupported file url."];
                                                                       }
-                                                                  } else {
-                                                                      if (completionHandler) {
-                                                                          completionHandler(nil, error);
-                                                                      }
+                                                                  }
+
+                                                                  if (completionHandler) {
+                                                                      completionHandler(nil, error);
                                                                   }
                                                               }];
         [task resume];

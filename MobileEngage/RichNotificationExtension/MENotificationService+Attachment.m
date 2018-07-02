@@ -23,16 +23,13 @@
                     if (attachment && !attachmentCreationError) {
                         if (completionHandler) {
                             completionHandler(@[attachment]);
-                        }
-                    } else {
-                        if (completionHandler) {
-                            completionHandler(nil);
+                            return;
                         }
                     }
-                } else {
-                    if (completionHandler) {
-                        completionHandler(nil);
-                    }
+                }
+
+                if (completionHandler) {
+                    completionHandler(nil);
                 }
             }];
 }

@@ -29,7 +29,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                                        timeout:30];
             };
 
-            it(@"should return with nil when content doesnt contain image url", ^{
+            it(@"should return with nil when content doesn't contain image url", ^{
                 UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
                 content.userInfo = @{};
 
@@ -49,7 +49,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                 [[result should] beNil];
             });
 
-            it(@"should not crash when content doesnt contain image url and completionHandler is nil", ^{
+            it(@"should not crash when content doesn't contain image url and completionHandler is nil", ^{
                 UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
                 content.userInfo = @{};
 
