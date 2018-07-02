@@ -432,4 +432,70 @@ SPEC_BEGIN(MENotificationServiceTests)
 
         });
 
+        describe(@"didReceiveNotificationRequest:withContentHandler:", ^{
+
+            UNNotificationRequest *(^requestWithUserInfo)(NSDictionary *userInfo) = ^UNNotificationRequest *(NSDictionary *userInfo) {
+                UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+                content.userInfo = userInfo;
+                UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"notificationRequestId"
+                                                                                      content:content
+                                                                                      trigger:nil];
+                return request;
+            };
+
+            UNNotificationContent *(^waitForResult)(UNNotificationRequest *request) = ^UNNotificationContent *(UNNotificationRequest *request) {
+                MENotificationService *service = [[MENotificationService alloc] init];
+
+                __block UNNotificationContent *result;
+                XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
+
+                [service didReceiveNotificationRequest:request
+                                    withContentHandler:^(UNNotificationContent *contentToDeliver) {
+                                        result = contentToDeliver;
+                                        [exp fulfill];
+                                    }];
+                [XCTWaiter waitForExpectations:@[exp]
+                                       timeout:30];
+                return result;
+            };
+
+            it(@"should contains categoryIdentifier in content when userInfo contain correct action items", ^{
+                UNNotificationRequest *request = requestWithUserInfo(@{@"ems": @{
+                    @"actions": @[
+                        @{
+                            @"id": @"UUID1",
+                            @"title": @"buttonTitle",
+                            @"type": @"MEAppEvent",
+                            @"name": @"nameOfTheEvent"
+                        }
+                    ]
+                }});
+
+                UNNotificationContent *result = waitForResult(request);
+
+                [[result.categoryIdentifier shouldNot] beNil];
+            });
+
+            it(@"should contains inAppData in userInfo when userInfo contains correct pushToInapp data", ^{
+                UNNotificationRequest *request = requestWithUserInfo(@{@"ems": @{
+                    @"inapp": @{
+                        @"url": @"https://ems-denna.herokuapp.com/images/Emarsys.png",
+                        @"campaignId": @"CampaignId"
+                    }
+                }});
+
+                UNNotificationContent *result = waitForResult(request);
+
+                [[result.userInfo[@"ems"][@"inapp"][@"inAppData"] shouldNot] beNil];
+            });
+
+            it(@"should contains attachment in content when userInfo contains correct image_url", ^{
+                UNNotificationRequest *request = requestWithUserInfo(@{@"image_url": @"https://ems-denna.herokuapp.com/images/Emarsys.png"});
+
+                UNNotificationContent *result = waitForResult(request);
+
+                [[result.attachments.firstObject shouldNot] beNil];
+            });
+        });
+
 SPEC_END
