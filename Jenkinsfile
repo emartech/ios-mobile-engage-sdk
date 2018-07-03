@@ -43,8 +43,8 @@ node('master') {
       stage('Git Clone') {
         parallel iPhone_5S: {
             clone env.IPHONE_5S
-        // }, iPhone_6S: {
-        //     clone env.IPHONE_6S
+         }, iPhone_6S: {
+             clone env.IPHONE_6S
         }, iPad_Pro: {
             clone env.IPAD_PRO
         }, iOS_9_3_Simulator: {
