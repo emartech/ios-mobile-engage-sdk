@@ -32,7 +32,7 @@
 
 + (BOOL)shouldSendLastMobileActivityWithRequestContext:(MERequestContext *)requestContext currentAppLoginPayload:(NSDictionary *)currentAppLoginPayload {
     return (![MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload]) ||
-            ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload] && requestContext.meId);
+        ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload] && requestContext.meId);
 }
 
 + (EMSRequestModel *)createAppLoginRequestWithPushToken:(NSData *)pushToken requestContext:(MERequestContext *)requestContext {
@@ -100,17 +100,29 @@
 + (EMSRequestModel *)createTrackMessageOpenRequestWithMessageId:(NSString *)messageId
                                                  requestContext:(MERequestContext *)requestContext {
     EMSRequestModel *requestModel;
-    if (messageId) {
-        requestModel = [MERequestFactory requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"
-                                                      method:HTTPMethodPOST
-                                      additionalPayloadBlock:^(NSMutableDictionary *payload) {
-                                          payload[@"sid"] = messageId;
-                                      }
-                                              requestContext:requestContext];
+    if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
+        NSMutableDictionary *attributes = [NSMutableDictionary new];
+        if (messageId) {
+            attributes[@"sid"] = messageId;
+        }
+
+        requestModel = [MERequestFactory createCustomEventModelWithEventName:@"inbox:open"
+                                                             eventAttributes:attributes
+                                                                        type:@"internal"
+                                                              requestContext:requestContext];
     } else {
-        requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
-        }];
+        if (messageId) {
+            requestModel = [MERequestFactory requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"
+                                                          method:HTTPMethodPOST
+                                          additionalPayloadBlock:^(NSMutableDictionary *payload) {
+                                              payload[@"sid"] = messageId;
+                                          }
+                                                  requestContext:requestContext];
+        } else {
+            requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
+            }];
+        }
     }
 
     return requestModel;
@@ -148,9 +160,9 @@
         payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
 
         NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
-                @"type": type,
-                @"name": eventName,
-                @"timestamp": [[requestContext.timestampProvider provideTimestamp] stringValueInUTC]}];
+            @"type": type,
+            @"name": eventName,
+            @"timestamp": [[requestContext.timestampProvider provideTimestamp] stringValueInUTC]}];
 
         if (eventAttributes) {
             event[@"attributes"] = eventAttributes;
@@ -189,8 +201,8 @@
         [builder setUrl:url];
         [builder setMethod:method];
         NSMutableDictionary *payload = [@{
-                @"application_id": requestContext.config.applicationCode,
-                @"hardware_id": [EMSDeviceInfo hardwareId]
+            @"application_id": requestContext.config.applicationCode,
+            @"hardware_id": [EMSDeviceInfo hardwareId]
         } mutableCopy];
 
         if (requestContext.appLoginParameters.contactFieldId && requestContext.appLoginParameters.contactFieldValue) {
