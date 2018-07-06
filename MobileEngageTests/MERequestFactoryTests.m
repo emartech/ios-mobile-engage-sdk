@@ -300,7 +300,8 @@ SPEC_BEGIN(MERequestFactoryTests)
             };
 
             beforeEach(^{
-                [MEExperimental enableFeature:INAPP_MESSAGING];
+                [MEExperimental reset];
+                [MEExperimental enableFeature:MESSAGE_OPEN_ON_V3];
             });
 
             afterEach(^{

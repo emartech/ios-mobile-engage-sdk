@@ -100,7 +100,7 @@
 + (EMSRequestModel *)createTrackMessageOpenRequestWithMessageId:(NSString *)messageId
                                                  requestContext:(MERequestContext *)requestContext {
     EMSRequestModel *requestModel;
-    if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
+    if ([MEExperimental isFeatureEnabled:MESSAGE_OPEN_ON_V3]) {
         NSMutableDictionary *attributes = [NSMutableDictionary new];
         if (messageId) {
             attributes[@"sid"] = messageId;

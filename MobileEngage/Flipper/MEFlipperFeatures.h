@@ -8,3 +8,4 @@
 
 static MEFlipperFeature INAPP_MESSAGING = @"INAPP_MESSAGING";
 static MEFlipperFeature USER_CENTRIC_INBOX = @"USER_CENTRIC_INBOX";
+static MEFlipperFeature MESSAGE_OPEN_ON_V3 = @"MESSAGE_OPEN_ON_V3";
