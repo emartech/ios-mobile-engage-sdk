@@ -11,6 +11,8 @@
 #import "MENotification.h"
 #import "NSDate+EMSCore.h"
 
+typedef MERequestContext *(^RequestContextBlock)(NSDate *timeStamp);
+
 SPEC_BEGIN(MERequestFactoryTests)
 
 #define kLastMobileActivityURL @"https://push.eservice.emarsys.net/api/mobileengage/v2/events/ems_lastMobileActivity"
@@ -21,6 +23,20 @@ SPEC_BEGIN(MERequestFactoryTests)
         afterAll(^{
             [MEExperimental reset];
         });
+
+        RequestContextBlock requestContextBlock = ^MERequestContext *(NSDate *timeStamp) {
+            MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
+                [builder setCredentialsWithApplicationCode:@"14C19-A121F"
+                                       applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
+            }];
+            EMSTimestampProvider *timestampProvider = [EMSTimestampProvider mock];
+            [timestampProvider stub:@selector(provideTimestamp) andReturn:timeStamp];
+            MERequestContext *requestContext = [[MERequestContext alloc] initWithConfig:config];
+            requestContext.meId = @"requestContextMeId";
+            requestContext.meIdSignature = @"requestContextMeIdSignature";
+            requestContext.timestampProvider = timestampProvider;
+            return requestContext;
+        };
 
         describe(@"createTrackDeepLinkRequestWithTrackingId:", ^{
             it(@"should create a RequestModel with deepLinkValue", ^{
@@ -144,16 +160,18 @@ SPEC_BEGIN(MERequestFactoryTests)
                     [[[request.url absoluteString] should] equal:kAppLoginURL];
                 });
 
-                it(@"should result in lastMobileActivity request if there was previous applogin with same payload and there is an existing meid", ^{
-                    MERequestContext *requestContext = [MERequestContext new];
+                it(@"should result in lastMobileActivity V3 request if there was previous applogin with same payload and there is an existing meid", ^{
+                    NSDate *timeStamp = [NSDate date];
+                    MERequestContext *requestContext = requestContextBlock(timeStamp);
+
                     requestContext.config = config;
                     requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
                     requestContext.meId = @"something";
-
                     requestContext.lastAppLoginPayload = apploginPayload;
 
                     EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
-                    [[[request.url absoluteString] should] equal:kLastMobileActivityURL];
+                    [[[request.url absoluteString] should] equal:@"https://mobile-events.eservice.emarsys.net/v3/devices/something/events"];
+                    [[request.payload[@"events"][0][@"name"] should] equal:@"last_mobile_activity"];
                 });
 
                 it(@"should result in applogin request if there was previous applogin with different payload and there is no meid", ^{
@@ -188,7 +206,6 @@ SPEC_BEGIN(MERequestFactoryTests)
         describe(@"createTrackMessageOpenRequestWithNotification:requestContext:", ^{
 
             typedef MENotification *(^NotificationBlock)();
-            typedef MERequestContext *(^RequestContextBlock)(NSDate *timeStamp);
 
             NotificationBlock notificationBlock = ^MENotification * {
                 MENotification *notification = [MENotification new];
@@ -204,20 +221,6 @@ SPEC_BEGIN(MERequestFactoryTests)
                 notification.expirationTime = @7200;
                 notification.receivedAtTimestamp = @12345678123;
                 return notification;
-            };
-
-            RequestContextBlock requestContextBlock = ^MERequestContext *(NSDate *timeStamp) {
-                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                    [builder setCredentialsWithApplicationCode:@"14C19-A121F"
-                                           applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
-                }];
-                EMSTimestampProvider *timestampProvider = [EMSTimestampProvider mock];
-                [timestampProvider stub:@selector(provideTimestamp) andReturn:timeStamp];
-                MERequestContext *requestContext = [[MERequestContext alloc] initWithConfig:config];
-                requestContext.meId = @"requestContextMeId";
-                requestContext.meIdSignature = @"requestContextMeIdSignature";
-                requestContext.timestampProvider = timestampProvider;
-                return requestContext;
             };
 
             context(@"USER_CENTRIC_INBOX TURNED OFF", ^{
@@ -256,7 +259,7 @@ SPEC_BEGIN(MERequestFactoryTests)
                 it(@"should create v3 request when USER_CENTRIC_INBOX feature is turned on", ^{
                     MENotification *notification = notificationBlock();
                     NSDate *timeStamp = [NSDate date];
-                    MERequestContext *requestContext = requestContextBlock(timeStamp);
+                    MERequestContext *requestContext = requestContextBlock([NSDate date]);
 
                     EMSRequestModel *requestModel = [MERequestFactory createTrackMessageOpenRequestWithNotification:notification
                                                                                                      requestContext:requestContext];
@@ -282,23 +285,6 @@ SPEC_BEGIN(MERequestFactoryTests)
         });
 
         describe(@"createTrackMessageOpenRequestWithMessageId:requestContext:", ^{
-
-            typedef MERequestContext *(^RequestContextBlock)(NSDate *timeStamp);
-
-            RequestContextBlock requestContextBlock = ^MERequestContext *(NSDate *timeStamp) {
-                MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
-                    [builder setCredentialsWithApplicationCode:@"14C19-A121F"
-                                           applicationPassword:@"PaNkfOD90AVpYimMBuZopCpm8OWCrREu"];
-                }];
-                EMSTimestampProvider *timestampProvider = [EMSTimestampProvider mock];
-                [timestampProvider stub:@selector(provideTimestamp) andReturn:timeStamp];
-                MERequestContext *requestContext = [[MERequestContext alloc] initWithConfig:config];
-                requestContext.meId = @"requestContextMeId";
-                requestContext.meIdSignature = @"requestContextMeIdSignature";
-                requestContext.timestampProvider = timestampProvider;
-                return requestContext;
-            };
-
             beforeEach(^{
                 [MEExperimental reset];
                 [MEExperimental enableFeature:MESSAGE_OPEN_ON_V3];

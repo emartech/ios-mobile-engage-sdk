@@ -18,12 +18,19 @@
                                                           requestContext:(MERequestContext *)requestContext {
     EMSRequestModel *requestModel = [self createAppLoginRequestWithPushToken:pushToken
                                                               requestContext:requestContext];
-
     if ([self shouldSendLastMobileActivityWithRequestContext:requestContext
                                       currentAppLoginPayload:requestModel.payload]) {
-        requestModel = [self requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/ems_lastMobileActivity"
-                                          method:HTTPMethodPOST
-                          additionalPayloadBlock:nil requestContext:requestContext];
+        if ([MEExperimental isFeatureEnabled:INAPP_MESSAGING]) {
+            requestModel = [MERequestFactory createCustomEventModelWithEventName:@"last_mobile_activity"
+                                                                 eventAttributes:nil
+                                                                            type:@"internal"
+                                                                  requestContext:requestContext];
+        } else {
+            requestModel = [self requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/ems_lastMobileActivity"
+                                              method:HTTPMethodPOST
+                              additionalPayloadBlock:nil
+                                      requestContext:requestContext];
+        }
     } else {
         requestContext.lastAppLoginPayload = requestModel.payload;
     }

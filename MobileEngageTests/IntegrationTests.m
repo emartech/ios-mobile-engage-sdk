@@ -5,7 +5,7 @@
 #import "MEConfig.h"
 #import "MEExperimental.h"
 #import "MEExperimental+Test.h"
-
+#import "MERequestContext.h"
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
 SPEC_BEGIN(IntegrationTests)
@@ -20,6 +20,13 @@ SPEC_BEGIN(IntegrationTests)
         [MEExperimental enableFeature:INAPP_MESSAGING];
         [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
                                                    error:nil];
+
+        NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+        [userDefaults removeObjectForKey:kMEID];
+        [userDefaults removeObjectForKey:kMEID_SIGNATURE];
+        [userDefaults removeObjectForKey:kLastAppLoginPayload];
+        [userDefaults synchronize];
+
     });
 
     describe(@"Public interface methods", ^{
