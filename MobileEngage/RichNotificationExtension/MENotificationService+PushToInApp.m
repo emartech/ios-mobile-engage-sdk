@@ -4,35 +4,37 @@
 #import "MENotificationService.h"
 #import <CoreSDK/EMSDictionaryValidator.h>
 #import "MENotificationService+PushToInApp.h"
-#import "MEDownloadUtils.h"
+#import "MEDownloader.h"
 
 @implementation MENotificationService (PushToInApp)
 
 - (void)createUserInfoWithInAppForContent:(UNMutableNotificationContent *)content
+                           withDownloader:(MEDownloader *)downloader
                         completionHandler:(PushToInAppCompletionHandler)completionHandler {
+    NSParameterAssert(downloader);
     NSDictionary *pushToInAppDict = [self extractPushToInAppFromContent:content];
     if (pushToInAppDict) {
-        [MEDownloadUtils downloadFileFromUrl:[NSURL URLWithString:pushToInAppDict[@"url"]]
-                           completionHandler:^(NSURL *destinationUrl, NSError *error) {
-                               if (!error) {
-                                   NSError *dataCreatingError;
-                                   NSData *pushToInAppData = [NSData dataWithContentsOfURL:destinationUrl
-                                                                                   options:NSDataReadingMappedIfSafe
-                                                                                     error:&dataCreatingError];
-                                   NSDictionary *contentDict = [self extendDictionary:content.userInfo
-                                                                        withInAppData:pushToInAppData];
-                                   if (!dataCreatingError) {
-                                       if (completionHandler) {
-                                           completionHandler(contentDict);
-                                           return;
-                                       }
-                                   }
-                               }
+        [downloader downloadFileFromUrl:[NSURL URLWithString:pushToInAppDict[@"url"]]
+                      completionHandler:^(NSURL *destinationUrl, NSError *error) {
+                          if (!error) {
+                              NSError *dataCreatingError;
+                              NSData *pushToInAppData = [NSData dataWithContentsOfURL:destinationUrl
+                                                                              options:NSDataReadingMappedIfSafe
+                                                                                error:&dataCreatingError];
+                              NSDictionary *contentDict = [self extendDictionary:content.userInfo
+                                                                   withInAppData:pushToInAppData];
+                              if (!dataCreatingError) {
+                                  if (completionHandler) {
+                                      completionHandler(contentDict);
+                                      return;
+                                  }
+                              }
+                          }
 
-                               if (completionHandler) {
-                                   completionHandler(nil);
-                               }
-                           }];
+                          if (completionHandler) {
+                              completionHandler(nil);
+                          }
+                      }];
     } else {
         if (completionHandler) {
             completionHandler(nil);

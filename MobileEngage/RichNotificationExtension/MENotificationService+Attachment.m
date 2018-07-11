@@ -3,34 +3,36 @@
 //
 #import "MENotificationService.h"
 #import "MENotificationService+Attachment.h"
-#import "MEDownloadUtils.h"
+#import "MEDownloader.h"
 
 #define IMAGE_URL @"image_url"
 
 @implementation MENotificationService (Attachment)
 
 - (void)createAttachmentForContent:(UNNotificationContent *)content
+                    withDownloader:(MEDownloader *)downloader
                  completionHandler:(AttachmentsCompletionHandler)completionHandler {
+    NSParameterAssert(downloader);
     NSURL *mediaUrl = [NSURL URLWithString:content.userInfo[IMAGE_URL]];
-    [MEDownloadUtils downloadFileFromUrl:mediaUrl
-            completionHandler:^(NSURL *destinationUrl, NSError *error) {
-                if (!error) {
-                    NSError *attachmentCreationError;
-                    UNNotificationAttachment *attachment = [UNNotificationAttachment attachmentWithIdentifier:destinationUrl.lastPathComponent
-                                                                                                          URL:destinationUrl
-                                                                                                      options:nil
-                                                                                                        error:&attachmentCreationError];
-                    if (attachment && !attachmentCreationError) {
-                        if (completionHandler) {
-                            completionHandler(@[attachment]);
-                            return;
-                        }
-                    }
-                }
+    [downloader downloadFileFromUrl:mediaUrl
+                  completionHandler:^(NSURL *destinationUrl, NSError *error) {
+                      if (!error) {
+                          NSError *attachmentCreationError;
+                          UNNotificationAttachment *attachment = [UNNotificationAttachment attachmentWithIdentifier:destinationUrl.lastPathComponent
+                                                                                                                URL:destinationUrl
+                                                                                                            options:nil
+                                                                                                              error:&attachmentCreationError];
+                          if (attachment && !attachmentCreationError) {
+                              if (completionHandler) {
+                                  completionHandler(@[attachment]);
+                                  return;
+                              }
+                          }
+                      }
 
-                if (completionHandler) {
-                    completionHandler(nil);
-                }
-            }];
+                      if (completionHandler) {
+                          completionHandler(nil);
+                      }
+                  }];
 }
 @end

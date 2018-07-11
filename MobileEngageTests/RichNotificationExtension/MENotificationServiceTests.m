@@ -12,11 +12,18 @@ SPEC_BEGIN(MENotificationServiceTests)
 
         if (@available(iOS 10.0, *)) {
 
-            describe(@"createAttachmentForContent:completionHandler:", ^{
+            describe(@"createAttachmentForContent:withDownloader:completionHandler:", ^{
+
+                __block MEDownloader *downloader;
+
+                beforeEach(^{
+                    downloader = [MEDownloader new];
+                });
 
                 void (^waitUntilNextResult)(MENotificationService *service, UNMutableNotificationContent *content) = ^(MENotificationService *service, UNMutableNotificationContent *content) {
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                     [service createAttachmentForContent:content
+                                         withDownloader:downloader
                                       completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
                                           [exp fulfill];
                                       }];
@@ -34,6 +41,7 @@ SPEC_BEGIN(MENotificationServiceTests)
 
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                     [service createAttachmentForContent:content
+                                         withDownloader:downloader
                                       completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
                                           result = attachments;
                                           [exp fulfill];
@@ -51,6 +59,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                     MENotificationService *service = [[MENotificationService alloc] init];
 
                     [service createAttachmentForContent:content
+                                         withDownloader:downloader
                                       completionHandler:nil];
 
                     waitUntilNextResult(service, content);
@@ -66,6 +75,7 @@ SPEC_BEGIN(MENotificationServiceTests)
 
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
                     [service createAttachmentForContent:content
+                                         withDownloader:downloader
                                       completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
                                           result = attachments;
                                           [exp fulfill];
@@ -84,9 +94,22 @@ SPEC_BEGIN(MENotificationServiceTests)
                     MENotificationService *service = [[MENotificationService alloc] init];
 
                     [service createAttachmentForContent:content
+                                         withDownloader:downloader
                                       completionHandler:nil];
 
                     waitUntilNextResult(service, content);
+                });
+
+                it(@"should throw exception when downloader is nil", ^{
+                    @try {
+                        [[[MENotificationService alloc] init] createAttachmentForContent:[UNMutableNotificationContent mock]
+                                                                          withDownloader:nil
+                                                                       completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
+                                                                       }];
+                        fail(@"Expected exception when downloader is nil");
+                    } @catch (NSException *exception) {
+                        [[theValue(exception) shouldNot] beNil];
+                    }
                 });
             });
 
@@ -287,12 +310,19 @@ SPEC_BEGIN(MENotificationServiceTests)
 
             describe(@"createUserInfoWithInAppForContent:completionHandler:", ^{
 
+                __block MEDownloader *downloader;
+
+                beforeEach(^{
+                    downloader = [MEDownloader new];
+                });
+
                 NSDictionary *(^waitUntilNextResult)(MENotificationService *service, UNMutableNotificationContent *content) = (NSDictionary *(^)(MENotificationService *, UNMutableNotificationContent *)) (UNNotificationCategory *) ^(MENotificationService *service, UNMutableNotificationContent *content) {
                     __block NSDictionary *result = [NSDictionary dictionary];
 
                     XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForResult"];
 
                     [service createUserInfoWithInAppForContent:content
+                                                withDownloader:downloader
                                              completionHandler:^(NSDictionary *userInfo) {
                                                  result = userInfo;
                                                  [exp fulfill];
@@ -358,6 +388,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                     content.userInfo = @{@"ems": @{}};
 
                     [service createUserInfoWithInAppForContent:content
+                                                withDownloader:downloader
                                              completionHandler:nil];
 
                     waitUntilNextResult(service, content);
@@ -389,6 +420,7 @@ SPEC_BEGIN(MENotificationServiceTests)
                     }};
 
                     [service createUserInfoWithInAppForContent:content
+                                                withDownloader:downloader
                                              completionHandler:nil];
 
                     waitUntilNextResult(service, content);
@@ -420,9 +452,22 @@ SPEC_BEGIN(MENotificationServiceTests)
                     }};
 
                     [service createUserInfoWithInAppForContent:content
+                                                withDownloader:downloader
                                              completionHandler:nil];
 
                     waitUntilNextResult(service, content);
+                });
+
+                it(@"should throw exception when downloader is nil", ^{
+                    @try {
+                        [[[MENotificationService alloc] init] createUserInfoWithInAppForContent:[UNMutableNotificationContent mock]
+                                                                                 withDownloader:nil
+                                                                              completionHandler:^(NSDictionary *userInfo) {
+                                                                              }];
+                        fail(@"Expected exception when downloader is nil");
+                    } @catch (NSException *exception) {
+                        [[theValue(exception) shouldNot] beNil];
+                    }
                 });
 
             });

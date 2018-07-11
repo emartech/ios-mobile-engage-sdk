@@ -6,6 +6,7 @@
 #import "MENotificationService+Actions.h"
 #import "MENotificationService+PushToInApp.h"
 #import "MENotificationService+Attachment.h"
+#import "MEDownloader.h"
 
 typedef void(^ContentHandler)(UNNotificationContent *contentToDeliver);
 
@@ -28,6 +29,8 @@ typedef void(^ContentHandler)(UNNotificationContent *contentToDeliver);
         return;
     }
 
+    MEDownloader *downloadUtils = [MEDownloader new];
+
     dispatch_group_t dispatchGroup = dispatch_group_create();;
 
     __weak typeof(self) weakSelf = self;
@@ -47,6 +50,7 @@ typedef void(^ContentHandler)(UNNotificationContent *contentToDeliver);
 
     dispatch_group_enter(dispatchGroup);
     [self createUserInfoWithInAppForContent:self.bestAttemptContent
+                             withDownloader:downloadUtils
                           completionHandler:^(NSDictionary *extendedUserInfo) {
                               if (extendedUserInfo) {
                                   weakSelf.bestAttemptContent.userInfo = extendedUserInfo;
@@ -56,6 +60,7 @@ typedef void(^ContentHandler)(UNNotificationContent *contentToDeliver);
 
     dispatch_group_enter(dispatchGroup);
     [self createAttachmentForContent:self.bestAttemptContent
+                      withDownloader:downloadUtils
                    completionHandler:^(NSArray<UNNotificationAttachment *> *attachments) {
                        weakSelf.bestAttemptContent.attachments = attachments;
                        dispatch_group_leave(dispatchGroup);
