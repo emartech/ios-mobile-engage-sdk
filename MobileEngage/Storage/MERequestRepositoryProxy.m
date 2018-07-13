@@ -14,22 +14,26 @@
 #import <CoreSDK/EMSDeviceInfo.h>
 #import "MobileEngageVersion.h"
 #import "MEInApp.h"
+#import "MERequestContext.h"
 
 @implementation MERequestRepositoryProxy
 
 - (instancetype)initWithRequestModelRepository:(EMSRequestModelRepository *)requestModelRepository
                          buttonClickRepository:(MEButtonClickRepository *)buttonClickRepository
                         displayedIAMRepository:(MEDisplayedIAMRepository *)displayedIAMRepository
-                                         inApp:(MEInApp *)inApp {
+                                         inApp:(MEInApp *)inApp
+                                requestContext:(MERequestContext *)requestContext {
     NSParameterAssert(requestModelRepository);
     NSParameterAssert(buttonClickRepository);
     NSParameterAssert(displayedIAMRepository);
     NSParameterAssert(inApp);
+    NSParameterAssert(requestContext);
     if (self = [super init]) {
         _requestModelRepository = requestModelRepository;
         _clickRepository = buttonClickRepository;
         _displayedIAMRepository = displayedIAMRepository;
         _inApp = inApp;
+        _requestContext = requestContext;
     }
     return self;
 }
@@ -65,27 +69,29 @@
     NSArray *allCustomEvents = [self.requestModelRepository query:[MERequestModelSelectEventsSpecification new]];
 
     EMSCompositeRequestModel *composite = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-        [builder setHeaders:requestModel.headers];
-        [builder setUrl:[[requestModel url] absoluteString]];
+            [builder setHeaders:requestModel.headers];
+            [builder setUrl:[[requestModel url] absoluteString]];
 
-        NSMutableDictionary *payload = [NSMutableDictionary dictionary];
-        payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
-        payload[@"viewed_messages"] = [self displayRepresentations];
-        payload[@"clicks"] = [self clickRepresentations];
-        if (self.inApp.paused) {
-            payload[@"dnd"] = @(self.inApp.paused);
+            NSMutableDictionary *payload = [NSMutableDictionary dictionary];
+            payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
+            payload[@"viewed_messages"] = [self displayRepresentations];
+            payload[@"clicks"] = [self clickRepresentations];
+            if (self.inApp.paused) {
+                payload[@"dnd"] = @(self.inApp.paused);
+            }
+            payload[@"events"] = [self eventRepresentations:allCustomEvents];
+
+            payload[@"language"] = [EMSDeviceInfo languageCode];
+            payload[@"ems_sdk"] = MOBILEENGAGE_SDK_VERSION;
+
+            NSString *appVersion = [EMSDeviceInfo applicationVersion];
+            if (appVersion) {
+                payload[@"application_version"] = appVersion;
+            }
+            [builder setPayload:payload];
         }
-        payload[@"events"] = [self eventRepresentations:allCustomEvents];
-
-        payload[@"language"] = [EMSDeviceInfo languageCode];
-        payload[@"ems_sdk"] = MOBILEENGAGE_SDK_VERSION;
-
-        NSString *appVersion = [EMSDeviceInfo applicationVersion];
-        if (appVersion) {
-            payload[@"application_version"] = appVersion;
-        }
-        [builder setPayload:payload];
-    }];
+                                                                  timestampProvider:self.requestContext.timestampProvider
+                                                                       uuidProvider:self.requestContext.uuidProvider];
     composite.originalRequests = allCustomEvents;
     return composite;
 }

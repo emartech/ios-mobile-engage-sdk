@@ -67,14 +67,19 @@
     if (self.requestContext.meId) {
         __weak typeof(self) weakSelf = self;
         EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            [builder setMethod:HTTPMethodGET];
-            [builder setHeaders:[weakSelf createNotificationsFetchingHeaders]];
-            [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@", weakSelf.requestContext.meId]];
-        }];
+                [builder setMethod:HTTPMethodGET];
+                [builder setHeaders:[weakSelf createNotificationsFetchingHeaders]];
+                [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@",
+                                                           weakSelf.requestContext.meId]];
+            }
+                                                       timestampProvider:self.requestContext.timestampProvider
+                                                            uuidProvider:self.requestContext.uuidProvider];
         self.fetchRequestInProgress = YES;
         [_restClient executeTaskWithRequestModel:requestModel
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
-                                        NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
+                                        NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body
+                                                                                                options:0
+                                                                                                  error:nil];
                                         MENotificationInboxStatus *status = [[MEInboxParser new] parseNotificationInboxStatus:payload];
                                         weakSelf.lastNotificationStatus = status;
                                         weakSelf.responseTimestamp = [weakSelf.timestampProvider provideTimestamp];
@@ -109,10 +114,13 @@
     if (self.requestContext.meId) {
         __weak typeof(self) weakSelf = self;
         EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            [builder setMethod:HTTPMethodDELETE];
-            [builder setHeaders:[weakSelf createNotificationsFetchingHeaders]];
-            [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@/count", weakSelf.requestContext.meId]];
-        }];
+                [builder setMethod:HTTPMethodDELETE];
+                [builder setHeaders:[weakSelf createNotificationsFetchingHeaders]];
+                [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@/count",
+                                                           weakSelf.requestContext.meId]];
+            }
+                                                       timestampProvider:self.requestContext.timestampProvider
+                                                            uuidProvider:self.requestContext.uuidProvider];
         [_restClient executeTaskWithRequestModel:requestModel
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         weakSelf.lastNotificationStatus.badgeCount = 0;

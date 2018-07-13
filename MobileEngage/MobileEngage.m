@@ -66,13 +66,16 @@ static EMSSQLiteHelper *_dbHelper;
 
     [_mobileEngageInternal setupWithConfig:config
                              launchOptions:launchOptions
-                  requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:_iam]
+                  requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:_iam
+                                                                                   requestContext:requestContext]
                              logRepository:logRepository
                             requestContext:requestContext];
 
     _iam.inAppTracker = _mobileEngageInternal;
 
-    _notification = [[MEUserNotificationDelegate alloc] initWithApplication:[UIApplication sharedApplication] mobileEngageInternal:_mobileEngageInternal inApp:_iam];
+    _notification = [[MEUserNotificationDelegate alloc] initWithApplication:[UIApplication sharedApplication]
+                                                       mobileEngageInternal:_mobileEngageInternal
+                                                                      inApp:_iam];
 }
 
 + (void)setupWithConfig:(MEConfig *)config

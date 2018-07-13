@@ -14,6 +14,7 @@
 #import "EMSAuthentication.h"
 #import "MEExperimental+Test.h"
 #import "MERequestContext.h"
+#import "EMSUUIDProvider.h"
 
 static NSString *const kAppId = @"kAppId";
 
@@ -33,7 +34,7 @@ SPEC_BEGIN(MEInboxTests)
 
         id (^inboxWithParameters)(EMSRESTClient *restClient, BOOL withApploginParameters) = ^id(EMSRESTClient *restClient, BOOL withApploginParameters) {
 
-            MERequestContext *context = [MERequestContext new];
+            MERequestContext *context = [[MERequestContext alloc] initWithConfig:config];
             if (withApploginParameters) {
                 [context setAppLoginParameters:[MEAppLoginParameters parametersWithContactFieldId:contactFieldId
                                                                                 contactFieldValue:contactFieldValue]];
@@ -106,13 +107,13 @@ SPEC_BEGIN(MEInboxTests)
                 }];
 
                 NSDictionary *jsonResponse = @{@"notifications": @[
-                        @{@"id": @"id1", @"title": @"title1", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678129)},
-                        @{@"id": @"id2", @"title": @"title2", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678128)},
-                        @{@"id": @"id3", @"title": @"title3", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678127)},
-                        @{@"id": @"id4", @"title": @"title4", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678126)},
-                        @{@"id": @"id5", @"title": @"title5", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678125)},
-                        @{@"id": @"id6", @"title": @"title6", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678124)},
-                        @{@"id": @"id7", @"title": @"title7", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678123)},
+                    @{@"id": @"id1", @"title": @"title1", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678129)},
+                    @{@"id": @"id2", @"title": @"title2", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678128)},
+                    @{@"id": @"id3", @"title": @"title3", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678127)},
+                    @{@"id": @"id4", @"title": @"title4", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678126)},
+                    @{@"id": @"id5", @"title": @"title5", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678125)},
+                    @{@"id": @"id6", @"title": @"title6", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678124)},
+                    @{@"id": @"id7", @"title": @"title7", @"custom_data": @{}, @"root_params": @{}, @"expiration_time": @7200, @"received_at": @(12345678123)},
                 ]};
 
                 NSMutableArray<MENotification *> *notifications = [NSMutableArray array];
@@ -130,7 +131,7 @@ SPEC_BEGIN(MEInboxTests)
                 KWCaptureSpy *requestModelSpy = [client captureArgument:@selector(executeTaskWithRequestModel:successBlock:errorBlock:)
                                                                 atIndex:0];
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-                        }
+                    }
                                               errorBlock:nil];
 
                 EMSRequestModel *capturedRequestModel = requestModelSpy.argument;
@@ -182,8 +183,8 @@ SPEC_BEGIN(MEInboxTests)
                 MEInbox *inbox = inboxWithParameters([EMSRESTClient mock], NO);
                 __block NSError *receivedError;
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-                            fail(@"resultblock invoked");
-                        }
+                        fail(@"resultblock invoked");
+                    }
                                               errorBlock:^(NSError *error) {
                                                   receivedError = error;
                                               }];
@@ -193,16 +194,16 @@ SPEC_BEGIN(MEInboxTests)
             it(@"should not invoke errorBlock when there is no errorBlock with appLoginParameters", ^{
                 MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], YES);
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-                            fail(@"resultblock invoked");
-                        }
+                        fail(@"resultblock invoked");
+                    }
                                               errorBlock:nil];
             });
 
             it(@"should not invoke errorBlock when there is no errorBlock without appLoginParameters", ^{
                 MEInbox *inbox = inboxWithParameters([EMSRESTClient mock], NO);
                 [inbox fetchNotificationsWithResultBlock:^(MENotificationInboxStatus *inboxStatus) {
-                            fail(@"resultblock invoked");
-                        }
+                        fail(@"resultblock invoked");
+                    }
                                               errorBlock:nil];
             });
         });
@@ -231,10 +232,12 @@ SPEC_BEGIN(MEInboxTests)
 
             it(@"should invoke restClient with the correct requestModel", ^{
                 EMSRequestModel *expectedRequestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                    [builder setMethod:HTTPMethodPOST];
-                    [builder setUrl:@"https://me-inbox.eservice.emarsys.net/api/reset-badge-count"];
-                    [builder setHeaders:expectedHeaders()];
-                }];
+                        [builder setMethod:HTTPMethodPOST];
+                        [builder setUrl:@"https://me-inbox.eservice.emarsys.net/api/reset-badge-count"];
+                        [builder setHeaders:expectedHeaders()];
+                    }
+                                                                       timestampProvider:[EMSTimestampProvider new]
+                                                                            uuidProvider:[EMSUUIDProvider new]];
 
                 EMSRESTClient *restClientMock = [EMSRESTClient mock];
                 [[restClientMock should] receive:@selector(executeTaskWithRequestModel:successBlock:errorBlock:)];
@@ -254,8 +257,8 @@ SPEC_BEGIN(MEInboxTests)
 
                 MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
                 [inbox resetBadgeCountWithSuccessBlock:^{
-                            successBlockInvoked = YES;
-                        }
+                        successBlockInvoked = YES;
+                    }
                                             errorBlock:^(NSError *error) {
                                                 fail(@"errorblock invoked");
                                             }];
@@ -267,8 +270,8 @@ SPEC_BEGIN(MEInboxTests)
 
                 MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], YES);
                 [inbox resetBadgeCountWithSuccessBlock:^{
-                            fail(@"successblock invoked");
-                        }
+                        fail(@"successblock invoked");
+                    }
                                             errorBlock:^(NSError *error) {
                                                 _error = error;
                                             }];
@@ -280,8 +283,8 @@ SPEC_BEGIN(MEInboxTests)
 
                 MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], NO);
                 [inbox resetBadgeCountWithSuccessBlock:^{
-                            fail(@"successblock invoked");
-                        }
+                        fail(@"successblock invoked");
+                    }
                                             errorBlock:^(NSError *error) {
                                                 _error = error;
                                             }];
@@ -311,10 +314,10 @@ SPEC_BEGIN(MEInboxTests)
                 MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeSuccess], YES);
 
                 [inbox resetBadgeCountWithSuccessBlock:^{
-                            if ([NSThread isMainThread]) {
-                                onMainThread = YES;
-                            }
+                        if ([NSThread isMainThread]) {
+                            onMainThread = YES;
                         }
+                    }
                                             errorBlock:^(NSError *error) {
                                                 fail(@"errorblock invoked");
                                             }];
@@ -326,8 +329,8 @@ SPEC_BEGIN(MEInboxTests)
                 MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], YES);
 
                 [inbox resetBadgeCountWithSuccessBlock:^{
-                            fail(@"successblock invoked");
-                        }
+                        fail(@"successblock invoked");
+                    }
                                             errorBlock:^(NSError *error) {
                                                 if ([NSThread isMainThread]) {
                                                     onMainThread = YES;
@@ -341,8 +344,8 @@ SPEC_BEGIN(MEInboxTests)
                 MEInbox *inbox = inboxWithParameters([[FakeInboxNotificationRestClient alloc] initWithResultType:ResultTypeFailure], NO);
 
                 [inbox resetBadgeCountWithSuccessBlock:^{
-                            fail(@"successblock invoked");
-                        }
+                        fail(@"successblock invoked");
+                    }
                                             errorBlock:^(NSError *error) {
                                                 if ([NSThread isMainThread]) {
                                                     onMainThread = YES;

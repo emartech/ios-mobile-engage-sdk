@@ -59,7 +59,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
             requestContext = [[MERequestContext alloc] initWithConfig:config];
             [_mobileEngage setupWithConfig:config
                              launchOptions:nil
-                  requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                  requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                   requestContext:[MERequestContext mock]]
                              logRepository:nil
                             requestContext:requestContext];
 
@@ -75,7 +76,9 @@ SPEC_BEGIN(MobileEngageInternalTests)
             };
             id requestManager = [EMSRequestManager mock];
 
-            [[requestManager should] receive:@selector(setAdditionalHeaders:) withCountAtLeast:1 arguments:additionalHeaders];
+            [[requestManager should] receive:@selector(setAdditionalHeaders:)
+                            withCountAtLeast:1
+                                   arguments:additionalHeaders];
 
             MEConfig *config = [MEConfig makeWithBuilder:^(MEConfigBuilder *builder) {
                 [builder setCredentialsWithApplicationCode:applicationCode
@@ -92,23 +95,27 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
         id (^requestModel)(NSString *url, NSDictionary *payload) = ^id(NSString *url, NSDictionary *payload) {
             return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setUrl:url];
-                [builder setMethod:HTTPMethodPOST];
-                [builder setPayload:payload];
-                [builder setHeaders:@{@"Authorization": [EMSAuthentication createBasicAuthWithUsername:kAppId
-                                                                                              password:@"appSecret"]}];
-            }];
+                    [builder setUrl:url];
+                    [builder setMethod:HTTPMethodPOST];
+                    [builder setPayload:payload];
+                    [builder setHeaders:@{@"Authorization": [EMSAuthentication createBasicAuthWithUsername:kAppId
+                                                                                                  password:@"appSecret"]}];
+                }
+                                  timestampProvider:requestContext.timestampProvider
+                                       uuidProvider:requestContext.uuidProvider];
         };
 
         id (^requestModelV3)(NSString *url, NSDictionary *payload) = ^id(NSString *url, NSDictionary *payload) {
             return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setUrl:url];
-                [builder setMethod:HTTPMethodPOST];
-                [builder setPayload:payload];
-                [builder setHeaders:@{@"X-ME-ID": kMEID,
-                    @"X-ME-ID-SIGNATURE": kMEID_SIGNATURE,
-                    @"X-ME-APPLICATIONCODE": kAppId}];
-            }];
+                    [builder setUrl:url];
+                    [builder setMethod:HTTPMethodPOST];
+                    [builder setPayload:payload];
+                    [builder setHeaders:@{@"X-ME-ID": kMEID,
+                        @"X-ME-ID-SIGNATURE": kMEID_SIGNATURE,
+                        @"X-ME-APPLICATIONCODE": kAppId}];
+                }
+                                  timestampProvider:requestContext.timestampProvider
+                                       uuidProvider:requestContext.uuidProvider];
         };
 
         describe(@"setupWithConfig:launchOptions:requestRepositoryFactory:logRepository:", ^{
@@ -202,7 +209,11 @@ SPEC_BEGIN(MobileEngageInternalTests)
                         [builder setExperimentalFeatures:@[INAPP_MESSAGING]];
                     }];
                     MobileEngageInternal *internal = [MobileEngageInternal new];
-                    [internal setupWithConfig:config launchOptions:nil requestRepositoryFactory:nil logRepository:nil requestContext:requestContext];
+                    [internal setupWithConfig:config
+                                launchOptions:nil
+                     requestRepositoryFactory:nil
+                                logRepository:nil
+                               requestContext:requestContext];
                     fail(@"Expected Exception when requestRepositoryFactory is nil!");
                 } @catch (NSException *exception) {
                     [[exception.reason should] equal:@"Invalid parameter not satisfying: requestRepositoryFactory"];
@@ -221,7 +232,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                       atIndex:0];
                 [internal setupWithConfig:config
                             launchOptions:nil
-                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                  requestContext:requestContext]
                             logRepository:nil
                            requestContext:requestContext];
                 EMSRequestManager *manager = spy.argument;
@@ -239,7 +251,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                       atIndex:0];
                 [internal setupWithConfig:config
                             launchOptions:nil
-                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                  requestContext:requestContext]
                             logRepository:nil
                            requestContext:requestContext];
                 EMSRequestManager *manager = spy.argument;
@@ -257,7 +270,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                       atIndex:0];
                 [internal setupWithConfig:config
                             launchOptions:nil
-                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                  requestContext:requestContext]
                             logRepository:nil
                            requestContext:requestContext];
                 EMSRequestManager *manager = spy.argument;
@@ -275,7 +289,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                                                       atIndex:0];
                 [internal setupWithConfig:config
                             launchOptions:nil
-                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                  requestContext:requestContext]
                             logRepository:nil
                            requestContext:requestContext];
                 EMSRequestManager *manager = spy.argument;
@@ -385,7 +400,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 MobileEngageInternal *internal = [MobileEngageInternal new];
                 [internal setupWithConfig:config
                             launchOptions:nil
-                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                 requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                  requestContext:requestContext]
                             logRepository:nil
                            requestContext:requestContext];
 
@@ -395,10 +411,14 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
                 NSNumber *meId = @123456789;
                 NSString *meIdSignature = @"signature";
-                NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature} options:0 error:nil];
+                NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"api_me_id": meId, @"me_id_signature": meIdSignature}
+                                                               options:0
+                                                                 error:nil];
                 EMSRequestModel *request = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                    [builder setUrl:@"https://www.somethi.ng"];
-                }];
+                        [builder setUrl:@"https://www.somethi.ng"];
+                    }
+                                                          timestampProvider:requestContext.timestampProvider
+                                                               uuidProvider:requestContext.uuidProvider];
                 fakeRequestManager.responseModels = [@[[[EMSResponseModel alloc] initWithStatusCode:200
                                                                                             headers:@{}
                                                                                                body:data
@@ -839,7 +859,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 });
 
                 it(@"should return with requestModel's non-nil requestId reported in the error when there is no sid", ^{
-                    FakeRequestManager *requestManager = [FakeRequestManager managerWithSuccessBlock:nil errorBlock:nil];
+                    FakeRequestManager *requestManager = [FakeRequestManager managerWithSuccessBlock:nil
+                                                                                          errorBlock:nil];
                     _mobileEngage = [MobileEngageInternal new];
 
                     __block NSError *reportedError;
@@ -860,7 +881,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     requestContext.meId = @"meId";
                     requestContext.meIdSignature = @"meIdSignature";
 
-                    [_mobileEngage setupWithRequestManager:requestManager config:config launchOptions:nil requestContext:requestContext];
+                    [_mobileEngage setupWithRequestManager:requestManager
+                                                    config:config
+                                             launchOptions:nil
+                                            requestContext:requestContext];
 
                     NSString *uuid = [_mobileEngage trackMessageOpenWithUserInfo:@{@"u": @{}}];
 
@@ -897,7 +921,10 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     requestContext.meId = @"meId";
                     requestContext.meIdSignature = @"meIdSignature";
 
-                    [_mobileEngage setupWithRequestManager:requestManager config:config launchOptions:nil requestContext:requestContext];
+                    [_mobileEngage setupWithRequestManager:requestManager
+                                                    config:config
+                                             launchOptions:nil
+                                            requestContext:requestContext];
                 });
 
                 afterEach(^{
@@ -1170,7 +1197,9 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
                 id timeStampProviderMock = [EMSTimestampProvider mock];
                 NSDate *timeStamp = [NSDate date];
-                [[timeStampProviderMock should] receive:@selector(provideTimestamp) andReturn:timeStamp withCountAtLeast:0];
+                [[timeStampProviderMock should] receive:@selector(provideTimestamp)
+                                              andReturn:timeStamp
+                                       withCountAtLeast:0];
                 _mobileEngage.requestContext.timestampProvider = timeStampProviderMock;
 
                 _mobileEngage.requestContext.meId = kMEID;
@@ -1254,7 +1283,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     @"contact_field_value": @"test@test.com"
                 };
 
-                EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName], payload);
+                EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@",
+                                                                                 eventName], payload);
 
                 [[requestManager should] receive:@selector(submit:)
                                    withArguments:kw_any(), kw_any(), kw_any()];
@@ -1280,7 +1310,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     @"hardware_id": [EMSDeviceInfo hardwareId],
                 };
 
-                EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName], payload);
+                EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@",
+                                                                                 eventName], payload);
 
                 [[requestManager should] receive:@selector(submit:)
                                    withArguments:kw_any(), kw_any(), kw_any()];
@@ -1314,7 +1345,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                     @"contact_field_value": @"test@test.com"
                 };
 
-                EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@", eventName], payload);
+                EMSRequestModel *model = requestModel([NSString stringWithFormat:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/%@",
+                                                                                 eventName], payload);
 
                 [[requestManager should] receive:@selector(submit:)
                                    withArguments:kw_any(), kw_any(), kw_any()];
@@ -1342,7 +1374,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 }];
                 [_mobileEngage setupWithConfig:config
                                  launchOptions:nil
-                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                       requestContext:requestContext]
                                  logRepository:nil
                                 requestContext:requestContext];
 
@@ -1355,7 +1388,9 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 id notificationCenterManagerMock = [MENotificationCenterManager mock];
                 [_mobileEngage setNotificationCenterManager:notificationCenterManagerMock];
 
-                [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:) withArguments:kw_any(), UIApplicationDidBecomeActiveNotification];
+                [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:)
+                                                  withArguments:kw_any(),
+                                                                UIApplicationDidBecomeActiveNotification];
                 requestManagerMock();
             });
 
@@ -1365,8 +1400,11 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [_mobileEngage.requestContext setMeId:@"testMeId"];
                 [_mobileEngage.requestContext setMeIdSignature:@"testMeIdSig"];
 
-                [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:) withArguments:kw_any(), UIApplicationDidBecomeActiveNotification];
-                KWCaptureSpy *spy = [notificationCenterManagerMock captureArgument:@selector(addHandlerBlock:forNotification:) atIndex:0];
+                [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:)
+                                                  withArguments:kw_any(),
+                                                                UIApplicationDidBecomeActiveNotification];
+                KWCaptureSpy *spy = [notificationCenterManagerMock captureArgument:@selector(addHandlerBlock:forNotification:)
+                                                                           atIndex:0];
 
                 id requestManager = requestManagerMock();
                 [[requestManager should] receive:@selector(submit:) withCountAtLeast:1];
@@ -1421,8 +1459,11 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [_mobileEngage setNotificationCenterManager:notificationCenterManagerMock];
                 [_mobileEngage.requestContext setMeId:nil];
 
-                [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:) withArguments:kw_any(), UIApplicationDidBecomeActiveNotification];
-                KWCaptureSpy *spy = [notificationCenterManagerMock captureArgument:@selector(addHandlerBlock:forNotification:) atIndex:0];
+                [[notificationCenterManagerMock should] receive:@selector(addHandlerBlock:forNotification:)
+                                                  withArguments:kw_any(),
+                                                                UIApplicationDidBecomeActiveNotification];
+                KWCaptureSpy *spy = [notificationCenterManagerMock captureArgument:@selector(addHandlerBlock:forNotification:)
+                                                                           atIndex:0];
 
                 id requestManager = requestManagerMock();
                 [[requestManager shouldNot] receive:@selector(submit:)];
@@ -1479,7 +1520,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 }];
                 [_mobileEngage setupWithConfig:config
                                  launchOptions:nil
-                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                       requestContext:requestContext]
                                  logRepository:nil
                                 requestContext:requestContext];
 
@@ -1516,7 +1558,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
                 [_mobileEngage setupWithConfig:config
                                  launchOptions:nil
-                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                       requestContext:requestContext]
                                  logRepository:nil
                                 requestContext:[[MERequestContext alloc] initWithConfig:config]];
 
@@ -1534,7 +1577,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 }];
                 [_mobileEngage setupWithConfig:config
                                  launchOptions:nil
-                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                       requestContext:requestContext]
                                  logRepository:nil
                                 requestContext:requestContext];
 
@@ -1561,7 +1605,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 }];
                 [_mobileEngage setupWithConfig:config
                                  launchOptions:nil
-                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                       requestContext:requestContext]
                                  logRepository:nil
                                 requestContext:requestContext];
 
@@ -1598,7 +1643,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
 
                 [_mobileEngage setupWithConfig:config
                                  launchOptions:nil
-                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                       requestContext:requestContext]
                                  logRepository:nil
                                 requestContext:[[MERequestContext alloc] initWithConfig:config]];
 
@@ -1621,7 +1667,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 [userDefaults synchronize];
                 [_mobileEngage setupWithConfig:config
                                  launchOptions:nil
-                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                       requestContext:requestContext]
                                  logRepository:nil
                                 requestContext:requestContext];
 
@@ -1644,7 +1691,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 }];
                 [_mobileEngage setupWithConfig:config
                                  launchOptions:nil
-                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                       requestContext:requestContext]
                                  logRepository:nil
                                 requestContext:requestContext];
 
@@ -1753,7 +1801,8 @@ SPEC_BEGIN(MobileEngageInternalTests)
                 }];
                 [_mobileEngage setupWithConfig:config
                                  launchOptions:nil
-                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]]
+                      requestRepositoryFactory:[[MERequestModelRepositoryFactory alloc] initWithInApp:[MEInApp mock]
+                                                                                       requestContext:requestContext]
                                  logRepository:nil
                                 requestContext:requestContext];
                 [[_mobileEngage.requestContext shouldNot] beNil];

@@ -10,6 +10,7 @@
 #import "MEButtonClickFilterNoneSpecification.h"
 #import "MESchemaDelegate.h"
 #import "MEDisplayedIAMFilterNoneSpecification.h"
+#import "EMSUUIDProvider.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestMIAMCleanup.db"]
 
@@ -21,14 +22,18 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
         beforeEach(^{
             timestampProvider = [EMSTimestampProvider new];
             requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setUrl:@"https://mobile-events.eservice.emarsys.net/v3/devices/meid/events"];
-            }];
+                    [builder setUrl:@"https://mobile-events.eservice.emarsys.net/v3/devices/meid/events"];
+                }
+                                          timestampProvider:[EMSTimestampProvider new]
+                                               uuidProvider:[EMSUUIDProvider new]];
         });
 
         describe(@"MEIAMCleanupResponseHandler.shouldHandleResponse", ^{
 
             it(@"should return YES when the response contains old_messages and the array contains more than 0 ids", ^{
-                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[@"asdad", @"34g433t"]} options:0 error:nil];
+                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[@"asdad", @"34g433t"]}
+                                                               options:0
+                                                                 error:nil];
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
@@ -42,10 +47,14 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
 
             it(@"should return NO when the request URL is not the V3 event service endpoint URL", ^{
                 EMSRequestModel *nonV3EventRequestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                    [builder setUrl:@"https://www.emarsys.com"];
-                }];
+                        [builder setUrl:@"https://www.emarsys.com"];
+                    }
+                                                                         timestampProvider:[EMSTimestampProvider new]
+                                                                              uuidProvider:[EMSUUIDProvider new]];
 
-                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[@"asdad", @"34g433t"]} options:0 error:nil];
+                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[@"asdad", @"34g433t"]}
+                                                               options:0
+                                                                 error:nil];
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
@@ -71,7 +80,9 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
             });
 
             it(@"should return NO when the response lacks old_messages", ^{
-                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"nothing": @[@"something"]} options:0 error:nil];
+                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"nothing": @[@"something"]}
+                                                               options:0
+                                                                 error:nil];
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
@@ -84,7 +95,9 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
             });
 
             it(@"should return NO when the response contains not an array under key old_messages", ^{
-                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @{@"s": @"t"}} options:0 error:nil];
+                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @{@"s": @"t"}}
+                                                               options:0
+                                                                 error:nil];
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
@@ -104,7 +117,8 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
 
             beforeEach(^{
                 [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH error:nil];
-                _dbHelper = [[EMSSQLiteHelper alloc] initWithDatabasePath:TEST_DB_PATH schemaDelegate:[MESchemaDelegate new]];
+                _dbHelper = [[EMSSQLiteHelper alloc] initWithDatabasePath:TEST_DB_PATH
+                                                           schemaDelegate:[MESchemaDelegate new]];
                 [_dbHelper open];
             });
 
@@ -116,20 +130,31 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
             it(@"should remove the Clicks matching the returned IDs", ^{
                 MEButtonClickRepository *repository = [[MEButtonClickRepository alloc] initWithDbHelper:_dbHelper];
 
-                [repository add:[[MEButtonClick alloc] initWithCampaignId:@"id1" buttonId:@"b" timestamp:[NSDate date]]];
-                [repository add:[[MEButtonClick alloc] initWithCampaignId:@"id2" buttonId:@"b" timestamp:[NSDate date]]];
-                [repository add:[[MEButtonClick alloc] initWithCampaignId:@"id3" buttonId:@"b" timestamp:[NSDate date]]];
-                [repository add:[[MEButtonClick alloc] initWithCampaignId:@"id4" buttonId:@"b" timestamp:[NSDate date]]];
+                [repository add:[[MEButtonClick alloc] initWithCampaignId:@"id1"
+                                                                 buttonId:@"b"
+                                                                timestamp:[NSDate date]]];
+                [repository add:[[MEButtonClick alloc] initWithCampaignId:@"id2"
+                                                                 buttonId:@"b"
+                                                                timestamp:[NSDate date]]];
+                [repository add:[[MEButtonClick alloc] initWithCampaignId:@"id3"
+                                                                 buttonId:@"b"
+                                                                timestamp:[NSDate date]]];
+                [repository add:[[MEButtonClick alloc] initWithCampaignId:@"id4"
+                                                                 buttonId:@"b"
+                                                                timestamp:[NSDate date]]];
 
 
-                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[@"id2", @"id4"]} options:0 error:nil];
+                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[@"id2", @"id4"]}
+                                                               options:0
+                                                                 error:nil];
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
                                                                                 timestamp:[NSDate date]];
 
-                MEIAMCleanupResponseHandler *handler = [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:repository displayIamRepository:nil];
+                MEIAMCleanupResponseHandler *handler = [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:repository
+                                                                                                     displayIamRepository:nil];
                 [handler handleResponse:response];
 
                 NSArray<MEButtonClick *> *clicks = [repository query:[MEButtonClickFilterNoneSpecification new]];
@@ -148,14 +173,17 @@ SPEC_BEGIN(MEIAMCleanupResponseHandlerTests)
                 [repository add:[[MEDisplayedIAM alloc] initWithCampaignId:@"id4a" timestamp:[NSDate date]]];
 
 
-                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[@"id2a", @"id4a"]} options:0 error:nil];
+                NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"old_messages": @[@"id2a", @"id4a"]}
+                                                               options:0
+                                                                 error:nil];
                 EMSResponseModel *response = [[EMSResponseModel alloc] initWithStatusCode:200
                                                                                   headers:@{}
                                                                                      body:body
                                                                              requestModel:[EMSRequestModel mock]
                                                                                 timestamp:[NSDate date]];
 
-                MEIAMCleanupResponseHandler *handler = [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:nil displayIamRepository:repository];
+                MEIAMCleanupResponseHandler *handler = [[MEIAMCleanupResponseHandler alloc] initWithButtonClickRepository:nil
+                                                                                                     displayIamRepository:repository];
                 [handler handleResponse:response];
 
                 NSArray<MEDisplayedIAM *> *displays = [repository query:[MEDisplayedIAMFilterNoneSpecification new]];

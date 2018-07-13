@@ -9,6 +9,7 @@
 @class MEButtonClickRepository;
 @class MEDisplayedIAMRepository;
 @class MEInApp;
+@class MERequestContext;
 
 @interface MERequestRepositoryProxy : NSObject <EMSRequestModelRepositoryProtocol>
 
@@ -16,10 +17,12 @@
 @property(nonatomic, readonly) EMSRequestModelRepository *requestModelRepository;
 @property(nonatomic, readonly) MEButtonClickRepository *clickRepository;
 @property(nonatomic, readonly) MEDisplayedIAMRepository *displayedIAMRepository;
+@property(nonatomic, readonly) MERequestContext *requestContext;
 
 - (instancetype)initWithRequestModelRepository:(EMSRequestModelRepository *)requestModelRepository
                          buttonClickRepository:(MEButtonClickRepository *)buttonClickRepository
                         displayedIAMRepository:(MEDisplayedIAMRepository *)displayedIAMRepository
-                                         inApp:(MEInApp *)inApp;
+                                         inApp:(MEInApp *)inApp
+                                requestContext:(MERequestContext *)requestContext;
 
 @end

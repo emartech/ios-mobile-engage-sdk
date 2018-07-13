@@ -127,8 +127,10 @@
                                                   requestContext:requestContext];
         } else {
             requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
-            }];
+                    [builder setUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/events/message_open"];
+                }
+                                          timestampProvider:requestContext.timestampProvider
+                                               uuidProvider:requestContext.uuidProvider];
         }
     }
 
@@ -159,45 +161,49 @@
                                                     type:(NSString *)type
                                           requestContext:(MERequestContext *)requestContext {
     return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-        [builder setMethod:HTTPMethodPOST];
-        [builder setUrl:[NSString stringWithFormat:@"https://mobile-events.eservice.emarsys.net/v3/devices/%@/events", requestContext.meId]];
-        NSMutableDictionary *payload = [NSMutableDictionary new];
-        payload[@"clicks"] = @[];
-        payload[@"viewed_messages"] = @[];
-        payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
+            [builder setMethod:HTTPMethodPOST];
+            [builder setUrl:[NSString stringWithFormat:@"https://mobile-events.eservice.emarsys.net/v3/devices/%@/events", requestContext.meId]];
+            NSMutableDictionary *payload = [NSMutableDictionary new];
+            payload[@"clicks"] = @[];
+            payload[@"viewed_messages"] = @[];
+            payload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
 
-        NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
-            @"type": type,
-            @"name": eventName,
-            @"timestamp": [[requestContext.timestampProvider provideTimestamp] stringValueInUTC]}];
+            NSMutableDictionary *event = [NSMutableDictionary dictionaryWithDictionary:@{
+                @"type": type,
+                @"name": eventName,
+                @"timestamp": [[requestContext.timestampProvider provideTimestamp] stringValueInUTC]}];
 
-        if (eventAttributes) {
-            event[@"attributes"] = eventAttributes;
+            if (eventAttributes) {
+                event[@"attributes"] = eventAttributes;
+            }
+
+            payload[@"events"] = @[event];
+            NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionary];
+            if (requestContext.meId) {
+                mutableHeaders[@"X-ME-ID"] = requestContext.meId;
+            }
+            if (requestContext.meIdSignature) {
+                mutableHeaders[@"X-ME-ID-SIGNATURE"] = requestContext.meIdSignature;
+            }
+            mutableHeaders[@"X-ME-APPLICATIONCODE"] = requestContext.config.applicationCode;
+            [builder setHeaders:mutableHeaders];
+
+            [builder setPayload:payload];
         }
-
-        payload[@"events"] = @[event];
-        NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionary];
-        if (requestContext.meId) {
-            mutableHeaders[@"X-ME-ID"] = requestContext.meId;
-        }
-        if (requestContext.meIdSignature) {
-            mutableHeaders[@"X-ME-ID-SIGNATURE"] = requestContext.meIdSignature;
-        }
-        mutableHeaders[@"X-ME-APPLICATIONCODE"] = requestContext.config.applicationCode;
-        [builder setHeaders:mutableHeaders];
-
-        [builder setPayload:payload];
-    }];
+                          timestampProvider:requestContext.timestampProvider
+                               uuidProvider:requestContext.uuidProvider];
 }
 
-+ (EMSRequestModel *)createTrackDeepLinkRequestWithTrackingId:(NSString *)trackingId {
++ (EMSRequestModel *)createTrackDeepLinkRequestWithTrackingId:(NSString *)trackingId requestContext:(MERequestContext *)requestContext {
     NSString *userAgent = [NSString stringWithFormat:@"Mobile Engage SDK %@ %@ %@", MOBILEENGAGE_SDK_VERSION, [EMSDeviceInfo deviceType], [EMSDeviceInfo osVersion]];
     return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-        [builder setMethod:HTTPMethodPOST];
-        [builder setUrl:@"https://deep-link.eservice.emarsys.net/api/clicks"];
-        [builder setHeaders:@{@"User-Agent": userAgent}];
-        [builder setPayload:@{@"ems_dl": trackingId}];
-    }];
+            [builder setMethod:HTTPMethodPOST];
+            [builder setUrl:@"https://deep-link.eservice.emarsys.net/api/clicks"];
+            [builder setHeaders:@{@"User-Agent": userAgent}];
+            [builder setPayload:@{@"ems_dl": trackingId}];
+        }
+                          timestampProvider:requestContext.timestampProvider
+                               uuidProvider:requestContext.uuidProvider];
 }
 
 + (EMSRequestModel *)requestModelWithUrl:(NSString *)url
@@ -205,26 +211,28 @@
                   additionalPayloadBlock:(void (^)(NSMutableDictionary *payload))payloadBlock
                           requestContext:(MERequestContext *)requestContext {
     EMSRequestModel *requestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-        [builder setUrl:url];
-        [builder setMethod:method];
-        NSMutableDictionary *payload = [@{
-            @"application_id": requestContext.config.applicationCode,
-            @"hardware_id": [EMSDeviceInfo hardwareId]
-        } mutableCopy];
+            [builder setUrl:url];
+            [builder setMethod:method];
+            NSMutableDictionary *payload = [@{
+                @"application_id": requestContext.config.applicationCode,
+                @"hardware_id": [EMSDeviceInfo hardwareId]
+            } mutableCopy];
 
-        if (requestContext.appLoginParameters.contactFieldId && requestContext.appLoginParameters.contactFieldValue) {
-            payload[@"contact_field_id"] = requestContext.appLoginParameters.contactFieldId;
-            payload[@"contact_field_value"] = requestContext.appLoginParameters.contactFieldValue;
+            if (requestContext.appLoginParameters.contactFieldId && requestContext.appLoginParameters.contactFieldValue) {
+                payload[@"contact_field_id"] = requestContext.appLoginParameters.contactFieldId;
+                payload[@"contact_field_value"] = requestContext.appLoginParameters.contactFieldValue;
+            }
+
+            if (payloadBlock) {
+                payloadBlock(payload);
+            }
+
+            [builder setPayload:payload];
+            [builder setHeaders:@{@"Authorization": [EMSAuthentication createBasicAuthWithUsername:requestContext.config.applicationCode
+                                                                                          password:requestContext.config.applicationPassword]}];
         }
-
-        if (payloadBlock) {
-            payloadBlock(payload);
-        }
-
-        [builder setPayload:payload];
-        [builder setHeaders:@{@"Authorization": [EMSAuthentication createBasicAuthWithUsername:requestContext.config.applicationCode
-                                                                                      password:requestContext.config.applicationPassword]}];
-    }];
+                                                   timestampProvider:requestContext.timestampProvider
+                                                        uuidProvider:requestContext.uuidProvider];
     return requestModel;
 }
 

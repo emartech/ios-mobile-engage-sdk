@@ -58,9 +58,11 @@
     if ([self hasLoginParameters]) {
         __weak typeof(self) weakSelf = self;
         EMSRequestModel *request = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            NSDictionary *headers = [weakSelf createNotificationsFetchingHeaders];
-            [[[builder setMethod:HTTPMethodGET] setHeaders:headers] setUrl:@"https://me-inbox.eservice.emarsys.net/api/notifications"];
-        }];
+                NSDictionary *headers = [weakSelf createNotificationsFetchingHeaders];
+                [[[builder setMethod:HTTPMethodGET] setHeaders:headers] setUrl:@"https://me-inbox.eservice.emarsys.net/api/notifications"];
+            }
+                                                  timestampProvider:self.requestContext.timestampProvider
+                                                       uuidProvider:self.requestContext.uuidProvider];
         [_restClient executeTaskWithRequestModel:request
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         NSDictionary *payload = [NSJSONSerialization JSONObjectWithData:response.body options:0 error:nil];
@@ -86,10 +88,12 @@
                              errorBlock:(MEInboxResultErrorBlock)errorBlock {
     if ([self hasLoginParameters]) {
         EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-            [builder setUrl:@"https://me-inbox.eservice.emarsys.net/api/reset-badge-count"];
-            [builder setMethod:HTTPMethodPOST];
-            [builder setHeaders:[self createNotificationsFetchingHeaders]];
-        }];
+                [builder setUrl:@"https://me-inbox.eservice.emarsys.net/api/reset-badge-count"];
+                [builder setMethod:HTTPMethodPOST];
+                [builder setHeaders:[self createNotificationsFetchingHeaders]];
+            }
+                                                timestampProvider:self.requestContext.timestampProvider
+                                                     uuidProvider:self.requestContext.uuidProvider];
         [_restClient executeTaskWithRequestModel:model
                                     successBlock:^(NSString *requestId, EMSResponseModel *response) {
                                         dispatch_async(dispatch_get_main_queue(), ^{

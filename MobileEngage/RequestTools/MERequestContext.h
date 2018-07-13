@@ -7,6 +7,8 @@
 #import "MEConfig.h"
 #import <CoreSDK/EMSTimestampProvider.h>
 
+@class EMSUUIDProvider;
+
 #define kSuiteName @"com.emarsys.mobileengage"
 #define kLastAppLoginPayload @"kLastAppLoginPayload"
 #define kMEID @"kMEID"
@@ -20,6 +22,7 @@
 @property(nonatomic, strong, nullable) MEAppLoginParameters *appLoginParameters;
 @property(nonatomic, strong, nullable) MEConfig *config;
 @property(nonatomic, strong, nullable) EMSTimestampProvider *timestampProvider;
+@property(nonatomic, strong, nullable) EMSUUIDProvider *uuidProvider;
 
 - (instancetype)initWithConfig:(MEConfig *)config;
 - (void)reset;

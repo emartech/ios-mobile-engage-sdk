@@ -118,7 +118,8 @@ requestRepositoryFactory:(MERequestModelRepositoryFactory *)requestRepositoryFac
             if (sourceHandler) {
                 sourceHandler(webPageURL);
             }
-            [self.requestManager submit:[MERequestFactory createTrackDeepLinkRequestWithTrackingId:queryItem.value ? queryItem.value : @""]];
+            [self.requestManager submit:[MERequestFactory createTrackDeepLinkRequestWithTrackingId:queryItem.value ? queryItem.value : @""
+                                                                                    requestContext:self.requestContext]];
         }
     }
     return result;

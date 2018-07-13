@@ -2,8 +2,8 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 #import <CoreSDK/EMSTimestampProvider.h>
+#import <CoreSDK/EMSUUIDProvider.h>
 #import "MERequestContext.h"
-
 
 @implementation MERequestContext
 
@@ -14,6 +14,7 @@
         _meIdSignature = [[[NSUserDefaults alloc] initWithSuiteName:kSuiteName] stringForKey:kMEID_SIGNATURE];
         _config = config;
         _timestampProvider = [EMSTimestampProvider new];
+        _uuidProvider = [EMSUUIDProvider new];
     }
     return self;
 }

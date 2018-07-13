@@ -10,13 +10,17 @@
 #import "MEInApp.h"
 #import "MobileEngage.h"
 #import "MobileEngage+Private.h"
+#import "MERequestContext.h"
 
 @implementation MERequestModelRepositoryFactory
 
-- (instancetype)initWithInApp:(MEInApp *)inApp {
+- (instancetype)initWithInApp:(MEInApp *)inApp
+               requestContext:(MERequestContext *)requestContext {
     NSParameterAssert(inApp);
+    NSParameterAssert(requestContext);
     if (self = [super init]) {
         _inApp = inApp;
+        _requestContext = requestContext;
     }
     return self;
 }
@@ -26,7 +30,8 @@
         return [[MERequestRepositoryProxy alloc] initWithRequestModelRepository:[[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDefaultDatabase]]
                                                           buttonClickRepository:[[MEButtonClickRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
                                                          displayedIAMRepository:[[MEDisplayedIAMRepository alloc] initWithDbHelper:[MobileEngage dbHelper]]
-                                                                          inApp:self.inApp];
+                                                                          inApp:self.inApp
+                                                                 requestContext:self.requestContext];
     }
     return [[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDefaultDatabase]];
 }

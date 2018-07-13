@@ -30,6 +30,7 @@
                                                     type:(NSString *)type
                                           requestContext:(MERequestContext *)requestContext;
 
-+ (EMSRequestModel *)createTrackDeepLinkRequestWithTrackingId:(NSString *)trackingId;
++ (EMSRequestModel *)createTrackDeepLinkRequestWithTrackingId:(NSString *)trackingId
+                                               requestContext:(MERequestContext *)requestContext;
 
 @end

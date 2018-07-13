@@ -35,7 +35,11 @@ SPEC_BEGIN(MEInboxV2Tests)
             } else {
                 requestContext.meId = nil;
             }
-            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext restClient:restClient notifications:notifications timestampProvider:[EMSTimestampProvider new]];
+            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithConfig:config
+                                                  requestContext:requestContext
+                                                      restClient:restClient
+                                                   notifications:notifications
+                                               timestampProvider:[EMSTimestampProvider new]];
             return inbox;
         };
 
@@ -43,7 +47,11 @@ SPEC_BEGIN(MEInboxV2Tests)
             notifications = [NSMutableArray array];
             requestContext = [[MERequestContext alloc] initWithConfig:config];
             requestContext.meId = meId;
-            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext restClient:restClient notifications:notifications timestampProvider:timestampProvider];
+            MEInboxV2 *inbox = [[MEInboxV2 alloc] initWithConfig:config
+                                                  requestContext:requestContext
+                                                      restClient:restClient
+                                                   notifications:notifications
+                                               timestampProvider:timestampProvider];
             return inbox;
         };
 
@@ -79,7 +87,11 @@ SPEC_BEGIN(MEInboxV2Tests)
 
             it(@"should throw exception when timestampProvider is nil", ^{
                 @try {
-                    [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext restClient:[EMSRESTClient mock] notifications:notifications timestampProvider:nil];
+                    [[MEInboxV2 alloc] initWithConfig:config
+                                       requestContext:requestContext
+                                           restClient:[EMSRESTClient mock]
+                                        notifications:notifications
+                                    timestampProvider:nil];
                     fail(@"Expected Exception when timestampProvider is nil!");
                 } @catch (NSException *exception) {
                     [[exception.reason should] equal:@"Invalid parameter not satisfying: timestampProvider"];
@@ -90,7 +102,11 @@ SPEC_BEGIN(MEInboxV2Tests)
 
             it(@"should throw exception when notifications is nil", ^{
                 @try {
-                    [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext restClient:[EMSRESTClient mock] notifications:nil timestampProvider:[EMSTimestampProvider new]];
+                    [[MEInboxV2 alloc] initWithConfig:config
+                                       requestContext:requestContext
+                                           restClient:[EMSRESTClient mock]
+                                        notifications:nil
+                                    timestampProvider:[EMSTimestampProvider new]];
                     fail(@"Expected Exception when notifications is nil!");
                 } @catch (NSException *exception) {
                     [[exception.reason should] equal:@"Invalid parameter not satisfying: notifications"];
@@ -100,7 +116,11 @@ SPEC_BEGIN(MEInboxV2Tests)
 
             it(@"should throw exception when config is nil", ^{
                 @try {
-                    [[MEInboxV2 alloc] initWithConfig:nil requestContext:requestContext restClient:[EMSRESTClient mock] notifications:[NSMutableArray new] timestampProvider:[EMSTimestampProvider new]];
+                    [[MEInboxV2 alloc] initWithConfig:nil
+                                       requestContext:requestContext
+                                           restClient:[EMSRESTClient mock]
+                                        notifications:[NSMutableArray new]
+                                    timestampProvider:[EMSTimestampProvider new]];
                     fail(@"Expected Exception when config is nil!");
                 } @catch (NSException *exception) {
                     [[exception.reason should] equal:@"Invalid parameter not satisfying: config"];
@@ -110,7 +130,11 @@ SPEC_BEGIN(MEInboxV2Tests)
 
             it(@"should throw exception when requestContext is nil", ^{
                 @try {
-                    [[MEInboxV2 alloc] initWithConfig:config requestContext:nil restClient:[EMSRESTClient mock] notifications:[NSMutableArray new] timestampProvider:[EMSTimestampProvider new]];
+                    [[MEInboxV2 alloc] initWithConfig:config
+                                       requestContext:nil
+                                           restClient:[EMSRESTClient mock]
+                                        notifications:[NSMutableArray new]
+                                    timestampProvider:[EMSTimestampProvider new]];
                     fail(@"Expected Exception when requestContext is nil!");
                 } @catch (NSException *exception) {
                     [[exception.reason should] equal:@"Invalid parameter not satisfying: requestContext"];
@@ -120,7 +144,11 @@ SPEC_BEGIN(MEInboxV2Tests)
 
             it(@"should throw exception when restClient is nil", ^{
                 @try {
-                    [[MEInboxV2 alloc] initWithConfig:config requestContext:requestContext restClient:nil notifications:[NSMutableArray new] timestampProvider:[EMSTimestampProvider new]];
+                    [[MEInboxV2 alloc] initWithConfig:config
+                                       requestContext:requestContext
+                                           restClient:nil
+                                        notifications:[NSMutableArray new]
+                                    timestampProvider:[EMSTimestampProvider new]];
                     fail(@"Expected Exception when restClient is nil!");
                 } @catch (NSException *exception) {
                     [[exception.reason should] equal:@"Invalid parameter not satisfying: restClient"];
@@ -362,7 +390,8 @@ SPEC_BEGIN(MEInboxV2Tests)
 
                 EMSRequestModel *capturedRequestModel = requestModelSpy.argument;
 
-                [[capturedRequestModel.url should] equal:[NSURL URLWithString:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@", meId]]];
+                [[capturedRequestModel.url should] equal:[NSURL URLWithString:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@",
+                                                                                                         meId]]];
                 [[capturedRequestModel.method should] equal:@"GET"];
                 [[capturedRequestModel.headers should] equal:expectedHeaders()];
             });
@@ -612,10 +641,13 @@ SPEC_BEGIN(MEInboxV2Tests)
 
             it(@"should invoke restClient with the correct requestModel", ^{
                 EMSRequestModel *expectedRequestModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                    [builder setMethod:HTTPMethodDELETE];
-                    [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@/count", meId]];
-                    [builder setHeaders:expectedHeaders()];
-                }];
+                        [builder setMethod:HTTPMethodDELETE];
+                        [builder setUrl:[NSString stringWithFormat:@"https://me-inbox.eservice.emarsys.net/api/v1/notifications/%@/count",
+                                                                   meId]];
+                        [builder setHeaders:expectedHeaders()];
+                    }
+                                                                       timestampProvider:requestContext.timestampProvider
+                                                                            uuidProvider:requestContext.uuidProvider];
 
                 EMSRESTClient *restClientMock = [EMSRESTClient mock];
                 [[restClientMock should] receive:@selector(executeTaskWithRequestModel:successBlock:errorBlock:)];

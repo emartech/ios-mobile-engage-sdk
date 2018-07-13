@@ -6,12 +6,15 @@
 
 @protocol EMSRequestModelRepositoryProtocol;
 @class MEInApp;
+@class MERequestContext;
 
 @interface MERequestModelRepositoryFactory : NSObject
 
 @property (nonatomic, readonly) MEInApp *inApp;
+@property (nonatomic, readonly) MERequestContext *requestContext;
 
-- (instancetype)initWithInApp:(MEInApp *)inApp;
+- (instancetype)initWithInApp:(MEInApp *)inApp
+               requestContext:(MERequestContext *)requestContext;
 
 - (id <EMSRequestModelRepositoryProtocol>)createWithBatchCustomEventProcessing:(BOOL)batchProcessing;
 
