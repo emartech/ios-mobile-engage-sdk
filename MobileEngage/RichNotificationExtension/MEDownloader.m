@@ -2,7 +2,7 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 #import "MEDownloader.h"
-#import <CoreSDK/NSError+EMSCore.h>
+#import "NSError+EMSCore.h"
 
 @interface MEDownloader ()
 
