@@ -2,8 +2,8 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 #import "MENotificationService.h"
-#import <CoreSDK/EMSDictionaryValidator.h>
 #import "MENotificationService+Actions.h"
+#import "EMSDictionaryValidator.h"
 
 @implementation MENotificationService (Actions)
 
