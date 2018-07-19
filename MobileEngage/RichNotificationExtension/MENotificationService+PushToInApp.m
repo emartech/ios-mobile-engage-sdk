@@ -1,9 +1,10 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
+#import <CoreSDK/EMSDictionaryValidator.h>
 #import "MENotificationService.h"
 #import "MENotificationService+PushToInApp.h"
-#import "EMSDictionaryValidator.h"
+
 #import "MEDownloader.h"
 
 @implementation MENotificationService (PushToInApp)
