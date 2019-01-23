@@ -3,7 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MENotification.h"
+#import <MobileEngageSDK/MENotification.h>
 
 @interface MENotificationInboxStatus : NSObject
 

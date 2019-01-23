@@ -3,7 +3,7 @@
 //
 #import "MENotificationService.h"
 #import "MENotificationService+Actions.h"
-#import "EMSDictionaryValidator.h"
+#import <CoreSDK/EMSDictionaryValidator.h>
 
 @implementation MENotificationService (Actions)
 

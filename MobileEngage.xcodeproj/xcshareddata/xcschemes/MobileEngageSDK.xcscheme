@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1010"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "32C6F59736632C8B5808DD7B"
-               BuildableName = "MobileEngageTests.xctest"
-               BlueprintName = "MobileEngageTests"
+               BlueprintIdentifier = "32C6F20E7A6F515CE383A966"
+               BuildableName = "MobileEngageSDK.framework"
+               BlueprintName = "MobileEngageSDK"
                ReferencedContainer = "container:MobileEngage.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "32C6F59736632C8B5808DD7B"
-               BuildableName = "MobileEngageTests.xctest"
-               BlueprintName = "MobileEngageTests"
-               ReferencedContainer = "container:MobileEngage.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "32C6F59736632C8B5808DD7B"
-            BuildableName = "MobileEngageTests.xctest"
-            BlueprintName = "MobileEngageTests"
-            ReferencedContainer = "container:MobileEngage.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -64,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "32C6F59736632C8B5808DD7B"
-            BuildableName = "MobileEngageTests.xctest"
-            BlueprintName = "MobileEngageTests"
+            BlueprintIdentifier = "32C6F20E7A6F515CE383A966"
+            BuildableName = "MobileEngageSDK.framework"
+            BlueprintName = "MobileEngageSDK"
             ReferencedContainer = "container:MobileEngage.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "32C6F59736632C8B5808DD7B"
-            BuildableName = "MobileEngageTests.xctest"
-            BlueprintName = "MobileEngageTests"
+            BlueprintIdentifier = "32C6F20E7A6F515CE383A966"
+            BuildableName = "MobileEngageSDK.framework"
+            BlueprintName = "MobileEngageSDK"
             ReferencedContainer = "container:MobileEngage.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

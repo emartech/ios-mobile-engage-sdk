@@ -5,7 +5,7 @@
 #import "MEIAMTriggerMEEvent.h"
 #import "MEIAMCommandResultUtils.h"
 #import "MobileEngage.h"
-#import "NSDictionary+EMSCore.h"
+#import <CoreSDK/NSDictionary+EMSCore.h>
 
 @implementation MEIAMTriggerMEEvent
 

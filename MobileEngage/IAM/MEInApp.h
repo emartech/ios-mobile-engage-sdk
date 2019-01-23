@@ -3,7 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MEEventHandler.h"
+#import <MobileEngageSDK/MEEventHandler.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
