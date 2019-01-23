@@ -6,7 +6,7 @@
 #import "MEIAMTriggerAppEvent.h"
 #import "MEEventHandler.h"
 #import "MEIAMCommandResultUtils.h"
-#import "NSDictionary+EMSCore.h"
+#import <CoreSDK/NSDictionary+EMSCore.h>
 
 @interface MEIAMTriggerAppEvent()
 

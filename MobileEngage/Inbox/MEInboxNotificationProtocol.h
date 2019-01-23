@@ -3,7 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MEInboxProtocol.h"
+#import <MobileEngageSDK/MEInboxProtocol.h>
 
 @protocol MEInboxNotificationProtocol <MEInboxProtocol>
 

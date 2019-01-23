@@ -7,7 +7,7 @@
 #import "MobileEngageStatusDelegate.h"
 #import "MEConfig.h"
 #import "NSDictionary+MobileEngage.h"
-#import "NSError+EMSCore.h"
+#import <CoreSDK/NSError+EMSCore.h>
 #import "MEDefaultHeaders.h"
 #import "AbstractResponseHandler.h"
 #import "MEIdResponseHandler.h"

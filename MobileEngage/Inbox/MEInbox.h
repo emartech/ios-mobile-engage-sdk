@@ -3,9 +3,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MENotificationInboxStatus.h"
-#import "MEInboxProtocol.h"
-#import "MEInboxNotificationProtocol.h"
+#import <MobileEngageSDK/MENotificationInboxStatus.h>
+#import <MobileEngageSDK/MEInboxProtocol.h>
+#import <MobileEngageSDK/MEInboxNotificationProtocol.h>
 
 @class MERequestContext;
 

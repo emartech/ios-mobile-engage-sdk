@@ -2,7 +2,7 @@
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
 #import <UserNotifications/UNUserNotificationCenter.h>
-#import "MEEventHandler.h"
+#import <MobileEngageSDK/MEEventHandler.h>
 
 @protocol MEUserNotificationCenterDelegate <UNUserNotificationCenterDelegate>
 

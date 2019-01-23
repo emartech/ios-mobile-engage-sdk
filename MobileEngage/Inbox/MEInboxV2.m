@@ -4,12 +4,12 @@
 
 #import <CoreSDK/EMSAuthentication.h>
 #import "MEInboxV2.h"
-#import "EMSRequestContract.h"
+#import <CoreSDK/EMSRequestContract.h>
 #import "MEInboxParser.h"
-#import "EMSResponseModel.h"
+#import <CoreSDK/EMSResponseModel.h>
 #import "MEDefaultHeaders.h"
 #import "MobileEngage+Private.h"
-#import "NSError+EMSCore.h"
+#import <CoreSDK/NSError+EMSCore.h>
 #import "MENotificationInboxStatus.h"
 
 @interface MEInboxV2 ()

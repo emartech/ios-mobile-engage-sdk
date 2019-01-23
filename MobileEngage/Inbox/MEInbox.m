@@ -2,7 +2,7 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "NSError+EMSCore.h"
+#import <CoreSDK/NSError+EMSCore.h>
 #import "MEInbox.h"
 #import <CoreSDK/EMSRequestModelBuilder.h>
 #import <CoreSDK/EMSResponseModel.h>

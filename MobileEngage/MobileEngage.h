@@ -3,9 +3,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MEInboxProtocol.h"
-#import "MEUserNotificationCenterDelegate.h"
-#import "MEInApp.h"
+#import <MobileEngageSDK/MEInboxProtocol.h>
+#import <MobileEngageSDK/MEUserNotificationCenterDelegate.h>
+#import <MobileEngageSDK/MEInApp.h>
 
 @class MEConfig;
 @protocol MobileEngageStatusDelegate;
