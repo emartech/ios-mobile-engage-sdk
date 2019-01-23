@@ -1,9 +1,5 @@
 .DS_Store
-.idea/
-/MobileEngage.xcodeproj/xcuserdata/
-/MobileEngage.xcodeproj/xcshareddata/
-/Pods
-/Podfile.lock
-/MobileEngage.xcworkspace/
-/MobileEngage.xcodeproj/project.xcworkspace/
-/test_output/
+xcuserdata/
+Pods/
+Carthage/Checkouts
+Carthage/Build
