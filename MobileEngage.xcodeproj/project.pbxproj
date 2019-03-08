@@ -768,7 +768,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 32C6FD3AA9EA1AC27FAA2651 /* Build configuration list for PBXProject "MobileEngageSDK" */;
+			buildConfigurationList = 32C6FD3AA9EA1AC27FAA2651 /* Build configuration list for PBXProject "MobileEngage" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -822,7 +822,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+			shellScript = "#/usr/local/bin/carthage copy-frameworks\n";
 		};
 		FABAAF0D21F88C8D0000F384 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -841,7 +841,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+			shellScript = "#/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1161,7 +1161,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		32C6FD3AA9EA1AC27FAA2651 /* Build configuration list for PBXProject "MobileEngageSDK" */ = {
+		32C6FD3AA9EA1AC27FAA2651 /* Build configuration list for PBXProject "MobileEngage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				32C6F1B420F1CB08C9867F54 /* Debug */,
