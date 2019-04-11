@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^MESourceHandler)(nullable NSString *source);
+typedef void(^MESourceHandler)(NSString * _Nullable source);
 
 @interface MobileEngage : NSObject
 
