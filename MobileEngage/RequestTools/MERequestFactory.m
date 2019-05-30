@@ -42,7 +42,8 @@
         ([MEExperimental isFeatureEnabled:INAPP_MESSAGING] && [requestContext.lastAppLoginPayload isEqual:currentAppLoginPayload] && requestContext.meId);
 }
 
-+ (EMSRequestModel *)createAppLoginRequestWithPushToken:(NSData *)pushToken requestContext:(MERequestContext *)requestContext {
++ (EMSRequestModel *)createAppLoginRequestWithPushToken:(NSData *)pushToken
+                                         requestContext:(MERequestContext *)requestContext {
     return [self requestModelWithUrl:@"https://push.eservice.emarsys.net/api/mobileengage/v2/users/login"
                               method:HTTPMethodPOST
               additionalPayloadBlock:^(NSMutableDictionary *payload) {
@@ -52,6 +53,10 @@
                   payload[@"device_model"] = [EMSDeviceInfo deviceModel];
                   payload[@"os_version"] = [EMSDeviceInfo osVersion];
                   payload[@"ems_sdk"] = MOBILEENGAGE_SDK_VERSION;
+
+
+                  payload[@"push_settings"] = [EMSDeviceInfo pushSettings];
+
 
                   NSString *appVersion = [EMSDeviceInfo applicationVersion];
                   if (appVersion) {

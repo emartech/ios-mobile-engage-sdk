@@ -44,7 +44,9 @@ SPEC_BEGIN(MERequestFactoryTests)
                 MERequestContext *requestContext = requestContextBlock([NSDate date]);
 
                 NSString *const value = @"dl_value";
-                NSString *userAgent = [NSString stringWithFormat:@"Mobile Engage SDK %@ %@ %@", MOBILEENGAGE_SDK_VERSION, [EMSDeviceInfo deviceType], [EMSDeviceInfo osVersion]];
+                NSString *userAgent = [NSString stringWithFormat:@"Mobile Engage SDK %@ %@ %@", MOBILEENGAGE_SDK_VERSION,
+                                                                 [EMSDeviceInfo deviceType],
+                                                                 [EMSDeviceInfo osVersion]];
                 EMSRequestModel *expected = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                         [builder setMethod:HTTPMethodPOST];
                         [builder setUrl:@"https://deep-link.eservice.emarsys.net/api/clicks"];
@@ -90,6 +92,7 @@ SPEC_BEGIN(MERequestFactoryTests)
                 apploginPayload[@"ems_sdk"] = MOBILEENGAGE_SDK_VERSION;
                 apploginPayload[@"application_id"] = applicationCode;
                 apploginPayload[@"hardware_id"] = [EMSDeviceInfo hardwareId];
+                apploginPayload[@"push_settings"] = [EMSDeviceInfo pushSettings];
                 apploginPayload[@"contact_field_id"] = contactFieldId;
                 apploginPayload[@"contact_field_value"] = contactFieldValue;
 
@@ -109,36 +112,42 @@ SPEC_BEGIN(MERequestFactoryTests)
                 it(@"should result in applogin request if there was no previous applogin", ^{
                     MERequestContext *requestContext = requestContextBlock([NSDate date]);
                     requestContext.config = config;
-                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:@3 contactFieldValue:@"test@test.com"];
+                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:@3
+                                                                                           contactFieldValue:@"test@test.com"];
                     requestContext.meId = nil;
 
 
-                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
+                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil
+                                                                                                      requestContext:requestContext];
                     [[[request.url absoluteString] should] equal:kAppLoginURL];
                 });
 
                 it(@"should result in lastMobileActivity request if there was previous applogin with same payload", ^{
                     MERequestContext *requestContext = requestContextBlock([NSDate date]);
                     requestContext.config = config;
-                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId
+                                                                                           contactFieldValue:contactFieldValue];
                     requestContext.meId = nil;
 
                     requestContext.lastAppLoginPayload = apploginPayload;
 
-                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
+                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil
+                                                                                                      requestContext:requestContext];
                     [[[request.url absoluteString] should] equal:kLastMobileActivityURL];
                 });
 
                 it(@"should result in applogin request if there was previous applogin with different payload", ^{
                     MERequestContext *requestContext = requestContextBlock([NSDate date]);
                     requestContext.config = config;
-                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId
+                                                                                           contactFieldValue:contactFieldValue];
                     requestContext.meId = nil;
 
                     apploginPayload[@"application_version"] = @"changed";
                     requestContext.lastAppLoginPayload = apploginPayload;
 
-                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
+                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil
+                                                                                                      requestContext:requestContext];
                     [[[request.url absoluteString] should] equal:kAppLoginURL];
                 });
             });
@@ -156,11 +165,13 @@ SPEC_BEGIN(MERequestFactoryTests)
                 it(@"should result in applogin request if there was previous applogin with same payload and there is no meid", ^{
                     MERequestContext *requestContext = requestContextBlock([NSDate date]);
                     requestContext.config = config;
-                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId
+                                                                                           contactFieldValue:contactFieldValue];
                     requestContext.lastAppLoginPayload = apploginPayload;
                     requestContext.meId = nil;
 
-                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
+                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil
+                                                                                                      requestContext:requestContext];
                     [[[request.url absoluteString] should] equal:kAppLoginURL];
                 });
 
@@ -169,11 +180,13 @@ SPEC_BEGIN(MERequestFactoryTests)
                     MERequestContext *requestContext = requestContextBlock(timeStamp);
 
                     requestContext.config = config;
-                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId
+                                                                                           contactFieldValue:contactFieldValue];
                     requestContext.meId = @"something";
                     requestContext.lastAppLoginPayload = apploginPayload;
 
-                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
+                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil
+                                                                                                      requestContext:requestContext];
                     [[[request.url absoluteString] should] equal:@"https://mobile-events.eservice.emarsys.net/v3/devices/something/events"];
                     [[request.payload[@"events"][0][@"name"] should] equal:@"last_mobile_activity"];
                 });
@@ -181,26 +194,30 @@ SPEC_BEGIN(MERequestFactoryTests)
                 it(@"should result in applogin request if there was previous applogin with different payload and there is no meid", ^{
                     MERequestContext *requestContext = requestContextBlock([NSDate date]);
                     requestContext.config = config;
-                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId
+                                                                                           contactFieldValue:contactFieldValue];
                     requestContext.meId = nil;
 
                     apploginPayload[@"application_version"] = @"changed";
                     requestContext.lastAppLoginPayload = apploginPayload;
 
-                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
+                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil
+                                                                                                      requestContext:requestContext];
                     [[[request.url absoluteString] should] equal:kAppLoginURL];
                 });
 
                 it(@"should result in applogin request if there was previous applogin with different payload and there is an existing meid", ^{
                     MERequestContext *requestContext = requestContextBlock([NSDate date]);
                     requestContext.config = config;
-                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId contactFieldValue:contactFieldValue];
+                    requestContext.appLoginParameters = [[MEAppLoginParameters alloc] initWithContactFieldId:contactFieldId
+                                                                                           contactFieldValue:contactFieldValue];
                     requestContext.meId = @"something";
 
                     apploginPayload[@"application_version"] = @"changed";
                     requestContext.lastAppLoginPayload = apploginPayload;
 
-                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil requestContext:requestContext];
+                    EMSRequestModel *request = [MERequestFactory createLoginOrLastMobileActivityRequestWithPushToken:nil
+                                                                                                      requestContext:requestContext];
                     [[[request.url absoluteString] should] equal:kAppLoginURL];
                 });
             });
