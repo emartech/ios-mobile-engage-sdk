@@ -41,48 +41,23 @@ node('master') {
           deleteDir()
       }
       stage('Git Clone') {
-        parallel iPhone_5S: {
-            clone env.IPHONE_5S
-         }, iPhone_6S: {
-             clone env.IPHONE_6S
-        }, iPad_Pro: {
-            clone env.IPAD_PRO
-        }, iOS_9_3_Simulator: {
+        parallel iOS_9_3_Simulator: {
             clone env.IOS93SIMULATOR
         }, failFast: false
       }
       stage('Pod install') {
           sh 'eval $(ssh-agent) && ssh-add ~/.ssh/ios-core && ssh-add ~/.ssh/ios-pod-private-repo'
-        parallel iPhone_5S: {
-            podi env.IPHONE_5S
-         }, iPhone_6S: {
-             podi env.IPHONE_6S
-        }, iPad_Pro: {
-            podi env.IPAD_PRO
-        }, iOS_9_3_Simulator: {
+        parallel iOS_9_3_Simulator: {
             podi env.IOS93SIMULATOR
         }, failFast: false
       }
       stage('Pod lint'){
-            parallel iPhone_5S: {
-                podiLinti env.IPHONE_5S
-             }, iPhone_6S: {
-                 podiLinti env.IPHONE_6S
-            }, iPad_Pro: {
-                podiLinti env.IPAD_PRO
-            }, iOS_9_3_Simulator: {
+            parallel iOS_9_3_Simulator: {
                 podiLinti env.IOS93SIMULATOR
             }, failFast: false
       }
       stage('Build and Test'){
-            parallel iPhone_5S: {
-                buildAndTest 'iOS', env.IPHONE_5S
-             }, iPhone_6S: {
-                 // echo "Skipped, please trust mac mini when you can open the rack."
-                 buildAndTest 'iOS', env.IPHONE_6S
-            }, iPad_Pro: {
-                buildAndTest 'iOS', env.IPAD_PRO
-            }, iOS_9_3_Simulator: {
+            parallel iOS_9_3_Simulator: {
                 buildAndTest 'iOS Simulator', env.IOS93SIMULATOR
             }, failFast: false
       }
