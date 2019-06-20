@@ -11,6 +11,6 @@ Pod::Spec.new do |spec|
 	spec.public_header_files  = [
     'MobileEngage/RichNotificationExtension/MENotificationService.h'
 	]
-	spec.dependency 'CoreSDK', '1.7.1'
+	spec.dependency 'CoreSDK'
 	spec.libraries = 'z', 'c++'
 end
