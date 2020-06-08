@@ -1,3 +1,7 @@
+__`Note`__
+Emarsys has discontinued developing this SDK, and it offers a new SDK instead. If you are still using this SDK, please plan migration to the new [Emarsys SDK](https://github.com/emartech/ios-emarsys-sdk/wiki/migrate-from-mobile-engage) as soon as possible.
+
+
 # What is the Mobile Engage SDK?
 
 Mobile Engage SDK is a tool that enables you to use Emarsys' Mobile Engage feature in a very straightforward way. By incorporating the SDK in your app, we support you, among others, in handling credentials, API calls, tracking of opens and events as well as logins and logouts in the app.
