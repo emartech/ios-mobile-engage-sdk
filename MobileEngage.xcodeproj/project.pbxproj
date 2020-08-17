@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0DC1BA794BF0F910A651A423 /* libPods-MobileEngage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B94562F7F6D12910E13357 /* libPods-MobileEngage.a */; };
 		167609D01EEAD8480029B2E6 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
 		1689A60F20A5D19700E5D91F /* MEUserNotificationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1689A60D20A5D19600E5D91F /* MEUserNotificationDelegate.h */; };
 		1689A61020A5D19700E5D91F /* MEUserNotificationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1689A60E20A5D19600E5D91F /* MEUserNotificationDelegate.m */; };
@@ -190,11 +189,11 @@
 		37460FD58D2F210F1B6E3A2E /* MEIAMJSCommandProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 32C6FD5134834458FE22A792 /* MEIAMJSCommandProtocol.h */; };
 		37460FF61699213058A2187D /* MEIAMResponseHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 374607DB302A1C9B233EE5A1 /* MEIAMResponseHandler.h */; };
 		37460FF89C4DD2695948EEAD /* MERequestModelRepositoryFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 374601960A82BE6A0B71CCB2 /* MERequestModelRepositoryFactoryTests.m */; };
-		6EB49D6DB4111DB9DFFB56C4 /* libPods-MobileEngageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E78D00C2A103CFDDD5BAEDAC /* libPods-MobileEngageTests.a */; };
+		602CBF1995548CE70DF73C8C /* libPods-MobileEngageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2DE0CB7BD9B9DC66681079A /* libPods-MobileEngageTests.a */; };
 		8A4BD7A01EE192FF0056486D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
 		8AAFD65E1EE196C700ACEB52 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */; };
+		A786BEEDB5F73BB3B96974C1 /* libPods-MobileEngage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB080F62C2AAF860E8FD4430 /* libPods-MobileEngage.a */; };
 		E655817A7BD6BD2489ED8321 /* MEInboxV2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E65587E10C55211DEB726913 /* MEInboxV2Tests.m */; };
-		E65582B92662CA6F5DA6D9D9 /* InboxV2IntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E6558D3653247D3EE636B7FF /* InboxV2IntegrationTests.m */; };
 		E65583D86E7FC18442B142D0 /* MEInboxProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */; };
 		E655852343DD03F5F9D4E0CF /* InboxIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E6558398A1E26EAC50F59B25 /* InboxIntegrationTests.m */; };
 		E65585B14C364FCFCF8D438B /* MEInboxV2.h in Headers */ = {isa = PBXBuildFile; fileRef = E65587B6E86F82209C3026CE /* MEInboxV2.h */; };
@@ -234,10 +233,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0DB038C870008486D1FD272C /* Pods-MobileEngage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.debug.xcconfig"; sourceTree = "<group>"; };
 		1689A60D20A5D19600E5D91F /* MEUserNotificationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEUserNotificationDelegate.h; sourceTree = "<group>"; };
 		1689A60E20A5D19600E5D91F /* MEUserNotificationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEUserNotificationDelegate.m; sourceTree = "<group>"; };
-		16BE175DC6F95EB43F3FB8B1 /* Pods-MobileEngageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.release.xcconfig"; sourceTree = "<group>"; };
 		16ED6B1E1E7FE12600BB9C63 /* MobileEngage Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MobileEngage Host.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16ED6B211E7FE12600BB9C63 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		16ED6B231E7FE12600BB9C63 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -248,6 +245,7 @@
 		16ED6B2C1E7FE12600BB9C63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		16ED6B2F1E7FE12600BB9C63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		16ED6B311E7FE12600BB9C63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1DD0A2FF147BE5CA92435D5C /* Pods-MobileEngage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.release.xcconfig"; path = "Target Support Files/Pods-MobileEngage/Pods-MobileEngage.release.xcconfig"; sourceTree = "<group>"; };
 		32C6F00FFF707C5A5F62FDED /* MEIAMRequestPushPermission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMRequestPushPermission.m; sourceTree = "<group>"; };
 		32C6F026E9C25D64A1EF4A30 /* MEIAMTriggerMEEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMTriggerMEEventTests.m; sourceTree = "<group>"; };
 		32C6F02AE6EF360D684F1079 /* MENotificationService+PushToInApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MENotificationService+PushToInApp.h"; sourceTree = "<group>"; };
@@ -378,7 +376,6 @@
 		32C6FFD88E2892F183B9C41C /* MobileEngage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MobileEngage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		32C6FFE02855F6FA4DCFF55D /* MEIAMClose.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMClose.m; sourceTree = "<group>"; };
 		32C6FFEF2BED88E65A98E1CF /* MEIAMButtonClicked.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMButtonClicked.m; sourceTree = "<group>"; };
-		338CBB3A9EE11AFB19A2C0C9 /* Pods-MobileEngageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		37460019FFC25B064B334586 /* MEIAMCleanupResponseHandlerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEIAMCleanupResponseHandlerTests.m; sourceTree = "<group>"; };
 		3746001FD425D82370667385 /* MEExperimental+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEExperimental+Test.h"; sourceTree = "<group>"; };
 		37460064180D9AE6386F4D91 /* MEAppLoginParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEAppLoginParameters.m; sourceTree = "<group>"; };
@@ -449,9 +446,11 @@
 		37460EC20968433EC524A4F3 /* MEUserNotificationDelegateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MEUserNotificationDelegateTests.m; path = MobileEngageTests/RichNotificationExtension/MEUserNotificationDelegateTests.m; sourceTree = SOURCE_ROOT; };
 		37460F0C951E73C1287B1A67 /* FakeTimestampProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeTimestampProvider.h; sourceTree = "<group>"; };
 		37460F6E627F308A7B6FCAB6 /* FakeStatusDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeStatusDelegate.m; sourceTree = "<group>"; };
-		84B94562F7F6D12910E13357 /* libPods-MobileEngage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		50F0C0EAE38448609FBCB115 /* Pods-MobileEngage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.debug.xcconfig"; path = "Target Support Files/Pods-MobileEngage/Pods-MobileEngage.debug.xcconfig"; sourceTree = "<group>"; };
+		6FF7D13EB85C9CF1B7707520 /* Pods-MobileEngageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.debug.xcconfig"; path = "Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		9C3FF70E993B3531291C33AD /* Pods-MobileEngage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngage.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage.release.xcconfig"; sourceTree = "<group>"; };
+		992CEF1FF46FD7CDADF4B10F /* Pods-MobileEngageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileEngageTests.release.xcconfig"; path = "Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests.release.xcconfig"; sourceTree = "<group>"; };
+		AB080F62C2AAF860E8FD4430 /* libPods-MobileEngage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E65581FC853AEB63A979D1D2 /* MEInboxParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxParserTests.m; sourceTree = "<group>"; };
 		E6558398A1E26EAC50F59B25 /* InboxIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxIntegrationTests.m; sourceTree = "<group>"; };
 		E65585F1412D63D1CFDA119B /* MEInbox+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MEInbox+Private.h"; sourceTree = "<group>"; };
@@ -459,9 +458,8 @@
 		E65587B6E86F82209C3026CE /* MEInboxV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxV2.h; sourceTree = "<group>"; };
 		E65587E10C55211DEB726913 /* MEInboxV2Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxV2Tests.m; sourceTree = "<group>"; };
 		E6558ACDAFAE46D238CFA2DF /* MEInboxProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEInboxProtocol.h; sourceTree = "<group>"; };
-		E6558D3653247D3EE636B7FF /* InboxV2IntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxV2IntegrationTests.m; sourceTree = "<group>"; };
 		E6558EE1E4F554A6B261D02F /* MEInboxV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEInboxV2.m; sourceTree = "<group>"; };
-		E78D00C2A103CFDDD5BAEDAC /* libPods-MobileEngageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2DE0CB7BD9B9DC66681079A /* libPods-MobileEngageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileEngageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -478,7 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AAFD65E1EE196C700ACEB52 /* libsqlite3.tbd in Frameworks */,
-				0DC1BA794BF0F910A651A423 /* libPods-MobileEngage.a in Frameworks */,
+				A786BEEDB5F73BB3B96974C1 /* libPods-MobileEngage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,7 +486,7 @@
 			files = (
 				167609D01EEAD8480029B2E6 /* libsqlite3.tbd in Frameworks */,
 				32C6FE55F469AAF41FE77725 /* MobileEngage.framework in Frameworks */,
-				6EB49D6DB4111DB9DFFB56C4 /* libPods-MobileEngageTests.a in Frameworks */,
+				602CBF1995548CE70DF73C8C /* libPods-MobileEngageTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,8 +531,8 @@
 			isa = PBXGroup;
 			children = (
 				8A4BD79F1EE192FF0056486D /* libsqlite3.tbd */,
-				84B94562F7F6D12910E13357 /* libPods-MobileEngage.a */,
-				E78D00C2A103CFDDD5BAEDAC /* libPods-MobileEngageTests.a */,
+				AB080F62C2AAF860E8FD4430 /* libPods-MobileEngage.a */,
+				F2DE0CB7BD9B9DC66681079A /* libPods-MobileEngageTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -665,7 +663,7 @@
 				32C6F979B34ACD8FE94CBAD3 /* MobileEngageSDK.podspec */,
 				1751A715D0CE68D830F78796 /* Frameworks */,
 				374605226CE4A4526E63994C /* MobileEngageRichExtension.podspec */,
-				76A5EF5F94EC70DB3D6B4642 /* Pods */,
+				CCC5CF51547A94AEF0A53F43 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -977,15 +975,16 @@
 			path = Flipper;
 			sourceTree = "<group>";
 		};
-		76A5EF5F94EC70DB3D6B4642 /* Pods */ = {
+		CCC5CF51547A94AEF0A53F43 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0DB038C870008486D1FD272C /* Pods-MobileEngage.debug.xcconfig */,
-				9C3FF70E993B3531291C33AD /* Pods-MobileEngage.release.xcconfig */,
-				338CBB3A9EE11AFB19A2C0C9 /* Pods-MobileEngageTests.debug.xcconfig */,
-				16BE175DC6F95EB43F3FB8B1 /* Pods-MobileEngageTests.release.xcconfig */,
+				50F0C0EAE38448609FBCB115 /* Pods-MobileEngage.debug.xcconfig */,
+				1DD0A2FF147BE5CA92435D5C /* Pods-MobileEngage.release.xcconfig */,
+				6FF7D13EB85C9CF1B7707520 /* Pods-MobileEngageTests.debug.xcconfig */,
+				992CEF1FF46FD7CDADF4B10F /* Pods-MobileEngageTests.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		E655871A618EF8E79E2BE02C /* Inbox */ = {
@@ -996,7 +995,6 @@
 				E655865EEABB244F1261121B /* MEInboxTests.m */,
 				E6558398A1E26EAC50F59B25 /* InboxIntegrationTests.m */,
 				E65587E10C55211DEB726913 /* MEInboxV2Tests.m */,
-				E6558D3653247D3EE636B7FF /* InboxV2IntegrationTests.m */,
 			);
 			path = Inbox;
 			sourceTree = "<group>";
@@ -1102,12 +1100,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 32C6F9D7A7E9B0205DB5522F /* Build configuration list for PBXNativeTarget "MobileEngage" */;
 			buildPhases = (
-				0D848A9DB67B0B0C70C8EC7C /* [CP] Check Pods Manifest.lock */,
+				CC7CE44A437B412ABA74903F /* [CP] Check Pods Manifest.lock */,
 				32C6F9DFBC3FBB7D13386EEB /* Sources */,
 				32C6F32B68AAAF0659C14E37 /* Frameworks */,
 				32C6F195EF51CA8006ACC49B /* Headers */,
 				32C6FD576C0FE675D0D1B0B5 /* Resources */,
-				F7C64BF6458327CFE809C11F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1122,13 +1119,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 32C6F1102A8A4F8E0A6DFCDC /* Build configuration list for PBXNativeTarget "MobileEngageTests" */;
 			buildPhases = (
-				0770780C9D56E0D67D46CF9B /* [CP] Check Pods Manifest.lock */,
+				BEF45DEA2CF07175719F1D90 /* [CP] Check Pods Manifest.lock */,
 				32C6FFEB1BBC1FD09F22D2C7 /* Sources */,
 				32C6FD7C120D99840C1701B9 /* Frameworks */,
 				32C6FB56092210A8184BD7F6 /* Resources */,
 				16ED6B381E7FE29F00BB9C63 /* CopyFiles */,
-				88B75ED42E3F5ABE68E2710A /* [CP] Embed Pods Frameworks */,
-				924EA83C99F7F151A75BB904 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1214,16 +1209,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0770780C9D56E0D67D46CF9B /* [CP] Check Pods Manifest.lock */ = {
+		BEF45DEA2CF07175719F1D90 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-MobileEngageTests-checkManifestLockResult.txt",
 			);
@@ -1232,67 +1231,26 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0D848A9DB67B0B0C70C8EC7C /* [CP] Check Pods Manifest.lock */ = {
+		CC7CE44A437B412ABA74903F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-MobileEngage-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		88B75ED42E3F5ABE68E2710A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		924EA83C99F7F151A75BB904 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileEngageTests/Pods-MobileEngageTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F7C64BF6458327CFE809C11F /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileEngage/Pods-MobileEngage-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1420,7 +1378,6 @@
 				E65586D5C044C8D482C143CC /* MEInboxTests.m in Sources */,
 				E655852343DD03F5F9D4E0CF /* InboxIntegrationTests.m in Sources */,
 				E655817A7BD6BD2489ED8321 /* MEInboxV2Tests.m in Sources */,
-				E65582B92662CA6F5DA6D9D9 /* InboxV2IntegrationTests.m in Sources */,
 				32C6FCB31412E9B01A5463BB /* MENotificationServiceTests.m in Sources */,
 				374606B8CC1A4AABE43D0E86 /* FakeTimestampProvider.m in Sources */,
 				37460ADC1CDAA2EAF5DCEE4D /* MEUserNotificationDelegateTests.m in Sources */,
@@ -1613,7 +1570,7 @@
 		};
 		32C6F532A52B3BD4432BE6ED /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0DB038C870008486D1FD272C /* Pods-MobileEngage.debug.xcconfig */;
+			baseConfigurationReference = 50F0C0EAE38448609FBCB115 /* Pods-MobileEngage.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1636,7 +1593,7 @@
 		};
 		32C6FBD3DD57E82510C44A93 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9C3FF70E993B3531291C33AD /* Pods-MobileEngage.release.xcconfig */;
+			baseConfigurationReference = 1DD0A2FF147BE5CA92435D5C /* Pods-MobileEngage.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1659,7 +1616,7 @@
 		};
 		32C6FC4847B3141A577C271E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 338CBB3A9EE11AFB19A2C0C9 /* Pods-MobileEngageTests.debug.xcconfig */;
+			baseConfigurationReference = 6FF7D13EB85C9CF1B7707520 /* Pods-MobileEngageTests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 7ZFXXDJH82;
 				INFOPLIST_FILE = MobileEngageTests/Info.plist;
@@ -1674,7 +1631,7 @@
 		};
 		32C6FCD3CB97CD1EFADDE329 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 16BE175DC6F95EB43F3FB8B1 /* Pods-MobileEngageTests.release.xcconfig */;
+			baseConfigurationReference = 992CEF1FF46FD7CDADF4B10F /* Pods-MobileEngageTests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 7ZFXXDJH82;
 				INFOPLIST_FILE = MobileEngageTests/Info.plist;
