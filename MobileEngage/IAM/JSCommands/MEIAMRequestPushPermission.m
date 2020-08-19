@@ -8,6 +8,8 @@
 #import "MEOsVersionUtils.h"
 #import "MEIAMCommandResultUtils.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
 @implementation MEIAMRequestPushPermission
 
 + (NSString *)commandName {
@@ -48,3 +50,5 @@
 }
 
 @end
+
+#pragma clang diagnostic pop

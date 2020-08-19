@@ -7,6 +7,9 @@
 
 #define IMAGE_URL @"image_url"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
 @implementation MENotificationService (Attachment)
 
 - (void)createAttachmentForContent:(UNNotificationContent *)content
@@ -36,3 +39,5 @@
                   }];
 }
 @end
+
+#pragma clang diagnostic pop

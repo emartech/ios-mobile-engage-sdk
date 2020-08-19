@@ -5,6 +5,9 @@
 #import "MENotificationService+Actions.h"
 #import "EMSDictionaryValidator.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
 @implementation MENotificationService (Actions)
 
 - (void)createCategoryForContent:(UNMutableNotificationContent *)content
@@ -91,3 +94,5 @@
     return actions;
 }
 @end
+
+#pragma clang diagnostic pop

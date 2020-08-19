@@ -8,6 +8,8 @@
 
 @class MobileEngageInternal;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MEUserNotificationDelegate: NSObject <MEUserNotificationCenterDelegate>
 
 - (instancetype)initWithApplication:(UIApplication *)application
@@ -15,3 +17,5 @@
                               inApp:(id <MEIAMProtocol>)inApp;
 
 @end
+
+NS_ASSUME_NONNULL_END

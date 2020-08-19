@@ -8,6 +8,9 @@
 #import "MENotificationService+Attachment.h"
 #import "MEDownloader.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
 typedef void(^ContentHandler)(UNNotificationContent *contentToDeliver);
 
 @interface MENotificationService () <NSURLSessionDelegate>
@@ -75,3 +78,5 @@ typedef void(^ContentHandler)(UNNotificationContent *contentToDeliver);
 }
 
 @end
+
+#pragma clang diagnostic pop

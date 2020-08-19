@@ -5,6 +5,9 @@
 #import "MENotificationService.h"
 #import "MEDownloader.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
 typedef void(^AttachmentsCompletionHandler)(NSArray<UNNotificationAttachment *> *attachments);
 
 @interface MENotificationService (Attachment)
@@ -14,3 +17,5 @@ typedef void(^AttachmentsCompletionHandler)(NSArray<UNNotificationAttachment *> 
                  completionHandler:(AttachmentsCompletionHandler)completionHandler;
 
 @end
+
+#pragma clang diagnostic pop

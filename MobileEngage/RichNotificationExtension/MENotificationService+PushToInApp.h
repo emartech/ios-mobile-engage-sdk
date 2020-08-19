@@ -5,6 +5,9 @@
 #import "MENotificationService.h"
 #import "MEDownloader.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
 typedef void(^PushToInAppCompletionHandler)(NSDictionary *userInfo);
 
 @interface MENotificationService (PushToInApp)
@@ -14,3 +17,5 @@ typedef void(^PushToInAppCompletionHandler)(NSDictionary *userInfo);
                         completionHandler:(PushToInAppCompletionHandler)completionHandler;
 
 @end
+
+#pragma clang diagnostic pop

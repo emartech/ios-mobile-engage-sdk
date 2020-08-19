@@ -11,6 +11,9 @@
 #import "EMSDictionaryValidator.h"
 #import "MEInApp+Private.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
 @interface MEUserNotificationDelegate ()
 
 @property(nonatomic, strong) UIApplication *application;
@@ -111,3 +114,5 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 @end
+
+#pragma clang diagnostic pop

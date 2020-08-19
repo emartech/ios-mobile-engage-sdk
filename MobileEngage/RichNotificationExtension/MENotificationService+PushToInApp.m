@@ -7,6 +7,9 @@
 
 #import "MEDownloader.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
 @implementation MENotificationService (PushToInApp)
 
 - (void)createUserInfoWithInAppForContent:(UNMutableNotificationContent *)content
@@ -81,3 +84,5 @@
     return result;
 }
 @end
+
+#pragma clang diagnostic pop

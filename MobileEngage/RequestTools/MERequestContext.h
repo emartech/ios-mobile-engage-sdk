@@ -14,6 +14,8 @@
 #define kMEID @"kMEID"
 #define kMEID_SIGNATURE @"kMEID_SIGNATURE"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MERequestContext : NSObject
 
 @property(nonatomic, strong, nullable) NSDictionary *lastAppLoginPayload;
@@ -25,6 +27,9 @@
 @property(nonatomic, strong, nullable) EMSUUIDProvider *uuidProvider;
 
 - (instancetype)initWithConfig:(MEConfig *)config;
+
 - (void)reset;
 
 @end
+
+NS_ASSUME_NONNULL_END

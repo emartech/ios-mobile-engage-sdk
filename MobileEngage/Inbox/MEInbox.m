@@ -119,6 +119,9 @@
     return [MobileEngage trackMessageOpenWithInboxMessage:inboxMessage];
 }
 
+- (void)purgeNotificationCache {
+
+}
 
 #pragma mark - Private methods
 

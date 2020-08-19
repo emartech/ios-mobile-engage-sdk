@@ -11,6 +11,8 @@
 #import "MELogRepository.h"
 #import "MEIAMProtocol.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef void (^MECompletionHandler)(void);
 
 @interface MEInApp (Private) <MEIAMProtocol>
@@ -24,6 +26,8 @@ typedef void (^MECompletionHandler)(void);
 - (void)setIamWindow:(UIWindow *)window;
 
 - (void)showMessage:(MEInAppMessage *)message
-  completionHandler:(MECompletionHandler)completionHandler;
+  completionHandler:(_Nullable MECompletionHandler)completionHandler;
 
 @end
+
+NS_ASSUME_NONNULL_END
